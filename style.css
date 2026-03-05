@@ -117,7 +117,7 @@ body.lightbox-open {
 
   .gallery img {
     width: auto;      /* scale width proportionally */
-    height: 100vh;    /* fill phone viewport height */
+    height: auto; /* 100vh;    /* fill phone viewport height */
     object-fit: cover; /* crop if necessary, full coverage */
   }
 }
