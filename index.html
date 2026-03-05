@@ -4,9 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nature Photo Gallery</title>
-
 <link rel="stylesheet" href="styles.css">
-
 </head>
 <body>
 
@@ -14,10 +12,11 @@
 
 <div class="gallery">
 
-<img src="images/photo1.jpg" alt="Photo 1">
-<img src="images/photo2.jpg" alt="Photo 2">
-<img src="images/photo3.jpg" alt="Photo 3">
-<img src="images/photo4.jpg" alt="Photo 4">
+<!-- Use lazy loading for faster page load -->
+<img src="images/photo1.jpg" alt="Sunset over hills" loading="lazy">
+<img src="images/photo2.jpg" alt="Forest stream" loading="lazy">
+<img src="images/photo3.jpg" alt="Mountain peak" loading="lazy">
+<img src="images/photo4.jpg" alt="Beach sunrise" loading="lazy">
 
 </div>
 
@@ -32,88 +31,60 @@
 </div>
 
 <script>
-
 const images = document.querySelectorAll(".gallery img")
 const lightbox = document.getElementById("lightbox")
 const lightboxImg = document.getElementById("lightbox-img")
-
 let currentIndex = 0
 let startX = 0
 
 function showImage(index){
-
-currentIndex = index
-lightboxImg.src = images[index].src
-
+  currentIndex = index
+  lightboxImg.src = images[index].src
 }
 
 images.forEach((img,index)=>{
-
-img.addEventListener("click",()=>{
-
-lightbox.classList.add("active")
-document.body.classList.add("lightbox-open")
-showImage(index)
-
-})
-
+  img.addEventListener("click",()=>{
+    lightbox.classList.add("active")
+    document.body.classList.add("lightbox-open")
+    showImage(index)
+  })
 })
 
 document.querySelector(".next").onclick = ()=>{
-
-currentIndex = (currentIndex + 1) % images.length
-showImage(currentIndex)
-
+  currentIndex = (currentIndex + 1) % images.length
+  showImage(currentIndex)
 }
 
 document.querySelector(".prev").onclick = ()=>{
-
-currentIndex = (currentIndex - 1 + images.length) % images.length
-showImage(currentIndex)
-
+  currentIndex = (currentIndex - 1 + images.length) % images.length
+  showImage(currentIndex)
 }
 
 document.addEventListener("keydown",(e)=>{
-
-if(!lightbox.classList.contains("active")) return
-
-if(e.key==="ArrowRight") document.querySelector(".next").click()
-if(e.key==="ArrowLeft") document.querySelector(".prev").click()
-
-if(e.key==="Escape"){
-lightbox.classList.remove("active")
-document.body.classList.remove("lightbox-open")
-}
-
+  if(!lightbox.classList.contains("active")) return
+  if(e.key==="ArrowRight") document.querySelector(".next").click()
+  if(e.key==="ArrowLeft") document.querySelector(".prev").click()
+  if(e.key==="Escape"){
+    lightbox.classList.remove("active")
+    document.body.classList.remove("lightbox-open")
+  }
 })
 
 lightbox.addEventListener("click",(e)=>{
-
-if(e.target===lightbox){
-
-lightbox.classList.remove("active")
-document.body.classList.remove("lightbox-open")
-
-}
-
+  if(e.target===lightbox){
+    lightbox.classList.remove("active")
+    document.body.classList.remove("lightbox-open")
+  }
 })
 
-/* swipe support */
-
-lightbox.addEventListener("touchstart",(e)=>{
-startX = e.touches[0].clientX
-})
-
+// swipe support
+lightbox.addEventListener("touchstart",(e)=>{ startX = e.touches[0].clientX })
 lightbox.addEventListener("touchend",(e)=>{
-
-let endX = e.changedTouches[0].clientX
-let diff = startX - endX
-
-if(diff > 50) document.querySelector(".next").click()
-if(diff < -50) document.querySelector(".prev").click()
-
+  let endX = e.changedTouches[0].clientX
+  let diff = startX - endX
+  if(diff > 50) document.querySelector(".next").click()
+  if(diff < -50) document.querySelector(".prev").click()
 })
-
 </script>
 
 </body>
