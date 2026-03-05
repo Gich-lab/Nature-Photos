@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nature Photo Gallery</title>
+<title>Vertical Full-Screen Gallery</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -11,23 +11,16 @@
 <header>Nature Photo Gallery</header>
 
 <div class="gallery">
-
-<!-- Use lazy loading for faster page load -->
-<img src="images/photo1.jpg" alt="Sunset over hills" loading="lazy">
-<img src="images/photo2.jpg" alt="Forest stream" loading="lazy">
-<img src="images/photo3.jpg" alt="Mountain peak" loading="lazy">
-<img src="images/photo4.jpg" alt="Beach sunrise" loading="lazy">
-
+  <img src="images/photo1.jpg" alt="Sunset over hills" loading="lazy">
+  <img src="images/photo2.jpg" alt="Forest stream" loading="lazy">
+  <img src="images/photo3.jpg" alt="Mountain peak" loading="lazy">
+  <img src="images/photo4.jpg" alt="Beach sunrise" loading="lazy">
 </div>
 
 <div class="lightbox" id="lightbox">
-
-<button class="nav prev">&#10094;</button>
-
-<img id="lightbox-img">
-
-<button class="nav next">&#10095;</button>
-
+  <button class="nav prev">&#10094;</button>
+  <img id="lightbox-img">
+  <button class="nav next">&#10095;</button>
 </div>
 
 <script>
