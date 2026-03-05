@@ -1,100 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Photo Gallery</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #111;
-      color: white;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nature Photo Gallery</title>
 
-    
-    header {
-      text-align: center;
-      padding: 20px;
-      background: #000;
-      font-size: 24px;
-      letter-spacing: 2px;
-    }
+<link rel="stylesheet" href="styles.css">
 
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 12px;
-      padding: 12px;
-    }
-
-    .gallery img {
-      width: 100%;
-      height: 250px;
-      object-fit: cover;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: transform 0.25s ease;
-    }
-
-    .gallery img:hover {
-      transform: scale(1.05);
-    }
-
-    .lightbox {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.9);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-
-    .lightbox img {
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 10px;
-    }
-
-    .lightbox.active {
-      display: flex;
-    }
-  </style>
 </head>
 <body>
 
-<header>My Photo Gallery</header>
+<header>Nature Photo Gallery</header>
 
 <div class="gallery">
-  <img src="images/Photo1.jpg" alt="Photo 1" />
-  <img src="images/Photo2.jpg" alt="Photo 2" />
-  <img src="images/Photo3.jpg" alt="Photo 3" />
-  <img src="images/Photo4.jpg" alt="Photo 4" />
+
+<img src="images/photo1.jpg" alt="Photo 1">
+<img src="images/photo2.jpg" alt="Photo 2">
+<img src="images/photo3.jpg" alt="Photo 3">
+<img src="images/photo4.jpg" alt="Photo 4">
+
 </div>
 
 <div class="lightbox" id="lightbox">
-  <img id="lightbox-img" src="" />
+
+<button class="nav prev">&#10094;</button>
+
+<img id="lightbox-img">
+
+<button class="nav next">&#10095;</button>
+
 </div>
 
 <script>
-const images = document.querySelectorAll('.gallery img');
-const lightbox = document.getElementById('lightbox');
-const lightboxImg = document.getElementById('lightbox-img');
 
-images.forEach(img => {
-  img.addEventListener('click', () => {
-    lightbox.classList.add('active');
-    lightboxImg.src = img.src;
-  });
-});
+const images = document.querySelectorAll(".gallery img")
+const lightbox = document.getElementById("lightbox")
+const lightboxImg = document.getElementById("lightbox-img")
 
-lightbox.addEventListener('click', () => {
-  lightbox.classList.remove('active');
-});
+let currentIndex = 0
+let startX = 0
+
+function showImage(index){
+
+currentIndex = index
+lightboxImg.src = images[index].src
+
+}
+
+images.forEach((img,index)=>{
+
+img.addEventListener("click",()=>{
+
+lightbox.classList.add("active")
+document.body.classList.add("lightbox-open")
+showImage(index)
+
+})
+
+})
+
+document.querySelector(".next").onclick = ()=>{
+
+currentIndex = (currentIndex + 1) % images.length
+showImage(currentIndex)
+
+}
+
+document.querySelector(".prev").onclick = ()=>{
+
+currentIndex = (currentIndex - 1 + images.length) % images.length
+showImage(currentIndex)
+
+}
+
+document.addEventListener("keydown",(e)=>{
+
+if(!lightbox.classList.contains("active")) return
+
+if(e.key==="ArrowRight") document.querySelector(".next").click()
+if(e.key==="ArrowLeft") document.querySelector(".prev").click()
+
+if(e.key==="Escape"){
+lightbox.classList.remove("active")
+document.body.classList.remove("lightbox-open")
+}
+
+})
+
+lightbox.addEventListener("click",(e)=>{
+
+if(e.target===lightbox){
+
+lightbox.classList.remove("active")
+document.body.classList.remove("lightbox-open")
+
+}
+
+})
+
+/* swipe support */
+
+lightbox.addEventListener("touchstart",(e)=>{
+startX = e.touches[0].clientX
+})
+
+lightbox.addEventListener("touchend",(e)=>{
+
+let endX = e.changedTouches[0].clientX
+let diff = startX - endX
+
+if(diff > 50) document.querySelector(".next").click()
+if(diff < -50) document.querySelector(".prev").click()
+
+})
+
 </script>
 
 </body>
