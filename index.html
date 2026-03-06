@@ -82,5 +82,47 @@ lightbox.addEventListener("touchend",(e)=>{
 })
 </script>
 
+<script>
+
+function detectDevice(){
+  const ua = navigator.userAgent;
+
+  if(/mobile/i.test(ua)) return "Mobile";
+  if(/tablet/i.test(ua)) return "Tablet";
+  return "Desktop";
+}
+
+function detectOS(){
+  const ua = navigator.userAgent;
+
+  if(ua.indexOf("Win")!=-1) return "Windows";
+  if(ua.indexOf("Mac")!=-1) return "MacOS";
+  if(ua.indexOf("Linux")!=-1) return "Linux";
+  if(ua.indexOf("Android")!=-1) return "Android";
+  if(ua.indexOf("like Mac")!=-1) return "iOS";
+
+  return "Unknown";
+}
+
+function sendVisitorData(){
+
+  const data = {
+    time: new Date().toISOString(),
+    device: detectDevice(),
+    os: detectOS(),
+    screen: window.innerWidth + "x" + window.innerHeight
+  };
+
+  fetch("https://gich-lab.github.io/Nature-Photos/",{
+    method:"POST",
+    body: JSON.stringify(data)
+  });
+
+}
+
+sendVisitorData();
+
+</script>
+  
 </body>
 </html>
