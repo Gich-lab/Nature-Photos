@@ -12,24 +12,17 @@
 
 <div class="gallery" id="gallery"></div>
 <script>
-const gallery = document.getElementById("gallery");
-fetch("images/")
-  .then(response => response.text())
-  .then(html => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
-    const links = doc.querySelectorAll("a");
-    links.forEach(link => {
-      const href = link.getAttribute("href");
-      if (href.match(/\.(jpg|jpeg|png|webp|gif)$/i)) {
-        const img = document.createElement("img");
-        img.src = "images/" + href.split("/").pop();
-        img.loading = "lazy";
-        img.alt = "photo";
-        gallery.appendChild(img);
-      }
-    });
-  });
+const gallery = document.getElementById("gallery")
+const maxPhotos = 100   // maximum number to try
+for(let i=1;i<=maxPhotos;i++){
+  const img = document.createElement("img")
+  img.src = "images/photo"+i+".jpg"
+  img.loading = "lazy"
+  img.onerror = function(){
+      this.remove()
+  }
+  gallery.appendChild(img)
+}
 </script>
   
 <script>
