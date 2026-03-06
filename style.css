@@ -116,8 +116,8 @@ body.lightbox-open {
   }
 
   .gallery img {
-    width: 10vh; /*auto;      /* scale width proportionally */
-    height: 10vh;    /* fill phone viewport height */
+    width: 100%; /*auto;      /* scale width proportionally */
+    height: auto;    /* fill phone viewport height */
     object-fit: cover; /* crop if necessary, full coverage */
   }
 }
