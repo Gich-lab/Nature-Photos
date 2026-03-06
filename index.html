@@ -11,21 +11,26 @@
 <header>Nature Photo Gallery</header>
 
 <div class="gallery" id="gallery"></div>
-
 <script>
-fetch("images.json")
-  .then(response => response.json())
-  .then(images => {
-    const gallery = document.getElementById("gallery")
-    images.forEach(file => {
-      const img = document.createElement("img")
-      img.src = "images/" + file
-      img.loading = "lazy"
-      img.alt = file
-      gallery.appendChild(img)
-    })
-  })
-</script>  
+const gallery = document.getElementById("gallery");
+fetch("images/")
+  .then(response => response.text())
+  .then(html => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    const links = doc.querySelectorAll("a");
+    links.forEach(link => {
+      const href = link.getAttribute("href");
+      if (href.match(/\.(jpg|jpeg|png|webp|gif)$/i)) {
+        const img = document.createElement("img");
+        img.src = "images/" + href.split("/").pop();
+        img.loading = "lazy";
+        img.alt = "Photo";
+        gallery.appendChild(img);
+      }
+    });
+  });
+</script>
   
 <script>
 const images = document.querySelectorAll(".gallery img")
