@@ -10,19 +10,23 @@
 
 <header>Nature Photo Gallery</header>
 
-<div class="gallery">
-  <img src="images/photo1.jpg" alt="Sunset over hills" loading="lazy">
-  <img src="images/photo2.jpg" alt="Forest stream" loading="lazy">
-  <img src="images/photo3.jpg" alt="Mountain peak" loading="lazy">
-  <img src="images/photo4.jpg" alt="Beach sunrise" loading="lazy">
-</div>
+<div class="gallery" id="gallery"></div>
 
-<div class="lightbox" id="lightbox">
-  <button class="nav prev">&#10094;</button>
-  <img id="lightbox-img">
-  <button class="nav next">&#10095;</button>
-</div>
-
+<script>
+fetch("images.json")
+  .then(response => response.json())
+  .then(images => {
+    const gallery = document.getElementById("gallery")
+    images.forEach(file => {
+      const img = document.createElement("img")
+      img.src = "images/" + file
+      img.loading = "lazy"
+      img.alt = file
+      gallery.appendChild(img)
+    })
+  })
+</script>  
+  
 <script>
 const images = document.querySelectorAll(".gallery img")
 const lightbox = document.getElementById("lightbox")
