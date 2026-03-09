@@ -4,7 +4,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Vertical Full-Screen Gallery</title>
-<link rel="stylesheet" href="styles.css" />
 <style>
   /* Basic styles for gallery */
   #gallery {
@@ -31,11 +30,11 @@
 
 <div class="gallery" id="gallery"></div>
 
-<!-- Lightbox elements (assuming they are in your CSS/HTML, include if not) -->
-<div id="lightbox" class="lightbox">
-  <img id="lightbox-img" src="" alt="Enlarged image" />
-  <button class="prev">Prev</button>
-  <button class="next">Next</button>
+<!-- Lightbox elements -->
+<div id="lightbox" class="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:9999;">
+  <img id="lightbox-img" src="" alt="Enlarged image" style="max-width:90%; max-height:90%; object-fit:contain;">
+  <button class="prev" style="position:absolute; top:50%; left:20px;">Prev</button>
+  <button class="next" style="position:absolute; top:50%; right:20px;">Next</button>
 </div>
 
 <script>
@@ -51,22 +50,23 @@ for(let i=1; i<=maxPhotos; i++){
   gallery.appendChild(img);
 }
 
-// Lightbox functionality
-const images = document.querySelectorAll("#gallery img");
+// Lightbox elements
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightbox-img");
+const images = document.querySelectorAll("#gallery img");
 let currentIndex = 0;
 let startX = 0;
 
+// Show image in lightbox
 function showImage(index){
   currentIndex = index;
   lightboxImg.src = images[index].src;
 }
 
+// Add click event to images
 images.forEach((img, index) => {
   img.addEventListener("click", () => {
-    lightbox.classList.add("active");
-    document.body.classList.add("lightbox-open");
+    lightbox.style.display = "flex";
     showImage(index);
   });
 });
@@ -83,20 +83,18 @@ document.querySelector(".prev").onclick = () => {
 
 // Keyboard nav
 document.addEventListener("keydown", (e) => {
-  if(!lightbox.classList.contains("active")) return;
+  if(lightbox.style.display !== "flex") return;
   if(e.key==="ArrowRight") document.querySelector(".next").click();
   if(e.key==="ArrowLeft") document.querySelector(".prev").click();
   if(e.key==="Escape"){
-    lightbox.classList.remove("active");
-    document.body.classList.remove("lightbox-open");
+    lightbox.style.display = "none";
   }
 });
 
-// Close lightbox
+// Close lightbox on background click
 lightbox.addEventListener("click", (e) => {
   if(e.target===lightbox){
-    lightbox.classList.remove("active");
-    document.body.classList.remove("lightbox-open");
+    lightbox.style.display = "none";
   }
 });
 
@@ -109,7 +107,7 @@ lightbox.addEventListener("touchend", (e) => {
   if(diff < -50) document.querySelector(".prev").click();
 });
 
-// Device detection functions
+// Device detection functions (optional, keep if needed)
 function detectDevice() {
   const ua = navigator.userAgent;
   if(/mobile/i.test(ua)) return "Mobile";
@@ -122,7 +120,7 @@ function detectOS() {
   if(ua.indexOf("iPhone")!== -1 || ua.indexOf("iPad") !== -1) return "iOS";
   if(ua.indexOf("Linux")!==-1) return "Linux";
   if(ua.indexOf("Android")!=-1) return "Android";
-  if(ua.indexOf("Mac")!=-1) return "MacOS";
+  if(ua.indexOf("Mac")!==-1) return "MacOS";
   return "Unknown";
 }
 function detectBrowser() {
@@ -143,7 +141,7 @@ function sendVisitorData() {
     browser: detectBrowser(),
     screen: window.innerWidth + "x" + window.innerHeight
   };
-  fetch("https://script.google.com/macros/s/AKfycbyJvR8_slY3w4fRFbqGBYRD5PcYM0PgZp90uSkEmQWuHMIZ8LrlBpMxCTCBrgucMHxc/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbyJvR8_slY3w4fRFbqGBYRD5PcYM0PgZp90uSkEmQWuHMIZ8LrlBpMxCTCBrgucMHxc", {
     method:"POST",
     body: JSON.stringify(data)
   });
@@ -162,7 +160,7 @@ function updateLayout() {
     gallery.style.display = "flex";
     gallery.style.flexWrap = "wrap";
     imgs.forEach(img => {
-      img.style.display = "block"; // Make sure images are visible
+      img.style.display = "block";
       img.style.width = "calc(25% - 10px)"; // Four per row
       img.style.height = "auto";
     });
@@ -176,7 +174,6 @@ function updateLayout() {
         img.style.width = "90vw";
         img.style.height = "90vh";
         img.style.objectFit = "contain";
-        // Center the image
         img.style.margin = "auto";
       } else {
         img.style.display = "none";
@@ -185,9 +182,12 @@ function updateLayout() {
   }
 }
 
-
 // Run layout update on load and resize
-window.addEventListener("load", updateLayout);
+window.addEventListener("load", () => {
+  updateLayout();
+  // Initialize currentIndex for desktop mode
+  currentIndex = 0;
+});
 window.addEventListener("resize", updateLayout);
 </script>
 </body>
