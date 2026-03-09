@@ -1,113 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Vertical Full-Screen Gallery</title>
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* Basic styles for gallery */
+  #gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  #gallery img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+  /* Full-screen styles for desktop view */
+  #gallery.fullscreen img {
+    width: 100vw !important;
+    height: 100vh !important;
+    object-fit: contain;
+  }
+</style>
 </head>
 <body>
 
 <header>Nature Photo Gallery</header>
 
 <div class="gallery" id="gallery"></div>
+
+<!-- Lightbox elements (assuming they are in your CSS/HTML, include if not) -->
+<div id="lightbox" class="lightbox">
+  <img id="lightbox-img" src="" alt="Enlarged image" />
+  <button class="prev">Prev</button>
+  <button class="next">Next</button>
+</div>
+
 <script>
-const gallery = document.getElementById("gallery")
-const maxPhotos = 100   // maximum number to try
-for(let i=1;i<=maxPhotos;i++){
-  const img = document.createElement("img")
+const gallery = document.getElementById("gallery");
+const maxPhotos = 100; // maximum number to try
+
+// Generate images
+for(let i=1; i<=maxPhotos; i++){
+  const img = document.createElement("img");
   img.setAttribute('loading', 'lazy');
-  img.src = "images/photo"+i+".jpg"
-  <!-- img.loading = "lazy"-->
-  img.onerror = function(){
-      this.remove()
-  }
-  gallery.appendChild(img)
+  img.src = "images/photo"+i+".jpg";
+  img.onerror = function() { this.remove(); }
+  gallery.appendChild(img);
 }
-</script>
-  
-<script>
-const images = document.querySelectorAll(".gallery img")
-const lightbox = document.getElementById("lightbox")
-const lightboxImg = document.getElementById("lightbox-img")
-let currentIndex = 0
-let startX = 0
+
+// Lightbox functionality
+const images = document.querySelectorAll("#gallery img");
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightbox-img");
+let currentIndex = 0;
+let startX = 0;
 
 function showImage(index){
-  currentIndex = index
-  lightboxImg.src = images[index].src
+  currentIndex = index;
+  lightboxImg.src = images[index].src;
 }
 
-images.forEach((img,index)=>{
-  img.addEventListener("click",()=>{
-    lightbox.classList.add("active")
-    document.body.classList.add("lightbox-open")
-    showImage(index)
-  })
-})
+images.forEach((img, index) => {
+  img.addEventListener("click", () => {
+    lightbox.classList.add("active");
+    document.body.classList.add("lightbox-open");
+    showImage(index);
+  });
+});
 
-document.querySelector(".next").onclick = ()=>{
-  currentIndex = (currentIndex + 1) % images.length
-  showImage(currentIndex)
-}
+// Navigation buttons
+document.querySelector(".next").onclick = () => {
+  currentIndex = (currentIndex + 1) % images.length;
+  showImage(currentIndex);
+};
+document.querySelector(".prev").onclick = () => {
+  currentIndex = (currentIndex - 1 + images.length) % images.length;
+  showImage(currentIndex);
+};
 
-document.querySelector(".prev").onclick = ()=>{
-  currentIndex = (currentIndex - 1 + images.length) % images.length
-  showImage(currentIndex)
-}
-
-document.addEventListener("keydown",(e)=>{
-  if(!lightbox.classList.contains("active")) return
-  if(e.key==="ArrowRight") document.querySelector(".next").click()
-  if(e.key==="ArrowLeft") document.querySelector(".prev").click()
+// Keyboard nav
+document.addEventListener("keydown", (e) => {
+  if(!lightbox.classList.contains("active")) return;
+  if(e.key==="ArrowRight") document.querySelector(".next").click();
+  if(e.key==="ArrowLeft") document.querySelector(".prev").click();
   if(e.key==="Escape"){
-    lightbox.classList.remove("active")
-    document.body.classList.remove("lightbox-open")
+    lightbox.classList.remove("active");
+    document.body.classList.remove("lightbox-open");
   }
-})
+});
 
-lightbox.addEventListener("click",(e)=>{
+// Close lightbox
+lightbox.addEventListener("click", (e) => {
   if(e.target===lightbox){
-    lightbox.classList.remove("active")
-    document.body.classList.remove("lightbox-open")
+    lightbox.classList.remove("active");
+    document.body.classList.remove("lightbox-open");
   }
-})
+});
 
-// swipe support
-lightbox.addEventListener("touchstart",(e)=>{ startX = e.touches[0].clientX })
-lightbox.addEventListener("touchend",(e)=>{
-  let endX = e.changedTouches[0].clientX
-  let diff = startX - endX
-  if(diff > 50) document.querySelector(".next").click()
-  if(diff < -50) document.querySelector(".prev").click()
-})
-</script>
+// Swipe support
+lightbox.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; });
+lightbox.addEventListener("touchend", (e) => {
+  let endX = e.changedTouches[0].clientX;
+  let diff = startX - endX;
+  if(diff > 50) document.querySelector(".next").click();
+  if(diff < -50) document.querySelector(".prev").click();
+});
 
-<script>
-
-function detectDevice(){
+// Device detection functions
+function detectDevice() {
   const ua = navigator.userAgent;
-
   if(/mobile/i.test(ua)) return "Mobile";
   if(/tablet/i.test(ua)) return "Tablet";
   return "Desktop";
 }
-
-function detectOS(){
+function detectOS() {
   const ua = navigator.userAgent;
-
   if(ua.indexOf("Win")!==-1) return "Windows";
   if(ua.indexOf("iPhone")!== -1 || ua.indexOf("iPad") !== -1) return "iOS";
   if(ua.indexOf("Linux")!==-1) return "Linux";
   if(ua.indexOf("Android")!=-1) return "Android";
   if(ua.indexOf("Mac")!=-1) return "MacOS";
-
   return "Unknown";
 }
-  
 function detectBrowser() {
   const ua = navigator.userAgent;
-  if(/Brave/i.test(ua)) return "Brave"; // Brave detection
+  if(/Brave/i.test(ua)) return "Brave";
   if(/Chrome/i.test(ua) && !/Edge|OPR/i.test(ua)) return "Chrome";
   if(/Safari/i.test(ua) && !/Chrome/i.test(ua)) return "Safari";
   if(/Firefox/i.test(ua)) return "Firefox";
@@ -115,9 +135,7 @@ function detectBrowser() {
   if(/OPR|Opera/i.test(ua)) return "Opera";
   return "Other";
 }
-  
-function sendVisitorData(){
-
+function sendVisitorData() {
   const data = {
     time: new Date().toISOString(),
     device: detectDevice(),
@@ -125,17 +143,54 @@ function sendVisitorData(){
     browser: detectBrowser(),
     screen: window.innerWidth + "x" + window.innerHeight
   };
-
-  fetch("https://script.google.com/macros/s/AKfycbyJvR8_slY3w4fRFbqGBYRD5PcYM0PgZp90uSkEmQWuHMIZ8LrlBpMxCTCBrgucMHxc/exec",{
+  fetch("https://script.google.com/macros/s/AKfycbyJvR8_slY3w4fRFbqGBYRD5PcYM0PgZp90uSkEmQWuHMIZ8LrlBpMxCTCBrgucMHxc/exec", {
     method:"POST",
     body: JSON.stringify(data)
   });
-
 }
-
 sendVisitorData();
 
-</script>
+// Responsive layout function
+function updateLayout() {
+  const width = window.innerWidth;
+  const imgs = document.querySelectorAll("#gallery img");
+  const gallery = document.getElementById("gallery");
   
+  if (width <= 768) {
+    // Mobile: grid of images
+    gallery.classList.remove("fullscreen");
+    gallery.style.display = "flex";
+    gallery.style.flexWrap = "wrap";
+    imgs.forEach(img => {
+      img.style.width = "calc(25% - 10px)";
+      img.style.height = "auto";
+      img.style.display = "block";
+    });
+  } else {
+    // Desktop: show only one image fullscreen
+    gallery.classList.add("fullscreen");
+    gallery.style.display = "block"; // override flex
+    // Find the current image to show fullscreen
+    if(images.length > 0){
+      // Show only the current image
+      imgs.forEach((img, index) => {
+        if(index === currentIndex){
+          img.style.display = "block";
+          // Make it full-screen
+          img.style.width = "100vw";
+          img.style.height = "100vh";
+          img.style.objectFit = "contain";
+        } else {
+          img.style.display = "none";
+        }
+      });
+    }
+  }
+}
+
+// Run layout update on load and resize
+window.addEventListener("load", updateLayout);
+window.addEventListener("resize", updateLayout);
+</script>
 </body>
 </html>
