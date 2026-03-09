@@ -16,87 +16,19 @@ body {
 
 /* Ensure images are responsive everywhere */
 img {
-  max-width: 100%;
-  width: 100%;
-  height: auto;
-  display: block;
+  max-width: 100vw; /* Set max-width to viewport width */
+  width: 100%; /* Set width to 100% */
+  height: auto; /* Maintain aspect ratio */
+  display: block; /* Display as block */
+  object-fit: contain; /* Contain image within parent */
+  margin: 0 auto; /* Center image horizontally */
 }
 
-header {
-  text-align: center;
-  padding: 20px;
-  background: #000;
-  font-size: 26px;
-  letter-spacing: 2px;
-}
-
-.gallery {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 10px;
-  max-width: 100%;
-}
-
-.gallery img {
-  width: 100%;       /* fit container width */
-  height: auto;      /* keep aspect ratio */
-  object-fit: contain;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: transform 0.25s ease;
-  max-width: 100%;
-  display: block;
-}
-
-.gallery img:hover {
-  transform: scale(1.03);
-}
-
-.lightbox {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.95);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.lightbox.active {
-  display: flex;
-}
-
-.lightbox img {
-  max-width: 90%;
-  max-height: 90%;
-  object-fit: contain;
-  border-radius: 10px;
-}
-
-.nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 40px;
-  color: white;
-  background: rgba(0,0,0,0.4);
-  border: none;
-  cursor: pointer;
-  padding: 12px 16px;
-  border-radius: 6px;
-}
-
-.prev { left: 20px; }
-.next { right: 20px; }
-
-.nav:hover {
-  background: rgba(255,255,255,0.2);
-}
-
-body.lightbox-open {
-  overflow: hidden;
+/* Add media query for smaller screens */
+@media only screen and (max-width: 768px) {
+  img {
+    width: 100%; /* Set width to 100% */
+    height: auto; /* Maintain aspect ratio */
+    object-fit: cover; /* Cover entire parent */
+  }
 }
