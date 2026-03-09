@@ -108,11 +108,19 @@ body.lightbox-open {
    Mobile Layout
    (Images fill screen height & stack vertically)
 ------------------------- */
-@media screen and (max-width: 600px) {
+/*@media screen and (max-width: 600px) {
   .gallery {
     display: flex;
     flex-direction: column;
     gap: 0; /* remove spacing for full-height images */
+*/
+@media screen and (max-width: 600px) {
+  .gallery {
+    padding: 5px;
+  }
+  .gallery img {
+    width: 100%;   /* always fit horizontally */
+    height: auto;  /* scale height proportionally */
   }
 
   .gallery img {
