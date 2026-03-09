@@ -167,16 +167,17 @@ function updateLayout() {
       img.style.height = "auto";
     });
   } else {
-    // Desktop: show only one image fullscreen
+    // Desktop: show only one image fullscreen with same size
     gallery.classList.add("fullscreen");
-    // Show only the current image, hide others
     imgs.forEach((img, index) => {
-      if(index === currentIndex){
+      if (index === currentIndex) {
         img.style.display = "block";
-        // Make it full-screen
-        img.style.width = "80vw";
-        img.style.height = "60vh";
+        // Set fixed size for all images
+        img.style.width = "90vw";
+        img.style.height = "90vh";
         img.style.objectFit = "contain";
+        // Center the image
+        img.style.margin = "auto";
       } else {
         img.style.display = "none";
       }
