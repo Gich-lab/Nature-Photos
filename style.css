@@ -1,18 +1,27 @@
-/* Apply box-sizing globally for consistent box model */
+/* Global reset and fix */
 *, *::before, *::after {
   box-sizing: border-box;
+  overflow-wrap: break-word;
 }
 
-/* Prevent horizontal overflow */
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   background: #111;
   color: white;
   overflow-x: hidden; /* Prevent horizontal scroll */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
-/* General header styles remain the same */
+/* Ensure images are responsive everywhere */
+img {
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 header {
   text-align: center;
   padding: 20px;
@@ -21,31 +30,29 @@ header {
   letter-spacing: 2px;
 }
 
-/* Gallery styles */
 .gallery {
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 10px;
+  max-width: 100%;
 }
 
-/* Make sure images are responsive and scale within container */
 .gallery img {
-  width: 100%;       /* fit screen width */
+  width: 100%;       /* fit container width */
   height: auto;      /* keep aspect ratio */
-  object-fit: contain; 
+  object-fit: contain;
   border-radius: 8px;
   cursor: pointer;
   transition: transform 0.25s ease;
-  max-width: 100%; /* ensure images don't overflow */
+  max-width: 100%;
+  display: block;
 }
 
-/* Hover effect remains unchanged */
 .gallery img:hover {
   transform: scale(1.03);
 }
 
-/* Lightbox styles, already good but ensure max-width/max-height */
 .lightbox {
   position: fixed;
   top: 0;
@@ -70,7 +77,6 @@ header {
   border-radius: 10px;
 }
 
-/* Navigation buttons, no change needed here */
 .nav {
   position: absolute;
   top: 50%;
@@ -91,7 +97,6 @@ header {
   background: rgba(255,255,255,0.2);
 }
 
-/* Prevent scroll when lightbox open */
 body.lightbox-open {
   overflow: hidden;
 }
