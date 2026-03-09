@@ -110,17 +110,17 @@ body.lightbox-open {
 ------------------------- */
 @media screen and (max-width: 600px) {
   .gallery {
-    display: flex;
-    flex-direction: column; /* stack vertically */
-    gap: 10px; /* spacing between images */
+    display: flex;           /* vertical flow */
+    flex-direction: column;
+    gap: 10px;
     padding: 5px;
   }
 
   .gallery img {
-    width: 100%;      /* fit horizontally */
-    max-height: 90vh; /* optional: don't exceed viewport height */
-    height: auto;     /* maintain aspect ratio */
-    object-fit: contain; /* scale image inside the box without cropping */
+    width: 100%;             /* fit horizontal screen */
+    height: auto;            /* maintain aspect ratio */
+    max-width: 100%;         /* ensure no overflow horizontally */
+    object-fit: contain;     /* show full image, no cropping */
     border-radius: 8px;
   }
 }
