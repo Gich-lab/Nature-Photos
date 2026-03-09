@@ -162,31 +162,28 @@ function updateLayout() {
     gallery.style.display = "flex";
     gallery.style.flexWrap = "wrap";
     imgs.forEach(img => {
-      img.style.width = "calc(25% - 10px)";
+      img.style.display = "block"; // Make sure images are visible
+      img.style.width = "calc(25% - 10px)"; // Four per row
       img.style.height = "auto";
-      img.style.display = "block";
     });
   } else {
     // Desktop: show only one image fullscreen
     gallery.classList.add("fullscreen");
-    gallery.style.display = "block"; // override flex
-    // Find the current image to show fullscreen
-    if(images.length > 0){
-      // Show only the current image
-      imgs.forEach((img, index) => {
-        if(index === currentIndex){
-          img.style.display = "block";
-          // Make it full-screen
-          img.style.width = "100vw";
-          img.style.height = "100vh";
-          img.style.objectFit = "contain";
-        } else {
-          img.style.display = "none";
-        }
-      });
-    }
+    // Show only the current image, hide others
+    imgs.forEach((img, index) => {
+      if(index === currentIndex){
+        img.style.display = "block";
+        // Make it full-screen
+        img.style.width = "100vw";
+        img.style.height = "100vh";
+        img.style.objectFit = "contain";
+      } else {
+        img.style.display = "none";
+      }
+    });
   }
 }
+
 
 // Run layout update on load and resize
 window.addEventListener("load", updateLayout);
