@@ -11,24 +11,46 @@ body {
   color: white;
   overflow-x: hidden; /* Prevent horizontal scroll */
   word-wrap: break-word;
-  overflow-wrap: break-word;
 }
 
-/* Ensure images are responsive everywhere */
+/* Make images responsive and prevent overflow */
 img {
-  max-width: 100vw; /* Set max-width to viewport width */
-  width: 100%; /* Set width to 100% */
-  height: auto; /* Maintain aspect ratio */
-  display: block; /* Display as block */
-  object-fit: contain; /* Contain image within parent */
-  margin: 0 auto; /* Center image horizontally */
+  max-width: 100%;      /* Ensure images don't overflow their containers */
+  height: auto;         /* Maintain aspect ratio */
+  display: block;       /* Remove inline spacing */
+  object-fit: contain;  /* Fit within container without overflow */
+  margin: 0 auto;       /* Center images if needed */
 }
 
-/* Add media query for smaller screens */
-@media only screen and (max-width: 768px) {
-  img {
-    width: 100%; /* Set width to 100% */
-    height: auto; /* Maintain aspect ratio */
-    object-fit: cover; /* Cover entire parent */
-  }
+/* Ensure containers are responsive */
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  max-width: 100%; /* Full width */
+  box-sizing: border-box;
+}
+
+/* Lightbox styles (unchanged) */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.95);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.lightbox.active {
+  display: flex;
+}
+.lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  border-radius: 10px;
 }
