@@ -53,27 +53,6 @@
 <script>
 const gallery = document.getElementById("gallery");
 const maxPhotos = 100; // maximum number to try
-
-
-// Function to generate a UUID (version 4)
-function generateUUID() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    const r = Math.random() * 16 | 0;
-    const v = c === 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-}
-
-// Function to get or create UUID
-function getOrCreateUUID() {
-  let uuid = localStorage.getItem('deviceUUID');
-  if (!uuid) {
-    uuid = generateUUID();
-    localStorage.setItem('deviceUUID', uuid);
-  }
-  return uuid;
-}
-
   
 // Generate images
 for(let i=1; i<=maxPhotos; i++){
@@ -168,7 +147,6 @@ function detectBrowser() {
 }
   
 function sendVisitorData() {
-  const uuid = getOrCreateUUID();
   const data = {
     uuid: uuid,
     time: new Date().toISOString(),
@@ -177,24 +155,12 @@ function sendVisitorData() {
     browser: detectBrowser(),
     screen: window.innerWidth + "x" + window.innerHeight
   };
-
-  fetch("https://script.google.com/macros/s/AKfycbwVOGLqX-KsB7ohLEsee6zkkOIUUVlbC7Ul_jQcTdGRbKDnrFSDpTwioEm75MPguYEO", {
-    method: "POST",
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  })
-  .then(response => response.text())
-  .then(data => console.log('Response from server:', data))
-  .catch(error => console.error('Error:', error));
-}
-
-    
-//  });
-// }
+  fetch("https://script.google.com/macros/s/AKfycbwVOGLqX-KsB7ohLEsee6zkkOIUUVlbC7Ul_jQcTdGRbKDnrFSDpTwioEm75MPguYEO/exec", {
+    method:"POST",
+    body: JSON.stringify(data)   
+  });
+ }
 sendVisitorData();
-// sendUUIDToSheet(uuid); // to be removed in case of issues
 
 // Responsive layout function
 function updateLayout() {
