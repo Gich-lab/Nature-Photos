@@ -167,9 +167,8 @@ function detectBrowser() {
   return "Other";
 }
 function sendVisitorData() {
-  const uuid = getOrCreateUUID()
   const data = {
-    uuid: uuid
+    uuid: = getOrCreateUUID(),
     time: new Date().toISOString(),
     device: detectDevice(),
     os: detectOS(),
