@@ -153,32 +153,29 @@ function updateLayout() {
   const imgs = document.querySelectorAll("#gallery img");
   const gallery = document.getElementById("gallery");
   
-  if (width <= 768) {
-    // Mobile: grid of images
-    gallery.classList.remove("fullscreen");
-    gallery.style.display = "flex";
-    gallery.style.flexWrap = "wrap";
-    imgs.forEach(img => {
-      img.style.display = "block";
-      img.style.width = "calc(25% - 10px)"; // Four per row
-      img.style.height = "auto";
-    });
-  } else {
-    // Desktop: show only one image fullscreen with same size
-    gallery.classList.add("fullscreen");
-    imgs.forEach((img, index) => {
-      if (index === currentIndex) {
-        img.style.display = "block";
-        // Set fixed size for all images
-        img.style.width = "90vw";
-        img.style.height = "90vh";
-        img.style.objectFit = "contain";
-        img.style.margin = "auto";
-      } else {
-        img.style.display = "none";
-      }
-    });
-  }
+if (width <= 768) {
+  // Mobile: grid of images
+  gallery.classList.remove("fullscreen");
+  gallery.style.display = "flex";
+  gallery.style.flexWrap = "wrap";
+  imgs.forEach(img => {
+    img.style.display = "block";
+    img.style.width = "calc(25% - 10px)"; // Four per row
+    img.style.height = "auto";
+  });
+} else {
+  // Desktop: display all images vertically, one at a time
+  gallery.classList.remove("fullscreen"); // Remove fullscreen if needed
+  imgs.forEach((img, index) => {
+    img.style.display = "block"; // Show all images
+    // Set size for vertical display
+    img.style.width = "100%"; // Full width of container
+    img.style.maxWidth = "600px"; // Optional max width
+    img.style.height = "auto"; // Maintain aspect ratio
+    img.style.margin = "10px auto"; // Centered with margin
+    // Remove object fit if not needed
+    img.style.objectFit = "contain";
+  });
 }
 
 // Run layout update on load and resize
