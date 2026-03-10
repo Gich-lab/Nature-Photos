@@ -23,10 +23,22 @@
     object-fit: contain;
   }
 </style>
+  
+<head>
+  <style>
+    /* Style for header */
+    header {
+      color: green; /* Change to 'blue' for blue color */
+      font-weight: bold;
+      font-size: 2em; /* Make the font larger */
+      text-align: center; /* Center the header text */
+      margin-top: 20px; /* Add some space above */
+    }
+  </style>
 </head>
 <body>
-
-<header>Nature Photo Gallery</header>
+  <header>Nature Photo Gallery</header>
+</body>
 
 <div id="gallery" class="gallery"></div>
 
@@ -170,14 +182,9 @@ function updateLayout() {
     gallery.classList.remove("fullscreen");
     imgs.forEach((img) => {
       img.style.display = "block"; // Show all images
-      img.style.width = "calc(100% - 20px)"; // One image per row on mobile devices
+      img.style.width = "calc(100% - 20px)"; // three images per row on desktops
       img.style.height = "auto";
-      img.style.margin = "5px"; // optional spacing
-      
-      // img.style.width = "100%"; // Full width
-      // img.style.maxWidth = "600px"; // Optional max width
-      // img.style.margin = "10px auto"; // Centered
-      // img.style.objectFit = "contain"; // Maintain aspect ratio
+      img.style.margin = "5px"; // optional spacing     
     });
   }
 }
