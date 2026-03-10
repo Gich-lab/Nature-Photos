@@ -190,7 +190,7 @@ function sendVisitorData() {
     browser: detectBrowser(),
     screen: window.innerWidth + "x" + window.innerHeight
   };
-  fetch("https://script.google.com/macros/s/AKfycbzGVoWFoaDnhdUChtRmKt2Jc_iBaeQCEcH27ABrIx-z9p-9Eup-D1IboUA0NR5F0vbs/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbwVOGLqX-KsB7ohLEsee6zkkOIUUVlbC7Ul_jQcTdGRbKDnrFSDpTwioEm75MPguYEO/exec", {
     method:"POST",
     body: JSON.stringify(data)
   });
