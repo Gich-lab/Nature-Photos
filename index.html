@@ -29,7 +29,7 @@
 <head>
   <style>
     .main-header {
-      color: blue; /* or green */
+      color: green; /* or blue */
       font-weight: bold;
       font-size: 2em;
       text-align: center;
@@ -42,7 +42,7 @@
 </body>
 
   
-<!-- <header>Nature Photo Gallery</header> -->
+<!-- <header>Nature Photos Gallery</header> -->
 
 <div id="gallery" class="gallery"></div>
 
@@ -177,7 +177,7 @@ function updateLayout() {
 
     imgs.forEach(img => {
       img.style.display = "block"; // Make sure images are block-level
-      img.style.width = "calc(50% - 20px)"; // Two per row
+      img.style.width = "calc(50% - 20px)"; // Two per row on mobile devices
       img.style.height = "auto";
       img.style.margin = "5px"; // optional spacing
     });
@@ -186,7 +186,7 @@ function updateLayout() {
     gallery.classList.remove("fullscreen");
     imgs.forEach((img) => {
       img.style.display = "block"; // Show all images
-      img.style.width = "calc(50% - 20px)"; // Two per row
+      img.style.width = "calc(50% - 20px)"; // Two per row on desktop
       img.style.height = "auto";
       img.style.margin = "5px"; // optional spacing
       
