@@ -199,9 +199,25 @@ function sendVisitorData() {
   fetch("https://script.google.com/macros/s/AKfycbwVOGLqX-KsB7ohLEsee6zkkOIUUVlbC7Ul_jQcTdGRbKDnrFSDpTwioEm75MPguYEO/exec", {
     method:"POST",
     body: JSON.stringify(data)
-  });
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ uuid: uuid })
+  })
+  .then(response => response.text())
+  .then(data => console.log('Response from server:', data))
+  .catch(error => console.error('Error:', error));
 }
+
+
+
+
+
+    
+//  });
+// }
 sendVisitorData();
+sendUUIDToSheet(uuid); // to be removed in case of issues
 
 // Responsive layout function
 function updateLayout() {
