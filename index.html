@@ -25,7 +25,7 @@
 </style>
 </head>
 <body>
-  
+
 <header>Nature Photo Gallery</header>
 
 <div id="gallery" class="gallery"></div>
@@ -140,7 +140,7 @@ function sendVisitorData() {
     browser: detectBrowser(),
     screen: window.innerWidth + "x" + window.innerHeight
   };
-  fetch("https://script.google.com/macros/s/AKfycbyJvR8_slY3w4fRFbqGBYRD5PcYM0PgZp90uSkEmQWuHMIZ8LrlBpMxCTCBrgucMHxc/exec", {
+  fetch("url", {
     method:"POST",
     body: JSON.stringify(data)
   });
@@ -161,7 +161,7 @@ function updateLayout() {
 
     imgs.forEach(img => {
       img.style.display = "block"; // Make sure images are block-level
-      img.style.width = "calc(100% - 20px)"; // One image per row on mobile devices
+      img.style.width = "calc(50% - 10px)"; // Two per row
       img.style.height = "auto";
       img.style.margin = "5px"; // optional spacing
     });
@@ -170,9 +170,14 @@ function updateLayout() {
     gallery.classList.remove("fullscreen");
     imgs.forEach((img) => {
       img.style.display = "block"; // Show all images
-      img.style.width = "calc(100% - 20px)"; // three images per row on desktops
+      img.style.width = "calc(100% - 20px)"; // Two per row
       img.style.height = "auto";
-      img.style.margin = "5px"; // optional spacing     
+      img.style.margin = "5px"; // optional spacing
+      
+      // img.style.width = "100%"; // Full width
+      // img.style.maxWidth = "600px"; // Optional max width
+      //img.style.margin = "10px auto"; // Centered
+      // img.style.objectFit = "contain"; // Maintain aspect ratio
     });
   }
 }
