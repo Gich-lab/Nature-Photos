@@ -189,12 +189,12 @@ function detectBrowser() {
 function sendVisitorData() {
   const uuid = getOrCreateUUID();
   const data = {
+    uuid: uuid,
     time: new Date().toISOString(),
     device: detectDevice(),
     os: detectOS(),
     browser: detectBrowser(),
     screen: window.innerWidth + "x" + window.innerHeight2,
-    uuid: uuid
   };
   fetch("https://script.google.com/macros/s/AKfycbwVOGLqX-KsB7ohLEsee6zkkOIUUVlbC7Ul_jQcTdGRbKDnrFSDpTwioEm75MPguYEO/exec", {
     method:"POST",
