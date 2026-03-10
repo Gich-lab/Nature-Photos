@@ -161,7 +161,7 @@ function updateLayout() {
 
     imgs.forEach(img => {
       img.style.display = "block"; // Make sure images are block-level
-      img.style.width = "calc(100% - 20px)"; // Two per row
+      img.style.width = "calc(100% - 20px)"; // One image per row on mobile devices
       img.style.height = "auto";
       img.style.margin = "5px"; // optional spacing
     });
@@ -170,10 +170,14 @@ function updateLayout() {
     gallery.classList.remove("fullscreen");
     imgs.forEach((img) => {
       img.style.display = "block"; // Show all images
-      img.style.width = "100%"; // Full width
-      img.style.maxWidth = "600px"; // Optional max width
-      img.style.margin = "10px auto"; // Centered
-      img.style.objectFit = "contain"; // Maintain aspect ratio
+      img.style.width = "calc(100% - 20px)"; // One image per row on mobile devices
+      img.style.height = "auto";
+      img.style.margin = "5px"; // optional spacing
+      
+      // img.style.width = "100%"; // Full width
+      // img.style.maxWidth = "600px"; // Optional max width
+      // img.style.margin = "10px auto"; // Centered
+      // img.style.objectFit = "contain"; // Maintain aspect ratio
     });
   }
 }
