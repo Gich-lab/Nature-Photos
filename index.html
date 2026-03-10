@@ -158,23 +158,22 @@ if (width <= 768) {
   gallery.classList.remove("fullscreen");
   gallery.style.display = "flex";
   gallery.style.flexWrap = "wrap";
+
   imgs.forEach(img => {
-    img.style.display = "block";
-    img.style.width = "calc(50% - 10px)"; // Four per row
+    img.style.display = "block"; // Make sure images are block-level
+    img.style.width = "calc(50% - 10px)"; // Two per row
     img.style.height = "auto";
+    img.style.margin = "5px"; // optional spacing
   });
 } else {
-  // Desktop: display all images vertically, one at a time
-  gallery.classList.remove("fullscreen"); // Remove fullscreen if needed
-  imgs.forEach((img, index) => {
+  // Desktop: display all images vertically
+  gallery.classList.remove("fullscreen");
+  imgs.forEach((img) => {
     img.style.display = "block"; // Show all images
-    // Set size for vertical display
-    img.style.width = "100%"; // Full width of container
+    img.style.width = "100%"; // Full width
     img.style.maxWidth = "600px"; // Optional max width
-    img.style.height = "auto"; // Maintain aspect ratio
-    img.style.margin = "10px auto"; // Centered with margin
-    // Remove object fit if not needed
-    img.style.objectFit = "contain";
+    img.style.margin = "10px auto"; // Centered
+    img.style.objectFit = "contain"; // Maintain aspect ratio
   });
 }
 
