@@ -74,26 +74,6 @@ function getOrCreateUUID() {
   return uuid;
 }
 
-// Function to send UUID to Google Sheets
-function sendUUIDToSheet(uuid) {
-  fetch('<YOUR_WEB_APP_URL>', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ uuid: uuid })
-  })
-  .then(response => response.text())
-  .then(data => console.log('Response from server:', data))
-  .catch(error => console.error('Error:', error));
-}
-
-// Run on page load
-
-
-// sendUUIDToSheet(uuid);
-
-
   
 // Generate images
 for(let i=1; i<=maxPhotos; i++){
