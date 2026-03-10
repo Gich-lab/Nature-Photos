@@ -166,6 +166,7 @@ function detectBrowser() {
   if(/OPR|Opera/i.test(ua)) return "Opera";
   return "Other";
 }
+  
 function sendVisitorData() {
   const uuid = getOrCreateUUID();
   const data = {
@@ -176,13 +177,13 @@ function sendVisitorData() {
     browser: detectBrowser(),
     screen: window.innerWidth + "x" + window.innerHeight
   };
-  fetch("https://script.google.com/macros/s/AKfycbwVOGLqX-KsB7ohLEsee6zkkOIUUVlbC7Ul_jQcTdGRbKDnrFSDpTwioEm75MPguYEO/exec", {
-    method:"POST",
-    body: JSON.stringify(data)
+
+  fetch("https://script.google.com/macros/s/AKfycbwVOGLqX-KsB7ohLEsee6zkkOIUUVlbC7Ul_jQcTdGRbKDnrFSDpTwioEm75MPguYEO", {
+    method: "POST",
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ uuid: uuid })
+    body: JSON.stringify(data)
   })
   .then(response => response.text())
   .then(data => console.log('Response from server:', data))
