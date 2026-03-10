@@ -54,6 +54,43 @@
 const gallery = document.getElementById("gallery");
 const maxPhotos = 100; // maximum number to try
 
+<script>
+// Function to generate a UUID (version 4)
+function generateUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+function getOrCreateUUID() {
+  let uuid = localStorage.getItem('deviceUUID');
+  if (!uuid) {
+    uuid = generateUUID();
+    localStorage.setItem('deviceUUID', uuid);
+  }
+  return uuid;
+}
+
+// Function to send UUID to Google Sheets
+function sendUUIDToSheet(uuid) {
+  fetch('<YOUR_WEB_APP_URL>', {
+    method: 'POST',
+    contentType: 'application/json',
+    body: JSON.stringify({ uuid: uuid }),
+  })
+  .then(response => response.text())
+  .then(data => console.log('Response from server:', data))
+  .catch(error => console.error('Error:', error));
+}
+
+// Run on page load
+const uuid = getOrCreateUUID();
+sendUUIDToSheet(uuid);
+</script>
+
+  
 // Generate images
 for(let i=1; i<=maxPhotos; i++){
   const img = document.createElement("img");
