@@ -54,7 +54,10 @@
 const gallery = document.getElementById("gallery");
 const maxPhotos = 100; // maximum number to try
 
-<script>
+// <script>
+const gallery = document.getElementById("gallery");
+const maxPhotos = 100; // maximum number to try
+
 // Function to generate a UUID (version 4)
 function generateUUID() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -64,6 +67,7 @@ function generateUUID() {
   });
 }
 
+// Function to get or create UUID
 function getOrCreateUUID() {
   let uuid = localStorage.getItem('deviceUUID');
   if (!uuid) {
@@ -77,8 +81,10 @@ function getOrCreateUUID() {
 function sendUUIDToSheet(uuid) {
   fetch('<YOUR_WEB_APP_URL>', {
     method: 'POST',
-    contentType: 'application/json',
-    body: JSON.stringify({ uuid: uuid }),
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ uuid: uuid })
   })
   .then(response => response.text())
   .then(data => console.log('Response from server:', data))
