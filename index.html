@@ -110,8 +110,7 @@ lightbox.addEventListener("touchend", (e) => {
 // Device detection functions (optional, keep if needed)
 function detectDevice() {
   const ua = navigator.userAgent;
-  if(/mobile/i.test(ua)) return "Mobile";
-  if(/tablet/i.test(ua)) return "Tablet";
+  if(/Mobile|Android|iPhone|iPad|iPod/i.test(ua)) return "Mobile";
   return "Desktop";
 }
 function detectOS() {
