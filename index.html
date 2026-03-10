@@ -192,7 +192,7 @@ function sendVisitorData() {
     os: detectOS(),
     browser: detectBrowser(),
     screen: window.innerWidth + "x" + window.innerHeight
-    const uuid = getOrCreateUUID();
+    uuid: getOrCreateUUID();
   };
   fetch("https://script.google.com/macros/s/AKfycbwVOGLqX-KsB7ohLEsee6zkkOIUUVlbC7Ul_jQcTdGRbKDnrFSDpTwioEm75MPguYEO/exec", {
     method:"POST",
