@@ -149,23 +149,28 @@ function detectBrowser() {
   return "Other";
 }
 
+function getPersistentUUID() {
+  const storageKey = 'myAppUUID';
+  // Check if UUID already exists
+  let uuid = localStorage.getItem(storageKey);  
+  if (!uuid) {
+    // Generate new UUID
+    uuid = generateUUID(); // assume generateUUID() is your UUID function
+    localStorage.setItem(storageKey, uuid);
+  }  
+  return uuid;
+}
+
+// Your UUID generator function (example)
 function generateUUID() {
-  // Generate a UUID of the form xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
+  // a simple UUID v4 generator
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    const r = Math.random() * 16 | 0; // random number between 0 and 15
-    const v = c === 'x' ? r : (r & 0x3 | 0x8); // set bits for 'y'
+    const r = crypto.getRandomValues(new Uint8Array(1))[0] % 16;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
   });
 }
-  
-function getPersistentDeviceId() {
-  let deviceId = localStorage.getItem('deviceId');
-  if (!deviceId) {
-    deviceId = generateUUID(); // generate a new UUID
-    localStorage.setItem('deviceId', deviceId);
-  }
-  return deviceId;
-}
+
   
   
 function sendVisitorData() {
@@ -177,9 +182,9 @@ function sendVisitorData() {
     screen: window.innerWidth + "x" + document.documentElement.clientHeight,
     uuid: getPersistentDeviceId();
   };
-}
+
   
-fetch("https://script.google.com/macros/s/AKfycbwlbZ6z5qDTtxyDu2lKU6xywxg1BP3QVW0D2fIjBPSsuJJLb667uBCuohe01xpUQmIi/exec", {
+ fetch("https://script.google.com/macros/s/AKfycbwlbZ6z5qDTtxyDu2lKU6xywxg1BP3QVW0D2fIjBPSsuJJLb667uBCuohe01xpUQmIi/exec", {
     method:"POST",
     body: JSON.stringify(data)
   });
