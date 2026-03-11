@@ -149,26 +149,29 @@ function detectBrowser() {
   return "Other";
 }
 
-function getOrCreateUUID() {
-  const storageKey = 'myAppUUID';
-  // Check if UUID already exists in localStorage
-  let uuid = localStorage.getItem(storageKey);
-  // If not, generate and store a new UUID
-  if (!uuid) {
-    uuid = generateUUID();
-    localStorage.setItem(storageKey, uuid);
-  }
-  return uuid;
+function getDeviceFingerprint() {
+  const components = [
+    navigator.userAgent,
+    screen.colorDepth,
+    screen.width,
+    screen.height,
+    Intl.DateTimeFormat().resolvedOptions().timeZone,
+    navigator.language,
+    navigator.platform,
+  ];
+  // Create a string from the components
+  const fingerprintString = components.join('||');
+  // Hash the string for a more compact fingerprint
+  return hashString(fingerprintString);
 }
 
-// UUID generator function
-function generateUUID() {
-  const template = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
-  return template.replace(/[xy]/g, function(c) {
-    const r = Math.random() * 16 | 0;
-    const v = c === 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
+// Simple hash function (djb2)
+function hashString(str) {
+  let hash = 5381;
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) + hash) + str.charCodeAt(i); /* hash * 33 + c */
+  }
+  return hash >>> 0; // Convert to unsigned 32-bit integer
 }
   
   
@@ -179,7 +182,7 @@ function sendVisitorData() {
     os: detectOS(),
     browser: detectBrowser(),
     screen: window.innerWidth + "x" + document.documentElement.clientHeight,
-    uuid: getOrCreateUUID()
+    uuid: getDeviceFingerprint();
   };
 
   
