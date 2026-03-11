@@ -177,7 +177,7 @@ function sendVisitorData() {
     screen: window.innerWidth + "x" + document.documentElement.clientHeight,
     uuid: getPersistentDeviceId();
   };
-
+}
   
   fetch("https://script.google.com/macros/s/AKfycbwlbZ6z5qDTtxyDu2lKU6xywxg1BP3QVW0D2fIjBPSsuJJLb667uBCuohe01xpUQmIi/exec", {
     method:"POST",
