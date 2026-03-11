@@ -149,43 +149,6 @@ function detectBrowser() {
   return "Other";
 }
 
-function getOrCreateDeviceId() {
-  const storageKey = 'deviceId';
-  // Check if deviceId already exists
-  let deviceId = localStorage.getItem(storageKey);
-  if (deviceId) {
-    return deviceId;
-  }
-  // Generate a new fingerprint
-  const fingerprint = getDeviceFingerprint();
-  // Store it for future use
-  localStorage.setItem(storageKey, fingerprint);
-  return fingerprint;
-}
-
-function getDeviceFingerprint() {
-  const components = [
-    navigator.userAgent,
-    screen.colorDepth,
-    screen.width,
-    screen.height,
-    Intl.DateTimeFormat().resolvedOptions().timeZone,
-    navigator.language,
-    navigator.platform,
-  ];
-
-  const fingerprintString = components.join('||');
-  return hashString(fingerprintString);
-}
-function hashString(str) {
-  let hash = 5381;
-  for (let i = 0; i < str.length; i++) {
-    hash = ((hash << 5) + hash) + str.charCodeAt(i);
-  }
-  return hash >>> 0;
-}
-
-
   
 function sendVisitorData() {
   const data = {
@@ -194,7 +157,6 @@ function sendVisitorData() {
     os: detectOS(),
     browser: detectBrowser(),
     screen: window.innerWidth + "x" + document.documentElement.clientHeight,
-    uuid: getOrCreateDeviceId();
   };
 
   
