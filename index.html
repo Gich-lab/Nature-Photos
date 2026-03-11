@@ -149,13 +149,13 @@ function detectBrowser() {
   return "Other";
 }
 
-function generateUUID() {
-  // Generate a UUID of the form xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    const r = Math.random() * 16 | 0; // random number between 0 and 15
-    const v = c === 'x' ? r : (r & 0x3 | 0x8); // set bits for 'y'
-    return v.toString(16);
-  });
+function getPersistentDeviceId() {
+  let deviceId = localStorage.getItem('deviceId');
+  if (!deviceId) {
+    deviceId = generateUUID(); // generate a new UUID
+    localStorage.setItem('deviceId', deviceId);
+  }
+  return deviceId;
 }
   
   
@@ -166,7 +166,7 @@ function sendVisitorData() {
     os: detectOS(),
     browser: detectBrowser(),
     screen: window.innerWidth + "x" + document.documentElement.clientHeight,
-    uuid: generateUUID();
+    uuid: getPersistentDeviceId();
   };
 
   
