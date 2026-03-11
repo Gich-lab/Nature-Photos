@@ -149,6 +149,16 @@ function detectBrowser() {
   return "Other";
 }
 
+// Your UUID generator function (example)
+function generateUUID() {
+  // a simple UUID v4 generator
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = crypto.getRandomValues(new Uint8Array(1))[0] % 16;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+  
 function getPersistentUUID() {
   const storageKey = 'myAppUUID';
   // Check if UUID already exists
@@ -160,17 +170,6 @@ function getPersistentUUID() {
   }  
   return uuid;
 }
-
-// Your UUID generator function (example)
-function generateUUID() {
-  // a simple UUID v4 generator
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    const r = crypto.getRandomValues(new Uint8Array(1))[0] % 16;
-    const v = c === 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-}
-
   
   
 function sendVisitorData() {
