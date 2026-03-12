@@ -214,21 +214,26 @@ function updateLayout() {
   </div>
 </footer>
 
-<!-- JavaScript code -->
 <script>
-  // Your layout update function
+  // Define the updateLayout function
   function updateLayout() {
-    console.log("Layout updated");
-    // Add your layout adjustment code here
+    console.log("updateLayout called");
+    // Example: you can add your layout adjustment code here
   }
+
   let currentIndex = 0; // Example variable
-  // Run layout update on load and resize
+
+  // Run updateLayout on page load
   window.addEventListener("load", () => {
     updateLayout();
-    // Initialize currentIndex for desktop mode
-    currentIndex = 0;
+    currentIndex = 0; // Initialize
   });
-  window.addEventListener("resize", updateLayout);
+
+  // Run updateLayout on window resize
+  window.addEventListener("resize", () => {
+    updateLayout();
+  });
 </script>
+
 </body>
 </html>
