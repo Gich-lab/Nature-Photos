@@ -200,7 +200,8 @@ function updateLayout() {
       // img.style.objectFit = "contain"; // Maintain aspect ratio
     });
   }
-}
+} 
+  
 
 <footer>
   <div style="max-width: 300px; overflow-wrap: break-word;">
@@ -212,15 +213,22 @@ function updateLayout() {
     <img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em; max-height: 1em; margin-left: .2em;">
   </div>
 </footer>
-  
-  
-// Run layout update on load and resize
-window.addEventListener("load", () => {
-  updateLayout();
-  // Initialize currentIndex for desktop mode
-  currentIndex = 0;
-}); 
-window.addEventListener("resize", updateLayout);
+
+<!-- JavaScript code -->
+<script>
+  // Your layout update function
+  function updateLayout() {
+    console.log("Layout updated");
+    // Add your layout adjustment code here
+  }
+  let currentIndex = 0; // Example variable
+  // Run layout update on load and resize
+  window.addEventListener("load", () => {
+    updateLayout();
+    // Initialize currentIndex for desktop mode
+    currentIndex = 0;
+  });
+  window.addEventListener("resize", updateLayout);
 </script>
 </body>
 </html>
