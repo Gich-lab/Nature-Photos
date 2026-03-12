@@ -201,6 +201,12 @@ function updateLayout() {
     });
   }
 } 
+// Run layout update on load and resize
+window.addEventListener("load", () => {
+  updateLayout();
+  // Initialize currentIndex for desktop mode
+  currentIndex = 0;
+});
 window.addEventListener("resize", updateLayout);
 </script>
 </body>
