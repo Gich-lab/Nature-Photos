@@ -202,13 +202,6 @@ function updateLayout() {
   }
 }
 
-// Run layout update on load and resize
-window.addEventListener("load", () => {
-  updateLayout();
-  // Initialize currentIndex for desktop mode
-  currentIndex = 0;
-});
-
 <footer>
   <div style="max-width: 300px; overflow-wrap: break-word;">
     <a href="https://gich-lab.github.io/Nature-Photos/">A Photo Gallery of the Outdoors</a> © 2026 by 
@@ -220,6 +213,13 @@ window.addEventListener("load", () => {
   </div>
 </footer>
   
+  
+// Run layout update on load and resize
+window.addEventListener("load", () => {
+  updateLayout();
+  // Initialize currentIndex for desktop mode
+  currentIndex = 0;
+}); 
 window.addEventListener("resize", updateLayout);
 </script>
 </body>
