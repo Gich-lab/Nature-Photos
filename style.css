@@ -54,3 +54,6 @@ img {
   object-fit: contain;
   border-radius: 10px;
 }
+.no-underline {
+  text-decoration: none;
+}
