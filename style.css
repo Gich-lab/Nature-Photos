@@ -55,5 +55,5 @@ img {
   border-radius: 10px;
 }
 .no-underline {
-  text-decoration: none;
+  text-decoration: none !important;
 }
