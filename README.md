@@ -1,15 +1,14 @@
 1. Nature Photos Gallery
+- This website showcases a collection of beautiful nature photographs for view or download.
 
-This website showcases a collection of beautiful nature photographs for view or download.
-
-2. Features
+3. Features
 - Browse a curated collection of high-quality nature photos
 - Download images for personal use
 - Responsive design for viewing on any device
 - Simple and intuitive user interface
 
 3. Installation
-No installation required! Just visit the live website URL:
+- No installation required! Just visit the live website URL:
 [[https://gich-lab.github.io/Nature-Photos/)]
 
 4. Usage
@@ -18,10 +17,10 @@ No installation required! Just visit the live website URL:
 - Use the browser download option to save images to your device
 
 5. Contributing
-Contributions are welcome are welcome in the new future!
+- Contributions are welcome are welcome in the new future!
 
 6. License
-This project is licensed under the Creative Commons License 4.0. 
+- This project is licensed under the Creative Commons License 4.0. 
 
 7. Contact
-For inquiries or support, contact us at [support@kenngich@proton.me]
+- For inquiries or support, contact us at [support@kenngich@proton.me]
