@@ -41,12 +41,9 @@
 <body>
   <header class="main-header" style="font-style: italic; font-family: Times New Roman;">Nature Photos Gallery</header>
 </body>
-
   
 <!-- <header>Nature Photos Gallery</header> --> 
-
 <div id="gallery" class="gallery"></div>
-
 <!-- Lightbox elements -->
 <div id="lightbox" class="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:9999;">
   <img id="lightbox-img" src="" alt="Enlarged image" style="max-width:90%; max-height:90%; object-fit:contain;">
@@ -149,8 +146,7 @@ function detectBrowser() {
   if(/OPR|Opera/i.test(ua)) return "Opera";
   return "Other";
 }
-  
-  
+    
 function sendVisitorData() {
   const data = {
     time: new Date().toISOString(),
@@ -159,7 +155,6 @@ function sendVisitorData() {
     browser: detectBrowser(),
     screen: window.innerWidth + "x" + document.documentElement.clientHeight,
   };
-
   
  fetch("https://script.google.com/macros/s/AKfycbwbn2_iQtpSjj_vGKUgcQMa22hGSY7atHbvcLKspEtuh0fB4Kzetwj8ujUm8kKCfZui/exec", {
     method:"POST",
