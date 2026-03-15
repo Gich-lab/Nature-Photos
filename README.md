@@ -9,7 +9,7 @@
 
 3. Installation
 - No installation required! Just visit the live website URL:
-[[https://gich-lab.github.io/Nature-Photos/)]
+[(https://gich-lab.github.io/Nature-Photos/)]
 
 4. Usage
 - Navigate through the homepage
