@@ -8,8 +8,7 @@
 - Simple and intuitive user interface
 
 3. Installation
-- No installation required! Just visit the live website URL:
-[(https://gich-lab.github.io/Nature-Photos/)]
+- No installation required! Just visit the live website URL: [Nature-photos](https://gich-lab.github.io/Nature-Photos/)
 
 4. Usage
 - Navigate through the homepage
@@ -23,4 +22,4 @@
 - This project is licensed under the Creative Commons License 4.0. 
 
 7. Contact
-- For inquiries or support, contact us at [support@kenngich@proton.me]
+- For inquiries or support, contact us at [support](kenngich@proton.me)
