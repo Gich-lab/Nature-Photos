@@ -1,0 +1,57 @@
+/* Global reset and fix */
+*, *::before, *::after {
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #111;
+  color: white;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  word-wrap: break-word;
+}
+
+/* Make images responsive and prevent overflow */
+img {
+  max-width: 100%;      /* Ensure images don't overflow their containers */
+  height: auto;         /* Maintain aspect ratio */
+  display: block;       /* Remove inline spacing */
+  object-fit: contain;  /* Fit within container without overflow */
+  margin: 0 auto;       /* Center images if needed */
+}
+
+/* Ensure containers are responsive */
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  max-width: 100%; /* Full width */
+  box-sizing: border-box;
+}
+
+/* Lightbox styles (unchanged) */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.95);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.lightbox.active {
+  display: flex;
+}
+.lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
