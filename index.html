@@ -48,11 +48,87 @@
   </style>
 </head>
 
-
+<!--
 <body>
   <header class="main-header" style="font-style: italic; font-family: Times New Roman;">Nature Photos Gallery</header>
 </body>    
+-->
 
+<body>
+  <header class="main-header" id="header">
+    <span class="cascade-text">Nature Photos Gallery</span>
+  </header>
+
+  <style>
+    .main-header {
+      font-family: "Times New Roman", serif;
+      font-style: italic;
+      text-align: center;
+      font-size: 2em;
+      padding: 0;
+    }
+
+    .cascade-text {
+      display: inline-block;
+      /* Animate fade out to create looping effect */
+      animation: cascadeLoop 12s infinite;
+    }
+
+    /* Style each character span */
+    .cascade-text span {
+      opacity: 0;
+      display: inline-block;
+      transform: translateY(20px);
+      animation: cascadeIn 1.5s forwards;
+      /* Use CSS variable for delay */
+      --delay: 0s;
+      animation-delay: var(--delay);
+    }
+
+    @keyframes cascadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes cascadeLoop {
+      0%, 99.9% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+  </style>
+
+  <script>
+    const textElement = document.querySelector('.cascade-text');
+    const text = textElement.textContent;
+    textElement.textContent = '';
+
+    const totalDuration = 6; // seconds for cascade
+    const repeatInterval = 12; // seconds for full loop
+    const delayIncrement = totalDuration / text.length;
+
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      const span = document.createElement('span');
+
+      span.innerHTML = (char === ' ') ? '&nbsp;' : char;
+      span.style.setProperty('--delay', `${i * delayIncrement}s`);
+      textElement.appendChild(span);
+    }
+  </script>
+</body>
+
+
+
+  
   
 <!-- <header>Nature Photos Gallery</header> -->  
 <div id="gallery" class="gallery"></div>
