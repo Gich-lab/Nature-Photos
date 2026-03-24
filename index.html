@@ -56,7 +56,7 @@
 
 <body>
   <header class="main-header" id="header">
-    <span class="cascade-text">Nature Photos Gallery</span>
+    <span class="cascade-text">Nature Photo Gallery</span>
   </header>
 
   <style>
@@ -79,7 +79,7 @@
       opacity: 0;
       display: inline-block;
       transform: translateY(20px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8); /*added web title transitions*/
+      /*box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8); web title transition shadow*/
       animation: cascadeIn 1.5s forwards;
       /* Use CSS variable for delay */
       --delay: 0s;
@@ -209,7 +209,7 @@ lightbox.addEventListener("touchend", (e) => {
   if(diff < -50) document.querySelector(".prev").click();
 });
   
-// Device detection functions (optional, keep if needed)
+// Device detection functions 
 function detectDevice() {
   const ua = navigator.userAgent;
   if(/Mobile|Android|iPhone|iPad|iPod/i.test(ua)) return "Mobile";
