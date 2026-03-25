@@ -1,4 +1,4 @@
-1. Nature Photos Gallery
+1. Nature Photo Gallery
 - This website showcases a collection of beautiful nature photographs for viewing or downloads.
 
 2. Features
@@ -22,4 +22,4 @@
 - This project is licensed under the Creative Commons License 4.0. 
 
 7. Contact
-- For inquiries or support, contact us at [support](kenngich@proton.me)
+- For inquiries or support, contact me at [support](kenngich@proton.me)
