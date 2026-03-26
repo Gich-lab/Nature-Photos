@@ -5,6 +5,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+<!-- Notification container -->
+<div id="notification" style="
+  display: none;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: #444;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  z-index: 9999;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+"></div>
+
 <script>
 async function fetchLatestCommitSha() {
   const url = `https://api.github.com/repos/Gich-lab/Nature-Photos/commits/main`;
@@ -15,21 +31,31 @@ async function fetchLatestCommitSha() {
     const latestSha = data.sha;
 
     const storedSha = localStorage.getItem('latestCommitSha');
+
     if (storedSha === latestSha) {
-      console.log('SHA is the same as localStorage, no update needed.');
+      // Show notification that there are no new updates
+      const notification = document.getElementById('notification');
+      notification.textContent = "No new updates.";
+      notification.style.display = 'block';
+
+      // Hide after 3 seconds
+      setTimeout(() => {
+        notification.style.display = 'none';
+      }, 3000);
+
       return;
     }
+
+    // If new update, update display and localStorage
     document.getElementById('commit-sha').textContent = latestSha;
     localStorage.setItem('latestCommitSha', latestSha);
   } catch (_) {}
 }
-</script>
 
-<div id="commit-sha"></div>
-
-<script>
+// Usage:
 fetchLatestCommitSha();
 </script>
+  
   
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-22HE9GQ99B"></script>
