@@ -21,40 +21,7 @@
   font-size: 14px;
 "></div>
 
-<script>
-async function fetchLatestCommitSha() {
-  const url = `https://api.github.com/repos/Gich-lab/Nature-Photos/commits/main`;
-  try {
-    const response = await fetch(url);
-    if (!response.ok) return;
-    const data = await response.json();
-    const latestSha = data.sha;
 
-    const storedSha = localStorage.getItem('latestCommitSha');
-
-    if (storedSha === latestSha) {
-      // Show notification that there are no new updates
-      const notification = document.getElementById('notification');
-      notification.textContent = "No new updates.";
-      notification.style.display = 'block';
-
-      // Hide after 3 seconds
-      setTimeout(() => {
-        notification.style.display = 'none';
-      }, 3000);
-
-      return;
-    }
-
-    // If there's a new update, update display and localStorage
-    document.getElementById('commit-sha').textContent = latestSha;
-    localStorage.setItem('latestCommitSha', latestSha);
-  } catch (_) {}
-}
-
-// Usage:
-fetchLatestCommitSha();
-</script>  
   
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-22HE9GQ99B"></script>
@@ -106,10 +73,48 @@ fetchLatestCommitSha();
 -->
 
 <body>
+  <!-- <header class="main-header" id="header"> -->
+    <!-- <span class="cascade-text">Nature Photo Gallery</span> -->
+  <!-- </header> -->
+  <body>
   <header class="main-header" id="header">
-    <span class="cascade-text">Nature Photo Gallery</span>
+    <span class="cascade-text" id="header-text">Nature Photo Gallery</span>
   </header>
 
+  <script>
+    async function fetchLatestCommitSha() {
+      const url = `https://api.github.com/repos/Gich-lab/Nature-Photos/commits/main`;
+      try {
+        const response = await fetch(url);
+        if (!response.ok) return;
+        const data = await response.json();
+        const latestSha = data.sha;
+
+        const storedSha = localStorage.getItem('latestCommitSha');
+
+        if (storedSha === latestSha) {
+          // No new commit, update header to show "No new photos!"
+          const headerText = document.getElementById("header-text");
+          headerText.textContent = "No new photos!";
+
+          // Revert back after 3 seconds
+          setTimeout(() => {
+            headerText.textContent = "Nature Photo Gallery";
+          }, 3000);
+        } else {
+          // New commit detected, update stored SHA
+          localStorage.setItem('latestCommitSha', latestSha);
+          // Optional: update header if desired
+        }
+      } catch (error) {
+        console.error('Error fetching latest commit:', error);
+      }
+    }
+
+    // Call the function to check for updates
+    fetchLatestCommitSha();
+  </script>
+</body>
   <style>
     .main-header {
       font-family: "Times New Roman", serif;
