@@ -5,6 +5,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+<script>
+  async function fetchLatestCommitSha(owner, repo, branch = 'main') {
+    const url = `https://api.github.com/repos/${Gich-lab}/${Nature-Photos}/commits/${main}`;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) return;
+      const data = await response.json();
+      document.getElementById('commit-sha').textContent = data.sha;
+    } catch (_) {
+      // Fail silently, do nothing
+    }
+  }
+
+  // Usage example:
+    fetchLatestCommitSha('Gich-lab', 'Nature-Photos');
+  </script>
+
+  
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-22HE9GQ99B"></script>
   <script>
