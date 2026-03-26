@@ -9,7 +9,7 @@
 
 <script>
 async function fetchLatestCommitSha(owner, repo, branch = 'main') {
-  const url = `https://api.github.com/repos/${owner}/${repo}/commits/${branch}`;
+  const url = `https://api.github.com/repos/${'Gich-lab'}/${'Nature-Photos'}/commits/${'main'}`;
   try {
     const response = await fetch(url);
     if (!response.ok) return;
