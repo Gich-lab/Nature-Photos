@@ -111,15 +111,12 @@
     const textElement = document.querySelector('.cascade-text');
     const text = textElement.textContent;
     textElement.textContent = '';
-
     const totalDuration = 6; // seconds for cascade
     const repeatInterval = 12; // seconds for full loop
     const delayIncrement = totalDuration / text.length;
-
     for (let i = 0; i < text.length; i++) {
       const char = text[i];
       const span = document.createElement('span');
-
       span.innerHTML = (char === ' ') ? '&nbsp;' : char;
       span.style.setProperty('--delay', `${i * delayIncrement}s`);
       textElement.appendChild(span);
@@ -151,7 +148,6 @@ for(let i=1; i<=maxPhotos; i++){
   gallery.appendChild(img);
 }  
 
-  
 // Lightbox elements
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightbox-img");
@@ -283,7 +279,6 @@ function updateLayout() {
     });
   }
 }   
-
   
 // Run layout update on load and resize
 window.addEventListener("load", () => {
