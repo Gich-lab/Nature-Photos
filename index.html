@@ -109,7 +109,15 @@ function fetchLatestCommitSha() {
       // If SHAs match, exit early
       if (latestCommitSha === storedSha) {
         const headerText = document.getElementById("header-text");
-        headerText.textContent = "No updates detected!"
+        const originalText = headerText.textContent;
+
+        // Show temporary message
+        headerText.textContent = "No updates detected!";
+
+        // Revert to website title after 3 seconds
+        setTimeout(() => {
+          headerText.textContent = originalText;
+        }, 3000);
         return;
       }
 
