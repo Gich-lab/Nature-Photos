@@ -125,6 +125,17 @@
       }
     }
 
+    // Prevent refresh if images are loaded
+    window.addEventListener('beforeunload', (e) => {
+      if (imagesAreLoaded) {
+        headerText.textContent = "No updates detected!";
+        const message = headerText.textContent
+        e.preventDefault(); // For modern browsers
+        e.returnValue = message; // For older browsers
+        return message; // For some browsers
+      }
+    });
+   
     // Run the check after the page loads
     window.addEventListener('load', fetchLatestCommitSha);
   </script>
