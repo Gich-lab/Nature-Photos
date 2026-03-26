@@ -6,17 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <script>
-  async function fetchLatestCommitSha(owner, repo, branch = 'main') {
-    const url = `https://api.github.com/repos/${Gich-lab}/${Nature-Photos}/commits/${main}`;
-    try {
-      const response = await fetch(url);
-      if (!response.ok) return;
-      const data = await response.json();
-      document.getElementById('commit-sha').textContent = data.sha;
-    } catch (_) {
-      // Fail silently, do nothing
-    }
+async function fetchLatestCommitSha(owner, repo, branch = 'main') {
+  const url = `https://api.github.com/repos/${owner}/${repo}/commits/${branch}`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) return;
+    const data = await response.json();
+    document.getElementById('commit-sha').textContent = data.sha;
+  } catch (_) {
+    // Fail silently, do nothing
   }
+}
+
+// Usage example:
+fetchLatestCommitSha('Gich-lab', 'Nature-Photos');
+</script>
 
   // Usage example:
   fetchLatestCommitSha('Gich-lab', 'Nature-Photos');
