@@ -64,81 +64,82 @@
   </header>
 
   <!-- images loading -->
-  <script>
-    async function fetchLatestCommitSha() {
-      const url = `https://api.github.com/repos/Gich-lab/Nature-Photos/commits/main`;
-      try {
-        const response = await fetch(url);
-        if (!response.ok) return;
-        const data = await response.json();
-        const latestSha = data.sha;
-        // Retrieve stored SHA from localStorage or initialize it
-        const storedSha = localStorage.getItem('storedSha') || '';
-  
-        if (latestSha === storedSha) {
-          // No new commit, show message
-          const headerText = document.getElementById("header-text");
-          headerText.textContent = "No updates detected!";
+<script>
+  let imagesAreLoaded = false;
 
-          // Wait for all images to load
-          const images = document.querySelectorAll('img');
-          const imagesLoadedPromise = new Promise((resolve) => {
-            let loadedCount = 0;
-            if (images.length === 0) {
-              resolve(); // No images, resolve immediately
-            }
-            images.forEach((img) => {
-              if (img.complete) {
+  async function fetchLatestCommitSha() {
+    const url = `https://api.github.com/repos/Gich-lab/Nature-Photos/commits/main`;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) return;
+      const data = await response.json();
+      const latestSha = data.sha;
+      const storedSha = localStorage.getItem('storedSha') || '';
+
+      if (latestSha === storedSha) {
+        // No new commit, show message
+        const headerText = document.getElementById("header-text");
+        headerText.textContent = "No updates detected!";
+
+        // Wait for all images to load
+        const images = document.querySelectorAll('img');
+        const imagesLoadedPromise = new Promise((resolve) => {
+          let loadedCount = 0;
+          if (images.length === 0) {
+            resolve(); // No images, resolve immediately
+          }
+          images.forEach((img) => {
+            if (img.complete) {
+              loadedCount++;
+              if (loadedCount === images.length) {
+                resolve();
+              }
+            } else {
+              img.addEventListener('load', () => {
                 loadedCount++;
                 if (loadedCount === images.length) {
                   resolve();
                 }
-              } else {
-                img.addEventListener('load', () => {
-                  loadedCount++;
-                  if (loadedCount === images.length) {
-                    resolve();
-                  }
-                });
-                img.addEventListener('error', () => {
-                  loadedCount++;
-                  if (loadedCount === images.length) {
-                    resolve();
-                  }
-                });
-              }
-            });
+              });
+              img.addEventListener('error', () => {
+                loadedCount++;
+                if (loadedCount === images.length) {
+                  resolve();
+                }
+              });
+            }
           });
+        });
 
-          // After all images are loaded, revert the message
-          imagesLoadedPromise.then(() => {
-            setTimeout(() => {
-              document.getElementById("header-text").textContent = "Nature Photo Gallery";
-            }, 3000); // 3sec
-          });
-        } else {
-          // New commit detected, update stored SHA
-          localStorage.setItem('storedSha', latestSha);
-        }
-      } catch (error) {
-        console.error('Error fetching latest commit:', error);
+        // After all images are loaded, revert the message and set flag
+        imagesLoadedPromise.then(() => {
+          setTimeout(() => {
+            document.getElementById("header-text").textContent = "Nature Photo Gallery";
+            imagesAreLoaded = true; // Set flag when images are loaded
+          }, 3000); // 3sec delay
+        });
+      } else {
+        // New commit detected, update stored SHA
+        localStorage.setItem('storedSha', latestSha);
       }
+    } catch (error) {
+      console.error('Error fetching latest commit:', error);
     }
+  }
 
-    // Prevent refresh if images are loaded
-    window.addEventListener('beforeunload', (e) => {
-      if (imagesAreLoaded) {
-        headerText.textContent = "No updates detected!";
-        const message = headerText.textContent
-        e.preventDefault(); // For modern browsers
-        e.returnValue = message; // For older browsers
-        return message; // For some browsers
-      }
-    });
-   
-    // Run the check after the page loads
-    window.addEventListener('load', fetchLatestCommitSha);
-  </script>
+  // Prevent refresh if images are loaded
+  window.addEventListener('beforeunload', (e) => {
+    if (imagesAreLoaded) {
+      const message = "All images have been loaded. Are you sure you want to leave?";
+      e.preventDefault(); // For modern browsers
+      e.returnValue = message; // For older browsers
+      return message; // For some browsers
+    }
+  });
+
+  // Run the check after the page loads
+  window.addEventListener('load', fetchLatestCommitSha);
+</script>
 </body>
   
   <style>
