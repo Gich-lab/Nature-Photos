@@ -93,9 +93,9 @@
         const storedSha = localStorage.getItem('latestCommitSha');
 
         if (storedSha === latestSha) {
-          // No new commit, update header to show "No new photos!"
+          // No new commit, update header to show "No updates detected!"
           const headerText = document.getElementById("header-text");
-          headerText.textContent = "No new photos!";
+          headerText.textContent = "No updates detected!";
 
           // Revert back after 3 seconds
           setTimeout(() => {
