@@ -63,7 +63,7 @@
     <span class="cascade-text" id="header-text">Nature Photo Gallery</span>
   </header>
 
-  <!-- Your images -->
+  <!-- images loading -->
   <script>
     async function fetchLatestCommitSha() {
       const url = `https://api.github.com/repos/Gich-lab/Nature-Photos/commits/main`;
@@ -72,10 +72,10 @@
         if (!response.ok) return;
         const data = await response.json();
         const latestSha = data.sha;
-
-        const storedSha = localStorage.getItem('latestCommitSha');
-
-        if (storedSha === latestSha) {
+        // Retrieve stored SHA from localStorage or initialize it
+        const storedSha = localStorage.getItem('storedSha') || '';
+  
+        if (latestSha === storedSha) {
           // No new commit, show message
           const headerText = document.getElementById("header-text");
           headerText.textContent = "No updates detected!";
@@ -114,11 +114,11 @@
           imagesLoadedPromise.then(() => {
             setTimeout(() => {
               document.getElementById("header-text").textContent = "Nature Photo Gallery";
-            }, 3000);
+            }, 3000); // 3sec
           });
         } else {
           // New commit detected, update stored SHA
-          localStorage.setItem('latestCommitSha', latestSha);
+          localStorage.setItem('storedSha', latestSha);
         }
       } catch (error) {
         console.error('Error fetching latest commit:', error);
