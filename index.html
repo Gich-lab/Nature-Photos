@@ -5,6 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+<div id="commit-sha"></div>
+
 <script>
 async function fetchLatestCommitSha(owner, repo, branch = 'main') {
   const url = `https://api.github.com/repos/${owner}/${repo}/commits/${branch}`;
@@ -12,19 +14,29 @@ async function fetchLatestCommitSha(owner, repo, branch = 'main') {
     const response = await fetch(url);
     if (!response.ok) return;
     const data = await response.json();
-    document.getElementById('commit-sha').textContent = data.sha;
+    const latestSha = data.sha;
+
+    // Check localStorage
+    const storedSha = localStorage.getItem('latestCommitSha');
+
+    // If the SHA is the same, stop
+    if (storedSha === latestSha) {
+      console.log('SHA is the same as localStorage, no update needed.');
+      return;
+    }
+
+    // Otherwise, update the display and localStorage
+    document.getElementById('commit-sha').textContent = latestSha;
+    localStorage.setItem('latestCommitSha', latestSha);
+    console.log('Updated with new SHA:', latestSha);
   } catch (_) {
     // Fail silently, do nothing
   }
 }
 
-// Usage example:
+// Usage:
 fetchLatestCommitSha('Gich-lab', 'Nature-Photos');
-</script>
-
-  // Usage example:
-  fetchLatestCommitSha('Gich-lab', 'Nature-Photos');
-</script>
+</script> 
   
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-22HE9GQ99B"></script>
