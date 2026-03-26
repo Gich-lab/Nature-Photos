@@ -107,7 +107,7 @@ function fetchLatestCommitSha() {
       const storedSha = localStorage.getItem('storedSha');
       
       // If SHAs match, exit early
-      if (latestSha === storedSha) {
+      if (latestCommitSha === storedSha) {
         const headerText = document.getElementById("header-text");
         headerText.textContent = "No updates detected!"
         return;
