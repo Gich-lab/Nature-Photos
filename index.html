@@ -46,7 +46,7 @@ async function fetchLatestCommitSha() {
       return;
     }
 
-    // If new update, update display and localStorage
+    // If there's a new update, update display and localStorage
     document.getElementById('commit-sha').textContent = latestSha;
     localStorage.setItem('latestCommitSha', latestSha);
   } catch (_) {}
@@ -54,8 +54,7 @@ async function fetchLatestCommitSha() {
 
 // Usage:
 fetchLatestCommitSha();
-</script>
-  
+</script>  
   
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-22HE9GQ99B"></script>
