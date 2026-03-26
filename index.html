@@ -74,9 +74,9 @@
       if (!response.ok) return;
       const data = await response.json();
       const latestSha = data.sha;
-      const storedSha = localStorage.getItem('storedSha') || '';
+      const storedSha = localStorage.getItem('storedSha') || ''; //most recent commit SHA
 
-      if (latestSha === storedSha) {
+      if (storedSha === latestCommitSha) {
         // No new commit, show message
         const headerText = document.getElementById("header-text");
         headerText.textContent = "No updates detected!";
@@ -119,8 +119,8 @@
           }, 3000); // 3sec delay
         });
       } else {
-        // New commit detected, update stored SHA
-        localStorage.setItem('storedSha', latestSha);
+        // New commit detected, update stored SHA in the browser
+        localStorage.setItem('latestCommitSha', storedSha);
       }
     } catch (error) {
       console.error('Error fetching latest commit:', error);
