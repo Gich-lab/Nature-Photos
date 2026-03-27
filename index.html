@@ -104,16 +104,15 @@ function fetchLatestCommitSha() {
    .then(response => response.json())
    .then(data => {
       const latestCommitSha = data.sha;
-      const storedSha = localStorage.getItem('storedSha');
-      
+      const storedSha = localStorage.getItem('storedSha');    
       // If SHAs match, exit early
       if (latestCommitSha === storedSha) {
         const headerText = document.getElementById("header-text");
         const originalText = headerText.textContent;
-
         // Show temporary message
         headerText.textContent = "No updates detected!";
-
+        // Force reflow
+        void headerText.offsetWidth;
         // Revert to website title after 3 seconds
         setTimeout(() => {
           headerText.textContent = originalText;
@@ -123,7 +122,6 @@ function fetchLatestCommitSha() {
 
       // Update local storage and proceed
       localStorage.setItem('storedSha', latestCommitSha);
-
       // Load or update images
       window.addEventListener('load', () => {
         waitForImagesOrTimeout(document.querySelectorAll('img'))
