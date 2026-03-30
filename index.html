@@ -98,34 +98,39 @@
     });
   }
 
-  // Fetch the latest commit SHA
+  // Function to determine if page was reloaded
+function isPageReloaded() {
+  if (performance.getEntriesByType('navigation')[0]) {
+    const navType = performance.getEntriesByType('navigation')[0].type;
+    return navType === 'reload';
+  } else if (performance.navigation) {
+    return performance.navigation.type === performance.navigation.RELOAD;
+  }
+  return false;
+}
+
 function fetchLatestCommitSha() {
   fetch('https://api.github.com/repos/Gich-lab/Nature-Photos/commits/main')
-   .then(response => response.json())
-   .then(data => {
+    .then(response => response.json())
+    .then(data => {
       const latestCommitSha = data.sha;
-      const storedSha = localStorage.getItem('storedSha');    
-      // If SHAs match, exit early
-      if (latestCommitSha === storedSha) {
+      const storedSha = localStorage.getItem('storedSha');
+
       const headerText = document.getElementById("header-text");
       const originalText = headerText.textContent;
 
-      // Show temporary message
-      headerText.textContent = "No updates detected!";
-
-      // Wait for all images to load before showing the message
-      window.addEventListener('load', function() {
-        void headerText.offsetWidth; // Force reflow
-        // Revert to website title after 3 seconds
+      if (latestCommitSha === storedSha && isPageReloaded()) {
+        // Show message only on reload if no update
+        headerText.textContent = "No updates detected!";
         setTimeout(() => {
           headerText.textContent = originalText;
         }, 3000);
-      });
+      } else if (latestCommitSha !== storedSha) {
+        // New commit detected, update storedSha
+        localStorage.setItem('storedSha', latestCommitSha);
       }
 
-      // Update local storage and proceed
-      localStorage.setItem('storedSha', latestCommitSha);
-      // Load or update images
+      // Proceed to load or update images
       window.addEventListener('load', () => {
         waitForImagesOrTimeout(document.querySelectorAll('img'));
       });
@@ -338,7 +343,7 @@ function updateLayout() {
     gallery.style.flexWrap = "wrap";
 
     imgs.forEach(img => {
-      img.style.display = "block"; // Make sure images are block-level
+      img.style.display = "block"; 
       img.style.width = "calc(100% - 20px)"; // one per row on mobile devices
       img.style.height = "auto";
       img.style.margin = "5px"; // optional spacing
