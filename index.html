@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="icon" href="tab-icon.ico" type="image/x-icon" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nature Photos Gallery</title>
-  <link rel="icon" href="tab-icon.ico" type="image/x-icon" />
-
+  
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-22HE9GQ99B"></script>
   <script>
@@ -14,46 +13,153 @@
     gtag('js', new Date());
     gtag('config', 'G-22HE9GQ99B');
   </script>
+<style>
+  /* Basic styles for gallery */
+  #gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  #gallery img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+  /* Full-screen styles for desktop view */
+  #gallery.fullscreen img {
+    width: 100vw !important;
+    height: 100vh !important;
+    object-fit: contain;
+  }
+    
+</style>
+</head>
+<body>
 
+<head>
   <style>
-    /* Main header style */
     .main-header {
       color: green; /* or blue */
       font-weight: bold;
       font-size: 2em;
       text-align: center;
       margin-top: 20px;
+    }
+  </style>
+</head>
+
+<!-- more efficient heading but less appealing 
+<body>
+  <header class="main-header" style="font-style: italic; font-family: Times New Roman;">Nature Photos Gallery</header>
+</body>    
+-->
+
+<body>
+  <header class="main-header" id="header">
+    <span class="cascade-text" id="header-text">Nature Photo Gallery</span>
+  </header>
+
+  <!-- images loading -->
+<script>
+  // Waits for all images to load or timeout
+  async function waitForImagesOrTimeout(images, timeoutMs = 1000) {
+    return new Promise((resolve) => {
+      let loadedCount = 0;
+      const totalImages = images.length;
+
+      // If no images, resolve immediately
+      if (totalImages === 0) {
+        resolve();
+        return;
+      }
+
+      // Set a timeout to proceed after timeoutMs
+      const timeoutId = setTimeout(() => {
+        resolve();
+      }, timeoutMs);
+
+      images.forEach((img) => {
+        if (img.complete) {
+          loadedCount++;
+          if (loadedCount === totalImages) {
+            clearTimeout(timeoutId);
+            resolve();
+          }
+        } else {
+          img.addEventListener('load', () => {
+            loadedCount++;
+            if (loadedCount === totalImages) {
+              clearTimeout(timeoutId);
+              resolve();
+            }
+          });
+        }
+      });
+    });
+  }
+
+  // Fetch the latest commit SHA
+function fetchLatestCommitSha() {
+  fetch('https://api.github.com/repos/Gich-lab/Nature-Photos/commits/main')
+   .then(response => response.json())
+   .then(data => {
+      const latestCommitSha = data.sha;
+      const storedSha = localStorage.getItem('storedSha');    
+      // If SHAs match, exit early
+      if (latestCommitSha === storedSha) {
+      const headerText = document.getElementById("header-text");
+      const originalText = headerText.textContent;
+
+      // Show temporary message
+      headerText.textContent = "No updates detected!";
+
+      // Wait for all images to load before showing the message
+      window.addEventListener('load', function() {
+        void headerText.offsetWidth; // Force reflow
+        // Revert to website title after 3 seconds
+        setTimeout(() => {
+          headerText.textContent = originalText;
+        }, 3000);
+      });
+      }
+
+      // Update local storage and proceed
+      localStorage.setItem('storedSha', latestCommitSha);
+      // Load or update images
+      window.addEventListener('load', () => {
+        waitForImagesOrTimeout(document.querySelectorAll('img'));
+      });
+    });
+}
+
+// Run on page load
+window.addEventListener('load', fetchLatestCommitSha);
+</script>
+</body>
+  
+  <style>
+    .main-header {
       font-family: "Times New Roman", serif;
       font-style: italic;
-    }
-    /* Gallery styles */
-    #gallery {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    #gallery img {
-      max-width: 100%;
-      height: auto;
-      display: block;
-    }
-    /* Full-screen styles for desktop view */
-    #gallery.fullscreen img {
-      width: 100vw !important;
-      height: 100vh !important;
-      object-fit: contain;
+      text-align: center;
+      font-size: 2em;
+      padding: 0;
     }
 
-      /* Cascading text animation styles */
     .cascade-text {
       display: inline-block;
+      /* Animate fade out to create looping effect */
       animation: cascadeLoop 12s infinite;
     }
+
+    /* Style each character span */
     .cascade-text span {
       opacity: 0;
       display: inline-block;
       transform: translateY(20px);
-      animation: cascadeIn 1.2s forwards;
+      /*box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8); web title transition shadow*/
+      animation: cascadeIn 1.5s forwards;
+      /* Use CSS variable for delay */
       --delay: 0s;
       animation-delay: var(--delay);
     }
@@ -78,252 +184,194 @@
       }
     }
   </style>
-</head>
-<body>
-  <!-- Header with animated cascade text -->
-  <header class="main-header" id="header">
-    <span class="cascade-text">Nature Photo Gallery</span>
-  </header>
 
-  <!-- Gallery container -->
-  <div id="gallery" class="gallery"></div>
-
-  <!-- Lightbox overlay -->
-  <div id="lightbox" class="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:9999;">
-    <img id="lightbox-img" src="" alt="Enlarged image" style="max-width:90%; max-height:90%; object-fit:contain;">
-    <button class="prev" style="position:absolute; top:50%; left:20px;">Prev</button>
-    <button class="next" style="position:absolute; top:50%; right:20px;">Next</button>
-  </div>
-
-  <!-- Scripts -->
   <script>
-    // Generate animated cascade text
-  const header = document.querySelector('.main-header');
-  const textElement = document.querySelector('.cascade-text');
-  const originalText = textElement.textContent;
-
-      // Function to start cascade with a given duration
-      function startCascade(durationSeconds) {
-        // Clear existing content
-        textElement.textContent = '';
-
-        const text = originalText;
-        const delayIncrement = durationSeconds / text.length;
-
-        for (let i = 0; i < text.length; i++) {
-          const char = text[i];
-          const span = document.createElement('span');
-          span.innerHTML = (char === ' ') ? '&nbsp;' : char;
-          span.style.setProperty('--delay', `${i * delayIncrement}s`);
-          textElement.appendChild(span);
-        }
-      }
-
-      // Start initial cascade for 8 seconds
-      startCascade(8);
-
-      // Make header font visible at start
-      header.style.visibility = 'visible';
-
-      // After 8 seconds, keep header visible for 6 seconds
-      setTimeout(() => {
-        // Keep header visible
-        header.style.visibility = 'visible';
-
-        // After 6 seconds, cascade again over 6 seconds
-        setTimeout(() => {
-          startCascade(6);
-        }, 6000);
-      }, 8000);
-
-    let maxPhotos = 92; // default value
-
-    // Fetch folder file count and generate images
-    fetchImageFolderFileCount().then(count => {
-      maxPhotos = count;
-      const gallery = document.getElementById("gallery");
-      
-      // Generate images
-      for(let i=1; i<=maxPhotos; i++){
-        const img = document.createElement("img");
-        img.setAttribute('loading', 'lazy');
-        img.src = "images/photo"+i+".jpg"; 
-        img.setAttribute('width', '1920');
-        img.setAttribute('height', '1080');
-        img.onerror = function() { this.remove(); }
-        gallery.appendChild(img);
-      }
-
-      // Initialize lightbox functionality after images are loaded
-      initializeLightbox();
-    });
-
-    // Placeholder for fetchImageFolderFileCount() - implement accordingly
-    function fetchImageFolderFileCount() {
-      // For now, return a resolved promise with default value
-      return Promise.resolve(92);
+    const textElement = document.querySelector('.cascade-text');
+    const text = textElement.textContent;
+    textElement.textContent = '';
+    const totalDuration = 6; // seconds for cascade
+    //const repeatInterval = 12; // seconds for full loop - removed
+    const delayIncrement = totalDuration / text.length;
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      const span = document.createElement('span');
+      span.innerHTML = (char === ' ') ? '&nbsp;' : char;
+      span.style.setProperty('--delay', `${i * delayIncrement}s`);
+      textElement.appendChild(span);
     }
-
-    // Lightbox functionality
-    function initializeLightbox() {
-      const gallery = document.getElementById("gallery");
-      const lightbox = document.getElementById("lightbox");
-      const lightboxImg = document.getElementById("lightbox-img");
-      let images = document.querySelectorAll("#gallery img");
-      let currentIndex = 0;
-      let startX = 0;
-
-      // Show image in lightbox
-      function showImage(index){
-        currentIndex = index;
-        lightboxImg.src = images[index].src;
-      }
-
-      // Add click event to images
-      images.forEach((img, index) => {
-        img.addEventListener("click", () => {
-          lightbox.style.display = "flex";
-          showImage(index);
-        });
-      });
-
-      // Navigation buttons
-      document.querySelector(".next").onclick = () => {
-        currentIndex = (currentIndex + 1) % images.length;
-        showImage(currentIndex);
-      };
-      document.querySelector(".prev").onclick = () => {
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
-        showImage(currentIndex);
-      };
-
-      // Keyboard navigation
-      document.addEventListener("keydown", (e) => {
-        if(lightbox.style.display !== "flex") return;
-        if(e.key==="ArrowRight") document.querySelector(".next").click();
-        if(e.key==="ArrowLeft") document.querySelector(".prev").click();
-        if(e.key==="Escape"){
-          lightbox.style.display = "none";
-        }
-      });
-
-      // Close on background click
-      lightbox.addEventListener("click", (e) => {
-        if(e.target===lightbox){
-          lightbox.style.display = "none";
-        }
-      });
-
-      // Swipe support
-      lightbox.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; });
-      lightbox.addEventListener("touchend", (e) => {
-        let endX = e.changedTouches[0].clientX;
-        let diff = startX - endX;
-        if(diff > 50) document.querySelector(".next").click();
-        if(diff < -50) document.querySelector(".prev").click();
-      });
-    }
-
-    // Device detection functions
-    function detectDevice() {
-      const ua = navigator.userAgent;
-      if(/Mobile|Android|iPhone|iPad|iPod/i.test(ua)) return "Mobile";
-      return "Desktop";
-    }
-    function detectOS() {
-      const ua = navigator.userAgent;
-      if(ua.indexOf("Win")!==-1) return "Windows";
-      if(ua.indexOf("Android")!=-1) return "Android";
-      if(ua.indexOf("iPhone")!== -1 || ua.indexOf("iPad") !== -1) return "iOS";
-      if(ua.indexOf("Linux")!==-1) return "Linux";  
-      if(ua.indexOf("Mac")!==-1) return "MacOS";
-      return "Unknown";
-    }
-    function detectBrowser() {
-      const ua = navigator.userAgent;
-      if(/Brave/i.test(ua)) return "Brave";
-      if(/Chrome/i.test(ua) && !/Edge|OPR/i.test(ua)) return "Chrome";
-      if(/Safari/i.test(ua) && !/Chrome/i.test(ua)) return "Safari";
-      if(/Firefox/i.test(ua)) return "Firefox";
-      if(/Edg/i.test(ua)) return "Edge";
-      if(/OPR|Opera/i.test(ua)) return "Opera";
-      return "Other";
-    }
-
-    function sendVisitorData() {
-      const data = {
-        time: new Date().toISOString(),
-        device: detectDevice(),
-        os: detectOS(),
-        browser: detectBrowser(),
-        screen: window.innerWidth + "x" + document.documentElement.clientHeight,
-      };
-      fetch("https://script.google.com/macros/s/AKfycbwbn2_iQtpSjj_vGKUgcQMa22hGSY7atHbvcLKspEtuh0fB4Kzetwj8ujUm8kKCfZui", {
-        method: "POST",
-        body: JSON.stringify(data),
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Network response was not ok: ${response.statusText}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Success:', data);
-      })
-      .catch(error => {
-        console.error('Error sending visitor data:', error);
-      });
-    }
-
-    // Run visitor data collection
-    sendVisitorData();
-
-    // Responsive layout update
-    function updateLayout() {
-      const width = window.innerWidth;
-      const gallery = document.getElementById("gallery");
-      const imgs = document.querySelectorAll("#gallery img");
-
-      if (width <= 768) {
-        // Mobile view
-        gallery.classList.remove("fullscreen");
-        gallery.style.display = "flex";
-        gallery.style.flexWrap = "wrap";
-
-        imgs.forEach(img => {
-          img.style.display = "block";
-          img.style.width = "calc(100% - 20px)";
-          img.style.height = "auto";
-          img.style.margin = "5px";
-          img.style.borderRadius = "0.3%";
-          img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-        });
-      } else {
-        // Desktop view
-        gallery.classList.remove("fullscreen");
-        imgs.forEach((img) => {
-          img.style.display = "block";
-          img.style.width = "calc(100% - 20px)";
-          img.style.height = "auto";
-          img.style.margin = "5px";
-          img.style.borderRadius = "0.3%";
-          img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-        });
-      }
-    }
-
-    window.addEventListener("load", () => {
-      updateLayout();
-    });
-    window.addEventListener("resize", updateLayout);
   </script>
+</body>
+  
+<!-- <header>Nature Photos Gallery</header> -->  
+<div id="gallery" class="gallery"></div>
+<!-- Lightbox elements -->
+<div id="lightbox" class="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:9999;">
+  <img id="lightbox-img" src="" alt="Enlarged image" style="max-width:90%; max-height:90%; object-fit:contain;">
+  <button class="prev" style="position:absolute; top:50%; left:20px;">Prev</button>
+  <button class="next" style="position:absolute; top:50%; right:20px;">Next</button>
+</div>
 
-  <footer>
-    <p class="footer" style="text-align: center;">
-      &copy; 2026 Gichuki. All rights reserved.
-      <a href="mailto:kenngich@proton.me" style="text-decoration: none !important;">✉️</a> E-mail
-    </p>
+ <script>   
+const gallery = document.getElementById("gallery");
+const maxPhotos = 92; // update to reflect current number of photos
+  
+// Generate images
+for(let i=1; i<=maxPhotos; i++){
+  const img = document.createElement("img");
+  img.setAttribute('loading', 'lazy');
+  img.src = "images/photo"+i+".jpg"; 
+  img.setAttribute('width', '1920');
+  img.setAttribute('height', '1080');
+  img.onerror = function() { this.remove(); }
+  gallery.appendChild(img);
+}  
+
+// Lightbox elements
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightbox-img");
+let images = document.querySelectorAll("#gallery img");
+let currentIndex = 0;
+let startX = 0;
+
+// Show image in lightbox
+function showImage(index){
+  currentIndex = index;
+  lightboxImg.src = images[index].src;
+}
+
+// Add click event to images
+images.forEach((img, index) => {
+  img.addEventListener("click", () => {
+    lightbox.style.display = "flex";
+    showImage(index);
+  });
+});
+
+// Navigation buttons
+document.querySelector(".next").onclick = () => {
+  currentIndex = (currentIndex + 1) % images.length;
+  showImage(currentIndex);
+};
+document.querySelector(".prev").onclick = () => {
+  currentIndex = (currentIndex - 1 + images.length) % images.length;
+  showImage(currentIndex);
+};
+
+// Keyboard nav
+document.addEventListener("keydown", (e) => {
+  if(lightbox.style.display !== "flex") return;
+  if(e.key==="ArrowRight") document.querySelector(".next").click();
+  if(e.key==="ArrowLeft") document.querySelector(".prev").click();
+  if(e.key==="Escape"){
+    lightbox.style.display = "none";
+  }
+});
+
+// Close lightbox on background click
+lightbox.addEventListener("click", (e) => {
+  if(e.target===lightbox){
+    lightbox.style.display = "none";
+  }
+});
+
+// Swipe support
+lightbox.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; });
+lightbox.addEventListener("touchend", (e) => {
+  let endX = e.changedTouches[0].clientX;
+  let diff = startX - endX;
+  if(diff > 50) document.querySelector(".next").click();
+  if(diff < -50) document.querySelector(".prev").click();
+});
+  
+// Device detection functions 
+function detectDevice() {
+  const ua = navigator.userAgent;
+  if(/Mobile|Android|iPhone|iPad|iPod/i.test(ua)) return "Mobile";
+  return "Desktop";
+}
+function detectOS() {
+  const ua = navigator.userAgent;
+  if(ua.indexOf("Win")!==-1) return "Windows";
+  if(ua.indexOf("Android")!=-1) return "Android";
+  if(ua.indexOf("iPhone")!== -1 || ua.indexOf("iPad") !== -1) return "iOS";
+  if(ua.indexOf("Linux")!==-1) return "Linux";  
+  if(ua.indexOf("Mac")!==-1) return "MacOS";
+  return "Unknown";
+}
+function detectBrowser() {
+  const ua = navigator.userAgent;
+  if(/Brave/i.test(ua)) return "Brave";
+  if(/Chrome/i.test(ua) && !/Edge|OPR/i.test(ua)) return "Chrome";
+  if(/Safari/i.test(ua) && !/Chrome/i.test(ua)) return "Safari";
+  if(/Firefox/i.test(ua)) return "Firefox";
+  if(/Edg/i.test(ua)) return "Edge";
+  if(/OPR|Opera/i.test(ua)) return "Opera";
+  return "Other";
+}
+    
+function sendVisitorData() {
+  const data = {
+    time: new Date().toISOString(),
+    device: detectDevice(),
+    os: detectOS(),
+    browser: detectBrowser(),
+    screen: window.innerWidth + "x" + document.documentElement.clientHeight,
+  };
+  
+ fetch("https://script.google.com/macros/s/AKfycbwbn2_iQtpSjj_vGKUgcQMa22hGSY7atHbvcLKspEtuh0fB4Kzetwj8ujUm8kKCfZui/exec", {
+    method:"POST",
+    body: JSON.stringify(data)
+  });
+}
+sendVisitorData();
+
+// Responsive layout function
+function updateLayout() {
+  const width = window.innerWidth;
+  const imgs = document.querySelectorAll("#gallery img");
+  const gallery = document.getElementById("gallery");
+  
+  if (width <= 768) {
+    // Mobile: grid of images
+    gallery.classList.remove("fullscreen");
+    gallery.style.display = "flex";
+    gallery.style.flexWrap = "wrap";
+
+    imgs.forEach(img => {
+      img.style.display = "block"; // Make sure images are block-level
+      img.style.width = "calc(100% - 20px)"; // one per row on mobile devices
+      img.style.height = "auto";
+      img.style.margin = "5px"; // optional spacing
+      img.style = "border-radius: 0.3%; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);"; // border rounding and shadow for 3D effect
+    });
+    
+  } else {
+    // Desktop: display all images vertically
+    gallery.classList.remove("fullscreen");
+    imgs.forEach((img) => {
+      img.style.display = "block"; // Show all images
+      img.style.width = "calc(100% - 20px)"; // one per row on desktop
+      img.style.height = "auto";
+      img.style.margin = "5px"; // optional spacing 
+      img.style = "border-radius: 0.3%; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);"; // border rounding and shadow for 3D effect
+    });
+  }
+}   
+  
+// Run layout update on load and resize
+window.addEventListener("load", () => {
+  updateLayout();
+  //Initialize currentIndex for desktop mode
+  currentIndex = 0;
+});
+window.addEventListener("resize", updateLayout); 
+  
+</script>
+    <footer>
+      <p class="footer" style="text-align: center;">
+        &copy; 2026 Gichuki. All rights reserved.
+        <a href="mailto:kenngich@proton.me" style="text-decoration: none !important;">✉️</a> E-mail
+      </p>
     <p style="text-align: center;">
       This website is licensed under the 
       <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">
