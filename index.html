@@ -56,7 +56,7 @@
 
 <body>
   <header class="main-header" id="header">
-    <span class="cascade-text" id="header-text">Gallery of Nature Photos</span>
+    <span class="cascade-text" id="header-text" style="visibility: hidden;">Gallery of Nature Photos</span>
   </header>
 
   <!-- images loading -->
@@ -119,9 +119,12 @@ function fetchLatestCommitSha() {
       const headerText = document.getElementById("header-text");
       const originalText = headerText.textContent;
 
+      // Start cascade effect on the header text displaying the title or message
+      triggerCascade(headerText, originalText);
+
       if (latestCommitSha === storedSha && isPageReloaded()) {
         // Show message only on reload if no update
-        headerText.textContent = "No updates detected!";
+        headerText.textContent = "No updates detected";
         setTimeout(() => {
           headerText.textContent = originalText;
         }, 3000);
@@ -374,7 +377,7 @@ window.addEventListener("resize", updateLayout);
 </script>
     <footer>
       <p class="footer" style="text-align: center;">
-        &copy; 2026 Gichuki. All rights reserved.
+        &copy; 2026 Kenneth Gichuki. All rights reserved.
         <a href="mailto:kenngich@proton.me" style="text-decoration: none !important;">✉️</a> E-mail
       </p>
     <!--
