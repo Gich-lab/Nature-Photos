@@ -124,10 +124,12 @@ function fetchLatestCommitSha() {
 
       if (latestCommitSha === storedSha && isPageReloaded()) {
         // Show message only on reload if no update
-        headerText.textContent = "No updates detected";
+        headerText.textContent = "No updates detected!";
+        triggerCascade(headerText, headerText.textContent);
+        // Revert to original after 8 seconds
         setTimeout(() => {
-          headerText.textContent = originalText;
-        }, 3000);
+          triggerCascade(headerText, originalText);
+        }, 8000);
       } else if (latestCommitSha !== storedSha) {
         // New commit detected, update storedSha
         localStorage.setItem('storedSha', latestCommitSha);
