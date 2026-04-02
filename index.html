@@ -196,18 +196,19 @@ window.addEventListener('load', fetchLatestCommitSha);
   </style>
 
   <script>
-    const textElement = document.querySelector('.cascade-text');
-    const text = textElement.textContent;
-    textElement.textContent = '';
-    const totalDuration = 6; // seconds for cascade
-    //const repeatInterval = 12; // seconds for full loop - removed
-    const delayIncrement = totalDuration / text.length;
-    for (let i = 0; i < text.length; i++) {
-      const char = text[i];
-      const span = document.createElement('span');
-      span.innerHTML = (char === ' ') ? '&nbsp;' : char;
-      span.style.setProperty('--delay', `${i * delayIncrement}s`);
-      textElement.appendChild(span);
+    function triggerCascade(element, text, totalDuration = 6) {
+      element.style.visibility = "visible";
+      element.textContent = '';
+
+      const delayIncrement = totalDuration / text.length;
+
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const span = document.createElement('span');
+        span.innerHTML = (char === ' ') ? '&nbsp;' : char;
+        span.style.setProperty('--delay', `${i * delayIncrement}s`);
+        element.appendChild(span);
+      }
     }
   </script>
 </body>
