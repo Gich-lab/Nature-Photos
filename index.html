@@ -124,7 +124,7 @@ function fetchLatestCommitSha() {
 
       if (latestCommitSha === storedSha && isPageReloaded()) {
         // Show message only on reload if no update
-        headerText.textContent = "No updates detected!";
+        headerText.textContent = "No updates found";
         triggerCascade(headerText, headerText.textContent);
         // Revert to original after 8 seconds
         setTimeout(() => {
@@ -168,7 +168,7 @@ window.addEventListener('load', fetchLatestCommitSha);
       display: inline-block;
       transform: translateY(20px);
       /*box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8); web title transition shadow*/
-      animation: cascadeIn 1.5s forwards;
+      animation: cascadeIn 1.2s forwards;
       /* Use CSS variable for delay */
       --delay: 0s;
       animation-delay: var(--delay);
