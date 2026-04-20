@@ -16,7 +16,7 @@
 - Use the browser download option to save images to your device
 
 5. Contributing
-- Contributions are welcome are welcome in the new future!
+- Contributions are welcome in the new future!
 
 6. License
 - This project is licensed under the Creative Commons License 4.0. 
