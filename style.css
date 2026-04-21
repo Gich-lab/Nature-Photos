@@ -26,8 +26,8 @@ img {
 .gallery {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 20px;
+  gap: 30px;
+  padding: 30px;
   max-width: 100%; /* Full width */
   box-sizing: border-box;
 }
