@@ -19,7 +19,7 @@ img {
   height: auto;         /* Maintain aspect ratio */
   display: block;       /* Remove inline spacing */
   object-fit: contain;  /* Fit within container without overflow */
-  margin: 10px 10px;       /* Center images if needed */
+  margin: 0 auto;       /* Center images if needed */
 }
 
 /* Ensure containers are responsive */
