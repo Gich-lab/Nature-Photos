@@ -102,6 +102,14 @@ function fetchLatestCommitSha() {
 
       // Start cascade effect on the header text displaying the title or message
       triggerCascade(headerText, originalText);
+      
+      // use a sessionKey to limit writing to google sheet multiple times through webpage refresh
+      const pageSessionKey = 'pageSessionId';
+      if (!sessionStorage.getItem(pageSessionKey)) {
+        // Set a unique ID or flag when the page loads
+        sessionStorage.setItem(pageSessionKey, 1);
+        sendVisitorData();
+      }
 
       if (latestCommitSha === storedSha && isPageReloaded()) {
         // Show message only on reload if no update
@@ -315,7 +323,6 @@ function sendVisitorData() {
     body: JSON.stringify(data)
   });
 }
-sendVisitorData();
 
 // Responsive layout function
 function updateLayout() {
