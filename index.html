@@ -4,15 +4,6 @@
   <link rel="icon" href="tab-icon.ico" type="image/x-icon" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-22HE9GQ99B"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-22HE9GQ99B');
-  </script>
 <style>
   /* Basic styles for gallery */
   #gallery {display:flex;flex-wrap:wrap;gap:10px;}
@@ -109,6 +100,7 @@ function fetchLatestCommitSha() {
         // Set a unique ID or flag when the page loads
         sessionStorage.setItem(pageSessionKey, 1);
         sendVisitorData();
+        loadGA();
       }
 
       if (latestCommitSha === storedSha && isPageReloaded()) {
@@ -131,6 +123,15 @@ function fetchLatestCommitSha() {
     });
 }
 
+// Function that loads Google Analytics
+function loadGA() {
+    const src = "https://www.googletagmanager.com/gtag/js?id=G-22HE9GQ99B"
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-22HE9GQ99B');
+}
+  
 // Run on page load
 window.addEventListener('load', fetchLatestCommitSha);
 </script>
