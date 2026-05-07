@@ -100,7 +100,6 @@ function fetchLatestCommitSha() {
         // Set a unique ID or flag when the page loads
         sessionStorage.setItem(pageSessionKey, 1);
         sendVisitorData();
-        loadGA();
       }
 
       if (latestCommitSha === storedSha && isPageReloaded()) {
@@ -114,6 +113,7 @@ function fetchLatestCommitSha() {
       } else if (latestCommitSha !== storedSha) {
         // New commit detected, update storedSha
         localStorage.setItem('storedSha', latestCommitSha);
+        loadGA();
       }
 
       // Proceed to load or update images
