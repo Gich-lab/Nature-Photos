@@ -70,7 +70,16 @@
     });
   }
 
-  // Function to determine if page was reloaded
+// Function that loads Google Analytics
+function loadGA() {
+    const src = "https://www.googletagmanager.com/gtag/js?id=G-22HE9GQ99B"
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-22HE9GQ99B');
+}
+  
+// Function that determines if page was reloaded
 function isPageReloaded() {
   if (performance.getEntriesByType('navigation')[0]) {
     const navType = performance.getEntriesByType('navigation')[0].type;
@@ -81,6 +90,7 @@ function isPageReloaded() {
   return false;
 }
 
+// Function that calls the whole script and loads images to a browser if certain conditions are met  
 function fetchLatestCommitSha() {
   fetch('https://api.github.com/repos/Gich-lab/Nature-Photos/commits/main')
     .then(response => response.json())
@@ -121,15 +131,6 @@ function fetchLatestCommitSha() {
         waitForImagesOrTimeout(document.querySelectorAll('img'));
       });
     });
-}
-
-// Function that loads Google Analytics
-function loadGA() {
-    const src = "https://www.googletagmanager.com/gtag/js?id=G-22HE9GQ99B"
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-22HE9GQ99B');
 }
   
 // Run on page load
@@ -186,6 +187,7 @@ window.addEventListener('load', fetchLatestCommitSha);
   </style>
 
   <script>
+    // Function that displays the webpage text in a cascading flow
     function triggerCascade(element, text, totalDuration = 6) {
       element.style.visibility = "visible";
       element.textContent = '';
