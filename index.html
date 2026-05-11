@@ -114,7 +114,7 @@ function fetchLatestCommitSha() {
 
       if (latestCommitSha === storedSha && isPageReloaded()) {
         // Show message only on reload if no update
-        document.getElementById('header').textContent = "No updates found \uD83E\uDD2D"
+        document.getElementById('header').textContent = "No updates found \uD83E\uDD2D";
         //headerText.textContent = "No updates found \uD83E\uDD2D";
         triggerCascade(headerText, headerText.textContent);
         // Revert to original after 8 seconds
