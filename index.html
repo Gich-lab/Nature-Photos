@@ -114,7 +114,7 @@ function fetchLatestCommitSha() {
 
       if (latestCommitSha === storedSha && isPageReloaded()) {
         // Show message only on reload if no update
-        headerText.textContent = "No updates found";
+        headerText.textContent = "No updates found 🤭";
         triggerCascade(headerText, headerText.textContent);
         // Revert to original after 8 seconds
         setTimeout(() => {
