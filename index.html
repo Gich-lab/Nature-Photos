@@ -100,6 +100,7 @@ function fetchLatestCommitSha() {
 
       const headerText = document.getElementById("header-text");
       const originalText = headerText.textContent;
+      const emoji = "\ud83d\ude0f";
 
       // Start cascade effect on the header text displaying the title or message
       triggerCascade(headerText, originalText);
@@ -114,7 +115,7 @@ function fetchLatestCommitSha() {
 
       if (latestCommitSha === storedSha && isPageReloaded()) {
         // Show message only on reload if no update
-        headerText.textContent = "No updates found 🤭";
+        headerText.textContent = "No updates found ${emoji}";
         triggerCascade(headerText, headerText.textContent);
         // Revert to original after 8 seconds
         setTimeout(() => {
