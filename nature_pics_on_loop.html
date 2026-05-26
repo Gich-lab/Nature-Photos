@@ -11,11 +11,16 @@
     box-sizing: border-box;
   }
 
-  body {
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* Hide scrollbars */
     background: #111;
-    overflow: hidden;
     font-family: Arial, sans-serif;
-    cursor: pointer; /* Indicate clickable for toggle fullscreen */
+    cursor: pointer;
+    -webkit-user-select: none; /* Disable text selection */
+    -webkit-touch-callout: none; /* Disable callout on iOS */
+    touch-action: manipulation; /* Improve touch responsiveness */
   }
 
   #imageContainer {
@@ -25,7 +30,6 @@
     height: 100vh;
   }
 
-  /* Main current image full size */
   #currentImage {
     position: absolute;
     top: 0;
@@ -35,7 +39,6 @@
     z-index: 1;
   }
 
-  /* Website link, initially hidden */
   #myLink {
     display: none;
     position: absolute;
@@ -47,10 +50,9 @@
     text-decoration: none;
     color: #000;
     font-weight: bold;
-    z-index: 3; /* Above other elements */
+    z-index: 3;
   }
 
-  /* Container for split transition overlay */
   #splitTransition {
     position: absolute;
     top: 0;
@@ -61,60 +63,39 @@
     z-index: 2;
   }
 
-  /* Left half container */
-  #leftHalf {
+  #leftHalf, #rightHalf {
     width: 50%;
     height: 100%;
     overflow: hidden;
     position: relative;
   }
 
-  /* Right half container */
-  #rightHalf {
-    width: 50%;
-    height: 100%;
-    overflow: hidden;
-    position: relative;
-  }
-
-  /* The half images, positioned to show only half of the full image */
   #leftImage, #rightImage {
     position: absolute;
     top: 0;
-    width: 200%; /* double width for shifting */
+    width: 200%;
     height: 100%;
     background-size: cover;
     background-position: center;
     transition: transform 1s ease;
   }
 
-  /* Left image shows the left half of the picture */
   #leftImage {
     left: 0;
-    clip-path: inset(0 50% 0 0); /* clip right half, show left half */
+    clip-path: inset(0 50% 0 0);
   }
 
-  /* Right image shows the right half of the picture */
   #rightImage {
     right: 0;
-    clip-path: inset(0 0 0 50%); /* clip left half, show right half */
+    clip-path: inset(0 0 0 50%);
   }
 
-  /* Animations for sliding in halves */
-  .slide-in-left {
-    transform: translateX(0);
-  }
-
-  .slide-in-right {
-    transform: translateX(0);
-  }
-
-  /* Initial positions off-screen */
-  #leftImage.off-screen-left {
+  /* Off-screen positions for animation */
+  .off-screen-left {
     transform: translateX(-100%);
   }
 
-  #rightImage.off-screen-right {
+  .off-screen-right {
     transform: translateX(100%);
   }
 </style>
@@ -122,13 +103,10 @@
 <body>
 
 <div id="imageContainer">
-  <!-- Current full image -->
   <img id="currentImage" src="" alt="Current" />
 
-  <!-- Website link, hidden initially -->
   <a id="myLink" href="https://yourwebsite.com" target="_blank">Visit Website</a>
 
-  <!-- Transition halves overlay -->
   <div id="splitTransition" style="display: none;">
     <div id="leftHalf">
       <div id="leftImage"></div>
@@ -140,10 +118,7 @@
 </div>
 
 <script>
-  // Number of images in the folder
   const totalImages = 100; 
-
-  // Generate image paths dynamically
   const images = [];
   for (let i = 1; i <= totalImages; i++) {
     images.push(`images/photo${i}.jpg`);
@@ -155,49 +130,38 @@
   const myLink = document.getElementById('myLink');
 
   let currentIndex = 0;
-
-  // Initialize the main image
   currentImg.src = images[currentIndex];
 
-  // Show link when image is clicked
   currentImg.addEventListener('click', () => {
     if (myLink.style.display === 'none') {
       myLink.style.display = 'block';
     }
   });
 
-  // Get overlay elements
   const splitTransition = document.getElementById('splitTransition');
 
-  // Function to start the transition
   function startTransition() {
     const nextIndex = (currentIndex + 1) % images.length;
     const nextSrc = images[nextIndex];
 
-    // Set background images for halves
     leftImg.style.backgroundImage = `url('${nextSrc}')`;
     rightImg.style.backgroundImage = `url('${nextSrc}')`;
 
-    // Show overlay
     splitTransition.style.display = 'flex';
 
-    // Position halves off-screen
     leftImg.classList.add('off-screen-left');
     rightImg.classList.add('off-screen-right');
 
-    // Trigger reflow
+    // Trigger reflow to restart animation
     void leftImg.offsetWidth;
 
-    // Animate halves sliding in
     leftImg.classList.remove('off-screen-left');
     rightImg.classList.remove('off-screen-right');
 
-    // When transition ends, update main image
     const onTransitionEnd = () => {
       currentImg.src = nextSrc;
       splitTransition.style.display = 'none';
 
-      // Cleanup classes
       leftImg.classList.remove('slide-in-left');
       rightImg.classList.remove('slide-in-right');
 
@@ -208,14 +172,11 @@
     };
 
     leftImg.addEventListener('transitionend', onTransitionEnd);
-
     currentIndex = nextIndex;
   }
 
-  // Cycle images every 10 seconds
   setInterval(startTransition, 10000);
 
-  // Function to toggle fullscreen
   function toggleFullscreen() {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen().catch((err) => {
@@ -228,12 +189,10 @@
     }
   }
 
-  // Make entire body clickable/tappable to toggle fullscreen
+  // Use touchstart for more responsive mobile detection
 document.body.addEventListener('click', toggleFullscreen);
-
-// Support touch events for mobile devices
 document.body.addEventListener('touchend', function(e) {
-  e.preventDefault(); // prevent scrolling
+  e.preventDefault();
   toggleFullscreen();
 }, {passive: false});
 </script>
