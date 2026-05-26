@@ -141,7 +141,7 @@
 
 <script>
   // Number of images in the folder
-  const totalImages = 20; // Change this to your number of images
+  const totalImages = 100; 
 
   // Generate image paths dynamically
   const images = [];
@@ -215,23 +215,26 @@
   // Cycle images every 10 seconds
   setInterval(startTransition, 10000);
 
-  // Toggle fullscreen on click
-  document.body.addEventListener('click', () => {
+  // Function to toggle fullscreen
+  function toggleFullscreen() {
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen();
+      document.documentElement.requestFullscreen().catch((err) => {
+        console.warn(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+      });
     } else {
-      document.exitFullscreen();
+      document.exitFullscreen().catch((err) => {
+        console.warn(`Error attempting to exit fullscreen mode: ${err.message} (${err.name})`);
+      });
     }
-  });
+  }
 
-  // Add async keydown event to toggle fullscreen on any key press
-  document.addEventListener('keydown', async () => {
-    if (!document.fullscreenElement) {
-      await document.documentElement.requestFullscreen();
-    } else {
-      await document.exitFullscreen();
-    }
-  });
+  // Make entire body clickable/tappable to toggle fullscreen
+document.body.addEventListener('click', toggleFullscreen);
+
+// Also allow toggling with any key press (for TVs and remote controls)
+document.addEventListener('keydown', () => {
+  toggleFullscreen();
+});
 </script>
 </body>
 </html>
