@@ -118,7 +118,7 @@
   }
 
   #fullscreenBtn:hover {
-    background: rgba(255,255,255,0.384);
+    background: rgba(255, 255, 255, 0.384);
     border-color: #ccc;
   }
 </style>
@@ -220,16 +220,19 @@
 
   // Function to detect mobile device
   function isMobileDevice() {
-    return /Android|iPhone|iPad|Windows Phone/i.test(navigator.userAgent);
+    return /Android|iPhone|iPad/i.test(navigator.userAgent);
   }
 
   // On load, check if mobile and adjust image display
   window.addEventListener('load', () => {
     if (isMobileDevice()) {
       const img = document.getElementById('currentImage');
-      // Crop to a specific section, e.g., top-center
+      // Crop to show top part, fill entire viewport
       img.style.objectFit = 'cover';
-      img.style.objectPosition = 'center top'; // shows top part
+      img.style.objectPosition = 'center top'; // show top part
+      // Make sure the image fills the screen
+      img.style.width = '100vw';
+      img.style.height = '100vh';
     }
   });
 </script>
