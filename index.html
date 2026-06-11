@@ -327,6 +327,7 @@ function sendVisitorData() {
 }
 
 // Responsive layout function
+/*
 function updateLayout() {
   const width = window.innerWidth;
   const imgs = document.querySelectorAll("#gallery img");
@@ -358,7 +359,83 @@ function updateLayout() {
     });
   }
 }   
+*/
+// Animate images by rotating them as they load  
+function updateLayout() {
+  const width = window.innerWidth;
+  const imgs = document.querySelectorAll("#gallery img");
+  const gallery = document.getElementById("gallery");
   
+  // Define the rotation animation style
+  const animationStyle = `
+    @keyframes rotate360 {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  `;
+  
+  // Inject the keyframes into the document if not already present
+  if (!document.getElementById('rotateKeyframes')) {
+    const styleSheet = document.createElement("style");
+    styleSheet.id = 'rotateKeyframes';
+    styleSheet.innerHTML = animationStyle;
+    document.head.appendChild(styleSheet);
+  }
+  
+  // Reset any ongoing animations
+  imgs.forEach(img => {
+    img.style.transition = "none";
+    img.style.transform = "rotate(0deg)";
+  });
+  
+  // Function to animate images sequentially
+  function animateImagesSequentially(index) {
+    if (index >= imgs.length) return;
+    const img = imgs[index];
+    
+    // Set the animation
+    img.style.transition = "transform 1s ease-in-out";
+    img.style.animation = "rotate360 1s forwards";
+    
+    // Remove the animation after completion and recurse for next image
+    img.addEventListener("animationend", () => {
+      img.style.transform = "rotate(0deg)"; // Reset rotation
+      animateImagesSequentially(index + 1);
+    }, { once: true });
+  }
+  
+  if (width <= 768) {
+    // Mobile: grid of images
+    gallery.classList.remove("fullscreen");
+    gallery.style.display = "flex";
+    gallery.style.flexWrap = "wrap";
+
+    imgs.forEach(img => {
+      img.style.display = "block"; 
+      img.style.width = "calc(100% - 20px)";
+      img.style.height = "auto";
+      img.style.margin = "5px";
+      img.style.borderRadius = "0.3%";
+      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
+    });
+    
+  } else {
+    // Desktop: display all images vertically
+    gallery.classList.remove("fullscreen");
+    imgs.forEach((img) => {
+      img.style.display = "block";
+      img.style.width = "calc(100% - 20px)";
+      img.style.height = "auto";
+      img.style.margin = "5px";
+      img.style.borderRadius = "0.3%";
+      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
+    });
+  }
+
+  // Start the sequential rotation animation
+  animateImagesSequentially(0);
+}
+
 // Run layout update on load and resize
 window.addEventListener("load", () => {
   updateLayout();
