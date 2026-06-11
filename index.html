@@ -431,14 +431,12 @@ function updateLayout() {
       img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
     });
   }
-
-  // Start the sequential rotation animation
-  animateImagesSequentially(0);
 }
 
 // Run layout update on load and resize
 window.addEventListener("load", () => {
   updateLayout();
+  animateImagesSequentially(0);
   //Initialize currentIndex for desktop mode
   currentIndex = 0;
 });
