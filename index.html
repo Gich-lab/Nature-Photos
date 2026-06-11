@@ -366,7 +366,6 @@ function updateLayout(shouldAnimate = false) {
   const imgs = document.querySelectorAll("#gallery img");
   const gallery = document.getElementById("gallery");
   
-  // Define the rotation animation style
   const animationStyle = `
     @keyframes rotate360 {
       from { transform: rotate(0deg); }
@@ -374,7 +373,6 @@ function updateLayout(shouldAnimate = false) {
     }
   `;
   
-  // Inject the keyframes into the document if not already present
   if (!document.getElementById('rotateKeyframes')) {
     const styleSheet = document.createElement("style");
     styleSheet.id = 'rotateKeyframes';
@@ -382,36 +380,28 @@ function updateLayout(shouldAnimate = false) {
     document.head.appendChild(styleSheet);
   }
   
-  // Reset any ongoing animations
+  // Reset any previous animations
   imgs.forEach(img => {
     img.style.transition = "none";
     img.style.transform = "rotate(0deg)";
+    // Remove animation properties
+    img.style.animation = "";
+    img.style.animationDelay = "";
   });
   
-  // Animate images sequentially if allowed
+  // Animate all images simultaneously
   if (shouldAnimate) {
-    animateImagesSequentially(0);
-  }
-  
-  // Function to animate images sequentially
-  function animateImagesSequentially(index) {
-    if (index >= imgs.length) return;
-    const img = imgs[index];
-    
-    // Set the animation
-    img.style.transition = "transform 1s ease-in-out";
-    img.style.animation = "rotate360 1s forwards";
-    
-    // Remove the animation after completion and recurse for next image
-    img.addEventListener("animationend", () => {
-      img.style.transform = "rotate(0deg)"; // Reset rotation
-      animateImagesSequentially(index + 1);
-    }, { once: true });
+    imgs.forEach((img) => {
+      // Set transition for smoothness
+      img.style.transition = "transform 1s ease-in-out";
+      // Trigger the animation
+      img.style.animation = "rotate360 1s forwards";
+    });
   }
 
   // Layout adjustments
   if (width <= 768) {
-    // Mobile: grid of images
+    // Mobile layout
     gallery.classList.remove("fullscreen");
     gallery.style.display = "flex";
     gallery.style.flexWrap = "wrap";
@@ -426,7 +416,7 @@ function updateLayout(shouldAnimate = false) {
     });
     
   } else {
-    // Desktop: display all images vertically
+    // Desktop layout
     gallery.classList.remove("fullscreen");
     imgs.forEach((img) => {
       img.style.display = "block";
