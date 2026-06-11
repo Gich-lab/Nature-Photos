@@ -361,7 +361,7 @@ function updateLayout() {
 }   
 */
 // Animate images by rotating them as they load  
-function updateLayout() {
+function updateLayout(shouldAnimate = false) {
   const width = window.innerWidth;
   const imgs = document.querySelectorAll("#gallery img");
   const gallery = document.getElementById("gallery");
@@ -388,6 +388,11 @@ function updateLayout() {
     img.style.transform = "rotate(0deg)";
   });
   
+  // Animate images sequentially if allowed
+  if (shouldAnimate) {
+    animateImagesSequentially(0);
+  }
+  
   // Function to animate images sequentially
   function animateImagesSequentially(index) {
     if (index >= imgs.length) return;
@@ -403,7 +408,8 @@ function updateLayout() {
       animateImagesSequentially(index + 1);
     }, { once: true });
   }
-  
+
+  // Layout adjustments
   if (width <= 768) {
     // Mobile: grid of images
     gallery.classList.remove("fullscreen");
@@ -436,7 +442,6 @@ function updateLayout() {
 // Run layout update on load and resize
 window.addEventListener("load", () => {
   updateLayout();
-  animateImagesSequentially(0);
   //Initialize currentIndex for desktop mode
   currentIndex = 0;
 });
