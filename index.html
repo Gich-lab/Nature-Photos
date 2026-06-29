@@ -392,6 +392,7 @@ function updateLayout(shouldAnimate = false) {
   // Animate all images simultaneously
   if (shouldAnimate) {
     imgs.forEach((img) => {
+      void img.offsetWidth;
       // Set transition for smoothness
       img.style.transition = "transform 1s ease-in-out";
       // Trigger the animation
