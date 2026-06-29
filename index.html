@@ -389,17 +389,23 @@ function updateLayout(shouldAnimate = false) {
     img.style.animationDelay = "";
   });
   
-  // Animate all images simultaneously
-  if (shouldAnimate) {
-    imgs.forEach((img) => {
-      void img.offsetWidth;
-      // Set transition for smoothness
-      img.style.transition = "transform 1s ease-in-out";
-      // Trigger the animation
-      img.style.animation = "rotate360 1s forwards";
-    });
-  }
+  // Animate all images sequentially
+  async function rotateImagesSequentially(images) {
+    for (const img of images) {
+      // Reset any previous animation
+      img.style.animation = "none";
 
+      // Trigger reflow to restart the animation
+      void img.offsetWidth;
+
+      // Set the rotation animation
+      img.style.animation = "rotate360 1s forwards";
+
+      // Wait for the animation to complete
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+  });
+  
   // Layout adjustments
   if (width <= 768) {
     // Mobile layout
