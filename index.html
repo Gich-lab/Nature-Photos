@@ -327,6 +327,7 @@ function sendVisitorData() {
 }
 
 // Responsive layout function
+  /*
 function updateLayout() {
   const width = window.innerWidth;
   const imgs = document.querySelectorAll("#gallery img");
@@ -358,7 +359,58 @@ function updateLayout() {
     });
   }
 }   
+*/
 
+function updateLayout() {
+  const width = window.innerWidth;
+  const imgs = document.querySelectorAll("#gallery img");
+  const gallery = document.getElementById("gallery");
+
+  if (width <= 768) {
+    // Mobile: grid of images
+    gallery.classList.remove("fullscreen");
+    gallery.style.display = "flex";
+    gallery.style.flexWrap = "wrap";
+
+    imgs.forEach(img => {
+      img.style.display = "block";
+      img.style.width = "calc(100% - 20px)";
+      img.style.height = "auto";
+      img.style.margin = "5px";
+      // Remove inline animation class if present
+      img.classList.remove("img-unfurl");
+    });
+  } else {
+    // Desktop: display all images vertically
+    gallery.classList.remove("fullscreen");
+    gallery.style.display = "block";
+
+    imgs.forEach((img) => {
+      img.style.display = "block";
+      img.style.width = "calc(100% - 20px)";
+      img.style.height = "auto";
+      img.style.margin = "5px";
+      // Remove inline animation class if present
+      img.classList.remove("img-unfurl");
+    });
+  }
+
+  // Setup IntersectionObserver to animate images on scroll
+  const options = { threshold: 0.1 };
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("img-unfurl");
+        obs.unobserve(entry.target);
+      }
+    });
+  }, options);
+
+  // Apply observer to all images
+  imgs.forEach(img => {
+    observer.observe(img);
+  });
+}
 // Run layout update on load and resize
 window.addEventListener("load", () => {
   updateLayout();
