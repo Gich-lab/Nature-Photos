@@ -361,29 +361,54 @@ function updateLayout() {
 }   
 */
 <style>
-  @keyframes unfurlDown {
-    0% {
-      transform: scaleY(0);
-      transform-origin: top;
-      opacity: 0;
-    }
-    100% {
-      transform: scaleY(1);
-      opacity: 1;
-    }
-  }
+  /* Basic styles for images and layout */
+#gallery {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 10px;
+}
 
-  /* Initial state before animation */
-  .initial {
-    opacity: 0;
+/* Style for images */
+#gallery img {
+  display: block;
+  width: calc(100% - 20px);
+  height: auto;
+  margin: 5px;
+  border-radius: 0.3%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);
+  /* Start hidden and scaled down for animation */
+  opacity: 0;
+  transform: scaleY(0);
+}
+
+/* Responsive layout for mobile */
+@media(max-width: 768px) {
+  #gallery {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+/* Keyframes for unfurl downward animation */
+@keyframes unfurlDown {
+  0% {
     transform: scaleY(0);
-  }
-
-  /* Class to trigger animation */
-  .unfurl-image {
-    animation: unfurlDown 1s ease-out forwards;
     transform-origin: top;
+    opacity: 0;
   }
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+/* Class to trigger animation */
+.unfurl {
+  animation: unfurlDown 1s ease-out forwards;
+  transform-origin: top;
+  opacity: 1;
+  transform: scaleY(1);
+}
 </style>
 
 function updateLayout() {
@@ -391,47 +416,66 @@ function updateLayout() {
   const imgs = document.querySelectorAll("#gallery img");
   const gallery = document.getElementById("gallery");
   
-  const commonStyles = {
-    display: "block",
-    width: "calc(100% - 20px)",
-    height: "auto",
-    margin: "5px",
-    "border-radius": "0.3%",
-    "box-shadow": "0 4px 12px rgba(0, 0, 0, 0.9)"
-  };
-
   if (width <= 768) {
+    // Mobile: grid of images
+    gallery.classList.remove("fullscreen");
     gallery.style.display = "flex";
     gallery.style.flexWrap = "wrap";
+
+    imgs.forEach(img => {
+      img.style.display = "block"; 
+      img.style.width = "calc(100% - 20px)"; // one per row on mobile
+      img.style.height = "auto";
+      img.style.margin = "5px"; // optional spacing
+    });
   } else {
-    gallery.style.display = "block";
+    // Desktop: display all images vertically
+    gallery.classList.remove("fullscreen");
+    imgs.forEach((img) => {
+      img.style.display = "block"; // Show all images
+      img.style.width = "calc(100% - 20px)"; // one per row on desktop
+      img.style.height = "auto";
+      img.style.margin = "5px"; // optional spacing
+    });
   }
+}
 
+// Setup IntersectionObserver to trigger unfurl on scroll
+function setupUnfurlOnScroll() {
+  const imgs = document.querySelectorAll("#gallery img");
+  const options = { threshold: 0.1 }; // Trigger when 10% visible
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // Add the unfurl class for animation
+        entry.target.classList.add("unfurl");
+        // Stop observing once animated
+        observer.unobserve(entry.target);
+      }
+    });
+  }, options);
+  
   imgs.forEach(img => {
-    // Apply common styles
-    Object.assign(img.style, commonStyles);
-
-    // Remove the animation class to reset
-    img.classList.remove("unfurl-image");
-    // Add initial class to set starting state
-    img.classList.add("initial");
-
-    // Trigger reflow
-    void img.offsetWidth;
-
-    // Remove initial class and add animation class
-    img.classList.remove("initial");
-    img.classList.add("unfurl-image");
+    // Reset styles for potential re-use
+    img.classList.remove("unfurl");
+    img.style.opacity = 0;
+    img.style.transform = "scaleY(0)";
+    observer.observe(img);
   });
 }
 
-// Run layout update on load and resize
+// Run on page load
 window.addEventListener("load", () => {
   updateLayout();
-  //Initialize currentIndex for desktop mode
-  currentIndex = 0;
+  setupUnfurlOnScroll();
 });
-window.addEventListener("resize", updateLayout); 
+
+// Run on window resize
+window.addEventListener("resize", () => {
+  updateLayout();
+  setupUnfurlOnScroll();
+});
+// window.addEventListener("resize", updateLayout); 
   
 </script>
     <footer>
