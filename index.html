@@ -327,6 +327,7 @@ function sendVisitorData() {
 }
 
 // Responsive layout function
+/*
 function updateLayout() {
   const width = window.innerWidth;
   const imgs = document.querySelectorAll("#gallery img");
@@ -358,6 +359,72 @@ function updateLayout() {
     });
   }
 }   
+*/
+<style>
+  @keyframes unfurlDown {
+    0% {
+      transform: scaleY(0);
+      transform-origin: top;
+      opacity: 0;
+    }
+    100% {
+      transform: scaleY(1);
+      opacity: 1;
+    }
+  }
+
+  .unfurl-image {
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: top;
+    animation: unfurlDown 1s ease-out forwards;
+  }
+</style>
+
+function updateLayout() {
+  const width = window.innerWidth;
+  const imgs = document.querySelectorAll("#gallery img");
+  const gallery = document.getElementById("gallery");
+  
+  // Common styles for all images
+  const commonStyles = {
+    display: "block",
+    width: "calc(100% - 20px)",
+    height: "auto",
+    margin: "5px",
+    "border-radius": "0.3%",
+    "box-shadow": "0 4px 12px rgba(0, 0, 0, 0.9)"
+  };
+
+  if (width <= 768) {
+    // Mobile layout
+    gallery.classList.remove("fullscreen");
+    gallery.style.display = "flex";
+    gallery.style.flexWrap = "wrap";
+  } else {
+    // Desktop layout
+    gallery.classList.remove("fullscreen");
+    gallery.style.display = "block"; // or flex if needed
+  }
+
+  imgs.forEach(img => {
+    // Apply common styles
+    Object.assign(img.style, commonStyles);
+    
+    // Reset animation
+    img.style.opacity = "0";
+    img.style.transform = "scaleY(0)";
+    
+    // Remove existing animation class if any
+    img.classList.remove("unfurl-image");
+    
+    // Trigger reflow to restart animation
+    void img.offsetWidth;
+    
+    // Add animation class to start the unfurl
+    img.classList.add("unfurl-image");
+  });
+}
 
 // Run layout update on load and resize
 window.addEventListener("load", () => {
