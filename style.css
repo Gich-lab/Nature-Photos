@@ -72,6 +72,6 @@ img {
 .img-unfurl {
   animation: rotateIn 1s ease-out forwards;
   /* Optional: set starting state if needed */
-  /* transform: rotate(-15deg); */
-  /* opacity: 0; */
+  transform: rotate(-15deg); 
+  opacity: 0; 
 }
