@@ -54,4 +54,20 @@ img {
   object-fit: contain;
   border-radius: 10px;
 }
+@keyframes rotateIn {
+  from {
+    transform: rotate(-15deg);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(0deg);
+    opacity: 1;
+  }
+}
 
+.img-unfurl {
+  animation: rotateIn 1s ease-out forwards;
+  /* Optional: set starting state if needed */
+  transform: rotate(-15deg); 
+  opacity: 0; 
+}
