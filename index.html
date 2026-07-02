@@ -327,45 +327,66 @@ function sendVisitorData() {
 }
 
 // Responsive layout function
+// Create the IntersectionObserver outside to observe all images
+const imgs = document.querySelectorAll("#gallery img");
+const observerOptions = { threshold: 0.1 };
+const observer = new IntersectionObserver((entries, obs) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("img-unfurl");
+      obs.unobserve(entry.target); // Optional: stop observing once animated
+    }
+  });
+}, observerOptions);
+
 function updateLayout() {
   const width = window.innerWidth;
-  const imgs = document.querySelectorAll("#gallery img");
   const gallery = document.getElementById("gallery");
   
+  // Reset animation classes on layout update
+  document.querySelectorAll("#gallery img").forEach(img => {
+    img.classList.remove("img-unfurl");
+  });
+  
   if (width <= 768) {
-    // Mobile: grid of images
+    // Mobile layout
     gallery.classList.remove("fullscreen");
     gallery.style.display = "flex";
     gallery.style.flexWrap = "wrap";
 
     imgs.forEach(img => {
       img.style.display = "block"; 
-      img.style.width = "calc(100% - 20px)"; // one per row on mobile devices
+      img.style.width = "calc(100% - 20px)";
       img.style.height = "auto";
-      img.style.margin = "5px"; // optional spacing
-      img.style = "border-radius: 0.3%; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);"; // border rounding and shadow for 3D effect
+      img.style.margin = "5px";
+      img.style.borderRadius = "0.3%";
+      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
     });
-    
   } else {
-    // Desktop: display all images vertically
+    // Desktop layout
     gallery.classList.remove("fullscreen");
     imgs.forEach((img) => {
-      img.style.display = "block"; // Show all images
-      img.style.width = "calc(100% - 20px)"; // one per row on desktop
+      img.style.display = "block";
+      img.style.width = "calc(100% - 20px)";
       img.style.height = "auto";
-      img.style.margin = "5px"; // optional spacing 
-      img.style = "border-radius: 0.3%; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);"; // border rounding and shadow for 3D effect
+      img.style.margin = "5px";
+      img.style.borderRadius = "0.3%";
+      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
     });
   }
-}   
 
-// Run layout update on load and resize
+  // Observe each image for unfurl animation
+  imgs.forEach(img => {
+    observer.observe(img);
+  });
+}
+
+// Run layout update on load
 window.addEventListener("load", () => {
   updateLayout();
-  //Initialize currentIndex for desktop mode
   currentIndex = 0;
 });
-window.addEventListener("resize", updateLayout); 
+window.addEventListener("resize", updateLayout);
 </script>
     <footer>
       <p class="footer" style="text-align: center;">
