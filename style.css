@@ -58,21 +58,20 @@ img {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-@keyframes unfurlDown {
-  0% {
-    transform: scaleY(0);
-    transform-origin: top;
+@keyframes rotateIn {
+  from {
+    transform: rotate(-15deg);
     opacity: 0;
   }
-  100% {
-    transform: scaleY(1);
+  to {
+    transform: rotate(0deg);
     opacity: 1;
   }
 }
 
 .img-unfurl {
-  animation: unfurlDown 1s ease-out forwards;
-  transform: scaleY(0);
-  opacity: 0;
-  transform-origin: top;
+  animation: rotateIn 1s ease-out forwards;
+  /* Optional: set starting state if needed */
+  /* transform: rotate(-15deg); */
+  /* opacity: 0; */
 }
