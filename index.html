@@ -327,7 +327,6 @@ function sendVisitorData() {
 }
 
 // Responsive layout function
-/*
 function updateLayout() {
   const width = window.innerWidth;
   const imgs = document.querySelectorAll("#gallery img");
@@ -359,82 +358,6 @@ function updateLayout() {
     });
   }
 }   
-*/
-// Animate images by rotating them as they load  
-function updateLayout(shouldAnimate = false) {
-  const width = window.innerWidth;
-  const imgs = document.querySelectorAll("#gallery img");
-  const gallery = document.getElementById("gallery");
-  
-  const animationStyle = `
-    @keyframes rotate360 {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-  `;
-  
-  if (!document.getElementById('rotateKeyframes')) {
-    const styleSheet = document.createElement("style");
-    styleSheet.id = 'rotateKeyframes';
-    styleSheet.innerHTML = animationStyle;
-    document.head.appendChild(styleSheet);
-  }
-  
-  // Reset any previous animations
-  imgs.forEach(img => {
-    img.style.transition = "none";
-    img.style.transform = "rotate(0deg)";
-    // Remove animation properties
-    img.style.animation = "";
-    img.style.animationDelay = "";
-  });
-  
-  // Animate all images sequentially
-  async function rotateImagesSequentially(images) {
-    for (const img of images) {
-      // Reset any previous animation
-      img.style.animation = "none";
-
-      // Trigger reflow to restart the animation
-      void img.offsetWidth;
-
-      // Set the rotation animation
-      img.style.animation = "rotate360 1s forwards";
-
-      // Wait for the animation to complete
-      await new Promise(resolve => setTimeout(resolve, 1000));
-    }
-  });
-  
-  // Layout adjustments
-  if (width <= 768) {
-    // Mobile layout
-    gallery.classList.remove("fullscreen");
-    gallery.style.display = "flex";
-    gallery.style.flexWrap = "wrap";
-
-    imgs.forEach(img => {
-      img.style.display = "block"; 
-      img.style.width = "calc(100% - 20px)";
-      img.style.height = "auto";
-      img.style.margin = "5px";
-      img.style.borderRadius = "0.3%";
-      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-    });
-    
-  } else {
-    // Desktop layout
-    gallery.classList.remove("fullscreen");
-    imgs.forEach((img) => {
-      img.style.display = "block";
-      img.style.width = "calc(100% - 20px)";
-      img.style.height = "auto";
-      img.style.margin = "5px";
-      img.style.borderRadius = "0.3%";
-      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-    });
-  }
-}
 
 // Run layout update on load and resize
 window.addEventListener("load", () => {
