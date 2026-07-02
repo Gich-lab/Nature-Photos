@@ -361,7 +361,7 @@ function updateLayout() {
 }   
 */
 <style>
-  /* Basic styles for images and layout */
+  /* Basic styles */
 #gallery {
   max-width: 800px;
   margin: 0 auto;
@@ -415,62 +415,51 @@ function updateLayout() {
   const width = window.innerWidth;
   const imgs = document.querySelectorAll("#gallery img");
   const gallery = document.getElementById("gallery");
-  
+
+  // Adjust layout based on screen size
   if (width <= 768) {
     // Mobile: grid of images
-    gallery.classList.remove("fullscreen");
     gallery.style.display = "flex";
     gallery.style.flexWrap = "wrap";
-
-    imgs.forEach(img => {
-      img.style.display = "block"; 
-      img.style.width = "calc(100% - 20px)"; // one per row on mobile
-      img.style.height = "auto";
-      img.style.margin = "5px"; // optional spacing
-    });
   } else {
     // Desktop: display all images vertically
-    gallery.classList.remove("fullscreen");
-    imgs.forEach((img) => {
-      img.style.display = "block"; // Show all images
-      img.style.width = "calc(100% - 20px)"; // one per row on desktop
-      img.style.height = "auto";
-      img.style.margin = "5px"; // optional spacing
-    });
+    gallery.style.display = "block"; // or flex if preferred
   }
-}
 
-// Setup IntersectionObserver to trigger unfurl on scroll
-function setupUnfurlOnScroll() {
-  const imgs = document.querySelectorAll("#gallery img");
-  const options = { threshold: 0.1 }; // Trigger when 10% visible
-  const observer = new IntersectionObserver((entries, observer) => {
+  // Reset image styles for animation
+  imgs.forEach(img => {
+    img.classList.remove("unfurl");
+    // Reset to initial hidden state
+    img.style.opacity = 0;
+    img.style.transform = "scaleY(0)";
+  });
+
+  // Setup IntersectionObserver for unfurl effect
+  const options = { threshold: 0.1 };
+  const observer = new IntersectionObserver((entries, observerRef) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        // Add the unfurl class for animation
         entry.target.classList.add("unfurl");
-        // Stop observing once animated
-        observer.unobserve(entry.target);
+        observerRef.unobserve(entry.target);
       }
     });
   }, options);
-  
+
+  // Observe each image
   imgs.forEach(img => {
-    // Reset styles for potential re-use
-    img.classList.remove("unfurl");
-    img.style.opacity = 0;
-    img.style.transform = "scaleY(0)";
     observer.observe(img);
   });
 }
 
-// Run on page load
+// Initialize on load
 window.addEventListener("load", () => {
   updateLayout();
-  setupUnfurlOnScroll();
 });
 
-window.addEventListener("resize", updateLayout); 
+// Update layout on resize
+window.addEventListener("resize", () => {
+  updateLayout();
+});
   
 </script>
     <footer>
