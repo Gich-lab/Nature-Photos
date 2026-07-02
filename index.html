@@ -451,16 +451,13 @@ function updateLayout() {
   });
 }
 
-// Initialize on load
+// Run layout update on load and resize
 window.addEventListener("load", () => {
   updateLayout();
+  //Initialize currentIndex for desktop mode
+  currentIndex = 0;
 });
-
-// Update layout on resize
-window.addEventListener("resize", () => {
-  updateLayout();
-});
-  
+window.addEventListener("resize", updateLayout); 
 </script>
     <footer>
       <p class="footer" style="text-align: center;">
