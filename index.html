@@ -373,11 +373,16 @@ function updateLayout() {
     }
   }
 
-  .unfurl-image {
+  /* Initial state before animation */
+  .initial {
     opacity: 0;
     transform: scaleY(0);
-    transform-origin: top;
+  }
+
+  /* Class to trigger animation */
+  .unfurl-image {
     animation: unfurlDown 1s ease-out forwards;
+    transform-origin: top;
   }
 </style>
 
@@ -386,7 +391,6 @@ function updateLayout() {
   const imgs = document.querySelectorAll("#gallery img");
   const gallery = document.getElementById("gallery");
   
-  // Common styles for all images
   const commonStyles = {
     display: "block",
     width: "calc(100% - 20px)",
@@ -397,31 +401,26 @@ function updateLayout() {
   };
 
   if (width <= 768) {
-    // Mobile layout
-    gallery.classList.remove("fullscreen");
     gallery.style.display = "flex";
     gallery.style.flexWrap = "wrap";
   } else {
-    // Desktop layout
-    gallery.classList.remove("fullscreen");
-    gallery.style.display = "block"; // or flex if needed
+    gallery.style.display = "block";
   }
 
   imgs.forEach(img => {
     // Apply common styles
     Object.assign(img.style, commonStyles);
-    
-    // Reset animation
-    img.style.opacity = "0";
-    img.style.transform = "scaleY(0)";
-    
-    // Remove existing animation class if any
+
+    // Remove the animation class to reset
     img.classList.remove("unfurl-image");
-    
-    // Trigger reflow to restart animation
+    // Add initial class to set starting state
+    img.classList.add("initial");
+
+    // Trigger reflow
     void img.offsetWidth;
-    
-    // Add animation class to start the unfurl
+
+    // Remove initial class and add animation class
+    img.classList.remove("initial");
     img.classList.add("unfurl-image");
   });
 }
