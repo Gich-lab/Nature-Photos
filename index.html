@@ -327,7 +327,6 @@ function sendVisitorData() {
 }
 
 // Responsive layout function
-  /*
 function updateLayout() {
   const width = window.innerWidth;
   const imgs = document.querySelectorAll("#gallery img");
@@ -359,49 +358,12 @@ function updateLayout() {
     });
   }
 }   
-*/
 
-const imgs = document.querySelectorAll("#gallery img");
-const observerOptions = { threshold: 0.1 };
-
-const observer = new IntersectionObserver((entries, obs) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("img-unfurl");
-      obs.unobserve(entry.target); // Optional: stop observing once animated
-    }
-  });
-}, observerOptions);
-
-function updateLayout() {
-  const width = window.innerWidth;
-
-  // Reset classes for all images
-  imgs.forEach(img => {
-    img.classList.remove("img-unfurl");
-  });
-
-  // Layout adjustments based on width
-  if (width <= 768) {
-    // Mobile layout adjustments
-    // your existing code
-  } else {
-    // Desktop layout adjustments
-    // your existing code
-  }
-
-  // Observe each image for unfurl effect
-  imgs.forEach(img => {
-    observer.observe(img);
-  });
-}
-
-// Run on load
+// Run layout update on load and resize
 window.addEventListener("load", () => {
   updateLayout();
+  //Initialize currentIndex for desktop mode
   currentIndex = 0;
-  // Start observing images
-  imgs.forEach(img => observer.observe(img));
 });
 window.addEventListener("resize", updateLayout); 
 </script>
