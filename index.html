@@ -470,12 +470,7 @@ window.addEventListener("load", () => {
   setupUnfurlOnScroll();
 });
 
-// Run on window resize
-window.addEventListener("resize", () => {
-  updateLayout();
-  setupUnfurlOnScroll();
-});
-// window.addEventListener("resize", updateLayout); 
+window.addEventListener("resize", updateLayout); 
   
 </script>
     <footer>
