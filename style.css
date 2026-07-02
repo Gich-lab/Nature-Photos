@@ -54,24 +54,3 @@ img {
   object-fit: contain;
   border-radius: 10px;
 }
-/* Unfurling animation for images */
-@keyframes unfurlDown {
-  0% {
-    transform: scaleY(0);
-    transform-origin: top;
-    opacity: 0;
-  }
-  100% {
-    transform: scaleY(1);
-    opacity: 1;
-  }
-}
-
-/* Class to trigger the unfurling animation */
-.img-unfurl {
-  animation: unfurlDown 1s ease-out forwards;
-  transform: scaleY(0);
-  opacity: 0;
-  /* Optional: set transform origin to top for unfurl from top */
-  transform-origin: top;
-}
