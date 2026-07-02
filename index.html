@@ -327,7 +327,6 @@ function sendVisitorData() {
 }
 
 // Responsive layout function
-/*
 function updateLayout() {
   const width = window.innerWidth;
   const imgs = document.querySelectorAll("#gallery img");
@@ -359,97 +358,6 @@ function updateLayout() {
     });
   }
 }   
-*/
-<style>
-  /* Basic styles */
-#gallery {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 10px;
-}
-
-/* Style for images */
-#gallery img {
-  display: block;
-  width: calc(100% - 20px);
-  height: auto;
-  margin: 5px;
-  border-radius: 0.3%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);
-  /* Start hidden and scaled down for animation */
-  opacity: 0;
-  transform: scaleY(0);
-}
-
-/* Responsive layout for mobile */
-@media(max-width: 768px) {
-  #gallery {
-    display: flex;
-    flex-wrap: wrap;
-  }
-}
-
-/* Keyframes for unfurl downward animation */
-@keyframes unfurlDown {
-  0% {
-    transform: scaleY(0);
-    transform-origin: top;
-    opacity: 0;
-  }
-  100% {
-    transform: scaleY(1);
-    opacity: 1;
-  }
-}
-
-/* Class to trigger animation */
-.unfurl {
-  animation: unfurlDown 1s ease-out forwards;
-  transform-origin: top;
-  opacity: 1;
-  transform: scaleY(1);
-}
-</style>
-
-function updateLayout() {
-  const width = window.innerWidth;
-  const imgs = document.querySelectorAll("#gallery img");
-  const gallery = document.getElementById("gallery");
-
-  // Adjust layout based on screen size
-  if (width <= 768) {
-    // Mobile: grid of images
-    gallery.style.display = "flex";
-    gallery.style.flexWrap = "wrap";
-  } else {
-    // Desktop: display all images vertically
-    gallery.style.display = "block"; // or flex if preferred
-  }
-
-  // Reset image styles for animation
-  imgs.forEach(img => {
-    img.classList.remove("unfurl");
-    // Reset to initial hidden state
-    img.style.opacity = 0;
-    img.style.transform = "scaleY(0)";
-  });
-
-  // Setup IntersectionObserver for unfurl effect
-  const options = { threshold: 0.1 };
-  const observer = new IntersectionObserver((entries, observerRef) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("unfurl");
-        observerRef.unobserve(entry.target);
-      }
-    });
-  }, options);
-
-  // Observe each image
-  imgs.forEach(img => {
-    observer.observe(img);
-  });
-}
 
 // Run layout update on load and resize
 window.addEventListener("load", () => {
