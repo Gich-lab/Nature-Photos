@@ -327,6 +327,7 @@ function sendVisitorData() {
 }
 
 // Responsive layout function
+  /*
 function updateLayout() {
   const width = window.innerWidth;
   const imgs = document.querySelectorAll("#gallery img");
@@ -352,13 +353,53 @@ function updateLayout() {
     imgs.forEach((img) => {
       img.style.display = "block"; // Show all images
       img.style.width = "calc(100% - 20px)"; // one per row on desktop
+      grid-template-columns: repeat(4, 1fr);
       img.style.height = "auto";
       img.style.margin = "5px"; // optional spacing 
       img.style = "border-radius: 0.3%; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);"; // border rounding and shadow for 3D effect
     });
   }
 }   
+*/
+// Responsive layout function 
+function updateLayout() {
+  const width = window.innerWidth;
+  const imgs = document.querySelectorAll("#gallery img");
+  const gallery = document.getElementById("gallery");
+  
+  if (width <= 768) {
+    // Mobile layout: flex with wrapping
+    gallery.classList.remove("fullscreen");
+    gallery.style.display = "flex";
+    gallery.style.flexWrap = "wrap";
 
+    imgs.forEach(img => {
+      img.style.display = "block";
+      img.style.width = "calc(100% - 20px)"; // full width minus margin
+      img.style.height = "auto";
+      img.style.margin = "5px"; // spacing
+      // Set border-radius and box-shadow individually
+      img.style.borderRadius = "0.3%";
+      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
+    });
+  } else {
+    // Desktop or larger screens: you might want to reset styles or set a grid
+    // Example:
+    gallery.style.display = "grid";
+    gallery.style.gridTemplateColumns = "repeat(4, 1fr)";
+    gallery.style.gap = "10px";
+
+    imgs.forEach(img => {
+      // Reset inline styles if needed or set specific styles for desktop
+      img.style.display = "block"; // or "inline-block" depending on layout
+      img.style.width = "100%"; // fill grid cell
+      img.style.margin = "0";
+      img.style.borderRadius = "0.3%";
+      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
+    });
+  }
+}
+  
 // Run layout update on load and resize
 window.addEventListener("load", () => {
   updateLayout();
