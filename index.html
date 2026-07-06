@@ -327,7 +327,6 @@ function sendVisitorData() {
 }
 
 // Responsive layout function
-/*
 function updateLayout() {
   const width = window.innerWidth;
   const imgs = document.querySelectorAll("#gallery img");
@@ -363,71 +362,6 @@ function updateLayout() {
     });
   }
 }   
-*/
-
-// Responsive layout function with rotating animation  
-function updateLayout() {
-  const width = window.innerWidth;
-  const imgs = document.querySelectorAll("#gallery img");
-  const gallery = document.getElementById("gallery");
-
-  // Remove the rotation class to reset
-  imgs.forEach(img => {
-    img.classList.remove('rotate-on-load');
-  });
-
-  if (width <= 768) {
-    // Mobile layout
-    gallery.classList.remove("fullscreen");
-    gallery.style.display = "flex";
-    gallery.style.flexWrap = "wrap";
-
-    imgs.forEach((img) => {
-      // Trigger reflow to restart animation
-      void img.offsetWidth;
-      // Add class to animate rotation
-      img.classList.add('rotate-on-load');
-
-      // Style adjustments
-      img.style.display = "block"; 
-      img.style.width = "calc(100% - 20px)"; 
-      img.style.height = "auto";
-      img.style.margin = "5px"; 
-      img.style.borderRadius = "0.3%"; 
-      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-    });
-    
-  } else {
-    // Desktop layout
-    gallery.classList.remove("fullscreen");
-    gallery.style.display = "flex";
-    gallery.style.flexWrap = "wrap";
-
-    imgs.forEach((img) => {
-      img.animate([
-        {transform: 'rotate(-360deg) scale(0.5)', opacity: 0},
-        {transform: 'rotate(0deg) scale(1)', opacity: 1}], {
-        duration: 1000,
-        easing: 'ease-out',
-        fill: 'forwards'
-    });
-
-      // Trigger reflow to restart animation
-      // void img.offsetWidth;
-      // Add class to animate rotation
-      // img.classList.add('rotate-on-load');
-
-      // Style adjustments
-      img.style.opacity = 1;
-      img.style.display = "block";
-      img.style.width = "calc(25% - 20px)";
-      img.style.height = "auto";
-      img.style.margin = "5px"; 
-      img.style.borderRadius = "0.6%";
-      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-    });
-  }
-}
 
 // Run layout update on load and resize
 window.addEventListener("load", () => {
