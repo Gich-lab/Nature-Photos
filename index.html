@@ -330,7 +330,7 @@ function sendVisitorData() {
 function updateLayout() {
   const width = window.innerWidth;
   const imgs = document.querySelectorAll("#gallery img");
-  const gallery = document.getElementById("gallery").style.display = 'flex';
+  const gallery = document.getElementById("gallery");
   
   if (width <= 768) {
     // Mobile: grid of images
