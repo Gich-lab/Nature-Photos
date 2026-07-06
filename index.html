@@ -347,15 +347,15 @@ function updateLayout() {
     });
     
   } else {
+    // Set images to occupy 22% width to fit 4 per row with gaps
     gallery.classList.remove("fullscreen");
     imgs.forEach((img) => {
-    img.style.display = "inline-block"; // Inline-block allows multiple images per line
-    img.style.width = "23%"; // Slightly less than 25% to account for margins
+    img.style.display = "block"; // or 'inline-block' if preferred
+    img.style.flex = "0 0 calc(25% - 10px)"; // 4 per row with gap
     img.style.height = "auto";
-    img.style.margin = "1%"; // Small margin around each image
-    img.style.borderRadius = "0.3%"; // Rounded corners
-    img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)"; // Shadow
-    });
+    img.style.borderRadius = "0.3%";
+    img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
+   });
   }
 }   
 
