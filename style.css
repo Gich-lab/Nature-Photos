@@ -13,31 +13,23 @@ body {
   word-wrap: break-word;
 }
 
-/* Style for images - Added the multidisplay*/
+/* Make images responsive and prevent overflow */
 img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  object-fit: contain;
-  border-radius: 0.3%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);
+  max-width: 100%;      /* Ensure images don't overflow their containers */
+  height: auto;         /* Maintain aspect ratio */
+  display: block;       /* Remove inline spacing */
+  object-fit: contain;  /* Fit within container without overflow */
+  margin: 0 auto;       /* Center images if needed */
 }
 
-/* Style for gallery container - default: 1 column for small screens */
+/* Ensure containers are responsive */
 .gallery {
-  display: grid;
-  grid-template-columns: 1fr; /* 1 column by default */
-  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
   padding: 40px;
-  max-width: 100%;
+  max-width: 100%; /* Full width */
   box-sizing: border-box;
-}
-
-/* Media query for larger screens (e.g., PC) */
-@media (min-width: 768px) {
-  .gallery {
-    grid-template-columns: repeat(4, 1fr); /* 4 columns on screens wider than 768px */
-  }
 }
 
 /* Lightbox styles (unchanged) */
