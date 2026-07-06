@@ -404,10 +404,18 @@ function updateLayout() {
     gallery.style.flexWrap = "wrap";
 
     imgs.forEach((img) => {
+      img.animate([
+        {transform: 'rotate(-360deg) scale(0.5)', opacity: 0},
+        {transform: 'rotate(0deg) scale(1)', opacity: 1}], {
+        duration: 1000,
+        easing: 'ease-out',
+        fill: 'forwards'
+    });
+
       // Trigger reflow to restart animation
-      void img.offsetWidth;
+      // void img.offsetWidth;
       // Add class to animate rotation
-      img.classList.add('rotate-on-load');
+      // img.classList.add('rotate-on-load');
 
       // Style adjustments
       img.style.opacity = 1;
