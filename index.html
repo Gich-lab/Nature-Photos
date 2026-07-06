@@ -351,10 +351,11 @@ function updateLayout() {
     gallery.classList.remove("fullscreen");
     imgs.forEach((img) => {
       img.style.display = "block"; // Show all images
-      img.style.width = "calc(25% - 20px)"; // four per row on desktop
+      img.style.width = "calc(25% - 20px)"; // Four per row on desktop
       img.style.height = "auto";
-      img.style.margin = "5px"; // optional spacing 
-      img.style = "border-radius: 0.3%; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);"; // border rounding and shadow for 3D effect
+      img.style.margin = "5px"; // optional spacing
+      img.style.borderRadius = "0.3%"; // border radius
+      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)"; // box shadow
     });
   }
 }   
