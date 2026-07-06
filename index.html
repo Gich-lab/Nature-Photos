@@ -352,6 +352,7 @@ function updateLayout() {
     gallery.style.display = "flex";
     gallery.style.flexWrap = "wrap";
     imgs.forEach((img) => {
+      img.style.opacity = 1; // fade in
       img.style.display = "block"; // Show all images
       img.style.width = "calc(25% - 20px)"; // Four per row on desktop
       img.style.height = "auto";
