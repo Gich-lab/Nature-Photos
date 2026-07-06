@@ -366,40 +366,57 @@ function updateLayout() {
   const imgs = document.querySelectorAll("#gallery img");
   const gallery = document.getElementById("gallery");
   
-  // Common styles for both mobile and desktop
-  imgs.forEach((img) => {
-    // Remove any previous rotation class
-    img.classList.remove("rotate-on-load");
-    
-    // Set common styles
-    img.style.display = "block";
-    img.style.width = "calc(100% - 20px)";
-    img.style.height = "auto";
-    img.style.margin = "5px";
-    img.style.borderRadius = "0.3%";
-    img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-  });
-  
   if (width <= 768) {
-    // Mobile layout
-    gallery.classList.remove("fullscreen");
+    // Mobile: grid of images
+    gallery.classList.remove("scrolling");
     gallery.style.display = "flex";
     gallery.style.flexWrap = "wrap";
-
-    imgs.forEach((img) => {
-      // Add rotation class to animate
-      img.classList.add("rotate-on-load");
-      
-      // Optional: remove the class after animation to allow re-triggering
-      img.addEventListener("animationend", () => {
-        img.classList.remove("rotate-on-load");
-      }, { once: true });
+    gallery.style.overflowX = "hidden"; // no scroll for mobile
+    // Reset styles
+    imgs.forEach(img => {
+      img.style.display = "block"; 
+      img.style.width = "calc(100% - 20px)";
+      img.style.height = "auto";
+      img.style.margin = "5px";
+      img.style.borderRadius = "0.3%";
+      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
     });
   } else {
-    // Desktop layout
-    gallery.classList.remove("fullscreen");
-    // Already set styles above
+    // Desktop: enable horizontal scrolling
+    gallery.classList.add("scrolling");
+    gallery.style.display = "flex";
+    gallery.style.flexDirection = "row"; // horizontal layout
+    gallery.style.overflowX = "auto"; // enable horizontal scroll
+    gallery.style.whiteSpace = "nowrap"; // prevent wrapping
+    gallery.style.scrollBehavior = "smooth"; // smooth scrolling
+    
+    // Optional: add a continuous auto-scroll
+    if (!gallery.dataset.scrollingInterval) {
+      startAutoScroll(gallery);
+    }
+
+    imgs.forEach(img => {
+      img.style.display = "inline-block";
+      img.style.width = "300px"; // fixed width for horizontal scroll
+      img.style.margin = "5px";
+      img.style.borderRadius = "0.3%";
+      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
+    });
   }
+}
+
+// Function to automatically scroll the gallery
+function startAutoScroll(gallery) {
+  const scrollAmount = 1; // pixels
+  const intervalTime = 20; // ms
+  const intervalId = setInterval(() => {
+    gallery.scrollLeft += scrollAmount;
+    // Loop back to start when reaching the end
+    if (gallery.scrollLeft + gallery.clientWidth >= gallery.scrollWidth) {
+      gallery.scrollLeft = 0;
+    }
+  }, intervalTime);
+  gallery.dataset.scrollingInterval = intervalId;
 }
 
 // Run layout update on load and resize
