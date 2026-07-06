@@ -56,4 +56,11 @@ img {
   object-fit: contain;
   border-radius: 10px;
 }
+@keyframes spinOnce {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 
+.rotate-on-load {
+  animation: spinOnce 2s forwards;
+}
