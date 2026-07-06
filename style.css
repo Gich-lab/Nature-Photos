@@ -56,11 +56,27 @@ img {
   object-fit: contain;
   border-radius: 10px;
 }
-@keyframes spinOnce {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.rotate-on-load {
+    animation: elegantLoad 0.9s cubic-bezier(.22,1,.36,1) forwards;
+    transform-origin: center;
 }
 
-.rotate-on-load {
-  animation: spinOnce 2s forwards;
+@keyframes elegantLoad {
+    0% {
+        opacity: 0;
+        transform: rotate(-360deg) scale(0.2);
+        filter: blur(8px);
+    }
+
+    70% {
+        opacity: 1;
+        transform: rotate(20deg) scale(1.08);
+        filter: blur(0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: rotate(0deg) scale(1);
+        filter: blur(0);
+    }
 }
