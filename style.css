@@ -30,6 +30,8 @@ img {
   padding: 40px;
   max-width: 100%; /* Full width */
   box-sizing: border-box;
+  opacity: 0; /* start hidden */
+  transition: opacity 0.5s ease;
 }
 
 /* Lightbox styles (unchanged) */
