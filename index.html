@@ -366,60 +366,39 @@ function updateLayout() {
   const imgs = document.querySelectorAll("#gallery img");
   const gallery = document.getElementById("gallery");
   
+  // Common styles for both mobile and desktop
+  imgs.forEach((img) => {
+    // Remove any previous rotation class
+    img.classList.remove("rotate-on-load");
+    
+    // Set common styles
+    img.style.display = "block";
+    img.style.width = "calc(100% - 20px)";
+    img.style.height = "auto";
+    img.style.margin = "5px";
+    img.style.borderRadius = "0.3%";
+    img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
+  });
+  
   if (width <= 768) {
-    // Mobile: grid of images
+    // Mobile layout
     gallery.classList.remove("fullscreen");
     gallery.style.display = "flex";
     gallery.style.flexWrap = "wrap";
 
-    imgs.forEach(img => {
-      // Remove previous rotations
-      img.classList.remove("rotating");
-      
-      // Set styles
-      img.style.display = "block"; 
-      img.style.width = "calc(100% - 20px)";
-      img.style.height = "auto";
-      img.style.margin = "5px"; 
-
-      // Apply border and shadow
-      img.style.borderRadius = "0.3%";
-      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-
-      // Add rotation class and trigger animation on load
-      img.classList.add("rotating");
-      
-      // Remove the rotation class after animation completes to prevent continuous spinning
-      img.addEventListener('animationend', () => {
-        img.classList.remove("rotating");
-      }, { once: true });
-    });
-    
-  } else {
-    // Desktop: display all images vertically
-    gallery.classList.remove("fullscreen");
     imgs.forEach((img) => {
-      // Remove previous rotations
-      img.classList.remove("rotating");
+      // Add rotation class to animate
+      img.classList.add("rotate-on-load");
       
-      // Set styles
-      img.style.display = "block"; 
-      img.style.width = "calc(100% - 20px)";
-      img.style.height = "auto";
-      img.style.margin = "5px"; 
-
-      // Apply border and shadow
-      img.style.borderRadius = "0.3%";
-      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-      
-      // Add rotation class and trigger animation on load
-      img.classList.add("rotating");
-      
-      // Remove the rotation class after animation completes
-      img.addEventListener('animationend', () => {
-        img.classList.remove("rotating");
+      // Optional: remove the class after animation to allow re-triggering
+      img.addEventListener("animationend", () => {
+        img.classList.remove("rotate-on-load");
       }, { once: true });
     });
+  } else {
+    // Desktop layout
+    gallery.classList.remove("fullscreen");
+    // Already set styles above
   }
 }
 
