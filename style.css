@@ -30,6 +30,8 @@ img {
   padding: 40px;
   max-width: 100%; /* Full width */
   box-sizing: border-box;
+  flex-wrap: wrap;
+  justify-content: space-between; /* evenly distribute images */
 }
 
 /* Lightbox styles (unchanged) */
