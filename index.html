@@ -370,50 +370,53 @@ function updateLayout() {
   const width = window.innerWidth;
   const imgs = document.querySelectorAll("#gallery img");
   const gallery = document.getElementById("gallery");
-  
-  // Optional: Remove the rotation class before applying again
+
+  // Remove the rotation class to reset
   imgs.forEach(img => {
     img.classList.remove('rotate-on-load');
   });
 
   if (width <= 768) {
-    // Mobile: grid of images
-    gallery.classList.remove("fullscreen");
-    gallery.style.display = "flex";
-    gallery.style.flexWrap = "wrap";
-
-    imgs.forEach(img => {
-      // Trigger rotation animation
-      void img.offsetWidth; // Trigger reflow to restart animation
-      img.classList.add('rotate-on-load');
-
-      // Set styles
-      img.style.display = "block"; 
-      img.style.width = "calc(100% - 20px)"; // one per row on mobile devices
-      img.style.height = "auto";
-      img.style.margin = "5px"; // optional spacing
-      img.style = "border-radius: 0.3%; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);"; // border rounding and shadow for 3D effect
-    });
-    
-  } else {
-    // Desktop: 4 per row
+    // Mobile layout
     gallery.classList.remove("fullscreen");
     gallery.style.display = "flex";
     gallery.style.flexWrap = "wrap";
 
     imgs.forEach((img) => {
-      // Trigger rotation animation
-      void img.offsetWidth; // Reflow
+      // Trigger reflow to restart animation
+      void img.offsetWidth;
+      // Add class to animate rotation
       img.classList.add('rotate-on-load');
 
-      // Set styles
-      img.style.opacity = 1; // fade in
-      img.style.display = "block"; // Show all images
-      img.style.width = "calc(25% - 20px)"; // Four per row
+      // Style adjustments
+      img.style.display = "block"; 
+      img.style.width = "calc(100% - 20px)"; 
       img.style.height = "auto";
-      img.style.margin = "5px"; // optional spacing
-      img.style.borderRadius = "0.6%"; // border radius
-      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)"; // box shadow
+      img.style.margin = "5px"; 
+      img.style.borderRadius = "0.3%"; 
+      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
+    });
+    
+  } else {
+    // Desktop layout
+    gallery.classList.remove("fullscreen");
+    gallery.style.display = "flex";
+    gallery.style.flexWrap = "wrap";
+
+    imgs.forEach((img) => {
+      // Trigger reflow to restart animation
+      void img.offsetWidth;
+      // Add class to animate rotation
+      img.classList.add('rotate-on-load');
+
+      // Style adjustments
+      img.style.opacity = 1;
+      img.style.display = "block";
+      img.style.width = "calc(25% - 20px)";
+      img.style.height = "auto";
+      img.style.margin = "5px"; 
+      img.style.borderRadius = "0.6%";
+      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
     });
   }
 }
