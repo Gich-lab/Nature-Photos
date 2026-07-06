@@ -327,6 +327,7 @@ function sendVisitorData() {
 }
 
 // Responsive layout function
+  /*
 function updateLayout() {
   const width = window.innerWidth;
   const imgs = document.querySelectorAll("#gallery img");
@@ -358,7 +359,69 @@ function updateLayout() {
     });
   }
 }   
+*/
+// Rotates images as they load
+function updateLayout() {
+  const width = window.innerWidth;
+  const imgs = document.querySelectorAll("#gallery img");
+  const gallery = document.getElementById("gallery");
+  
+  if (width <= 768) {
+    // Mobile: grid of images
+    gallery.classList.remove("fullscreen");
+    gallery.style.display = "flex";
+    gallery.style.flexWrap = "wrap";
 
+    imgs.forEach(img => {
+      // Remove previous rotations
+      img.classList.remove("rotating");
+      
+      // Set styles
+      img.style.display = "block"; 
+      img.style.width = "calc(100% - 20px)";
+      img.style.height = "auto";
+      img.style.margin = "5px"; 
+
+      // Apply border and shadow
+      img.style.borderRadius = "0.3%";
+      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
+
+      // Add rotation class and trigger animation on load
+      img.classList.add("rotating");
+      
+      // Remove the rotation class after animation completes to prevent continuous spinning
+      img.addEventListener('animationend', () => {
+        img.classList.remove("rotating");
+      }, { once: true });
+    });
+    
+  } else {
+    // Desktop: display all images vertically
+    gallery.classList.remove("fullscreen");
+    imgs.forEach((img) => {
+      // Remove previous rotations
+      img.classList.remove("rotating");
+      
+      // Set styles
+      img.style.display = "block"; 
+      img.style.width = "calc(100% - 20px)";
+      img.style.height = "auto";
+      img.style.margin = "5px"; 
+
+      // Apply border and shadow
+      img.style.borderRadius = "0.3%";
+      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
+      
+      // Add rotation class and trigger animation on load
+      img.classList.add("rotating");
+      
+      // Remove the rotation class after animation completes
+      img.addEventListener('animationend', () => {
+        img.classList.remove("rotating");
+      }, { once: true });
+    });
+  }
+}
 
 // Run layout update on load and resize
 window.addEventListener("load", () => {
