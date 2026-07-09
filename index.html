@@ -120,6 +120,10 @@ function fetchLatestCommitSha() {
         setTimeout(() => {
           triggerCascade(headerText, originalText);
         }, 8000);
+        // Refresh the cascade effect every 2 minu
+        setTimeout(() => {
+          triggerCascade(headerText, headerText.textContent);
+        }, 120000); // 2 minutes in milliseconds
       } else if (latestCommitSha !== storedSha) {
         // New commit detected, update storedSha
         localStorage.setItem('storedSha', latestCommitSha);
