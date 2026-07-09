@@ -117,13 +117,9 @@ function fetchLatestCommitSha() {
         headerText.textContent = "Hamna picha mpya";//"No updates found";
         triggerCascade(headerText, headerText.textContent);
         // Revert to original after 8 seconds
-        setTimeout(() => {
+        setInterval(() => {
           triggerCascade(headerText, originalText);
         }, 8000);
-        // Refresh the cascade effect every 2 minu
-        setTimeout(() => {
-          triggerCascade(headerText, originalText);
-        }, 120000); // 2 minutes in milliseconds
       } else if (latestCommitSha !== storedSha) {
         // New commit detected, update storedSha
         localStorage.setItem('storedSha', latestCommitSha);
