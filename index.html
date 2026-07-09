@@ -118,6 +118,7 @@ function fetchLatestCommitSha() {
         triggerCascade(headerText, headerText.textContent);
         // Revert to original after 8 seconds
         setInterval(() => {
+          console.log("Running triggerCascade after 8 mins");
           triggerCascade(headerText, originalText);
         }, 8000);
       } else if (latestCommitSha !== storedSha) {
