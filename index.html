@@ -102,11 +102,7 @@ function fetchLatestCommitSha() {
       const originalText = headerText.textContent;
       
       // Start cascade effect on the header text displaying the title or message
-      // triggerCascade(headerText, originalText);
-      setInterval(() => {
-          triggerCascade(headerText, originalText);
-        }, 10000); // rerun the text animation after 10 seconds
-      
+      triggerCascade(headerText, originalText);      
       // use a sessionKey to limit writing to google sheet multiple times through webpage refresh
       const pageSessionKey = 'pageSessionId';
       if (!sessionStorage.getItem(pageSessionKey)) {
