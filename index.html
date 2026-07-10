@@ -193,10 +193,7 @@ window.addEventListener('load', fetchLatestCommitSha);
           element.appendChild(span);
         }
         if (loop) {
-          element.cascadeTimer = setTimeout(
-            animate,
-            (totalDuration + 0.5) * 1000);
-        }
+          element.cascadeTimer = setTimeout(animate,(totalDuration + 0.5) * 1000);}
       }
       animate();
     }
