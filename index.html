@@ -100,9 +100,7 @@ function fetchLatestCommitSha() {
 
       const headerText = document.getElementById("header-text");
       const originalText = headerText.textContent;
-      
-      // Start cascade effect on the header text displaying the title or message
-      triggerCascade(headerText, originalText);      
+
       // use a sessionKey to limit writing to google sheet multiple times through webpage refresh
       const pageSessionKey = 'pageSessionId';
       if (!sessionStorage.getItem(pageSessionKey)) {
@@ -115,7 +113,11 @@ function fetchLatestCommitSha() {
         // Show message only on reload if no update
         headerText.textContent = "Hamna picha mpya";//"No updates found";
         triggerCascade(headerText, headerText.textContent, 6, false);
+        setTimeout(() => {
+          triggerCascade(headerText, originalText);}, 6000);
       } else if (latestCommitSha !== storedSha) {
+        // Start cascade effect on the header text displaying the title or message
+        triggerCascade(headerText, originalText);
         // New commit detected, update storedSha
         localStorage.setItem('storedSha', latestCommitSha);
         loadGA();
