@@ -182,18 +182,21 @@ window.addEventListener('load', fetchLatestCommitSha);
 
   <script>
     function triggerCascade(element, text, totalDuration = 6, loop = true) {
+      // Stop any previous animation loop on this element
       clearTimeout(element.cascadeTimer);
       function animate() {
+        element.style.visibility = "visible";
         element.textContent = "";
         const delayIncrement = totalDuration / text.length;
         for (let i = 0; i < text.length; i++) {
           const span = document.createElement("span");
           span.innerHTML = (text[i] === " ") ? "&nbsp;" : text[i];
           span.style.setProperty("--delay", `${i * delayIncrement}s`);
-          element.appendChild(span);
-        }
+          element.appendChild(span);}
+        // Continue looping only if requested
         if (loop) {
-          element.cascadeTimer = setTimeout(animate,(totalDuration + 0.5) * 1000);}
+          element.cascadeTimer = setTimeout(animate,(totalDuration + 0.5) * 1000);
+        }
       }
       animate();
     }
