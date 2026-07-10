@@ -56,8 +56,5 @@ img {
   object-fit: contain;
   border-radius: 10px;
 }
-.rotate-on-load {
-    animation: elegantLoad 0.9s cubic-bezier(.22,1,.36,1) forwards;
-    transform-origin: center;
-}
+
 
