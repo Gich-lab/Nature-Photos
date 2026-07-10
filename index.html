@@ -114,11 +114,7 @@ function fetchLatestCommitSha() {
       if (latestCommitSha === storedSha && isPageReloaded()) {
         // Show message only on reload if no update
         headerText.textContent = "Hamna picha mpya";//"No updates found";
-        triggerCascade(headerText, headerText.textContent);
-        // Revert to original after 8 seconds
-        setTimeout(() => {
-          triggerCascade(headerText, originalText);
-        }, 8000);
+        triggerCascade(headerText, headerText.textContent, 8, false);
       } else if (latestCommitSha !== storedSha) {
         // New commit detected, update storedSha
         localStorage.setItem('storedSha', latestCommitSha);
@@ -186,20 +182,24 @@ window.addEventListener('load', fetchLatestCommitSha);
 
   <script>
     function triggerCascade(element, text, totalDuration = 6, loop = true) {
-      element.style.visibility = "visible";
+      clearTimeout(element.cascadeTimer);
       function animate() {
-        element.textContent = '';
+        element.textContent = "";
         const delayIncrement = totalDuration / text.length;
         for (let i = 0; i < text.length; i++) {
-            const char = text[i];
-            const span = document.createElement('span');
-            span.innerHTML = (char === ' ') ? '&nbsp;' : char;
-            span.style.setProperty('--delay', `${i * delayIncrement}s`);
+            const span = document.createElement("span");
+            span.innerHTML = (text[i] === " ") ? "&nbsp;" : text[i];
+            span.style.setProperty("--delay", `${i * delayIncrement}s`);
             element.appendChild(span);
         }
-        element.cascadeTimer = setTimeout(animate, (totalDuration + 0.5) * 1000)
-      }
-      animate()
+        if (loop) {
+            element.cascadeTimer = setTimeout(
+                animate,
+                (totalDuration + 0.5) * 1000
+            );
+        }
+    }
+      animate();
     }
   </script>
 </body>
