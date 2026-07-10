@@ -114,7 +114,7 @@ function fetchLatestCommitSha() {
       if (latestCommitSha === storedSha && isPageReloaded()) {
         // Show message only on reload if no update
         headerText.textContent = "Hamna picha mpya";//"No updates found";
-        triggerCascade(headerText, headerText.textContent, 8, false);
+        triggerCascade(headerText, headerText.textContent, 6, false);
       } else if (latestCommitSha !== storedSha) {
         // New commit detected, update storedSha
         localStorage.setItem('storedSha', latestCommitSha);
