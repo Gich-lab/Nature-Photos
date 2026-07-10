@@ -187,18 +187,17 @@ window.addEventListener('load', fetchLatestCommitSha);
         element.textContent = "";
         const delayIncrement = totalDuration / text.length;
         for (let i = 0; i < text.length; i++) {
-            const span = document.createElement("span");
-            span.innerHTML = (text[i] === " ") ? "&nbsp;" : text[i];
-            span.style.setProperty("--delay", `${i * delayIncrement}s`);
-            element.appendChild(span);
+          const span = document.createElement("span");
+          span.innerHTML = (text[i] === " ") ? "&nbsp;" : text[i];
+          span.style.setProperty("--delay", `${i * delayIncrement}s`);
+          element.appendChild(span);
         }
         if (loop) {
-            element.cascadeTimer = setTimeout(
-                animate,
-                (totalDuration + 0.5) * 1000
-            );
+          element.cascadeTimer = setTimeout(
+            animate,
+            (totalDuration + 0.5) * 1000);
         }
-    }
+      }
       animate();
     }
   </script>
