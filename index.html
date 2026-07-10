@@ -114,7 +114,7 @@ function fetchLatestCommitSha() {
         headerText.textContent = "Hamna picha mpya";//"No updates found";
         triggerCascade(headerText, headerText.textContent, 6, false);
         setTimeout(() => {
-          triggerCascade(headerText, originalText);}, 6000);
+          triggerCascade(headerText, originalText);}, 8000);
       } else if (latestCommitSha !== storedSha) {
         // Start cascade effect on the header text displaying the title or message
         triggerCascade(headerText, originalText);
