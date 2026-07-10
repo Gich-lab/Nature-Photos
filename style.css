@@ -3,10 +3,6 @@
   box-sizing: border-box;
   overflow-wrap: break-word;
 }
-#header-text span{
-    animation: cascade 10s infinite;
-    animation-delay: var(--delay);
-}
 
 body {
   margin: 0;
