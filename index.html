@@ -115,7 +115,10 @@ function fetchLatestCommitSha() {
         // Show message only on reload if no update
         headerText.textContent = "Hamna picha mpya";//"No updates found";
         triggerCascade(headerText, headerText.textContent);
-        triggerCascade(headerText, originalText);
+        // Revert to original after 8 seconds
+        setTimeout(() => {
+          triggerCascade(headerText, originalText);
+        }, 8000);
       } else if (latestCommitSha !== storedSha) {
         // New commit detected, update storedSha
         localStorage.setItem('storedSha', latestCommitSha);
@@ -194,9 +197,7 @@ window.addEventListener('load', fetchLatestCommitSha);
             span.style.setProperty('--delay', `${i * delayIncrement}s`);
             element.appendChild(span);
         }
-        if (loop) {
-            setTimeout(animate, (totalDuration + 0.5) * 1000);
-        }
+        element.cascadeTimer = setTimeout(animate, (totalDuration + 0.5) * 1000)
       }
       animate()
     }
