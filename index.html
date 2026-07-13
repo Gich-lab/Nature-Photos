@@ -327,15 +327,13 @@ function sendVisitorData() {
   });
 }
 
-function rotateImageOnLoad(img) {
-    function animate() {
-        rotateImage(img);
-    }
-    if (img.complete) {
-        animate();
-    } else {
-        img.addEventListener("load", animate, { once: true });
-    }
+function rotateImage(img) {
+    // Remove previous animation
+    img.classList.remove("rotate-on-load");
+    // Force browser reflow so the animation restarts
+    void img.offsetWidth;
+    // Add animation again
+    img.classList.add("rotate-on-load");
 }
   
 // Responsive layout function
@@ -351,7 +349,7 @@ function updateLayout() {
     gallery.style.flexWrap = "wrap";
 
     imgs.forEach(img => {
-      rotateImageOnLoad(img);
+      rotateImage(img);
       img.style.display = "block"; 
       img.style.width = "calc(100% - 20px)"; // one per row on mobile devices
       img.style.height = "auto";
@@ -365,7 +363,7 @@ function updateLayout() {
     gallery.style.display = "flex";
     gallery.style.flexWrap = "wrap";
     imgs.forEach((img) => {
-      rotateImageOnLoad(img);
+      rotateImage(img);
       img.style.opacity = 1; // fade in
       img.style.display = "block"; // Show all images
       img.style.width = "calc(25% - 20px)"; // Four per row on desktop
