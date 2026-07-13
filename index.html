@@ -340,6 +340,7 @@ function updateLayout() {
     gallery.style.flexWrap = "wrap";
 
     imgs.forEach(img => {
+      rotateImage(img);
       img.style.display = "block"; 
       img.style.width = "calc(100% - 20px)"; // one per row on mobile devices
       img.style.height = "auto";
@@ -353,6 +354,7 @@ function updateLayout() {
     gallery.style.display = "flex";
     gallery.style.flexWrap = "wrap";
     imgs.forEach((img) => {
+      rotateImage(img);
       img.style.opacity = 1; // fade in
       img.style.display = "block"; // Show all images
       img.style.width = "calc(25% - 20px)"; // Four per row on desktop
