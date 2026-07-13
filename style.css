@@ -57,4 +57,20 @@ img {
   border-radius: 10px;
 }
 
+@keyframes rotate360 {
+    from {
+        transform: rotateY(0deg);
+        opacity: 0;
+    }
+    to {
+        transform: rotateY(360deg);
+        opacity: 1;
+    }
+}
 
+.rotate-on-load {
+    animation: rotate360 1.2s ease-out forwards;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    will-change: transform;
+}
