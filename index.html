@@ -377,25 +377,24 @@ function updateLayout() {
     gallery.style.display = "flex";
     gallery.style.flexWrap = "wrap";
 
-    imgs.forEach((img, index) => {
-      // Reset previous transformations
-      img.style.transform = "none";
-
+    imgs.forEach(img => {
+      // Reset any previous transformations
+      img.style.transform = "none"; 
+      
       // Set styles for mobile layout
       img.style.display = "block"; 
-      img.style.width = "calc(100% - 20px)";
+      img.style.width = "calc(100% - 20px)"; // one per row on mobile devices
       img.style.height = "auto";
-      img.style.margin = "5px";
-      img.style.borderRadius = "0.3%";
-      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
+      img.style.margin = "5px"; // optional spacing
+      img.style.borderRadius = "0.3%"; 
+      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)"; 
 
-      // Animate each image with delay for sequential effect
+      // Trigger rotation animation
       img.animate([
         { transform: 'rotate(0deg)' },
         { transform: 'rotate(360deg)' }
       ], {
-        duration: 1000,
-        delay: index * 300, // delay increases for each image
+        duration: 2000,
         fill: 'forwards'
       });
     });
@@ -406,26 +405,25 @@ function updateLayout() {
     gallery.style.display = "flex";
     gallery.style.flexWrap = "wrap";
 
-    imgs.forEach((img, index) => {
-      // Reset previous transformations
+    imgs.forEach((img) => {
+      // Reset any previous transformations
       img.style.transform = "none";
 
       // Set styles for desktop layout
-      img.style.opacity = 1;
+      img.style.opacity = 1; // fade in if needed
       img.style.display = "block"; 
-      img.style.width = "calc(25% - 20px)";
+      img.style.width = "calc(25% - 20px)"; // four per row
       img.style.height = "auto";
-      img.style.margin = "5px";
+      img.style.margin = "5px"; 
       img.style.borderRadius = "0.6%";
       img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
 
-      // Animate each image with delay for sequential effect
+      // Trigger rotation animation
       img.animate([
         { transform: 'rotate(0deg)' },
         { transform: 'rotate(360deg)' }
       ], {
-        duration: 1000,
-        delay: index * 300,
+        duration: 2000,
         fill: 'forwards'
       });
     });
