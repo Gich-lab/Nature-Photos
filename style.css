@@ -58,19 +58,10 @@ img {
 }
 
 @keyframes rotate360 {
-    from {
-        transform: rotate(0deg);
-        opacity: 0;
-    }
-    to {
-        transform: rotate(360deg);
-        opacity: 1;
-    }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-.rotate-on-load {
-    animation: rotate360 1.2s ease-out forwards;
-    transform-style: preserve-3d;
-    backface-visibility: hidden;
-    will-change: transform;
+.rotate {
+  animation: rotate360 2s linear infinite;
 }
