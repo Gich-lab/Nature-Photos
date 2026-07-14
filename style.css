@@ -56,12 +56,3 @@ img {
   object-fit: contain;
   border-radius: 10px;
 }
-
-@keyframes rotate360 {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.rotate {
-  animation: rotate360 2s linear infinite;
-}
