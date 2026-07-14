@@ -366,72 +366,44 @@ function updateLayout() {
 }   
 */
 // Rotate images as they load
-function updateLayout() {
-  const width = window.innerWidth;
-  const imgs = document.querySelectorAll("#gallery img");
-  const gallery = document.getElementById("gallery");
-  
-  if (width <= 768) {
-    // Mobile: grid of images
-    gallery.classList.remove("fullscreen");
-    gallery.style.display = "flex";
-    gallery.style.flexWrap = "wrap";
+function initialiseGalleryLoading() {
+    const gallery = document.getElementById("gallery");
+    gallery.querySelectorAll("img").forEach(img => {
+        // Skip if already initialized
+        if (img.parentElement.classList.contains("image-wrapper"))
+            return;
+        // Create wrapper
+        const wrapper = document.createElement("div");
+        wrapper.className = "image-wrapper";
+        // Create spinner
+        const spinner = document.createElement("div");
+        spinner.className = "spinner";
 
-    imgs.forEach(img => {
-      // Reset any previous transformations
-      img.style.transform = "none"; 
-      
-      // Set styles for mobile layout
-      img.style.display = "block"; 
-      img.style.width = "calc(100% - 20px)"; // one per row on mobile devices
-      img.style.height = "auto";
-      img.style.margin = "5px"; // optional spacing
-      img.style.borderRadius = "0.3%"; 
-      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)"; 
-
-      // Trigger rotation animation
-      img.animate([
-        { transform: 'rotate(0deg)' },
-        { transform: 'rotate(360deg)' }
-      ], {
-        duration: 2000,
-        fill: 'forwards'
-      });
+        // Insert wrapper before image
+        img.parentNode.insertBefore(wrapper, img);
+        // Move image into wrapper
+        wrapper.appendChild(img);
+        // Add spinner
+        wrapper.appendChild(spinner);
+        function revealImage() {
+            img.classList.add("loaded");
+            spinner.style.opacity = "0";
+            setTimeout(() => spinner.remove(), 300);
+        }
+        if (img.complete && img.naturalWidth > 0) {
+            revealImage();
+        } else {
+            img.addEventListener("load", revealImage, { once: true });
+            img.addEventListener("error", () => {
+                spinner.remove();
+            }, { once: true });
+        }
     });
-    
-  } else {
-    // Desktop layout
-    gallery.classList.remove("fullscreen");
-    gallery.style.display = "flex";
-    gallery.style.flexWrap = "wrap";
-
-    imgs.forEach((img) => {
-      // Reset any previous transformations
-      img.style.transform = "none";
-
-      // Set styles for desktop layout
-      img.style.opacity = 1; // fade in if needed
-      img.style.display = "block"; 
-      img.style.width = "calc(25% - 20px)"; // four per row
-      img.style.height = "auto";
-      img.style.margin = "5px"; 
-      img.style.borderRadius = "0.6%";
-      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-
-      // Trigger rotation animation
-      img.animate([
-        { transform: 'rotate(0deg)' },
-        { transform: 'rotate(360deg)' }
-      ], {
-        duration: 2000,
-        fill: 'forwards'
-      });
-    });
-  }
 }
 // Run layout update on load and resize
 window.addEventListener("load", () => {
   updateLayout();
+  initialiseGalleryLoading();
   //Initialize currentIndex for desktop mode
   currentIndex = 0;
 });
