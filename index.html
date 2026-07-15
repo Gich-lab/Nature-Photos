@@ -369,68 +369,49 @@ function updateLayout() {
 function updateLayout() {
   const width = window.innerWidth;
   const imgs = document.querySelectorAll("#gallery img");
-  const gallery = document.getElementById("gallery");
-  
+  const gallery = document.getElementById("gallery");  
   // Helper function to add rotation class after image loads
-  function addRotationClass(img) {
-    if (!img.classList.contains("rotate")) {
-      if (img.complete) {
-        // Image already loaded
-        img.classList.add("rotate");
-      } else {
-        // Wait for image to load
-        img.addEventListener("load", () => {
-          img.classList.add("rotate");
-        });
-      }
+  function updateLayout() {
+    const width = window.innerWidth;
+    const imgs = document.querySelectorAll("#gallery img");
+    const gallery = document.getElementById("gallery");
+    function rotateImage(img) {
+        // Remove the class if it already exists
+        img.classList.remove("rotate");
+        // Force browser reflow so the animation can restart
+        void img.offsetWidth;
+        // If image is already loaded, rotate immediately
+        if (img.complete && img.naturalWidth > 0) {
+            img.classList.add("rotate");
+        } else {
+            // Rotate once loading finishes
+            img.addEventListener("load", function () {
+                img.classList.remove("rotate");
+                void img.offsetWidth;
+                img.classList.add("rotate");
+            }, { once: true });
+        }
     }
-  }
-
-  if (width <= 768) {
-    // Mobile layout
     gallery.classList.remove("fullscreen");
     gallery.style.display = "flex";
     gallery.style.flexWrap = "wrap";
-
-    imgs.forEach((img) => {
-      // Reset styles
-      img.style.transform = "none";
-
-      // Set styles for mobile layout
-      img.style.display = "block"; 
-      img.style.width = "calc(100% - 20px)";
-      img.style.height = "auto";
-      img.style.margin = "5px"; 
-      img.style.borderRadius = "0.3%"; 
-      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-
-      // Add rotation class when image loads
-      addRotationClass(img);
+    imgs.forEach(img => {
+        // Don't reset transform here
+        // img.style.transform = "none";  <-- REMOVE THIS
+        img.style.display = "block";
+        img.style.height = "auto";
+        img.style.margin = "5px";
+        img.style.boxShadow = "0 4px 12px rgba(0,0,0,.9)";
+        if (width <= 768) {
+            img.style.width = "calc(100% - 20px)";
+            img.style.borderRadius = "0.3%";
+        } else {
+            img.style.opacity = "1";
+            img.style.width = "calc(25% - 20px)";
+            img.style.borderRadius = "0.6%";
+        }
+        rotateImage(img);
     });
-    
-  } else {
-    // Desktop layout
-    gallery.classList.remove("fullscreen");
-    gallery.style.display = "flex";
-    gallery.style.flexWrap = "wrap";
-
-    imgs.forEach((img) => {
-      // Reset styles
-      img.style.transform = "none";
-
-      // Set styles for desktop layout
-      img.style.opacity = 1;
-      img.style.display = "block"; 
-      img.style.width = "calc(25% - 20px)";
-      img.style.height = "auto";
-      img.style.margin = "5px"; 
-      img.style.borderRadius = "0.6%"; 
-      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-
-      // Add rotation class when image loads
-      addRotationClass(img);
-    });
-  }
 }
   
 // Run layout update on load and resize
