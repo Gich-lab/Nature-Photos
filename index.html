@@ -410,7 +410,10 @@ function updateLayout() {
             img.style.width = "calc(25% - 20px)";
             img.style.borderRadius = "0.6%";
         }
-        rotateImage(img);
+      rotateImage(img);
+      // Add rotation class to all images after layout update
+      document.querySelectorAll('#gallery img').forEach(img => {
+      img.classList.add('rotate');
     });
 }
   
