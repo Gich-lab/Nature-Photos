@@ -414,9 +414,9 @@ function updateLayout() {
       // Add rotation class to all images after layout update
       document.querySelectorAll('#gallery img').forEach(img => {
       img.classList.add('rotate');
+      });
     }
-}
-  
+                 
 // Run layout update on load and resize
 window.addEventListener("load", () => {
   updateLayout();
