@@ -31,6 +31,14 @@
       0%, 99.9% { opacity: 1; }
       100% { opacity: 0; }
     }
+    /* Rotation animation for images */
+    @keyframes rotateAnimation {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .rotate {
+      animation: rotateAnimation 4s linear infinite;
+    }
   </style>
 </head>
 <body>
