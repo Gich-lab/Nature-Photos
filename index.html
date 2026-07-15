@@ -365,41 +365,74 @@ function updateLayout() {
   }
 }   
 */
-// Rotate images as they load
-function initialiseGalleryLoading() {
-    const gallery = document.getElementById("gallery");
-    gallery.querySelectorAll("img").forEach(img => {
-        // Skip if already initialized
-        if (img.parentElement.classList.contains("image-wrapper"))
-            return;
-        // Create wrapper
-        const wrapper = document.createElement("div");
-        wrapper.className = "image-wrapper";
-        // Create spinner
-        const spinner = document.createElement("div");
-        spinner.className = "spinner";
 
-        // Insert wrapper before image
-        img.parentNode.insertBefore(wrapper, img);
-        // Move image into wrapper
-        wrapper.appendChild(img);
-        // Add spinner
-        wrapper.appendChild(spinner);
-        function revealImage() {
-            img.classList.add("loaded");
-            spinner.style.opacity = "0";
-            setTimeout(() => spinner.remove(), 300);
-        }
-        if (img.complete && img.naturalWidth > 0) {
-            revealImage();
-        } else {
-            img.addEventListener("load", revealImage, { once: true });
-            img.addEventListener("error", () => {
-                spinner.remove();
-            }, { once: true });
-        }
+function updateLayout() {
+  const width = window.innerWidth;
+  const imgs = document.querySelectorAll("#gallery img");
+  const gallery = document.getElementById("gallery");
+  
+  // Helper function to add rotation class after image loads
+  function addRotationClass(img) {
+    if (!img.classList.contains("rotate")) {
+      if (img.complete) {
+        // Image already loaded
+        img.classList.add("rotate");
+      } else {
+        // Wait for image to load
+        img.addEventListener("load", () => {
+          img.classList.add("rotate");
+        });
+      }
+    }
+  }
+
+  if (width <= 768) {
+    // Mobile layout
+    gallery.classList.remove("fullscreen");
+    gallery.style.display = "flex";
+    gallery.style.flexWrap = "wrap";
+
+    imgs.forEach((img) => {
+      // Reset styles
+      img.style.transform = "none";
+
+      // Set styles for mobile layout
+      img.style.display = "block"; 
+      img.style.width = "calc(100% - 20px)";
+      img.style.height = "auto";
+      img.style.margin = "5px"; 
+      img.style.borderRadius = "0.3%"; 
+      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
+
+      // Add rotation class when image loads
+      addRotationClass(img);
     });
+    
+  } else {
+    // Desktop layout
+    gallery.classList.remove("fullscreen");
+    gallery.style.display = "flex";
+    gallery.style.flexWrap = "wrap";
+
+    imgs.forEach((img) => {
+      // Reset styles
+      img.style.transform = "none";
+
+      // Set styles for desktop layout
+      img.style.opacity = 1;
+      img.style.display = "block"; 
+      img.style.width = "calc(25% - 20px)";
+      img.style.height = "auto";
+      img.style.margin = "5px"; 
+      img.style.borderRadius = "0.6%"; 
+      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
+
+      // Add rotation class when image loads
+      addRotationClass(img);
+    });
+  }
 }
+  
 // Run layout update on load and resize
 window.addEventListener("load", () => {
   updateLayout();
