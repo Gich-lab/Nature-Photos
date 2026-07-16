@@ -331,7 +331,6 @@
     rotateImage(img);
   });
 
-  /*// Check if all images are already loaded (for page refresh scenario)
   const allLoaded = Array.from(imgs).every(img => img.complete && img.naturalWidth > 0);
 
   if (allLoaded) {
@@ -342,21 +341,7 @@
       img.classList.add("rotate");
     });
   }
-}
-*/
-
-imgs.forEach(img => {
-  // Add event listener for when each image loads
-  img.addEventListener('load', () => {
-    // Remove any existing rotation
-    img.classList.remove("rotate");
-    // Trigger reflow to restart animation
-    void img.offsetWidth;
-    // Add the rotation class to start rotating
-    img.classList.add("rotate");
-  });
-});
-    
+      
   // Initialize layout on load and resize
   window.addEventListener("load", () => {
     updateLayout();
