@@ -107,4 +107,5 @@ img {
 
 .rotate-once {
   animation: rotateOnce 2s linear forwards;
+  animation-iteration-count: 1;
 }
