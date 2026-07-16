@@ -101,4 +101,11 @@ img {
     pointer-events: none;
 }
 
+@keyframes rotateOnce {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 
+.rotate-once {
+  animation: rotateOnce 2s linear forwards;
+}
