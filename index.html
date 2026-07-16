@@ -31,6 +31,14 @@
       0%, 99.9% { opacity: 1; }
       100% { opacity: 0; }
     }
+    @keyframes rotateOnce {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .rotate-once {
+      animation: rotateOnce 2s linear forwards;
+      animation-iteration-count: 1;
+    }
   </style>
 </head>
 <body>
