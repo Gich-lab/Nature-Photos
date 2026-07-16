@@ -278,46 +278,68 @@
 
   // Responsive layout
   function updateLayout() {
-    const width = window.innerWidth;
-    const imgs = document.querySelectorAll("#gallery img");
-    const gallery = document.getElementById("gallery");
-    function rotateImage(img) {
-      img.classList.remove("rotate");
-      void img.offsetWidth; // force reflow
-      if (img.complete && img.naturalWidth > 0) {
+  const width = window.innerWidth;
+  const imgs = document.querySelectorAll("#gallery img");
+  const gallery = document.getElementById("gallery");
+
+  // Function to rotate individual images when loading
+  function rotateImage(img) {
+    // Remove any existing rotation class
+    img.classList.remove("rotate");
+    void img.offsetWidth; // force reflow to restart animation
+
+    if (img.complete && img.naturalWidth > 0) {
+      // If already loaded, animate once
+      img.classList.add("rotate");
+    } else {
+      // When image loads, animate once
+      img.addEventListener("load", () => {
+        img.classList.remove("rotate");
+        void img.offsetWidth; // reflow
         img.classList.add("rotate");
-      } else {
-        img.addEventListener("load", () => {
-          img.classList.remove("rotate");
-          void img.offsetWidth;
-          img.classList.add("rotate");
-        }, { once: true });
-      }
+      }, { once: true });
     }
-    gallery.classList.remove("fullscreen");
-    gallery.style.display = "flex";
-    gallery.style.flexWrap = "wrap";
-    imgs.forEach(img => {
-      img.style.display = "block";
-      img.style.height = "auto";
-      img.style.margin = "5px";
-      img.style.boxShadow = "0 4px 12px rgba(0,0,0,.9)";
-      if (width <= 768) {
-        img.style.width = "calc(100% - 20px)";
-        img.style.borderRadius = "0.3%";
-      } else {
-        img.style.opacity = "1";
-        img.style.width = "calc(25% - 20px)";
-        img.style.borderRadius = "0.6%";
-      }
-      rotateImage(img);
-      // Add rotation class to all images
-      document.querySelectorAll('#gallery img').forEach(img => {
-        img.classList.add('rotate');
-      });
-    });
   }
 
+  // Remove 'fullscreen' class and set display styles
+  gallery.classList.remove("fullscreen");
+  gallery.style.display = "flex";
+  gallery.style.flexWrap = "wrap";
+
+  // For each image, apply styles and handle rotation
+  imgs.forEach(img => {
+    // Reset styles
+    img.style.display = "block";
+    img.style.height = "auto";
+    img.style.margin = "5px";
+    img.style.boxShadow = "0 4px 12px rgba(0,0,0,.9)";
+
+    if (width <= 768) {
+      img.style.width = "calc(100% - 20px)";
+      img.style.borderRadius = "0.3%";
+    } else {
+      img.style.opacity = "1";
+      img.style.width = "calc(25% - 20px)";
+      img.style.borderRadius = "0.6%";
+    }
+
+    // Trigger individual rotation when images load
+    rotateImage(img);
+  });
+
+  // Check if all images are already loaded (for page refresh scenario)
+  const allLoaded = Array.from(imgs).every(img => img.complete && img.naturalWidth > 0);
+
+  if (allLoaded) {
+    // If all images are loaded, rotate all once collectively
+    imgs.forEach(img => {
+      img.classList.remove("rotate");
+      void img.offsetWidth; // reflow to restart
+      img.classList.add("rotate");
+    });
+  }
+}
+  
   // Initialize layout on load and resize
   window.addEventListener("load", () => {
     updateLayout();
