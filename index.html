@@ -331,17 +331,6 @@
     rotateImage(img);
   });
 
-  const allLoaded = Array.from(imgs).every(img => img.complete && img.naturalWidth > 0);
-
-  if (allLoaded) {
-    // If all images are loaded, rotate all once collectively
-    imgs.forEach(img => {
-      img.classList.remove("rotate");
-      void img.offsetWidth; // reflow to restart
-      img.classList.add("rotate");
-    });
-  }
-      
   // Initialize layout on load and resize
   window.addEventListener("load", () => {
     updateLayout();
