@@ -9,11 +9,12 @@
     /* Basic styles for gallery */
     #gallery { display: flex; flex-wrap: wrap; gap: 10px; }
     #gallery img { max-width: 100%; height: auto; display: block; }
+
     /* Full-screen styles for desktop view */
     #gallery.fullscreen img { width: 100vw !important; height: 100vh !important; object-fit: contain; }
 
     /* Styles for header and cascade text */
-    .main-header { color: green;font-weight: bold; font-family: "Times New Roman", serif; font-style: italic; text-align: center; font-size: 2em; padding: 0; }
+    .main-header { color: green; font-weight: bold; font-family: "Times New Roman", serif; font-style: italic; text-align: center; font-size: 2em; padding: 0; }
     .cascade-text { display: inline-block; animation: cascadeLoop 12s infinite; }
     .cascade-text span {
       opacity: 0;
@@ -31,13 +32,16 @@
       0%, 99.9% { opacity: 1; }
       100% { opacity: 0; }
     }
+
+    /* Rotation animation keyframes */
     @keyframes rotateOnce {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
+
+    /* Rotation class to trigger animation */
     .rotate {
       animation: rotateOnce 2s linear forwards;
-      animation-iteration-count: 1;
     }
   </style>
 </head>
