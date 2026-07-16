@@ -100,4 +100,7 @@ img {
     animation: spinner .8s linear infinite;
     pointer-events: none;
 }
-
+.rotate {
+  animation: rotateOnce 2s linear forwards;
+  animation-iteration-count: 1;
+}
