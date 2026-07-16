@@ -278,28 +278,28 @@
 
   // Responsive layout
   function updateLayout() {
-  const width = window.innerWidth;
-  const imgs = document.querySelectorAll("#gallery img");
-  const gallery = document.getElementById("gallery");
+    const width = window.innerWidth;
+    const imgs = document.querySelectorAll("#gallery img");
+    const gallery = document.getElementById("gallery");
 
-  // Function to rotate individual images when loading
-  function rotateImage(img) {
-    // Remove any existing rotation class
-    img.classList.remove("rotate");
-    void img.offsetWidth; // force reflow to restart animation
+    // Function to rotate individual images when loading
+    function rotateImage(img) {
+      // Remove any existing rotation class
+      img.classList.remove("rotate");
+      void img.offsetWidth; // force reflow to restart animation
 
-    if (img.complete && img.naturalWidth > 0) {
-      // If already loaded, animate once
-      img.classList.add("rotate");
-    } else {
-      // When image loads, animate once
-      img.addEventListener("load", () => {
-        img.classList.remove("rotate");
-        void img.offsetWidth; // reflow
+      if (img.complete && img.naturalWidth > 0) {
+        // If already loaded, animate once
         img.classList.add("rotate");
-      }, { once: true });
+      } else {
+        // When image loads, animate once
+        img.addEventListener("load", () => {
+          img.classList.remove("rotate");
+          void img.offsetWidth; // reflow
+          img.classList.add("rotate");
+        }, { once: true });
+      }
     }
-  }
 
   // Remove 'fullscreen' class and set display styles
   gallery.classList.remove("fullscreen");
