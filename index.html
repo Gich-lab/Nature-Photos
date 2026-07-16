@@ -281,56 +281,57 @@
   }
 
   // Responsive layout
+function updateLayout() {
+  const width = window.innerWidth;
+  const imgs = document.querySelectorAll("#gallery img");
+  const gallery = document.getElementById("gallery");  
+  // Helper function to add rotation class after image loads
   function updateLayout() {
     const width = window.innerWidth;
     const imgs = document.querySelectorAll("#gallery img");
     const gallery = document.getElementById("gallery");
-
-    // Function to rotate individual images when loading
     function rotateImage(img) {
-      // Remove any existing rotation class
-      img.classList.remove("rotate");
-      void img.offsetWidth; // force reflow to restart animation
-
-      if (img.complete && img.naturalWidth > 0) {
-        // If already loaded, animate once
-        img.classList.add("rotate");
-      } else {
-        // When image loads, animate once
-        img.addEventListener("load", () => {
-          img.classList.remove("rotate");
-          void img.offsetWidth; // reflow
-          img.classList.add("rotate");
-        }, { once: true });
-      }
+        // Remove the class if it already exists
+        img.classList.remove("rotate");
+        // Force browser reflow so the animation can restart
+        void img.offsetWidth;
+        // If image is already loaded, rotate immediately
+        if (img.complete && img.naturalWidth > 0) {
+            img.classList.add("rotate");
+        } else {
+            // Rotate once loading finishes
+            img.addEventListener("load", function () {
+                img.classList.remove("rotate");
+                void img.offsetWidth;
+                img.classList.add("rotate");
+            }, { once: true });
+        }
     }
-
-  // Remove 'fullscreen' class and set display styles
-  gallery.classList.remove("fullscreen");
-  gallery.style.display = "flex";
-  gallery.style.flexWrap = "wrap";
-
-  // For each image, apply styles and handle rotation
-  imgs.forEach(img => {
-    // Reset styles
-    img.style.display = "block";
-    img.style.height = "auto";
-    img.style.margin = "5px";
-    img.style.boxShadow = "0 4px 12px rgba(0,0,0,.9)";
-
-    if (width <= 768) {
-      img.style.width = "calc(100% - 20px)";
-      img.style.borderRadius = "0.3%";
-    } else {
-      img.style.opacity = "1";
-      img.style.width = "calc(25% - 20px)";
-      img.style.borderRadius = "0.6%";
+    gallery.classList.remove("fullscreen");
+    gallery.style.display = "flex";
+    gallery.style.flexWrap = "wrap";
+    imgs.forEach(img => {
+        // Don't reset transform here
+        // img.style.transform = "none";  <-- REMOVE THIS
+        img.style.display = "block";
+        img.style.height = "auto";
+        img.style.margin = "5px";
+        img.style.boxShadow = "0 4px 12px rgba(0,0,0,.9)";
+        if (width <= 768) {
+            img.style.width = "calc(100% - 20px)";
+            img.style.borderRadius = "0.3%";
+        } else {
+            img.style.opacity = "1";
+            img.style.width = "calc(25% - 20px)";
+            img.style.borderRadius = "0.6%";
+        }
+      rotateImage(img);
+      // Add rotation class to all images after layout update
+      document.querySelectorAll('#gallery img').forEach(img => {
+      img.classList.add('rotate');
+      });
     }
-
-    // Trigger individual rotation when images load
-    rotateImage(img);
-  });
-
+                 
   // Initialize layout on load and resize
   window.addEventListener("load", () => {
     updateLayout();
