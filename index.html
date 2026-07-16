@@ -326,7 +326,8 @@ function sendVisitorData() {
     body: JSON.stringify(data)
   });
 }
-  
+
+/*
 // Responsive layout function
 function updateLayout() {
   const width = window.innerWidth;
@@ -363,7 +364,59 @@ function updateLayout() {
     });
   }
 }   
-           
+*/
+function updateLayout() {
+  const width = window.innerWidth;
+  const imgs = document.querySelectorAll("#gallery img");
+  const gallery = document.getElementById("gallery");
+
+  // Function to rotate an individual image once
+  function rotateImage(img) {
+    // Remove the class to restart the animation
+    img.classList.remove("rotate");
+    // Trigger reflow
+    void img.offsetWidth;
+    // Add the class to start the animation
+    img.classList.add("rotate");
+  }
+
+  if (width <= 768) {
+    // Mobile: grid of images
+    gallery.classList.remove("fullscreen");
+    gallery.style.display = "flex";
+    gallery.style.flexWrap = "wrap";
+
+    imgs.forEach(img => {
+      img.style.display = "block"; 
+      img.style.width = "calc(100% - 20px)"; // one per row on mobile devices
+      img.style.height = "auto";
+      img.style.margin = "5px"; // optional spacing
+      img.style.borderRadius = "0.3%"; 
+      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
+      // Trigger individual rotation
+      rotateImage(img);
+    });
+    
+  } else {
+    // Desktop: four images per row
+    gallery.classList.remove("fullscreen");
+    gallery.style.display = "flex";
+    gallery.style.flexWrap = "wrap";
+
+    imgs.forEach((img) => {
+      img.style.opacity = 1; // fade in
+      img.style.display = "block"; // Show all images
+      img.style.width = "calc(25% - 20px)"; // Four per row
+      img.style.height = "auto";
+      img.style.margin = "5px"; // optional spacing
+      img.style.borderRadius = "0.6%"; // border radius
+      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)"; // box shadow
+      // Trigger individual rotation
+      rotateImage(img);
+    });
+  }
+}
+  
 // Run layout update on load and resize
 window.addEventListener("load", () => {
   updateLayout();
