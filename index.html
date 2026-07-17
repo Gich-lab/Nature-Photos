@@ -455,7 +455,7 @@ function processImagesSequentially() {
   }
   processNext();
 }
-
+/*
 function rotateImageOnce(img) {
   // Apply CSS animation for a single rotation
   img.style.transition = "transform 1s linear";
@@ -466,8 +466,33 @@ function rotateImageOnce(img) {
     img.style.transform = "rotate(0deg)";
   }, 1100);
 }
+*/
+  
+const img = document.querySelector('img');
+function rotateDuringLoading() {
+  // Set transition for smooth rotation
+  img.style.transition = "transform 1s linear";
+
+  // Start rotation immediately
+  img.style.transform = "rotate(360deg)";
+
+  // When the image finishes loading, reset rotation
+  img.onload = () => {
+    // Optional: reset rotation or keep it as is
+    // To reset:
+    // img.style.transition = "";
+    // img.style.transform = "rotate(0deg)";
+  };
+}
+
+// If image is already loading or not loaded yet
+if (!img.complete) {
+  rotateDuringLoading();
+}
 
 
+
+/*
 // Call this function after images are loaded or on layout update
 function updateLayout() {
   const width = window.innerWidth;
@@ -501,7 +526,7 @@ function updateLayout() {
   // Start processing images sequentially
   processImagesSequentially();
 }
-// window.addEventListener("load", updateLayout);    
+*/
 // Run layout update on load and resize
 window.addEventListener("load", () => {
   updateLayout();
