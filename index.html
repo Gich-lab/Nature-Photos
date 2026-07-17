@@ -446,28 +446,31 @@ function processImagesSequentially() {
       return;
     }
     const img = imgs[index];
+
     // Rotate the image once
     rotateImageOnce(img);
+
     // Increment index after rotation
     index++;
+
     // Wait 1 second before processing the next image
     setTimeout(processNext, 1000);
   }
+
   processNext();
 }
 
-/*
 function rotateImageOnce(img) {
   // Apply CSS animation for a single rotation
   img.style.transition = "transform 1s linear";
   img.style.transform = "rotate(360deg)";
+
   // Reset transform after animation completes to allow re-trigger if needed
   setTimeout(() => {
-    img.style.transition = "";
     img.style.transform = "rotate(0deg)";
-  }, 1100);
+  }, 1000);
 }
-*/  
+
 // Call this function after images are loaded or on layout update
 function updateLayout() {
   const width = window.innerWidth;
@@ -486,15 +489,6 @@ function updateLayout() {
     img.style.boxShadow = "";
     img.style.opacity = 1;
     img.style.display = "block";
-    // Apply CSS animation for a single rotation
-    img.style.transition = "transform 1s linear";
-    img.style.transform = "rotate(360deg)";
-    // Reset transform after animation completes to allow re-trigger if needed
-    setTimeout(() => {
-      img.style.transition = "";
-      img.style.transform = "rotate(0deg)";
-    }, 1100);
-  }
 
     if (width <= 768) {
       // Mobile
@@ -511,6 +505,8 @@ function updateLayout() {
   processImagesSequentially();
 }
 
+// Call updateLayout after images are loaded
+window.addEventListener("load", updateLayout);
 // Run layout update on load and resize
 window.addEventListener("load", () => {
   updateLayout();
