@@ -469,7 +469,7 @@ function rotateImageOnce(img) {
 */
   
 const img = document.querySelector('img');
-function rotateDuringLoading() {
+function rotateImageOnce() {
   // Set transition for smooth rotation
   img.style.transition = "transform 1s linear";
 
@@ -486,10 +486,10 @@ function rotateDuringLoading() {
 }
 
 // If image is already loading or not loaded yet
-if (!img.complete) {
-  rotateDuringLoading();
-}
-
+  if (!img.complete) {
+    rotateImageOnce();
+  }
+  
 // Call this function after images are loaded or on layout update
 function updateLayout() {
   const width = window.innerWidth;
