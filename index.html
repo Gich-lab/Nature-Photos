@@ -368,6 +368,7 @@ function updateLayout() {
 }   
 */
 
+  /*
 function rotateImage(img) {
   img.animate(
         [
@@ -427,7 +428,79 @@ function updateLayout() {
     });
   }
 }
+*/
 
+// Disable refresh until all images are processed
+window.onbeforeunload = function() {
+  return "Please wait until images are loaded.";
+};
+
+function processImagesSequentially() {
+  const imgs = document.querySelectorAll("#gallery img");
+  let index = 0;
+
+  function processNext() {
+    if (index >= imgs.length) {
+      // All done, enable refresh
+      window.onbeforeunload = null;
+      return;
+    }
+    const img = imgs[index];
+    // Rotate the image once
+    rotateImageOnce(img);
+    // Increment index after rotation
+    index++;
+    // Wait 1 second before processing the next image
+    setTimeout(processNext, 1000);
+  }
+  processNext();
+}
+
+function rotateImageOnce(img) {
+  // Apply CSS animation for a single rotation
+  img.style.transition = "transform 1s linear";
+  img.style.transform = "rotate(360deg)";
+
+  // Reset transform after animation completes to allow re-trigger if needed
+  setTimeout(() => {
+    img.style.transform = "rotate(0deg)";
+  }, 1000);
+}
+
+// Call this function after images are loaded or on layout update
+function updateLayout() {
+  const width = window.innerWidth;
+  const imgs = document.querySelectorAll("#gallery img");
+  const gallery = document.getElementById("gallery");
+
+  // Setup layout styles
+  gallery.style.display = "flex";
+  gallery.style.flexWrap = "wrap";
+
+  // Reset any previous inline styles
+  imgs.forEach(img => {
+    img.style.transition = "";
+    img.style.transform = "";
+    img.style.borderRadius = "";
+    img.style.boxShadow = "";
+    img.style.opacity = 1;
+    img.style.display = "block";
+
+    if (width <= 768) {
+      // Mobile
+      img.style.width = "calc(100% - 20px)";
+      img.style.margin = "5px";
+    } else {
+      // Desktop
+      img.style.width = "calc(25% - 20px)";
+      img.style.margin = "5px";
+    }
+  });
+
+  // Start processing images sequentially
+  processImagesSequentially();
+}
+// window.addEventListener("load", updateLayout);    
 // Run layout update on load and resize
 window.addEventListener("load", () => {
   updateLayout();
