@@ -365,20 +365,21 @@ function updateLayout() {
   }
 }   
 */
+
+// Function to rotate an individual image once
+function rotateImage(img) {
+  // Remove the class to restart the animation
+  img.classList.remove("rotate");
+  // Trigger reflow
+  void img.offsetWidth;
+  // Add the class to start the animation
+  img.classList.add("rotate");
+}
+  
 function updateLayout() {
   const width = window.innerWidth;
   const imgs = document.querySelectorAll("#gallery img");
   const gallery = document.getElementById("gallery");
-
-  // Function to rotate an individual image once
-  function rotateImage(img) {
-    // Remove the class to restart the animation
-    img.classList.remove("rotate");
-    // Trigger reflow
-    void img.offsetWidth;
-    // Add the class to start the animation
-    img.classList.add("rotate");
-  }
 
   if (width <= 768) {
     // Mobile: grid of images
