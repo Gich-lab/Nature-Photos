@@ -469,26 +469,20 @@ function rotateImageOnce(img) {
 */
   
 const img = document.querySelector('img');
+
 function rotateImageOnce() {
+  // Prepare the onload handler first
+  img.onload = () => {
+    // Reset rotation after load completes
+    img.style.transition = "";
+    img.style.transform = "";
+  };
   // Set transition for smooth rotation
   img.style.transition = "transform 1s linear";
-
-  // Start rotation immediately
+  // Trigger rotation
   img.style.transform = "rotate(360deg)";
-
-  // When the image finishes loading, reset rotation
-  img.onload = () => {
-    // Optional: reset rotation or keep it as is
-    // To reset:
-    // img.style.transition = "";
-    // img.style.transform = "rotate(0deg)";
-  };
 }
 
-// If image is already loading or not loaded yet
-  if (!img.complete) {
-    rotateImageOnce();
-  }
   
 // Call this function after images are loaded or on layout update
 function updateLayout() {
