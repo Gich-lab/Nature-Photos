@@ -461,12 +461,6 @@ function rotateImageOnce(img) {
   img.style.transition = "transform 1s linear";
   img.style.transform = "rotate(360deg)";
 
-  // Reset transform after animation completes to allow re-trigger if needed
-  setTimeout(() => {
-    img.style.transform = "rotate(0deg)";
-  }, 1000);
-}
-
 // Call this function after images are loaded or on layout update
 function updateLayout() {
   const width = window.innerWidth;
