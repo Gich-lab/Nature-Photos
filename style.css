@@ -101,38 +101,23 @@ img {
     pointer-events: none;
 }
 
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+img.spinning {
+  animation: spin 2s linear infinite;
+}
+
+/*
 @keyframes rotateOnce {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
 .rotate-once {
-  animation: rotateOnce 2s linear forwards;
+  animation: rotateOnce 2s linear forwards; 
 }
+*/
 
-/* Default layout: desktop (four images per row) */
-#gallery {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  opacity: 1; /* ensure visible */
-  transition: opacity 0.5s ease;
-}
-
-#gallery img {
-  display: block;
-  width: calc(25% - 10px); /* four per row with spacing */
-  margin: 5px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);
-  border-radius: 0.4%;
-  transition: all 0.3s ease;
-}
-
-/* Mobile layout: one image per row (stacked) */
-#gallery.mobile {
-  flex-direction: column;
-}
-
-#gallery.mobile img {
-  width: 100%;
-}
