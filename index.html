@@ -391,8 +391,9 @@ function updateLayout() {
       img.style.width = "calc(100% - 20px)"; // one per row on mobile devices
       img.style.height = "auto";
       img.style.margin = "5px"; // optional spacing
-      img.style.borderRadius = "0.3%"; 
-      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
+      //img.style.borderRadius = "0.3%"; 
+      img.style = "border-radius: 0.3%; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);";
+      //img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
       // Trigger individual rotation
       rotateImage(img);
     });
@@ -409,8 +410,9 @@ function updateLayout() {
       img.style.width = "calc(25% - 20px)"; // Four per row
       img.style.height = "auto";
       img.style.margin = "5px"; // optional spacing
-      img.style.borderRadius = "0.6%"; // border radius
-      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)"; // box shadow
+      //img.style.borderRadius = "0.6%"; // border radius
+      img.style = "border-radius: 0.3%; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);";
+      //img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)"; // box shadow
       // Trigger individual rotation
       rotateImage(img);
     });
