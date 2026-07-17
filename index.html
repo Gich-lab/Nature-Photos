@@ -366,6 +366,21 @@ function updateLayout() {
 }   
 */
 
+function rotateImage(img) {
+  img.animate(
+        [
+            { transform: "rotate(0deg)" },
+            { transform: "rotate(360deg)" }
+        ],
+        {
+            duration: 2000,
+            easing: "linear",
+            iterations: 1
+        }
+    );
+}
+
+  /*
 // Function to rotate an individual image once
 function rotateImage(img) {
   // Remove the class to restart the animation
@@ -375,7 +390,7 @@ function rotateImage(img) {
   // Add the class to start the animation
   img.classList.add("rotate-once");
 }
-  
+*/  
 function updateLayout() {
   const width = window.innerWidth;
   const imgs = document.querySelectorAll("#gallery img");
