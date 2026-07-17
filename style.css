@@ -23,15 +23,44 @@ img {
 }
 
 /* Ensure containers are responsive */
+/*
 .gallery {
   display: flex;
   flex-direction: column;
   gap: 40px;
   padding: 40px;
-  max-width: 100%; /* Full width */
+  max-width: 100%;  Full width 
   box-sizing: border-box;
-  opacity: 0; /* start hidden */
+  opacity: 0;  start hidden 
   transition: opacity 0.5s ease;
+}
+*/
+
+/* Default layout: desktop (four images per row) */
+#gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  opacity: 1; /* ensure visible */
+  transition: opacity 0.5s ease;
+}
+
+#gallery img {
+  display: block;
+  width: calc(25% - 10px); /* four per row, adjust spacing as needed */
+  margin: 5px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);
+  border-radius: 0.4%;
+  transition: all 0.3s ease;
+}
+
+/* Mobile layout: one image per row (stacked) */
+#gallery.mobile {
+  flex-direction: column;
+}
+
+#gallery.mobile img {
+  width: 100%;
 }
 
 /* Lightbox styles (unchanged) */
