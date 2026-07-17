@@ -381,20 +381,8 @@ function rotateImage(img) {
         }
     );
 }
-  
-function updateLayout() {
-  const width = window.innerWidth;
-  const gallery = document.getElementById("gallery");
-  if (width <= 768) {
-    gallery.classList.remove('desktop');
-    gallery.classList.add('mobile');
-  } else {
-    gallery.classList.remove('mobile');
-    gallery.classList.add('desktop');
-  }
-}
-  
-/*
+   
+
 // display images 
 function updateLayout() {
   const width = window.innerWidth;
@@ -439,7 +427,6 @@ function updateLayout() {
     });
   }
 }
-*/  
 
 // Run layout update on load and resize
 window.addEventListener("load", () => {
