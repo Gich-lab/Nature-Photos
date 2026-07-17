@@ -101,7 +101,7 @@ img {
     pointer-events: none;
 }
 
-/*
+
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -110,8 +110,8 @@ img {
 img.spinning {
   animation: spin 2s linear infinite;
 }
-*/
 
+/*
 @keyframes rotateOnce {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -120,5 +120,5 @@ img.spinning {
 .rotate-once {
   animation: rotateOnce 2s linear forwards; 
 }
-
+*/
 
