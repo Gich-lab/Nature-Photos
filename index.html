@@ -367,7 +367,7 @@ function updateLayout() {
   }
 }   
 */
-/*
+
 function rotateImage(img) {
   img.animate(
         [
@@ -388,55 +388,6 @@ function updateLayout() {
   const width = window.innerWidth;
   const imgs = document.querySelectorAll("#gallery img");
   const gallery = document.getElementById("gallery");
-*/
-
-// Function to rotate an image and return a Promise that resolves when the animation completes
-function rotateImage(img) {
-  return new Promise((resolve) => {
-    const animation = img.animate(
-      [
-        { transform: "rotate(0deg)" },
-        { transform: "rotate(360deg)" }
-      ],
-      {
-        duration: 2000,
-        easing: "linear",
-        iterations: 1
-      }
-    );
-    animation.onfinish = () => resolve();
-  });
-}
-
-// Function to rotate images one after another
-async function rotateImagesSequentially(images) {
-  for (const img of images) {
-    await rotateImage(img);
-  }
-}
-
-// Main function to update layout, wait for images, rotate them, then style
-async function updateLayout() {
-  const width = window.innerWidth;
-  const imgs = document.querySelectorAll("#gallery img");
-  const gallery = document.getElementById("gallery");
-
-  // Wait for all images to load
-  await Promise.all(Array.from(imgs).map(img => {
-    if (img.complete) {
-      // Already loaded
-      return Promise.resolve();
-    } else {
-      // Wait for load event
-      return new Promise((resolve) => {
-        img.onload = resolve;
-        img.onerror = resolve; // handle errors to prevent hanging
-      });
-    }
-  }));
-
-  // Rotate images sequentially
-  await rotateImagesSequentially(Array.from(imgs));
 
   if (width <= 768) {
     // Mobile: grid of images
