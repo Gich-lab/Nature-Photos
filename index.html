@@ -509,7 +509,7 @@ function updateLayout() {
     const isMobile = width <= 768;
 
     const gallery = document.getElementById("gallery");
-    const imgs = [...document.querySelectorAll("#gallery img")];
+    const imgs = [document.querySelectorAll("#gallery img")];
 
     gallery.classList.remove("fullscreen");
     gallery.style.display = "flex";
