@@ -367,7 +367,7 @@ function updateLayout() {
   }
 }   
 */
-
+/*
 function rotateImage(img) {
   img.animate(
         [
@@ -382,13 +382,14 @@ function rotateImage(img) {
     );
 }
    
-/*
+
 // display images 
 function updateLayout() {
   const width = window.innerWidth;
   const imgs = document.querySelectorAll("#gallery img");
   const gallery = document.getElementById("gallery");
 */
+
 // Function to rotate an image and return a Promise that resolves when the animation completes
 function rotateImage(img) {
   return new Promise((resolve) => {
@@ -436,7 +437,7 @@ async function updateLayout() {
 
   // Rotate images sequentially
   await rotateImagesSequentially(Array.from(imgs));
-  
+
   if (width <= 768) {
     // Mobile: grid of images
     gallery.classList.remove("fullscreen");
