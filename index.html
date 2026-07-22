@@ -368,7 +368,6 @@ function updateLayout() {
 }   
 */
 
-/*
 function rotateImage(img) {
   img.animate(
         [
@@ -428,97 +427,15 @@ function updateLayout() {
     });
   }
 }
-*/
-
-// Function to rotate a single image and return a promise
-function rotateImage(img) {
-  return new Promise((resolve) => {
-    const animation = img.animate(
-      [
-        { transform: "rotate(0deg)" },
-        { transform: "rotate(360deg)" }
-      ],
-      {
-        duration: 2000,
-        easing: "linear",
-        iterations: 1
-      }
-    );
-    animation.onfinish = () => resolve();
-  });
-}
-
-// Function to handle each image load
-function handleImageLoad(img) {
-  return rotateImage(img);
-}
-
-// Main function
-async function updateLayout() {
-  const width = window.innerWidth;
-  const imgs = Array.from(document.querySelectorAll("#gallery img"));
-  const gallery = document.getElementById("gallery");
-
-  // Wait for all images to load
-  await Promise.all(
-    imgs.map((img) => {
-      if (img.complete) {
-        return Promise.resolve();
-      } else {
-        return new Promise((resolve) => {
-          img.onload = resolve;
-          img.onerror = resolve; // handle errors
-        });
-      }
-    })
-  );
-
-  // Rotate images one after another as they load
-  for (const img of imgs) {
-    await handleImageLoad(img);
-  }
-
-  // Apply layout styles
-  if (width <= 768) {
-    // Mobile layout
-    gallery.classList.remove("fullscreen");
-    gallery.style.display = "flex";
-    gallery.style.flexWrap = "wrap";
-
-    imgs.forEach(img => {
-      img.style.display = "block"; 
-      img.style.width = "calc(100% - 20px)";
-      img.style.height = "auto";
-      img.style.margin = "5px"; 
-      img.style.borderRadius = "0.3%"; 
-      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-    });
-  } else {
-    // Desktop layout
-    gallery.classList.remove("fullscreen");
-    gallery.style.display = "flex";
-    gallery.style.flexWrap = "wrap";
-
-    imgs.forEach((img) => {
-      img.style.opacity = 1;
-      img.style.display = "block";
-      img.style.width = "calc(25% - 20px)";
-      img.style.height = "auto";
-      img.style.margin = "5px";
-      img.style.borderRadius = "0.4%";
-      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-    });
-  }
-}
 
 // Call updateLayout after images are loaded
-window.addEventListener("load", updateLayout);
+//window.addEventListener("load", updateLayout);
 // Run layout update on load and resize
-/*window.addEventListener("load", () => {
+window.addEventListener("load", () => {
   updateLayout();
   //Initialize currentIndex for desktop mode
   currentIndex = 0;
-});*/
+});
 
 window.addEventListener("resize", updateLayout);
   
