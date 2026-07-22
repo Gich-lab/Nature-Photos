@@ -512,11 +512,11 @@ async function updateLayout() {
 // Call updateLayout after images are loaded
 window.addEventListener("load", updateLayout);
 // Run layout update on load and resize
-window.addEventListener("load", () => {
+/*window.addEventListener("load", () => {
   updateLayout();
   //Initialize currentIndex for desktop mode
   currentIndex = 0;
-});
+});*/
 
 window.addEventListener("resize", updateLayout);
   
