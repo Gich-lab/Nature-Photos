@@ -430,7 +430,7 @@ function updateLayout() {
 }
 */
 
-// Function to rotate an image and return a Promise that resolves after the animation completes
+// Function to rotate a single image and return a promise
 function rotateImage(img) {
   return new Promise((resolve) => {
     const animation = img.animate(
@@ -448,35 +448,37 @@ function rotateImage(img) {
   });
 }
 
-// Function to rotate images one after another sequentially
-async function rotateImagesSequentially(images) {
-  for (const img of images) {
-    await rotateImage(img);
-  }
+// Function to handle each image load
+function handleImageLoad(img) {
+  return rotateImage(img);
 }
 
-// Main function to update layout and animate images sequentially
+// Main function
 async function updateLayout() {
   const width = window.innerWidth;
-  const imgs = document.querySelectorAll("#gallery img");
+  const imgs = Array.from(document.querySelectorAll("#gallery img"));
   const gallery = document.getElementById("gallery");
 
   // Wait for all images to load
-  await Promise.all(Array.from(imgs).map(img => {
-    if (img.complete) {
-      return Promise.resolve();
-    } else {
-      return new Promise((resolve) => {
-        img.onload = resolve;
-        img.onerror = resolve; // handle errors gracefully
-      });
-    }
-  }));
+  await Promise.all(
+    imgs.map((img) => {
+      if (img.complete) {
+        return Promise.resolve();
+      } else {
+        return new Promise((resolve) => {
+          img.onload = resolve;
+          img.onerror = resolve; // handle errors
+        });
+      }
+    })
+  );
 
-  // Rotate images one after another
-  await rotateImagesSequentially(Array.from(imgs));
+  // Rotate images one after another as they load
+  for (const img of imgs) {
+    await handleImageLoad(img);
+  }
 
-  // Apply layout styles after rotation
+  // Apply layout styles
   if (width <= 768) {
     // Mobile layout
     gallery.classList.remove("fullscreen");
@@ -497,7 +499,7 @@ async function updateLayout() {
     gallery.style.display = "flex";
     gallery.style.flexWrap = "wrap";
 
-    Array.from(imgs).forEach((img) => {
+    imgs.forEach((img) => {
       img.style.opacity = 1;
       img.style.display = "block";
       img.style.width = "calc(25% - 20px)";
