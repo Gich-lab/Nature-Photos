@@ -368,7 +368,6 @@ function updateLayout() {
 }   
 */
 
-/*
 function rotateImage(img) {
   img.animate(
         [
@@ -439,97 +438,6 @@ window.addEventListener("load", () => {
   currentIndex = 0;
 });
 
-window.addEventListener("resize", updateLayout);
-*/
-
-// Function to rotate an image and return a Promise that resolves when the animation completes
-function rotateImage(img) {
-  return new Promise((resolve) => {
-    const animation = img.animate(
-      [
-        { transform: "rotate(0deg)" },
-        { transform: "rotate(360deg)" }
-      ],
-      {
-        duration: 2000,
-        easing: "linear",
-        iterations: 1
-      }
-    );
-    animation.onfinish = () => resolve();
-  });
-}
-
-// Function to rotate images one after another
-async function rotateImagesSequentially(images) {
-  for (const img of images) {
-    await rotateImage(img);
-  }
-}
-
-// Main function to update layout, wait for images, rotate them, then style
-async function updateLayout() {
-  const width = window.innerWidth;
-  const imgs = document.querySelectorAll("#gallery img");
-  const gallery = document.getElementById("gallery");
-
-  // Wait for all images to load
-  await Promise.all(Array.from(imgs).map(img => {
-    if (img.complete) {
-      // Already loaded
-      return Promise.resolve();
-    } else {
-      // Wait for load event
-      return new Promise((resolve) => {
-        img.onload = resolve;
-        img.onerror = resolve; // handle errors to prevent hanging
-      });
-    }
-  }));
-
-  // Rotate images sequentially
-  await rotateImagesSequentially(Array.from(imgs));
-
-  // Apply layout styles after rotations
-  if (width <= 768) {
-    // Mobile layout
-    gallery.classList.remove("fullscreen");
-    gallery.style.display = "flex";
-    gallery.style.flexWrap = "wrap";
-
-    Array.from(imgs).forEach(img => {
-      img.style.display = "block"; 
-      img.style.width = "calc(25% - 20px)";
-      img.style.height = "auto";
-      img.style.margin = "5px"; 
-      img.style.borderRadius = "0.3%"; 
-      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-    });
-  } else {
-    // Desktop layout
-    gallery.classList.remove("fullscreen");
-    gallery.style.display = "flex";
-    gallery.style.flexWrap = "wrap";
-
-    Array.from(imgs).forEach((img) => {
-      img.style.opacity = 1;
-      img.style.display = "block";
-      img.style.width = "calc(25% - 20px)";
-      img.style.height = "auto";
-      img.style.margin = "5px";
-      img.style.borderRadius = "0.4%";
-      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-    });
-  }
-}
-
-// Run updateLayout after page load and on resize
-window.addEventListener("load", updateLayout);
-window.addEventListener("load", () => {
-  updateLayout();
-  //Initialize currentIndex for desktop mode
-  currentIndex = 0;
-});
 window.addEventListener("resize", updateLayout);
   
 </script>
