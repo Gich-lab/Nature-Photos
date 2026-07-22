@@ -368,6 +368,7 @@ function updateLayout() {
 }   
 */
 
+/*
 function rotateImage(img) {
   img.animate(
         [
@@ -438,6 +439,103 @@ window.addEventListener("load", () => {
 });
 
 window.addEventListener("resize", updateLayout);
+*/
+
+function rotateImage(img) {
+    img.animate(
+        [
+            { transform: "rotate(0deg)" },
+            { transform: "rotate(360deg)" }
+        ],
+        {
+            duration: 2000,
+            easing: "linear",
+            iterations: 1
+        }
+    );
+}
+
+function styleImage(img, isMobile) {
+    img.style.display = "block";
+    img.style.height = "auto";
+    img.style.margin = "5px";
+    img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
+
+    if (isMobile) {
+        img.style.width = "calc(100% - 20px)";
+        img.style.borderRadius = "0.3%";
+    } else {
+        img.style.width = "calc(25% - 20px)";
+        img.style.borderRadius = "0.4%";
+    }
+}
+
+function showImagesSequentially(images, isMobile, index = 0) {
+    if (index >= images.length) return;
+    const img = images[index];
+    const reveal = () => {
+        styleImage(img, isMobile);
+        img.style.opacity = "0";
+        img.style.display = "block";
+        // Fade in
+        requestAnimationFrame(() => {
+            img.style.transition = "opacity 0.5s ease";
+            img.style.opacity = "1";
+        });
+        rotateImage(img);
+        // Wait before showing next image
+        setTimeout(() => {
+            showImagesSequentially(images, isMobile, index + 1);
+        }, 500);
+    };
+
+    if (img.complete) {
+        reveal();
+    } else {
+        img.addEventListener("load", reveal, { once: true });
+        // Handle failed loads so sequence doesn't stop
+        img.addEventListener(
+            "error",
+            () => {
+                showImagesSequentially(images, isMobile, index + 1);
+            },
+            { once: true }
+        );
+    }
+}
+
+function updateLayout() {
+    const width = window.innerWidth;
+    const isMobile = width <= 768;
+
+    const gallery = document.getElementById("gallery");
+    const imgs = [...document.querySelectorAll("#gallery img")];
+
+    gallery.classList.remove("fullscreen");
+    gallery.style.display = "flex";
+    gallery.style.flexWrap = "wrap";
+
+    // Hide all images initially
+    imgs.forEach(img => {
+        img.style.display = "none";
+        img.style.opacity = "0";
+    });
+
+    // Start sequential display
+    showImagesSequentially(imgs, isMobile);
+}
+
+// Run layout update on load
+window.addEventListener("load", () => {
+    updateLayout();
+    currentIndex = 0;
+});
+
+// Re-apply layout on resize
+window.addEventListener("resize", () => {
+    updateLayout();
+});
+
   
 </script>
     <footer>
