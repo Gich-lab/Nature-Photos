@@ -368,7 +368,7 @@ function updateLayout() {
 }   
 */
 
-
+/*
 function rotateImage(img) {
   img.animate(
         [
@@ -440,8 +440,60 @@ window.addEventListener("load", () => {
 });
 
 window.addEventListener("resize", updateLayout);
+*/
 
 
+// Function to rotate an image once
+ function rotateImage(img) {
+    return new Promise((resolve) => {
+      const animation = img.animate(
+        [
+          { transform: "rotate(0deg)" },
+          { transform: "rotate(360deg)" }
+        ],
+        {
+          duration: 600,
+          easing: "linear",
+          iterations: 1
+        }
+      );
+      animation.onfinish = () => {
+        // Reset transform after rotation
+        img.style.transform = "";
+        resolve();
+      };
+    });
+  }
+
+  // Main function to handle loading and animation
+  async function setupGallery() {
+    const imgs = Array.from(document.querySelectorAll("#gallery img"));
+
+    // Wait for all images to load
+    await Promise.all(
+      imgs.map((img) => {
+        if (img.complete) {
+          return Promise.resolve();
+        } else {
+          return new Promise((resolve) => {
+            img.onload = resolve;
+            img.onerror = resolve; // Proceed even if image fails to load
+          });
+        }
+      })
+    );
+
+    // Animate images sequentially
+    for (const img of imgs) {
+      await rotateImage(img);
+    }
+  }
+
+  // Run on page load
+  window.addEventListener("load", setupGallery);
+  // Also run on resize if needed
+  window.addEventListener("resize", setupGallery);
+  
 </script>
     <footer>
       <p class="footer" style="text-align: center;">
