@@ -430,7 +430,6 @@ function updateLayout() {
 }
 
 */
-
 function rotateImage(img) {
   return new Promise((resolve) => {
     const animation = img.animate(
@@ -453,7 +452,7 @@ function rotateImage(img) {
   }
 
   // Main function to handle loading and animation
-  async function setupGallery() {
+async function setupGallery() {
     const imgs = Array.from(document.querySelectorAll("#gallery img"));
 
     // Wait for all images to load
@@ -472,7 +471,7 @@ function rotateImage(img) {
 
     // Animate images sequentially
 for (const img of imgs) {
-  await rotateImage(img);
+  await rotateImage(img);}
 }
   
 // Call updateLayout after images are loaded
