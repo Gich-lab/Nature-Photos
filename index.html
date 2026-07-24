@@ -225,11 +225,7 @@ for(let i=1; i<=maxPhotos; i++){
   const img = document.createElement("img");
   //img.setAttribute('loading', 'lazy');
   const img = document.createElement("img");
-
-  img.style.clipPath = "inset(0 100% 0 0)";
-  img.style.opacity = "0";
-  img.loading = "eager";
-  
+ 
   img.src = "images/photo"+i+".jpg"; 
   img.setAttribute('width', '1920');
   img.setAttribute('height', '1080');
@@ -474,29 +470,20 @@ function updateLayout() {
 }
 */
 
-async function updateLayout() {
-    const imgs = document.querySelectorAll("#gallery img");
-    for (const img of imgs) {
-        if (!img.complete) {
-            await new Promise(resolve => {
-                img.onload = resolve;
-                img.onerror = resolve;
-            });
-        }
+for (const img of imgs) {
 
-        img.style.opacity = "1";
-        await img.animate(
-            [
-                { clipPath: "inset(0 100% 0 0)" },
-                { clipPath: "inset(0 0 0 0)" }
-            ],
-            {
-                duration: 1200,
-                easing: "ease-out",
-                fill: "forwards"
-            }
-        ).finished;
+    img.style.display = "block";
+    img.style.transform = "scaleX(0)";
+    img.style.transformOrigin = "left center";
+
+    if (!img.complete) {
+        await new Promise(resolve => {
+            img.onload = resolve;
+            img.onerror = resolve;
+        });
     }
+
+    await unfurlImage(img);
 }
 
 async function updateLayout() {
