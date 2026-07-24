@@ -469,16 +469,16 @@ function updateLayout() {
 */
 
 function unfurlImage(img) {
-    img.style.visibility = "visible";
+    img.style.clipPath = "inset(0 100% 0 0)";
 
     return img.animate(
         [
-            { transform: "scaleX(0)" },
-            { transform: "scaleX(1)" }
+            { clipPath: "inset(0 100% 0 0)" },
+            { clipPath: "inset(0 0 0 0)" }
         ],
         {
             duration: 1200,
-            easing: "ease-out",
+            easing: "cubic-bezier(0.22, 1, 0.36, 1)",
             fill: "forwards"
         }
     ).finished;
