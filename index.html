@@ -469,17 +469,12 @@ function updateLayout() {
 */
 
 function unfurlImage(img) {
-  img.style.visibility = "hidden";
+    img.style.visibility = "visible";
+
     return img.animate(
         [
-            {
-                transform: "scaleX(0)",
-                transformOrigin: "left center"
-            },
-            {
-                transform: "scaleX(1)",
-                transformOrigin: "left center"
-            }
+            { transform: "scaleX(0)" },
+            { transform: "scaleX(1)" }
         ],
         {
             duration: 1200,
