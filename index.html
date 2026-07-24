@@ -368,7 +368,7 @@ function updateLayout() {
 }   
 */
 
-
+/*
 function rotateImage(img) {
   img.animate(
         [
@@ -377,13 +377,27 @@ function rotateImage(img) {
         ],
         {
             duration: 2000,
-            easing: "ease-out", /*"linear",*/
+            easing: "ease-out", 
             iterations: 1
         }
     );
 }
-   
+*/   
 
+function unfurlImage(img) {
+    img.animate(
+        [
+            { clipPath: "inset(0 100% 0 0)" },
+            { clipPath: "inset(0 0 0 0)" }
+        ],
+        {
+            duration: 1200,
+            easing: "ease-out",
+            fill: "forwards"
+        }
+    );
+}  
+  
 // display images 
 function updateLayout() {
   const width = window.innerWidth;
@@ -424,7 +438,8 @@ function updateLayout() {
       //img.style = "border-radius: 0.3%; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);";
       img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)"; // box shadow
       // Trigger individual rotation
-      rotateImage(img);
+      // rotateImage(img);
+      unfurlImage(img)
     });
   }
 }
