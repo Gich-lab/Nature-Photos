@@ -370,7 +370,7 @@ function updateLayout() {
 }   
 */
 
-/*
+
 function rotateImage(img) {
   img.animate(
         [
@@ -422,7 +422,7 @@ async function displayImagesSequentially(imageUrls, container) {
         await unfurlImage(img);
     }
 }
-  
+*/  
 // display images 
 function updateLayout() {
   const width = window.innerWidth;
@@ -468,68 +468,7 @@ function updateLayout() {
     });
   }
 }
-*/
 
-for (const img of imgs) {
-
-    img.style.display = "block";
-    img.style.transform = "scaleX(0)";
-    img.style.transformOrigin = "left center";
-
-    if (!img.complete) {
-        await new Promise(resolve => {
-            img.onload = resolve;
-            img.onerror = resolve;
-        });
-    }
-
-    await unfurlImage(img);
-}
-
-async function updateLayout() {
-    const width = window.innerWidth;
-    const imgs = document.querySelectorAll("#gallery img");
-    const gallery = document.getElementById("gallery");
-
-    gallery.classList.remove("fullscreen");
-    gallery.style.display = "flex";
-    gallery.style.flexWrap = "wrap";
-
-    if (width <= 768) {
-        // Mobile: one image per row
-        for (const img of imgs) {
-            img.style.display = "block";
-            img.style.width = "calc(100% - 20px)";
-            img.style.height = "auto";
-            img.style.margin = "5px";
-            img.style.borderRadius = "0.3%";
-            img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-
-            img.style.transform = "scaleX(0)";
-            img.style.transformOrigin = "left center";
-
-            await unfurlImage(img);
-        }
-
-    } else {
-        // Desktop: four images per row
-        for (const img of imgs) {
-            img.style.opacity = "1";
-            img.style.display = "block";
-            img.style.width = "calc(25% - 20px)";
-            img.style.height = "auto";
-            img.style.margin = "5px";
-            img.style.borderRadius = "0.4%";
-            img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-
-            img.style.transform = "scaleX(0)";
-            img.style.transformOrigin = "left center";
-
-            await unfurlImage(img);
-        }
-    }
-}
-  
   
 // Call updateLayout after images are loaded
 //window.addEventListener("load", updateLayout);
