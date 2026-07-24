@@ -383,27 +383,42 @@ function rotateImage(img) {
     );
 }
 */   
-
+/*
 function unfurlImage(img) {
-    img.animate(
+    return img.animate(
         [
-            {
-                transform: "scaleX(0) skewY(2deg)",
-                opacity: 0.8,
-                transformOrigin: "left center"
-            },
-            {
-                transform: "scaleX(1) skewY(0deg)",
-                opacity: 1,
-                transformOrigin: "left center"
-            }
+            { clipPath: "inset(0 100% 0 0)" }, // hidden from right
+            { clipPath: "inset(0 0 0 0)" }      // fully revealed
         ],
         {
             duration: 1200,
-            easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+            easing: "ease-out",
             fill: "forwards"
         }
-    );
+    ).finished;
+}
+
+async function displayImagesSequentially(imageUrls, container) {
+    for (const url of imageUrls) {
+        const img = document.createElement("img");
+
+        img.src = url;
+        img.style.width = "100%";
+        img.style.display = "block";
+        img.style.margin = "5px 0";
+        img.style.clipPath = "inset(0 100% 0 0)"; // start hidden
+
+        // Wait for image to load
+        await new Promise((resolve) => {
+            img.onload = resolve;
+            img.onerror = resolve;
+        });
+
+        container.appendChild(img);
+
+        // Wait for unfurl animation to finish
+        await unfurlImage(img);
+    }
 }
   
 // display images 
@@ -451,7 +466,72 @@ function updateLayout() {
     });
   }
 }
+*/
 
+function unfurlImage(img) {
+    return img.animate(
+        [
+            {
+                transform: "scaleX(0)",
+                transformOrigin: "left center"
+            },
+            {
+                transform: "scaleX(1)",
+                transformOrigin: "left center"
+            }
+        ],
+        {
+            duration: 1200,
+            easing: "ease-out",
+            fill: "forwards"
+        }
+    ).finished;
+}
+
+async function updateLayout() {
+    const width = window.innerWidth;
+    const imgs = document.querySelectorAll("#gallery img");
+    const gallery = document.getElementById("gallery");
+
+    gallery.classList.remove("fullscreen");
+    gallery.style.display = "flex";
+    gallery.style.flexWrap = "wrap";
+
+    if (width <= 768) {
+        // Mobile: one image per row
+        for (const img of imgs) {
+            img.style.display = "block";
+            img.style.width = "calc(100% - 20px)";
+            img.style.height = "auto";
+            img.style.margin = "5px";
+            img.style.borderRadius = "0.3%";
+            img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
+
+            img.style.transform = "scaleX(0)";
+            img.style.transformOrigin = "left center";
+
+            await unfurlImage(img);
+        }
+
+    } else {
+        // Desktop: four images per row
+        for (const img of imgs) {
+            img.style.opacity = "1";
+            img.style.display = "block";
+            img.style.width = "calc(25% - 20px)";
+            img.style.height = "auto";
+            img.style.margin = "5px";
+            img.style.borderRadius = "0.4%";
+            img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
+
+            img.style.transform = "scaleX(0)";
+            img.style.transformOrigin = "left center";
+
+            await unfurlImage(img);
+        }
+    }
+}
+  
   
 // Call updateLayout after images are loaded
 //window.addEventListener("load", updateLayout);
