@@ -20,8 +20,6 @@ img {
   display: block;       /* Remove inline spacing */
   object-fit: contain;  /* Fit within container without overflow */
   margin: 0 auto;       /* Center images if needed */
-  clip-path: inset(0 100% 0 0);
-  opacity: 0;
 }
 
 /* Ensure containers are responsive */
