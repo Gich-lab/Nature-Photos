@@ -20,6 +20,7 @@ img {
   display: block;       /* Remove inline spacing */
   object-fit: contain;  /* Fit within container without overflow */
   margin: 0 auto;       /* Center images if needed */
+  clip-path: inset(0 100% 0 0);
 }
 
 /* Ensure containers are responsive */
@@ -32,7 +33,6 @@ img {
   box-sizing: border-box;
   opacity: 1;  /*0 start hidden*/ 
   transition: opacity 0.5s ease;
-  visibility: hidden;
 }
 
 /* Lightbox styles (unchanged) */
