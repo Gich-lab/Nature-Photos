@@ -387,6 +387,7 @@ function rotateImage(img) {
   ).finished;
 }
 
+/*
 async function loadImagesSequentially() {
   for (let i = 1; i <= maxPhotos; i++) {
     const img = document.createElement("img");
@@ -405,6 +406,32 @@ async function loadImagesSequentially() {
     await rotateImage(img);
   }
 }
+*/
+
+async function loadImagesSequentially() {
+  const gallery = document.getElementById("gallery");
+  // Create all images immediately
+  const images = [];
+  for (let i = 1; i <= maxPhotos; i++) {
+    const img = document.createElement("img");
+    img.style.visibility = "hidden";
+    img.src = `images/photo${i}.jpg`;
+    gallery.appendChild(img);
+    images.push(img);
+  }
+
+    // Reveal and rotate sequentially in an overlap
+  for (const img of images) {
+    if (!img.complete) {
+      await new Promise(resolve => {
+        img.onload = resolve;
+        img.onerror = resolve;
+      });
+    }
+    img.style.visibility = "visible";
+    rotateImage(img);  // don't await
+    await new Promise(resolve => setTimeout(resolve, 150))
+  }
   
 function updateLayout() {
   const width = window.innerWidth;
