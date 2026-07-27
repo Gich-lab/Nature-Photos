@@ -460,9 +460,10 @@ function updateLayout() {
 }
  
 window.addEventListener("load", async () => {
-  if(!isPageReloaded()) {
-    await loadImagesSequentially();
-  }
+    const hasUpdate = await fetchLatestCommitSha();
+    if (hasUpdate) {
+        await loadImagesSequentially();
+    }
 });
 
 window.addEventListener("resize", updateLayout);  
