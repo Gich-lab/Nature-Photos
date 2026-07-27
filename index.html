@@ -117,7 +117,7 @@ function fetchLatestCommitSha() {
         triggerCascade(headerText, headerText.textContent, 6, false);
         setTimeout(() => {
           triggerCascade(headerText, originalText);}, 8000);
-        return; // stop reload
+        //return; // stop reload
       } else if (latestCommitSha !== storedSha) {
         // Start cascade effect on the header text displaying the title or message
         triggerCascade(headerText, originalText);
