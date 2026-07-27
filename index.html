@@ -458,13 +458,20 @@ function updateLayout() {
     }
   });
 }
- 
+
+window.addEventListener("load", async () => {
+  if (!isPageReloaded()) {
+    await loadImagesSequentially();
+  }
+});
+  
+/*
 window.addEventListener("load", async () => {
   await loadImagesSequentially();
-});
+});*/
 
 window.addEventListener("resize", updateLayout);
-  
+ 
 // Call updateLayout after images are loaded
 // window.addEventListener("load", updateLayout);
 // Run layout update on load and resize
