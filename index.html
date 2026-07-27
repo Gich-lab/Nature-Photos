@@ -224,7 +224,6 @@ const maxPhotos = 100; // update to reflect current number of photos
 for(let i=1; i<=maxPhotos; i++){
   const img = document.createElement("img");
   img.setAttribute('loading', 'lazy');
-  const img = document.createElement("img");
  
   img.src = "images/photo"+i+".jpg"; 
   img.setAttribute('width', '1920');
@@ -331,7 +330,7 @@ function sendVisitorData() {
   });
 }
 
-
+/*
 // Responsive layout function -basic
 function updateLayout() {
   const width = window.innerWidth;
@@ -368,7 +367,48 @@ function updateLayout() {
     });
   }
 }   
+*/
 
+async function updateLayout() {
+  const width = window.innerWidth;
+  const imgs = [...document.querySelectorAll("#gallery img")];
+  const gallery = document.getElementById("gallery");
+
+  gallery.classList.remove("fullscreen");
+  gallery.style.display = "flex";
+  gallery.style.flexWrap = "wrap";
+
+  // Wait for all images to load
+  await Promise.all(
+    imgs.map(img =>
+      img.complete
+        ? Promise.resolve()
+        : new Promise(resolve => {
+            img.onload = resolve;
+            img.onerror = resolve;
+          })
+    )
+  );
+
+  // Rotate one at a time
+  for (const img of imgs) {
+
+    img.style.display = "block";
+    img.style.height = "auto";
+    img.style.margin = "5px";
+    img.style.boxShadow = "0 4px 12px rgba(0,0,0,0.9)";
+
+    if (width <= 768) {
+      img.style.width = "calc(100% - 20px)";
+    } else {
+      img.style.width = "calc(25% - 20px)";
+    }
+
+    await rotateImage(img);
+  }
+}
+
+  
   
 // Call updateLayout after images are loaded
 // window.addEventListener("load", updateLayout);
