@@ -330,7 +330,7 @@ function sendVisitorData() {
   });
 }
 
-/*
+
 // Responsive layout function -basic
 function updateLayout() {
   const width = window.innerWidth;
@@ -367,51 +367,7 @@ function updateLayout() {
     });
   }
 }   
-*/
-
-async function updateLayout() {
-  const width = window.innerWidth;
-  const imgs = [...document.querySelectorAll("#gallery img")];
-  const gallery = document.getElementById("gallery");
-
-  gallery.classList.remove("fullscreen");
-  gallery.style.display = "flex";
-  gallery.style.flexWrap = "wrap";
-
-  // Wait for all images to load
-  await Promise.all(
-    imgs.map(img =>
-      img.complete
-        ? Promise.resolve()
-        : new Promise(resolve => {
-            img.onload = resolve;
-            img.onerror = resolve;
-          })
-    )
-  );
-
-  // Rotate one at a time
-  for (const img of imgs) {
-
-    img.style.display = "block";
-    img.style.height = "auto";
-    img.style.margin = "5px";
-    img.style.boxShadow = "0 4px 12px rgba(0,0,0,0.9)";
-
-    if (width <= 768) {
-      img.style.width = "calc(100% - 20px)";
-    } else {
-      img.style.width = "calc(25% - 20px)";
-    }
-
-    await rotateImage(img);
-  }
-}
-
-window.addEventListener("load", updateLayout);
-window.addEventListener("resize", updateLayout);  
   
-/*  
 // Call updateLayout after images are loaded
 window.addEventListener("load", updateLayout);
 // Run layout update on load and resize
@@ -422,7 +378,7 @@ window.addEventListener("load", () => {
 });
 
 window.addEventListener("resize", updateLayout);
- */ 
+ 
 </script>
     <footer>
       <p class="footer" style="text-align: center;">
