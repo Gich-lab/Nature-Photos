@@ -387,21 +387,20 @@ function rotateImage(img) {
   ).finished;
 }
 
-
 async function loadImagesSequentially() {
   for (let i = 1; i <= maxPhotos; i++) {
     const img = document.createElement("img");
-    // Hide before adding
     img.style.visibility = "hidden";
+    img.onerror = function () {
+      this.remove();
+    };
     img.src = `images/photo${i}.jpg`;
     await new Promise(resolve => {
       img.onload = resolve;
       img.onerror = resolve;
     });
     gallery.appendChild(img);
-    // Apply current layout styling
     updateLayout();
-    // Show image and rotate
     img.style.visibility = "visible";
     await rotateImage(img);
   }
@@ -416,9 +415,7 @@ function updateLayout() {
   gallery.style.display = "flex";
   gallery.style.flexWrap = "wrap";
 
-  for (const img of imgs) {
-
-    // Apply layout styles
+  imgs.forEach(img => {
     img.style.display = "block";
     img.style.height = "auto";
     img.style.margin = "5px";
@@ -432,18 +429,7 @@ function updateLayout() {
       img.style.borderRadius = "0.6%";
       img.style.opacity = "1";
     }
-
-    // Wait for this image to load
-    if (!img.complete) {
-      await new Promise(resolve => {
-        img.onload = resolve;
-        img.onerror = resolve;
-      });
-    }
-
-    // Rotate this image
-    await rotateImage(img);
-  }
+  });
 }
 
 window.addEventListener("load", async () => {
