@@ -370,106 +370,46 @@ function updateLayout() {
 }   
 */
 
-/*
-function rotateImage(img) {
-  img.animate(
-        [
-            { transform: "rotate(0deg)" },
-            { transform: "rotate(360deg)" }
-        ],
-        {
-            duration: 2000,
-            easing: "ease-out", 
-            iterations: 1
-        }
-    );
-}
-*/
-  
-
-function unfurlImage(img) {
-    return img.animate(
-        [
-            { clipPath: "inset(0 100% 0 0)" }, // hidden from right
-            { clipPath: "inset(0 0 0 0)" }      // fully revealed
-        ],
-        {
-            duration: 1200,
-            easing: "ease-out",
-            fill: "forwards"
-        }
-    ).finished;
-}
-
-async function displayImagesSequentially(imageUrls, container) {
-    for (const url of imageUrls) {
-        const img = document.createElement("img");
-
-        img.src = url;
-        img.style.width = "100%";
-        img.style.display = "block";
-        img.style.margin = "5px 0";
-        img.style.clipPath = "inset(0 100% 0 0)"; // start hidden
-
-        // Wait for image to load
-        await new Promise((resolve) => {
-            img.onload = resolve;
-            img.onerror = resolve;
-        });
-
-        container.appendChild(img);
-
-        // Wait for unfurl animation to finish
-        await unfurlImage(img);
-    }
-}
- 
-// display images 
-function updateLayout() {
+async function updateLayout() {
   const width = window.innerWidth;
-  const imgs = document.querySelectorAll("#gallery img");
+  const imgs = [...document.querySelectorAll("#gallery img")];
   const gallery = document.getElementById("gallery");
 
-  if (width <= 768) {
-    // Mobile: grid of images
-    gallery.classList.remove("fullscreen");
-    gallery.style.display = "flex";
-    gallery.style.flexWrap = "wrap";
+  gallery.classList.remove("fullscreen");
+  gallery.style.display = "flex";
+  gallery.style.flexWrap = "wrap";
 
-    imgs.forEach(img => {
-      img.style.display = "block"; 
-      img.style.width = "calc(100% - 20px)"; // one per row on mobile devices
-      img.style.height = "auto";
-      img.style.margin = "5px"; // optional spacing
-      img.style.borderRadius = "0.3%"; 
-      //img.style = "border-radius: 0.3%; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);";
-      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-      // Trigger individual rotation
-      rotateImage(img);
-    });
-    
-  } else {
-    // Desktop: four images per row
-    gallery.classList.remove("fullscreen");
-    gallery.style.display = "flex";
-    gallery.style.flexWrap = "wrap";
+  // Wait for all images to load
+  await Promise.all(
+    imgs.map(img =>
+      img.complete
+        ? Promise.resolve()
+        : new Promise(resolve => {
+            img.onload = resolve;
+            img.onerror = resolve;
+          })
+    )
+  );
 
-    imgs.forEach((img) => {
-      img.style.opacity = 1; // fade in
-      img.style.display = "block"; // Show all images
-      img.style.width = "calc(25% - 20px)"; // Four per row
-      img.style.height = "auto";
-      img.style.margin = "5px"; // optional spacing
-      img.style.borderRadius = "0.4%"; // border radius
-      //img.style = "border-radius: 0.3%; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);";
-      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)"; // box shadow
-      // Trigger individual rotation
-      // rotateImage(img);
-      unfurlImage(img)
-    });
+  // Rotate one at a time
+  for (const img of imgs) {
+
+    img.style.display = "block";
+    img.style.height = "auto";
+    img.style.margin = "5px";
+    img.style.boxShadow = "0 4px 12px rgba(0,0,0,0.9)";
+
+    if (width <= 768) {
+      img.style.width = "calc(100% - 20px)";
+    } else {
+      img.style.width = "calc(25% - 20px)";
+    }
+
+    await rotateImage(img);
   }
 }
 
+  
   
 // Call updateLayout after images are loaded
 //window.addEventListener("load", updateLayout);
