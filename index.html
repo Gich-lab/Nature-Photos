@@ -369,41 +369,55 @@ function updateLayout() {
 }   
 */
 
+function rotateImage(img) {
+  return img.animate(
+    [
+      { transform: "rotate(0deg)" },
+      { transform: "rotate(360deg)" }
+    ],
+    {
+      duration: 1500,
+      easing: "ease-out",
+      iterations: 1
+    }
+  ).finished;
+}
+
 async function updateLayout() {
   const width = window.innerWidth;
-  const imgs = [...document.querySelectorAll("#gallery img")];
+  const imgs = document.querySelectorAll("#gallery img");
   const gallery = document.getElementById("gallery");
 
   gallery.classList.remove("fullscreen");
   gallery.style.display = "flex";
   gallery.style.flexWrap = "wrap";
 
-  // Wait for all images to load
-  await Promise.all(
-    imgs.map(img =>
-      img.complete
-        ? Promise.resolve()
-        : new Promise(resolve => {
-            img.onload = resolve;
-            img.onerror = resolve;
-          })
-    )
-  );
-
-  // Rotate one at a time
   for (const img of imgs) {
 
+    // Apply layout styles
     img.style.display = "block";
     img.style.height = "auto";
     img.style.margin = "5px";
-    img.style.boxShadow = "0 4px 12px rgba(0,0,0,0.9)";
+    img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
 
     if (width <= 768) {
       img.style.width = "calc(100% - 20px)";
+      img.style.borderRadius = "0.3%";
     } else {
       img.style.width = "calc(25% - 20px)";
+      img.style.borderRadius = "0.6%";
+      img.style.opacity = "1";
     }
 
+    // Wait for this image to load
+    if (!img.complete) {
+      await new Promise(resolve => {
+        img.onload = resolve;
+        img.onerror = resolve;
+      });
+    }
+
+    // Rotate this image
     await rotateImage(img);
   }
 }
