@@ -432,7 +432,8 @@ async function loadImagesSequentially() {
     rotateImage(img);  // don't await
     await new Promise(resolve => setTimeout(resolve, 150))
   }
-  
+}); 
+
 function updateLayout() {
   const width = window.innerWidth;
   const imgs = document.querySelectorAll("#gallery img");
