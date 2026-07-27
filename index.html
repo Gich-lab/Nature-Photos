@@ -459,12 +459,9 @@ function updateLayout() {
   });
 }
  
-window.addEventListener("load", async () => {
-    const hasUpdate = await fetchLatestCommitSha();
-    if (hasUpdate) {
-        await loadImagesSequentially();
-    }
-});
+window.addEventListener('load', fetchLatestCommitSha); 
+  with window.addEventListener("load", async () => {
+    await loadImagesSequentially();
 
 window.addEventListener("resize", updateLayout);  
   
