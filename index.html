@@ -220,7 +220,6 @@ window.addEventListener('load', fetchLatestCommitSha);
 const gallery = document.getElementById("gallery");
 const maxPhotos = 100; // update to reflect current number of photos
 
-/*
 // Generate images
 for(let i=1; i<=maxPhotos; i++){
   const img = document.createElement("img");
@@ -229,27 +228,12 @@ for(let i=1; i<=maxPhotos; i++){
   img.src = "images/photo"+i+".jpg"; 
   //img.setAttribute('width', '1920');
   //img.setAttribute('height', '1080');
+  img.style.visibility = "hidden";
   img.style.width = "calc(25% - 20px)";
   img.style.height = "auto";
   img.onerror = function() { this.remove(); }
   gallery.appendChild(img);
 }  
-*/
-
-// Generate images
-for (let i = 1; i <= maxPhotos; i++) {
-    const img = document.createElement("img");
-    img.setAttribute("loading", "lazy");
-    // Hide initially
-    img.style.visibility = "hidden";
-    img.style.width = "calc(25% - 20px)";
-    img.style.height = "auto";
-    img.onerror = function () {
-        this.remove();
-    };
-    img.src = `images/photo${i}.jpg`;
-    gallery.appendChild(img);
-}
   
 // Lightbox elements
 const lightbox = document.getElementById("lightbox");
