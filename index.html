@@ -124,12 +124,12 @@ function fetchLatestCommitSha() {
         // New commit detected, update storedSha
         localStorage.setItem('storedSha', latestCommitSha);
         loadGA();
-        await loadImagesSequentially();
       }
-
+      await loadImagesSequentially();
+      /*
       // Proceed to load or update images
       window.addEventListener('load', () => {
-        waitForImagesOrTimeout(document.querySelectorAll('img'));
+        waitForImagesOrTimeout(document.querySelectorAll('img'));*/
       });
     });
 }
