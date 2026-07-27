@@ -459,7 +459,10 @@ function updateLayout() {
 }
  
 window.addEventListener("load", async () => {
-  await loadImagesSequentially();
+  const webPageUpdated = await fetchLatestCommitSha();
+  if(webPageUpdated) {
+    await loadImagesSequentially();
+  }
 });
 
 window.addEventListener("resize", updateLayout);  
