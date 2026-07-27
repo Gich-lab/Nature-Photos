@@ -459,16 +459,10 @@ function updateLayout() {
   });
 }
 
-window.addEventListener("load", async () => {
-  if (!isPageReloaded()) {
-    await loadImagesSequentially();
-  }
-});
-  
-/*
+
 window.addEventListener("load", async () => {
   await loadImagesSequentially();
-});*/
+});
 
 window.addEventListener("resize", updateLayout);
  
