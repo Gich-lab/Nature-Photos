@@ -226,8 +226,10 @@ for(let i=1; i<=maxPhotos; i++){
   img.setAttribute('loading', 'lazy');
  
   img.src = "images/photo"+i+".jpg"; 
-  img.setAttribute('width', '1920');
-  img.setAttribute('height', '1080');
+  //img.setAttribute('width', '1920');
+  //img.setAttribute('height', '1080');
+  img.style.width = "calc(25% - 20px)";
+  img.style.height = "auto";
   img.onerror = function() { this.remove(); }
   gallery.appendChild(img);
 }  
