@@ -124,6 +124,7 @@ function fetchLatestCommitSha() {
         // New commit detected, update storedSha
         localStorage.setItem('storedSha', latestCommitSha);
         //loadGA();
+        setTimeout(loadGA, 9000); //added some delay 
       }
      
       // Proceed to load or update images
