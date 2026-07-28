@@ -117,14 +117,15 @@ function fetchLatestCommitSha() {
         triggerCascade(headerText, headerText.textContent, 6, false);
         setTimeout(() => {
           triggerCascade(headerText, originalText);}, 8000);
-        //return; // stop reload
+        // Images already exist, just show them
+          document.getElementById("gallery").style.display = "flex";
+        return; // stop reload
       } else if (latestCommitSha !== storedSha) {
         // Start cascade effect on the header text displaying the title or message
         triggerCascade(headerText, originalText);
         // New commit detected, update storedSha
         localStorage.setItem('storedSha', latestCommitSha);
         loadGA();
-        await loadImagesSequentially();
         //setTimeout(loadGA, 9000); //added some delay 
       }
      
@@ -461,11 +462,10 @@ function updateLayout() {
   });
 }
 
-/*
 window.addEventListener("load", async () => {
   await loadImagesSequentially();
 });
-*/
+
 window.addEventListener("resize", updateLayout);
  
 // Call updateLayout after images are loaded
