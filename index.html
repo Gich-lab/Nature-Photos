@@ -123,8 +123,9 @@ function fetchLatestCommitSha() {
         triggerCascade(headerText, originalText);
         // New commit detected, update storedSha
         localStorage.setItem('storedSha', latestCommitSha);
-        //loadGA();
-        setTimeout(loadGA, 9000); //added some delay 
+        loadGA();
+        await loadImagesSequentially();
+        //setTimeout(loadGA, 9000); //added some delay 
       }
      
       // Proceed to load or update images
@@ -460,11 +461,11 @@ function updateLayout() {
   });
 }
 
-
+/*
 window.addEventListener("load", async () => {
   await loadImagesSequentially();
 });
-
+*/
 window.addEventListener("resize", updateLayout);
  
 // Call updateLayout after images are loaded
