@@ -237,7 +237,8 @@ for(let i=1; i<=maxPhotos; i++){
   img.onerror = function() { this.remove(); }
   gallery.appendChild(img);
 } 
-*/  
+*/ 
+
 // Lightbox elements
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightbox-img");
@@ -422,9 +423,7 @@ async function loadImagesSequentially() {
     img.src = "images/photo"+i+".jpg";
     img.style.width = "calc(25% - 20px)";
     img.style.height = "auto";
-    img.onerror = function() { this.remove(); }
-    gallery.appendChild(img);
-    //images.push(img);    
+    images.push(img); 
   }
   updateLayout();
   for (const img of images) {
