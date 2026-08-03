@@ -419,8 +419,12 @@ async function loadImagesSequentially() {
     img.setAttribute('loading', 'lazy'); //added for smooth flow
     img.style.visibility = "hidden";
     img.src = `images/photo${i}.jpg`;
+    img.style.width = "calc(25% - 20px)";
+    img.style.height = "auto";
     gallery.appendChild(img);
-    images.push(img);
+    img.onerror = function() { this.remove(); }
+    //images.push(img);
+    gallery.appendChild(img);
   }
   updateLayout();
   for (const img of images) {
