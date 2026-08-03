@@ -418,13 +418,13 @@ async function loadImagesSequentially() {
     const img = document.createElement("img");
     img.setAttribute('loading', 'lazy'); //added for smooth flow
     img.style.visibility = "hidden";
-    img.src = `images/photo${i}.jpg`;
+    //img.src = `images/photo${i}.jpg`;
+    img.src = "images/photo"+i+".jpg";
     img.style.width = "calc(25% - 20px)";
     img.style.height = "auto";
+    img.onerror = function() { this.remove(); }
     gallery.appendChild(img);
-    //img.onerror = function() { this.remove(); }
-    images.push(img);
-    
+    //images.push(img);    
   }
   updateLayout();
   for (const img of images) {
