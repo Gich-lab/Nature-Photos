@@ -102,6 +102,7 @@ function fetchLatestCommitSha() {
 
       const headerText = document.getElementById("header-text");
       const originalText = headerText.textContent;
+      headerText.style.visibility = "visible";
 
       // use a sessionKey to limit writing to google sheet multiple times through webpage refresh
       const pageSessionKey = 'pageSessionId';
