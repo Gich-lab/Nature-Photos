@@ -223,7 +223,6 @@ window.addEventListener('load', fetchLatestCommitSha);
 const gallery = document.getElementById("gallery");
 const maxPhotos = 100; // update to reflect current number of photos
 
-
 // Generate images
 for(let i=1; i<=maxPhotos; i++){
   const img = document.createElement("img");
@@ -236,8 +235,8 @@ for(let i=1; i<=maxPhotos; i++){
   img.style.height = "auto";
   img.onerror = function() { this.remove(); }
   gallery.appendChild(img);
-}  
- 
+} 
+  
 // Lightbox elements
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightbox-img");
