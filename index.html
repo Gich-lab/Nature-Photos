@@ -410,12 +410,13 @@ async function loadImagesSequentially() {
   }
 }
 */
-
+  
 async function loadImagesSequentially() {
   const gallery = document.getElementById("gallery");
   const images = [];
   for (let i = 1; i <= maxPhotos; i++) {
     const img = document.createElement("img");
+    img.setAttribute('loading', 'lazy'); //added for smooth flow
     img.style.visibility = "hidden";
     img.src = `images/photo${i}.jpg`;
     gallery.appendChild(img);
