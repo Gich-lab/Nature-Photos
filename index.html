@@ -453,7 +453,8 @@ async function loadImagesSequentially() {
     gallery.appendChild(img);
     updateLayout();
     img.style.visibility = "visible";
-    await rotateImage(img);
+    rotateImage(img);//faster 
+    //await rotateImage(img);
     // Optional delay between images
     await new Promise(resolve => setTimeout(resolve, 20));
   }
