@@ -417,8 +417,8 @@ async function loadImagesSequentially() {
   const images = [];
   for (let i = 1; i <= maxPhotos; i++) {
     const img = document.createElement("img");
-    img.setAttribute('loading', 'lazy'); //added for smooth flow
-    img.style.visibility = "hidden";
+    //img.setAttribute('loading', 'lazy'); //added for smooth flow
+    img.style.visibility = "visible";//hidden
     img.src = 'images/photo${i}.jpg';
     img.style.width = "calc(25% - 20px)";
     img.style.height = "auto";
