@@ -411,7 +411,37 @@ async function loadImagesSequentially() {
   }
 }
 */
-  
+
+async function loadImagesSequentially() {
+  const gallery = document.getElementById("gallery");
+  for (let i = 1; i <= maxPhotos; i++) {
+    const img = document.createElement("img");
+    img.style.visibility = "hidden";
+    img.src = `images/photo${i}.jpg`;
+
+    img.onerror = function () {
+      this.remove();
+    };
+
+    // Wait until image loads
+    await new Promise(resolve => {
+      img.onload = resolve;
+      img.onerror = resolve;
+    });
+
+    // Add only after loaded
+    gallery.appendChild(img);
+    updateLayout();
+    img.style.visibility = "visible";
+    await rotateImage(img);
+    // Optional delay between images
+    await new Promise(resolve => setTimeout(resolve, 150));
+  }
+  // Refresh image collection for lightbox
+  images = document.querySelectorAll("#gallery img");
+}  
+
+/*
 async function loadImagesSequentially() {
   const gallery = document.getElementById("gallery");
   const images = [];
@@ -420,10 +450,11 @@ async function loadImagesSequentially() {
     //img.setAttribute('loading', 'lazy'); //added for smooth flow
     img.style.visibility = "visible";
     img.src = "images/photo"+i+".jpg"; 
-    img.style.width = "calc(25% - 20px)";
-    img.style.height = "auto";
-    gallery.appendChild(img);
-    images.push(img); 
+    img.onerror = function () {this.remove();};
+    //img.style.width = "calc(25% - 20px)";
+    //img.style.height = "auto";
+    //gallery.appendChild(img);
+    //images.push(img); 
   }
   updateLayout();
   for (const img of images) {
@@ -437,8 +468,9 @@ async function loadImagesSequentially() {
     rotateImage(img);
     await new Promise(resolve => setTimeout(resolve, 150));
   }
+  images = document.querySelectorAll("#gallery img"); //refresh images for lightbox
 } 
-
+*/
 function updateLayout() {
   const width = window.innerWidth;
   const imgs = document.querySelectorAll("#gallery img");
