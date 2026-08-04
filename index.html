@@ -433,18 +433,6 @@ async function loadImagesSequentially() {
 */
 
 async function loadImagesSequentially() {
-  for (let i = 1; i <= maxPhotos; i++) {
-    const img = document.createElement("img");
-    img.src = `images/photo${i}.jpg`;
-    gallery.appendChild(img);
-    rotateImage(img);
-    await new Promise(resolve => setTimeout(resolve, 20));
-  }
-  updateLayout();
-}
-  
-/*
-async function loadImagesSequentially() {
   const gallery = document.getElementById("gallery");
   for (let i = 1; i <= maxPhotos; i++) {
     const img = document.createElement("img");
@@ -467,12 +455,12 @@ async function loadImagesSequentially() {
     img.style.visibility = "visible";
     await rotateImage(img);
     // Optional delay between images
-    await new Promise(resolve => setTimeout(resolve, 50));
+    await new Promise(resolve => setTimeout(resolve, 20));
   }
   // Refresh image collection for lightbox
   images = document.querySelectorAll("#gallery img");//refresh images for lightbox
 }  
-*/
+  
 function updateLayout() {
   const width = window.innerWidth;
   const imgs = document.querySelectorAll("#gallery img");
