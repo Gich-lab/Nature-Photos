@@ -418,12 +418,12 @@ async function loadImagesSequentially() {
   for (let i = 1; i <= maxPhotos; i++) {
     const img = document.createElement("img");
     //img.setAttribute('loading', 'lazy'); //added for smooth flow
-    img.style.visibility = "hidden";//"visible";
+    img.style.visibility = "visible";
     img.src = "images/photo"+i+".jpg"; 
     img.style.width = "calc(25% - 20px)";
     img.style.height = "auto";
     gallery.appendChild(img);
-    //images.push(img); 
+    images.push(img); 
   }
   updateLayout();
   for (const img of images) {
