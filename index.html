@@ -456,7 +456,7 @@ async function loadImagesSequentially() {
     //rotateImage(img);//faster 
     await rotateImage(img);
     // Optional delay between images
-    await new Promise(resolve => setTimeout(resolve, 20));
+    await new Promise(resolve => setTimeout(resolve, 10));
   }
   // Refresh image collection for lightbox
   images = document.querySelectorAll("#gallery img");//refresh images for lightbox
