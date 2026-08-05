@@ -64,11 +64,15 @@ img {
 
 .footer {
     position: fixed;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: 0;
+    left: 0;
+    width: 100%;
 
+    text-align: center;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.7);
     color: white;
+
     z-index: 1000;
 }
 
