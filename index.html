@@ -210,9 +210,7 @@ window.addEventListener('load', fetchLatestCommitSha);
   </script>
 </body>
   
-<!-- <header>Nature Photos Gallery</header> -->  
 <div id="gallery" class="gallery"></div>
-<!-- Lightbox elements -->
 <div id="lightbox" class="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:9999;">
   <img id="lightbox-img" src="" alt="Enlarged image" style="max-width:90%; max-height:90%; object-fit:contain;">
   <button class="prev" style="position:absolute; top:50%; left:20px;">Prev</button>
@@ -262,23 +260,6 @@ gallery.addEventListener("click", (e) => {
   lightbox.style.display = "flex";
   showImage(currentIndex);
 });
-
-  
-/*
-// Show image in lightbox
-function showImage(index){
-  currentIndex = index;
-  lightboxImg.src = images[index].src;
-}
-
-// Add click event to images
-images.forEach((img, index) => {
-  img.addEventListener("click", () => {
-    lightbox.style.display = "flex";
-    showImage(index);
-  });
-});
-*/
 
 // Navigation buttons
 document.querySelector(".next").onclick = () => {
@@ -357,46 +338,6 @@ function sendVisitorData() {
   });
 }
 
-/*
-// Responsive layout function -basic
-function updateLayout() {
-  const width = window.innerWidth;
-  const imgs = document.querySelectorAll("#gallery img");
-  const gallery = document.getElementById("gallery");
-  
-  if (width <= 768) {
-    // Mobile: grid of images
-    gallery.classList.remove("fullscreen");
-    gallery.style.display = "flex";
-    gallery.style.flexWrap = "wrap";
-
-    imgs.forEach(img => {
-      img.style.display = "block"; 
-      img.style.width = "calc(100% - 20px)"; // one per row on mobile devices
-      img.style.height = "auto";
-      img.style.margin = "5px"; // optional spacing
-      img.style = "border-radius: 0.3%; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);"; // border rounding and shadow for 3D effect
-    });
-    
-  } else {
-    // Set images to occupy 22% width to fit 4 per row with gaps
-    gallery.classList.remove("fullscreen");
-    gallery.style.display = "flex";
-    gallery.style.flexWrap = "wrap";
-    imgs.forEach((img) => {
-      img.style.opacity = 1; // fade in
-      img.style.display = "block"; // Show all images
-      img.style.width = "calc(25% - 20px)"; // Four per row on desktop
-      img.style.height = "auto";
-      img.style.margin = "5px"; // optional spacing
-      img.style.borderRadius = "0.6%";//"0.3%"; // border radius
-      img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)"; // box shadow
-    });
-  }
-}   
-*/
-
-
 function rotateImage(img) {
   return img.animate(
     [
@@ -410,27 +351,6 @@ function rotateImage(img) {
     }
   ).finished;
 }
-
-/*
-async function loadImagesSequentially() {
-  for (let i = 1; i <= maxPhotos; i++) {
-    const img = document.createElement("img");
-    img.style.visibility = "hidden";
-    img.onerror = function () {
-      this.remove();
-    };
-    img.src = `images/photo${i}.jpg`;
-    await new Promise(resolve => {
-      img.onload = resolve;
-      img.onerror = resolve;
-    });
-    gallery.appendChild(img);
-    updateLayout();
-    img.style.visibility = "visible";
-    await rotateImage(img);
-  }
-}
-*/
 
 async function loadImagesSequentially() {
   const gallery = document.getElementById("gallery");
@@ -488,28 +408,17 @@ function updateLayout() {
   });
 }
 
-  
 window.addEventListener("load", async () => {
   await loadImagesSequentially();
 });
   
 window.addEventListener("resize", updateLayout);
  
-// Call updateLayout after images are loaded
-// window.addEventListener("load", updateLayout);
-// Run layout update on load and resize
-/*window.addEventListener("load", () => {
-  updateLayout();
-  //Initialize currentIndex for desktop mode
-  currentIndex = 0;
-});
-
-window.addEventListener("resize", updateLayout);
- */
 </script>
     <footer>
       <p class="footer" style="text-align: center;">
-        &copy; 2026 Gichuki. All rights reserved.
+        &copy; <span id="year"></span> 2026 Gichuki. All rights reserved.
+        <!--&copy; 2026 Gichuki. All rights reserved.-->
         <a href="mailto:kenngich@proton.me" style="text-decoration: none !important;">✉️</a> E-mail
       </p>
     <!--
