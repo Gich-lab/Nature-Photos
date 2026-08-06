@@ -117,13 +117,11 @@ function fetchLatestCommitSha() {
         headerText.textContent = "Hamna picha mpya";//"No updates found";
         triggerCascade(headerText, headerText.textContent, 6, false);
         setTimeout(() => {
-          cycleHeaders();
-          //triggerCascade(headerText, originalText);}, 8000);
+          triggerCascade(headerText, originalText);}, 8000);
         //return; // stop reload
       } else if (latestCommitSha !== storedSha) {
         // Start cascade effect on the header text displaying the title or message
-        cycleHeaders();
-        //triggerCascade(headerText, originalText);
+        triggerCascade(headerText, originalText);
         // New commit detected, update storedSha
         localStorage.setItem('storedSha', latestCommitSha);
         loadGA();
@@ -190,59 +188,6 @@ window.addEventListener('load', fetchLatestCommitSha);
   </style>
 
   <script>
-  const headerText = document.getElementById("header-text");
-  const headerLines = [
-    "Waste less, wonder more!",
-    "Think green, act cleaner!",
-    "Protect what sustains you!",
-    "Less waste, more world!"
-  ];
-
-  function triggerCascade(element, text, totalDuration = 2) {
-      return new Promise(resolve => {
-          element.style.visibility = "visible";
-          element.innerHTML = "";
-
-          const delayIncrement = totalDuration / text.length;
-          let lastSpan = null;
-          for (let i = 0; i < text.length; i++) {
-              const span = document.createElement("span");
-              span.innerHTML =
-                  text[i] === " " ? "&nbsp;" : text[i];
-              span.style.setProperty(
-                  "--delay",
-                  `${i * delayIncrement}s`
-              );
-              element.appendChild(span);
-              lastSpan = span;
-          }
-          if (lastSpan) {
-              lastSpan.addEventListener(
-                  "animationend",
-                  () => resolve(),
-                  { once: true }
-              );
-          } else {
-              resolve();
-          }
-      });
-  }
-      
-  async function cycleHeaders() {
-      let index = 0;
-      while (true) {
-          await triggerCascade(
-              headerText,
-              headerLines[index]
-          );
-          await new Promise(resolve =>
-              setTimeout(resolve, 1500)
-          );
-          index = (index + 1) % headerLines.length;
-      }
-  }
-    
-    /*
     function triggerCascade(element, text, totalDuration = 6, loop = true) {
       // Stop any previous animation loop on this element
       clearTimeout(element.cascadeTimer);
@@ -262,7 +207,6 @@ window.addEventListener('load', fetchLatestCommitSha);
       }
       animate();
     }
-    */
   </script>
 </body>
   
