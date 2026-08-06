@@ -118,6 +118,11 @@ function fetchLatestCommitSha() {
       const originalText = headerText.textContent;
       headerText.style.visibility = "visible";
 
+      const texts = [ "Waste less, wonder more!",
+                      "Think green, act cleaner!",
+                      "Leaf it better, humans!",
+                      "Less waste, more world!"];
+
       // use a sessionKey to limit writing to google sheet multiple times through webpage refresh
       const pageSessionKey = 'pageSessionId';
       if (!sessionStorage.getItem(pageSessionKey)) {
@@ -131,14 +136,11 @@ function fetchLatestCommitSha() {
         headerText.textContent = "Hamna picha mpya";//"No updates found";
         triggerCascade(headerText, headerText.textContent, 6, false);
         setTimeout(() => {
-          triggerCascade(headerText, originalText);}, 8000);
+          triggerCascade(headerText, texts);}, 8000); //originalText
         //return; // stop reload
       } else if (latestCommitSha !== storedSha) {
-        const texts = [ "Waste less, wonder more!",
-                      "Think green, act cleaner!",
-                      "Leaf it better, humans!",
-                      "Less waste, more world!"];
-        cycleHeaderText(headerText, texts, 2000);
+        triggerCascade(headerText, texts, 2000);
+        //cycleHeaderText(headerText, texts, 2000);
         // Start cascade effect on the header text displaying the title or message
         //triggerCascade(headerText, originalText);
         // New commit detected, update storedSha
