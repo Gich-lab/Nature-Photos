@@ -30,7 +30,7 @@
 
 <body>
   <header class="main-header" id="header">
-    <span class="cascade-text" id="header-text" style="visibility: hidden;">Think green, act cleaner!</span>
+    <span class="cascade-text" id="header-text" style="visibility: hidden;"></span>
   </header>
 
   <!-- images loading -->
@@ -71,6 +71,20 @@
       });
     });
   }
+
+//cycle multiple lines on the headertext
+function cycleHeaderText(element, texts, delay) {
+  let index = 0;
+
+  function showNextText() {
+    if (index < texts.length) {
+      element.textContent = texts[index];
+      index++;
+      setTimeout(showNextText, delay);
+    }
+  }
+  showNextText(); // start the cycle
+}
 
 // Function that loads Google Analytics
 function loadGA() {
@@ -120,8 +134,13 @@ function fetchLatestCommitSha() {
           triggerCascade(headerText, originalText);}, 8000);
         //return; // stop reload
       } else if (latestCommitSha !== storedSha) {
+        cost texts = [ "Waste less, wonder more!",
+                      "Think green, act cleaner!",
+                      "Leaf it better, humans!,
+                      "Less waste, more world!]
+        cycleHeaderText(headerText, texts, 2000);
         // Start cascade effect on the header text displaying the title or message
-        triggerCascade(headerText, originalText);
+        //triggerCascade(headerText, originalText);
         // New commit detected, update storedSha
         localStorage.setItem('storedSha', latestCommitSha);
         loadGA();
