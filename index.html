@@ -153,10 +153,7 @@ function fetchLatestCommitSha() {
           //triggerCascade(headerText, texts);}, 8000); //originalText
         //return; // stop reload
       } else if (latestCommitSha !== storedSha) {
-        setTimeout(cycleHeaderText, 15000);
-        //cycleHeaderText();
-        //triggerCascade(headerText, texts, 2000);
-        //cycleHeaderText(headerText, texts, 2000);
+        cycleHeaderText();
         // Start cascade effect on the header text displaying the title or message
         //triggerCascade(headerText, originalText);
         // New commit detected, update storedSha
