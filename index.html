@@ -117,11 +117,14 @@ function fetchLatestCommitSha() {
         headerText.textContent = "Hamna picha mpya";//"No updates found";
         triggerCascade(headerText, headerText.textContent, 6, false);
         setTimeout(() => {
-          triggerCascade(headerText, originalText);}, 8000);
+          //cycleHeaders();
+          triggerCascade(headerText,  cycleHeaders());});
+          //triggerCascade(headerText, originalText);}, 8000);
         //return; // stop reload
       } else if (latestCommitSha !== storedSha) {
         // Start cascade effect on the header text displaying the title or message
-        triggerCascade(headerText, originalText);
+        triggerCascade(headerText, cycleHeaders());
+        //triggerCascade(headerText, originalText);
         // New commit detected, update storedSha
         localStorage.setItem('storedSha', latestCommitSha);
         loadGA();
@@ -189,11 +192,10 @@ window.addEventListener('load', fetchLatestCommitSha);
 
   <script>
   const headerText = document.getElementById("header-text");
-
   const headerLines = [
-    "Waste less, wonder more!";
-    "Think green, act cleaner!";
-    "Protect what sustains you!";
+    "Waste less, wonder more!",
+    "Think green, act cleaner!",
+    "Protect what sustains you!",
     "Less waste, more world!"
   ];
 
@@ -226,8 +228,7 @@ window.addEventListener('load', fetchLatestCommitSha);
           }
       });
   }
-  cycleHeaders();
-    
+      
   async function cycleHeaders() {
       let index = 0;
       while (true) {
