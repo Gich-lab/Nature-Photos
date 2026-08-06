@@ -417,6 +417,8 @@ async function loadImagesSequentially() {
   }
   // Refresh image collection for lightbox
   images = document.querySelectorAll("#gallery img");//refresh images for lightbox
+  // Show footer when finished
+  document.getElementById("footerText").style.opacity = "1";
 }  
   
 function updateLayout() {
@@ -453,7 +455,7 @@ window.addEventListener("resize", updateLayout);
  
 </script>
     <footer>
-      <p class="footer" style="text-align: center;">
+      <p class="footer" style="text-align: center; opacity:0; transition:opacity 1s;">
         &copy; <span id="year"></span> 2026 Gichuki. All rights reserved.
         <!--&copy; 2026 Gichuki. All rights reserved.-->
         <a href="mailto:kenngich@proton.me" style="text-decoration: none !important;">✉️</a> E-mail
