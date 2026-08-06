@@ -130,7 +130,7 @@ function fetchLatestCommitSha() {
       function cycleHeaderText() {
         triggerCascade(headerText, texts[currentText]);
         currentText = (currentText + 1) % texts.length;
-        setTimeout(cycleHeaderText, 15000) // 15sec text display
+        setTimeout(cycleHeaderText, 8000) // 8sec text display
       }
 
       // use a sessionKey to limit writing to google sheet multiple times through webpage refresh
@@ -145,12 +145,13 @@ function fetchLatestCommitSha() {
         // Show message only on reload if no update
         headerText.textContent = "Hamna picha mpya";//"No updates found";
         triggerCascade(headerText, headerText.textContent, 6, false);
-        setTimeout(cycleHeaderText, 8000);
+        setTimeout(cycleHeaderText, 15000); //15sec text lingering duration
         //setTimeout(() => {
           //triggerCascade(headerText, texts);}, 8000); //originalText
         //return; // stop reload
       } else if (latestCommitSha !== storedSha) {
-        cycleHeaderText();
+        setTimeout(cycleHeaderText, 15000);
+        //cycleHeaderText();
         //triggerCascade(headerText, texts, 2000);
         //cycleHeaderText(headerText, texts, 2000);
         // Start cascade effect on the header text displaying the title or message
