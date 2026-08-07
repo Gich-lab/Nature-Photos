@@ -62,6 +62,20 @@ img {
   to { transform: rotate(360deg); }
 }
 
+.main-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    color: green;
+    font-weight: bold;
+    font-size: 2em;
+    text-align: center;
+    padding: 10px 0;
+    background: transparent;
+    pointer-events: none; /* clicks pass through */
+}
+
 .footer {
     position: fixed;
     bottom: 0;
