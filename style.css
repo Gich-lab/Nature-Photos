@@ -36,7 +36,7 @@ img {
   gap: 20px; /*adds spacing between images*/
   padding-top: 0;
   padding-right: 20px;
-  padding-bottom: 20px;
+  padding-bottom: 0;
   padding-left: 20px;
   max-width: 100%;
   box-sizing: border-box;
