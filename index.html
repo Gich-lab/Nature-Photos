@@ -71,7 +71,7 @@
         }
       
         .cascade-text {
-          display: inline-block;
+          display: block; /*inline-block;*/
           /* Animate fade out to create looping effect */
           animation: cascadeLoop 12s infinite;
         }
@@ -79,7 +79,7 @@
         /* Style each character span */
         .cascade-text span {
           opacity: 0;
-          display: inline-block;
+          display: block; /*inline-block;*/
           transform: translateY(20px);
           /*box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8); web title transition shadow*/
           animation: cascadeIn 1.2s forwards;
