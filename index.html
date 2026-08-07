@@ -4,27 +4,27 @@
   <link rel="icon" href="tab-icon.ico" type="image/x-icon" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  styles.css
 </head>
 <body>
-
-<head>
-  <style>
-
-  </style>
-</head>
-
 <!-- more efficient heading but less appealing 
 <body>
   <header class="main-header" style="font-style: italic; font-family: Times New Roman;">Nature Photos Gallery</header>
 </body>    
 -->
-
-<body>
   <header class="main-header" id="header">
     <span class="cascade-text" id="header-text" style="visibility: hidden;"></span>
   </header>
+<main>
+  
+</main>
+<div id="gallery" class="gallery"></div>
+<div id="lightbox" class="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:9999;">
+  <img id="lightbox-img" src="" alt="Enlarged image" style="max-width:90%; max-height:90%; object-fit:contain;">
+  <button class="prev" style="position:absolute; top:50%; left:20px;">Prev</button>
+  <button class="next" style="position:absolute; top:50%; right:20px;">Next</button>
+</div>
 
+  
   <!-- images loading -->
 <script>
   // Waits for all images to load or timeout
@@ -189,54 +189,6 @@ window.addEventListener('load', fetchLatestCommitSha);
   });
 </script>
 
-</body>  
-  <style>
-    .main-header {
-      font-family: "Times New Roman", serif;
-      font-style: italic;
-      text-align: center;
-      font-size: 2em;
-      padding: 0;
-    }
-
-    .cascade-text {
-      display: inline-block;
-      /* Animate fade out to create looping effect */
-      animation: cascadeLoop 12s infinite;
-    }
-
-    /* Style each character span */
-    .cascade-text span {
-      opacity: 0;
-      display: inline-block;
-      transform: translateY(20px);
-      /*box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8); web title transition shadow*/
-      animation: cascadeIn 1.2s forwards;
-      /* Use CSS variable for delay */
-      --delay: 0s;
-      animation-delay: var(--delay);
-    }
-
-    @keyframes cascadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes cascadeLoop {
-      0%, 99.9% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 0;
-      }
-    }
-  </style>
 
   <script>
     function triggerCascade(element, text, totalDuration = 6, loop = true) {
@@ -259,14 +211,6 @@ window.addEventListener('load', fetchLatestCommitSha);
       animate();
     }
   </script>
-  
-<div id="gallery" class="gallery"></div>
-<div id="lightbox" class="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:9999;">
-  <img id="lightbox-img" src="" alt="Enlarged image" style="max-width:90%; max-height:90%; object-fit:contain;">
-  <button class="prev" style="position:absolute; top:50%; left:20px;">Prev</button>
-  <button class="next" style="position:absolute; top:50%; right:20px;">Next</button>
-</div>
-</body>
   
 <script>   
 const gallery = document.getElementById("gallery");
