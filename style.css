@@ -4,6 +4,13 @@
   overflow-wrap: break-word;
 }
 
+#gallery {display:flex;flex-wrap:wrap;gap:10px;}
+
+  /* Full-screen styles for desktop view */
+#gallery.fullscreen img {width:100vw !important;height:100vh !important;object-fit:contain;}
+.blur-img {filter: blur(4px); transition: filter 0.3s ease;}
+.main-header {color: green;font-weight: bold;font-size: 2em;text-align: center;margin-top: 20px;}
+
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
