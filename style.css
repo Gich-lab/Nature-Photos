@@ -39,6 +39,7 @@ img {
   box-sizing: border-box;
   opacity: 1;
   transition: opacity 0.5s ease;
+  background: rgba(0,0,255,0.2);
 }
 
 #gallery.fullscreen img {
