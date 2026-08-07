@@ -54,8 +54,7 @@
         console.log(document.getElementById("header").offsetHeight); 
       
         #gallery {
-          margin: 0;
-          padding: 0 20px 20px 20px;
+          margin-top: 0;
         }
       
         .cascade-text {
@@ -473,6 +472,16 @@
     });
       
     window.addEventListener("resize", updateLayout);
+
+    function adjustGalleryPosition() {
+      const header = document.getElementById("header");
+      const gallery = document.getElementById("gallery");
+
+      gallery.style.marginTop = header.offsetHeight + "px";
+    }
+
+    window.addEventListener("load", adjustGalleryPosition);
+    window.addEventListener("resize", adjustGalleryPosition);
   
   </script>
 </body>
