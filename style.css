@@ -76,7 +76,8 @@ img {
     text-align: center;
     padding: 10px 0;
     background: transparent;
-    pointer-events: none; /* clicks pass through */
+    backdrop-filter: blur(4px);
+    /*pointer-events: none;  clicks pass through */
 }
 
 .footer {
