@@ -94,13 +94,13 @@ img {
 }
 
 
-    .cascade-text {
-      display: inline-block;
-      /* Animate fade out to create looping effect */
-      animation: cascadeLoop 12s infinite;
-    }
+.cascade-text {
+  display: inline-block;
+  /* Animate fade out to create looping effect */
+  animation: cascadeLoop 12s infinite;
+}
 
-    /* Style each character span */
+/* Style each character span */
 .cascade-text span {
   opacity: 0;
   display: inline-block;
