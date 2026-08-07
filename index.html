@@ -172,6 +172,28 @@ function fetchLatestCommitSha() {
 // Run on page load
 window.addEventListener('load', fetchLatestCommitSha);
 </script>
+
+<script>
+  //pin the header text at the top of the webpage
+  const header = document.getElementById('header');
+  const images = document.querySelectorAll('#gallery img');
+
+  window.addEventListener('scroll', () => {
+    const headerBottom = header.offsetTop + header.offsetHeight;
+
+    images.forEach(img => {
+      const rect = img.getBoundingClientRect();
+      const imgTop = rect.top + window.scrollY;
+
+      if (imgTop < headerBottom) {
+        img.classList.add('blur-img');
+      } else {
+        img.classList.remove('blur-img');
+      }
+    });
+  });
+</script>
+
 </body>  
   <style>
     .main-header {
