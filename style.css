@@ -89,24 +89,6 @@ img {
   border-radius: 10px;
 }
 
-.cascade-text {
-  display: inline-block;
-  /* Animate fade out to create looping effect */
-  animation: cascadeLoop 12s infinite;
-}
-
-/* Style each character span */
-.cascade-text span {
-  opacity: 0;
-  display: inline-block;
-  transform: translateY(20px);
-  /*box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8); web title transition shadow*/
-  animation: cascadeIn 1.2s forwards;
-  /* Use CSS variable for delay */
-  --delay: 0s;
-  animation-delay: var(--delay);
-}
-
 /*defines the animation sequence*/
 @keyframes rotateOnce {
   from { transform: rotate(0deg); }
@@ -150,7 +132,3 @@ img {
     z-index: 1000;
 }
 
-.cascade-text span {
-    opacity: 1 !important;
-    color: red !important;
-}
