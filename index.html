@@ -11,7 +11,9 @@
 </head>
 <body>
     <header class="main-header" id="header">
-      <span class="cascade-text" id="header-text" style="visibility: hidden;"></span>
+      <div class="header-inner">
+        <span class="cascade-text" id="header-text" style="visibility: hidden;"></span>     
+      </div>
     </header>
     <main>
       <div id="gallery" class="gallery"></div>
@@ -50,9 +52,7 @@
 
         #gallery {border: 2px solid blue;
         }
-      
-        console.log(document.getElementById("header").offsetHeight); 
-      
+            
         #gallery {
           margin-top: 0;
         }
