@@ -66,19 +66,25 @@ img {
 }
 
 .main-header {
-    position: fixed;
-    top: 10px;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0;
     width: 100%;
-    z-index: 1000;
+
+    z-index: 99999;
+
     color: green;
     font-weight: bold;
     font-size: 2em;
     text-align: center;
+
     padding: 10px 0;
-    background: transparent;
+    margin: 0;
+
+    background: rgba(255,255,255,0.7);
     backdrop-filter: blur(4px);
-    /*pointer-events: none;  clicks pass through */
 }
+
 
 .footer {
     position: fixed;
