@@ -37,7 +37,7 @@
           margin: 0;
           right: 20px;
           left: 12px; /*left: 0;*/
-          width: calc(100% - 20px);
+          width: calc(100% - 32px);
           z-index: 99999;
           color: green;
           font-family: "Times New Roman", serif;
@@ -71,7 +71,7 @@
         }
       
         .cascade-text {
-          display: block; /*inline-block;*/
+          display: inline-block;
           /* Animate fade out to create looping effect */
           animation: cascadeLoop 12s infinite;
         }
@@ -79,7 +79,7 @@
         /* Style each character span */
         .cascade-text span {
           opacity: 0;
-          display: block; /*inline-block;*/
+          display: inline-block;
           transform: translateY(20px);
           /*box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8); web title transition shadow*/
           animation: cascadeIn 1.2s forwards;
