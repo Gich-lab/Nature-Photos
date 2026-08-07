@@ -10,6 +10,17 @@
   text-align: center;
 }
 
+.header-inner {
+  padding-left: 20px;
+  padding-right: 20px;
+  box-sizing: border-box;
+}
+
+#header-text {
+  display: block;
+  text-align: center;
+}
+
 .main-header {
     position: fixed;
     top: 0;
