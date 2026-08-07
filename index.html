@@ -273,22 +273,6 @@
     const gallery = document.getElementById("gallery");
     const maxPhotos = 108; // update to reflect current number of photos
 
-    /*
-    // Generate images
-    for(let i=1; i<=maxPhotos; i++){
-      const img = document.createElement("img");
-      img.setAttribute('loading', 'lazy');
-    
-      img.src = "images/photo"+i+".jpg"; 
-      //img.setAttribute('width', '1920');
-      //img.setAttribute('height', '1080');
-      img.style.width = "calc(25% - 20px)";
-      img.style.height = "auto";
-      img.onerror = function() { this.remove(); }
-      gallery.appendChild(img);
-    } 
-    */ 
-
     // Lightbox elements
     const lightbox = document.getElementById("lightbox");
     const lightboxImg = document.getElementById("lightbox-img");
