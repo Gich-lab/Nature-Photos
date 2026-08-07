@@ -155,3 +155,7 @@ img {
     z-index: 1000;
 }
 
+.cascade-text span {
+    opacity: 1 !important;
+    color: red !important;
+}
