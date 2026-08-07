@@ -67,7 +67,7 @@ img {
 
 .main-header {
     position: fixed;
-    top: 20px;
+    top: 0;
     width: 100%;
     z-index: 1000;
     color: green;
@@ -78,6 +78,11 @@ img {
     background: transparent;
     backdrop-filter: blur(4px);
     /*pointer-events: none;  clicks pass through */
+}
+
+.blur-img {
+  filter: blur(4px);
+  transition: filter 0.3s ease;
 }
 
 .footer {
