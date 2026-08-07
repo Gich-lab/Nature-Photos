@@ -4,6 +4,10 @@
   <link rel="icon" href="tab-icon.ico" type="image/x-icon" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    .main-header {color: green;font-weight: bold;font-size: 2em;text-align: center;margin-top: 20px;}
+  </style>
+
 </head>
 <body>
     <header class="main-header" id="header">
@@ -17,6 +21,60 @@
       <button class="next" style="position:absolute; top:50%; right:20px;">Next</button>
       </div>
     </main>
+
+    <style>
+        /* Basic styles for gallery */
+        #gallery {display:flex;flex-wrap:wrap;gap:10px;}
+        #gallery img {max-width:100%;height:auto;display:block;}
+        /* Full-screen styles for desktop view */
+        #gallery.fullscreen img {width:100vw !important;height:100vh !important;object-fit:contain;}  
+
+        .main-header {
+          font-family: "Times New Roman", serif;
+          font-style: italic;
+          text-align: center;
+          font-size: 2em;
+          padding: 0;
+        }
+
+        .cascade-text {
+          display: inline-block;
+          /* Animate fade out to create looping effect */
+          animation: cascadeLoop 12s infinite;
+        }
+
+        /* Style each character span */
+        .cascade-text span {
+          opacity: 0;
+          display: inline-block;
+          transform: translateY(20px);
+          /*box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8); web title transition shadow*/
+          animation: cascadeIn 1.2s forwards;
+          /* Use CSS variable for delay */
+          --delay: 0s;
+          animation-delay: var(--delay);
+        }
+
+        @keyframes cascadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes cascadeLoop {
+          0%, 99.9% {
+            opacity: 1;
+          }
+          100% {
+            opacity: 0;
+          }
+        }
+      </style>
 
     <footer>
       <p id = "footerText", class="footer" style="text-align: center; opacity:0; transition:opacity 1s;">
@@ -125,7 +183,8 @@
             "Green scenes, clean habits!",
             "Trees are judging quietly",
             "Waste less, wonder more!",
-            "Plant now, brag later!"
+            "Plant now, brag later!",
+            "Dunia yetu maridadi"
           ];
 
           let currentText = 0;
