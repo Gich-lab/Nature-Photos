@@ -175,23 +175,26 @@ window.addEventListener('load', fetchLatestCommitSha);
 </script>
 
 <script>
-  //pin the header text at the top of the webpage
-  const header = document.getElementById('header');
-  const images = document.querySelectorAll('#gallery img');
+  // Header element
+  const header = document.getElementById("header");
+  window.addEventListener("scroll", () => {
 
-  window.addEventListener('scroll', () => {
-    const headerBottom = header.offsetTop + header.offsetHeight;
+    // Get current header position
+    const headerBottom =
+      header.getBoundingClientRect().bottom + window.scrollY;
 
-    images.forEach(img => {
+    // Always get the current gallery images
+    document.querySelectorAll("#gallery img").forEach(img => {
+
       const rect = img.getBoundingClientRect();
       const imgTop = rect.top + window.scrollY;
-
       if (imgTop < headerBottom) {
-        img.classList.add('blur-img');
+        img.classList.add("blur-img");
       } else {
-        img.classList.remove('blur-img');
+        img.classList.remove("blur-img");
       }
     });
+
   });
 </script>
 
@@ -265,7 +268,6 @@ window.addEventListener('load', fetchLatestCommitSha);
       animate();
     }
   </script>
-</body>
   
 <div id="gallery" class="gallery"></div>
 <div id="lightbox" class="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:9999;">
@@ -273,7 +275,8 @@ window.addEventListener('load', fetchLatestCommitSha);
   <button class="prev" style="position:absolute; top:50%; left:20px;">Prev</button>
   <button class="next" style="position:absolute; top:50%; right:20px;">Next</button>
 </div>
-
+</body>
+  
 <script>   
 const gallery = document.getElementById("gallery");
 const maxPhotos = 108; // update to reflect current number of photos
