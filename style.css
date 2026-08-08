@@ -51,6 +51,22 @@ img {
     object-fit: contain;
 }
 
+@media (max-width: 768px) {
+  #gallery img {
+    width: calc(100% - 20px);
+    border-radius: 0.3%;
+  }
+}
+
+@media (min-width: 769px) {
+  #gallery img {
+    width: calc(25% - 20px);
+    border-radius: 0.6%;
+    opacity: 1;
+  }
+}
+
+
 /* Lightbox styles (unchanged) */
 .lightbox {
   position: fixed;
