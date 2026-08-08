@@ -114,7 +114,9 @@
     </p>
     -->
     </footer>
-    
+
+  <script src="imagesData.js"></script>
+  
   <script>
     // Waits for all images to load or timeout
     async function waitForImagesOrTimeout(images, timeoutMs = 1000) {
@@ -452,22 +454,6 @@
       gallery.classList.remove("fullscreen");
       gallery.style.display = "flex";
       gallery.style.flexWrap = "wrap";
-
-      imgs.forEach(img => {
-        img.style.display = "block";
-        img.style.height = "auto";
-        img.style.margin = "5px";
-        img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-
-        if (width <= 768) {
-          img.style.width = "calc(100% - 20px)";
-          img.style.borderRadius = "0.3%";
-        } else {
-          img.style.width = "calc(25% - 20px)";
-          img.style.borderRadius = "0.6%";
-          img.style.opacity = "1";
-        }
-      });
     }
 
     window.addEventListener("load", async () => {
