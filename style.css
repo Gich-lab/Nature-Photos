@@ -81,13 +81,6 @@ img {
     }
 }
 
-/* Fullscreen */
-#gallery.fullscreen img {
-    width: 100vw !important;
-    height: 100vh !important;
-    object-fit: contain;
-}
-
 .blur-img {
     filter: blur(5px);
     transition: filter 0.25s ease;
