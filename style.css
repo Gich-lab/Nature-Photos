@@ -36,7 +36,8 @@ img {
     margin-top: 20px;
     padding: 0 20px;
 
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr))
     flex-flow: row wrap;
     align-items: flex-start;
     align-content: flex-start;
@@ -57,28 +58,6 @@ img {
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.65);
     box-sizing: border-box;
-}
-
-/* Desktop - four images per row */
-@media (min-width: 769px) {
-    #gallery img {
-        flex: 0 0 calc((100% - 60px) / 4);
-        width: calc((100% - 60px) / 4);
-    }
-}
-
-/* Mobile - one image per row */
-@media (max-width: 768px) {
-    #gallery {
-        padding: 0 10px;
-        gap: 15px;
-    }
-
-    #gallery img {
-        flex: 0 0 100%;
-        width: 100%;
-        border-radius: 10px;
-    }
 }
 
 .blur-img {
