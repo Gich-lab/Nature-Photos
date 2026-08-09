@@ -37,27 +37,36 @@ img {
     padding: 0 20px;
 
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr))
-    flex-flow: row wrap;
-    align-items: flex-start;
-    align-content: flex-start;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 20px;
+
     box-sizing: border-box;
-    opacity: 1;
-    transition: opacity 0.5s ease;
+
     background: rgba(0, 0, 255, 0.2);
-    border-radius: 8px;
 }
 
-/* Gallery images */
 #gallery img {
-    display: block;
-    height: auto;
+    width: 100%;
     max-width: 100%;
+    height: auto;
+    min-width: 0;
+
+    display: block;
+
     margin: 0;
+
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.65);
-    box-sizing: border-box;
+
+    object-fit: contain;
+}
+
+@media (max-width: 768px) {
+    #gallery {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 0 10px;
+    }
 }
 
 .blur-img {
