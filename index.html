@@ -105,14 +105,6 @@
         <!--&copy; 2026 Gichuki. All rights reserved.-->
         <a href="mailto:kenngich@proton.me" style="text-decoration: none !important;">✉️</a> E-mail
       </p>
-    <!--
-    <p style="text-align: center;">
-      This website is licensed under the 
-      <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">
-        Attribution-NonCommercial 4.0 International License.
-      </a>
-    </p>
-    -->
     </footer>
     
   <script>
@@ -202,13 +194,14 @@
           const texts = [
             "Mti leo, kivuli kesho",
             "Less junk, more jungle!",
-            "Think green, act cleaner!",
+            "Think green, act cleaner",
+            "Mito yastahili heshima",
             "Stay wild & awesome!",
             "Get lost, find nature!",
             "Kata takataka si miti",
             "Trees are judging quietly",
             "Waste less, wonder more!",
-            "Dunia inajua ulitupa wapi",
+            "Dunia yajua unakozoa taka",
             "Plant now, brag later!",
             "itunze dunia ikutunze"
           ];
@@ -241,11 +234,10 @@
           } else if (latestCommitSha !== storedSha) {
             cycleHeaderText();
             // Start cascade effect on the header text displaying the title or message
-            //triggerCascade(headerText, originalText);
             // New commit detected, update storedSha
             localStorage.setItem('storedSha', latestCommitSha);
             loadGA();
-            //setTimeout(loadGA, 9000); //added some delay 
+            //setTimeout(loadGA, 9000); 
           }
         
           // Proceed to load or update images
