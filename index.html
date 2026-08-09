@@ -26,8 +26,8 @@
 
     <style>
         /* Basic styles for gallery */
-        /*#gallery {display:flex;flex-wrap:wrap;gap:10px;}
-        #gallery img {max-width:100%;height:auto;display:block;}*/
+        #gallery {display:flex;flex-wrap:wrap;gap:10px;}
+        #gallery img {max-width:100%;height:auto;display:block;}
         /* Full-screen styles for desktop view */
         #gallery.fullscreen img {width:100vw !important;height:100vh !important;object-fit:contain;}  
 
@@ -114,9 +114,7 @@
     </p>
     -->
     </footer>
-
-  <script src="imagesData.js"></script>
-  
+    
   <script>
     // Waits for all images to load or timeout
     async function waitForImagesOrTimeout(images, timeoutMs = 1000) {
@@ -447,8 +445,29 @@
     }  
       
     function updateLayout() {
+      const width = window.innerWidth;
+      const imgs = document.querySelectorAll("#gallery img");
       const gallery = document.getElementById("gallery");
-      gallery.classList.remove("fullscreen")
+
+      gallery.classList.remove("fullscreen");
+      gallery.style.display = "flex";
+      gallery.style.flexWrap = "wrap";
+
+      imgs.forEach(img => {
+        img.style.display = "block";
+        img.style.height = "auto";
+        img.style.margin = "5px";
+        img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
+
+        if (width <= 768) {
+          img.style.width = "calc(100% - 20px)";
+          img.style.borderRadius = "0.3%";
+        } else {
+          img.style.width = "calc(25% - 20px)";
+          img.style.borderRadius = "0.6%";
+          img.style.opacity = "1";
+        }
+      });
     }
 
     window.addEventListener("load", async () => {
