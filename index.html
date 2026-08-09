@@ -218,7 +218,7 @@
           function cycleHeaderText() {
             triggerCascade(headerText, texts[currentText]);
             currentText = (currentText + 1) % texts.length;
-            setTimeout(cycleHeaderText, 10000) // 8sec text display
+            setTimeout(cycleHeaderText, 18000) // 8sec text display
           }
 
           // use a sessionKey to limit writing to google sheet multiple times through webpage refresh
@@ -233,7 +233,7 @@
             // Show message only on reload if no update
             headerText.textContent = "Hamna picha mpya";//"No updates found";
             triggerCascade(headerText, headerText.textContent, 6, false);
-            setTimeout(cycleHeaderText, 15000); //15sec text lingering duration
+            setTimeout(cycleHeaderText, 10000); //15sec text lingering duration
             //setTimeout(() => {
               //triggerCascade(headerText, texts);}, 8000); //originalText
             //return; // stop reload
