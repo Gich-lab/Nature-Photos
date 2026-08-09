@@ -1,75 +1,120 @@
-/* Global reset */
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-    overflow-wrap: break-word;
+/* Global reset and fix */
+*, *::before, *::after {
+  box-sizing: border-box;
+  overflow-wrap: break-word;
 }
 
 #header-text {
-    display: inline-block;
-    width: 100%;
-    text-align: center;
+  display: inline-block;
+  width: 100%;
+  text-align: center;
 }
 
 body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #111;
-    color: white;
-    overflow-x: hidden;
-    word-wrap: break-word;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #111;
+  color: white;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  word-wrap: break-word;
 }
 
-/* General images */
+/* Make images responsive and prevent overflow */
 img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    object-fit: contain;
+  max-width: 100%;      /* Ensure images don't overflow their containers */
+  height: auto;         /* Maintain aspect ratio */
+  display: block;       /* Remove inline spacing */
+  object-fit: contain;  /* Fit within container without overflow */
+  margin: 0 auto;       /* Center images if needed */
 }
 
-/* Gallery */
+/* Ensure containers are responsive */
 #gallery {
-    width: 100%;
-    max-width: 100%;
-    margin-top: 20px;
-    padding: 0 20px;
-
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 20px;
-
-    box-sizing: border-box;
-
-    background: rgba(0, 0, 255, 0.2);
+  margin-top: 20px;   
+  display: flex;
+  flex-wrap: wrap; /*wrap allows images to move onto new rows*/
+  gap: 20px; /*adds spacing between images*/
+  padding-top: 0;
+  padding-right: 20px;
+  padding-bottom: 0;
+  padding-left: 20px;
+  max-width: 100%;
+  box-sizing: border-box;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  background: rgba(0,0,255,0.2);
 }
 
-#gallery img {
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-    min-width: 0;
-
-    display: block;
-
-    margin: 0;
-
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.65);
-
+#gallery.fullscreen img {
+    width: 100vw !important;
+    height: 100vh !important;
     object-fit: contain;
 }
 
-@media (max-width: 768px) {
-    #gallery {
-        grid-template-columns: 1fr;
-        gap: 15px;
-        padding: 0 10px;
-    }
+/* Lightbox styles (unchanged) */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.95);
+  /*display: none;*/
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
-.blur-img {
-    filter: blur(5px);
-    transition: filter 0.25s ease;
+.lightbox.active {
+  display: flex;
+}
+
+.lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+/*defines the animation sequence*/
+@keyframes rotateOnce {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes cascadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cascadeLoop {
+  0%, 99.9% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/*applies that animation to an element*/
+.rotate-once {
+  animation: rotateOnce 2s linear forwards; 
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    z-index: 1000;
 }
