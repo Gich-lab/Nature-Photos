@@ -447,13 +447,8 @@
     }  
       
     function updateLayout() {
-      const width = window.innerWidth;
-      const imgs = document.querySelectorAll("#gallery img");
       const gallery = document.getElementById("gallery");
-
-      gallery.classList.remove("fullscreen");
-      gallery.style.display = "flex";
-      gallery.style.flexWrap = "wrap";
+      gallery.classList.remove("fullscreen")
     }
 
     window.addEventListener("load", async () => {
