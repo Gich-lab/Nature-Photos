@@ -288,8 +288,8 @@
       animate();
     }
 
-    const gallery = document.getElementById("gallery");
-    const maxPhotos = 116; // update to reflect the current number of photos
+    //const gallery = document.getElementById("gallery");
+    //const maxPhotos = 116; // update to reflect the current number of photos
 
     // Lightbox elements
     const lightbox = document.getElementById("lightbox");
@@ -408,6 +408,42 @@
       ).finished;
     }
 
+    //load all images
+    async function loadImagesSequentially() {
+        const gallery = document.getElementById("gallery");
+        let i = 1;
+        while (true) {
+            const img = document.createElement("img");
+            img.style.visibility = "hidden";
+            // Performance hints
+            img.loading = "lazy";
+            img.decoding = "async";
+            const imageExists = await new Promise(resolve => {
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(false);
+                img.src = `images/photo${i}.jpg`;
+            });
+            // Stop when an image is missing
+            if (!imageExists) {
+                break;
+            }
+            gallery.appendChild(img);
+            img.style.visibility = "visible";
+            // Optional rotation
+            await rotateImage(img);
+            i++;
+        }
+
+        // Refresh image collection for lightbox
+        images = document.querySelectorAll("#gallery img");
+        // Apply layout once after all images are loaded
+        updateLayout();
+        // Show footer
+        document.getElementById("footerText").style.opacity = "1";
+        console.log(`Loaded ${i - 1} images`);
+    }
+    
+    /*
     async function loadImagesSequentially() {
       const gallery = document.getElementById("gallery");
       for (let i = 1; i <= maxPhotos; i++) {
@@ -439,7 +475,8 @@
       // Show footer when finished
       document.getElementById("footerText").style.opacity = "1";
     }  
-      
+    */
+    
     function updateLayout() {
       const width = window.innerWidth;
       const imgs = document.querySelectorAll("#gallery img");
@@ -454,9 +491,6 @@
         img.style.height = "auto";
         img.style.margin = "5px";
         img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-        //speed up loading
-        img.loading = "lazy";
-        img.decoding = "async";
 
         if (width <= 768) {
           img.style.width = "calc(100% - 20px)";
