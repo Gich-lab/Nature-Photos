@@ -415,9 +415,6 @@
         const img = document.createElement("img");
         img.style.visibility = "hidden";
         img.src = `images/photo${i}.jpg`;
-        // loading speed
-        img.loading = "lazy";
-        img.decoding = "async";
 
         img.onerror = function () {
           this.remove();
