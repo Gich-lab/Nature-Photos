@@ -453,6 +453,9 @@
         img.style.height = "auto";
         img.style.margin = "5px";
         img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
+        //speed up loading
+        img.loading = "lazy";
+        img.decoding = "async";
 
         if (width <= 768) {
           img.style.width = "calc(100% - 20px)";
