@@ -442,12 +442,6 @@
     }  
 
     function updateLayout() {
-      const gallery = document.getElementById("gallery");
-      gallery.classList.remove("fullscreen");
-    }
-    
-    /*
-    function updateLayout() {
       const width = window.innerWidth;
       const imgs = document.querySelectorAll("#gallery img");
       const gallery = document.getElementById("gallery");
@@ -472,13 +466,12 @@
         }
       });
     }
-    */
     
     window.addEventListener("load", async () => {
       await loadImagesSequentially();
     });
       
-    /*window.addEventListener("resize", updateLayout);*/
+    window.addEventListener("resize", updateLayout);
 
     function adjustGalleryPosition() {
       const header = document.getElementById("header");
