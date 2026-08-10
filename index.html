@@ -428,13 +428,14 @@
 
         // Add only after loaded
         gallery.appendChild(img);
-        updateLayout();
+        //updateLayout();
         img.style.visibility = "visible";
         //rotateImage(img);//faster 
         await rotateImage(img);
         // Optional delay between images
         await new Promise(resolve => setTimeout(resolve, 10));
       }
+      updateLayout(); // run once to speed up loading
       // Refresh image collection for lightbox
       images = document.querySelectorAll("#gallery img");//refresh images for lightbox
       // Show footer when finished
