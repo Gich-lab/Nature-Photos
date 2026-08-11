@@ -356,10 +356,10 @@
     // Device detection functions 
     function detectDevice() {
       const ua = navigator.userAgent;
-      if(/Mobile|Android|iPhone|iPad|iPod/i.test(ua)) return "Mobile";
+      if(/Mobile|Android|iPhone/i.test(ua)) return "Mobile";
       return "Desktop";
     }
-      
+    
     function detectOS() {
       const ua = navigator.userAgent;
       if(ua.indexOf("Win")!==-1) return "Windows";
@@ -447,6 +447,7 @@
       const width = window.innerWidth;
       const imgs = document.querySelectorAll("#gallery img");
       const gallery = document.getElementById("gallery");
+      const isMobile = detectDevice() === "Mobile";
 
       gallery.classList.remove("fullscreen");
       gallery.style.display = "flex";
@@ -457,8 +458,8 @@
         img.style.height = "auto";
         img.style.margin = "5px";
         img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-
-        if (width <= 768) {
+        
+        if (isMobile){  
           img.style.width = "calc(100% - 20px)";
           img.style.borderRadius = "0.3%";
         } else {
@@ -468,7 +469,7 @@
         }
       });
     }
-    
+    //if (width <= 768) {
     window.addEventListener("load", async () => {
       await loadImagesSequentially();
     });
