@@ -62,8 +62,31 @@
                 cursor:pointer;
                 z-index:10001;">
           ❮ Prev
-       </button>     
+        </button>     
 
+        <button class="next"
+                onclick="
+                this.style.background='rgba(0,120,255,0.8)';
+                this.style.color='white';
+                setTimeout(()=>{
+                    this.style.background='rgba(255,255,255,0.12)';
+                    this.style.color='#00ff44';
+                },200);"
+                style="
+                position:absolute;
+                top:50%;
+                left:-5px;
+                transform:translateY(-50%);
+                background:rgba(255,255,255,0.12);
+                backdrop-filter:blur(7px);
+                -webkit-backdrop-filter:blur(7px);
+                border:1px solid rgba(0,255,0,0.25);
+                color:#00ff44;
+                border-radius:20px;
+                padding:8px 12px;
+                cursor:pointer;
+                z-index:10001;">
+        </button>   
         </div>
         <a id="download"
           class="download-btn"
@@ -401,7 +424,7 @@
       showImage(currentIndex);
      });
 
-    document.querySelector(".next").addEventListener("click", () => {
+    document.querySelector(".prev").addEventListener("click", () => {
       currentIndex = (currentIndex - 1 + images.length) % images.length;
       showImage(currentIndex);
      });    
