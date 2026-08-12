@@ -17,15 +17,87 @@
     </header>
     <main>
       <div id="gallery" class="gallery"></div>
-      <div id="lightbox" class="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:9999;">
-        <div class="lightbox-content">
-          <img id="lightbox-img" src="" alt="Enlarged image" style="max-width:90%; max-height:90%; object-fit:contain;">
-          <a id="download" class="download-btn" download>Download</a>
+      <div id="lightbox" class="lightbox"
+          style="
+          display:none;
+          position:fixed;
+          inset:0;
+          background:rgba(0,0,0,0.85);
+          justify-content:center;
+          align-items:center;
+          z-index:9999;">
+
+        <div class="lightbox-content"
+            style="position:relative; display:inline-block;">
+
+          <img id="lightbox-img"
+              src=""
+              alt="Enlarged image"
+              style="
+              display:block;
+              max-width:90vw;
+              max-height:90vh;
+              object-fit:contain;
+              border-radius:8px;">
+
+          <button class="prev"
+                  style="
+                  position:absolute;
+                  top:50%;
+                  left:15px;
+                  transform:translateY(-50%);
+                  background:rgba(255,255,255,0.12);
+                  backdrop-filter:blur(10px);
+                  -webkit-backdrop-filter:blur(10px);
+                  border:1px solid rgba(0,255,0,0.25);
+                  color:#00ff44;
+                  border-radius:20px;
+                  padding:8px 12px;
+                  cursor:pointer;
+                  z-index:10001;">
+            ❮ Prev
+          </button>
+          <button class="next"
+                  style="
+                  position:absolute;
+                  top:50%;
+                  right:15px;
+                  transform:translateY(-50%);
+                  background:rgba(255,255,255,0.12);
+                  backdrop-filter:blur(10px);
+                  -webkit-backdrop-filter:blur(10px);
+                  border:1px solid rgba(0,255,0,0.25);
+                  color:#00ff44;
+                  border-radius:20px;
+                  padding:8px 12px;
+                  cursor:pointer;
+                  z-index:10001;">
+            Next ❯
+          </button>
+
         </div>
-      <button class="prev" style="position:absolute; top:50%; left:20px;">Prev</button>
-      <button class="next" style="position:absolute; top:50%; right:20px;">Next</button>
+        <a id="download"
+          class="download-btn"
+          download
+          style="
+          position:absolute;
+          bottom:20px;
+          left:50%;
+          transform:translateX(-50%);
+          background:rgba(255,255,255,0.12);
+          backdrop-filter:blur(10px);
+          -webkit-backdrop-filter:blur(10px);
+          border:1px solid rgba(0,255,0,0.25);
+          color:#00ff44;
+          text-decoration:none;
+          border-radius:25px;
+          padding:10px 18px;
+          font-weight:bold;
+          z-index:10001;">
+          Download
+        </a>
+
       </div>
-    </main>
 
     <style>
         /* Basic styles for gallery */
