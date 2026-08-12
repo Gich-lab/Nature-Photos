@@ -175,3 +175,9 @@ img {
     transform: translateX(-50%) scale(1.05);
 }
 
+.download-btn:visited,
+.download-btn:hover,
+.download-btn:active {
+    color: #00ff55 !important;
+    text-decoration: none !important;
+}
