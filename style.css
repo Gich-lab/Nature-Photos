@@ -118,3 +118,15 @@ img {
     color: white;
     z-index: 1000;
 }
+
+.lightbox-content{
+    position:relative;
+    display:inline-block;
+}
+
+.download-btn{
+    position:absolute;
+    left:50%;
+    bottom:8px;
+    transform:translateX(-50%);
+}
