@@ -222,12 +222,12 @@
           if (!sessionStorage.getItem(pageSessionKey)) {
             // Set a unique ID or flag when the page loads
             sessionStorage.setItem(pageSessionKey, 1);
-            sendVisitorData();
+            sendVisitorData("visit");
           }
 
           if (latestCommitSha === storedSha && isPageReloaded()) {
             // Show message only on reload if no update
-            headerText.textContent = "Hamna picha mpya";//"No updates found";
+            headerText.textContent = "More images soon...";//"No updates found";
             triggerCascade(headerText, headerText.textContent, 6, false);
             setTimeout(cycleHeaderText, 15000); //15sec text lingering duration
             //setTimeout(() => {
@@ -352,7 +352,15 @@
       if(diff > 50) document.querySelector(".next").click();
       if(diff < -50) document.querySelector(".prev").click();
     });
-      
+
+    //rudimentary check for any downloads (inaccurate without a backend server)
+    downloadButton.addEventListener("click", function () {
+        sendVisitorData(
+            "Download",
+            lightboxImg.src.split('/').pop()
+        );
+    });
+ 
     // Device detection functions 
     function detectDevice() {
       const ua = navigator.userAgent;
@@ -380,6 +388,7 @@
       return "Other";
     }
 
+    /*
     // Google sheet data
     function sendVisitorData() {
       const data = {
@@ -395,7 +404,26 @@
         body: JSON.stringify(data)
       });
     }
+    */
 
+    // function that logs visits  
+    function sendVisitorData(eventType = "visit", imageName = "") {
+      const data = {
+        event: eventType,
+        time: new Date().toISOString(),
+        image: imageName,
+        device: detectDevice(),
+        os: detectOS(),
+        browser: detectBrowser(),
+        screen: window.innerWidth + "x" + document.documentElement.clientHeight
+      };
+
+      fetch("https://script.google.com/macros/s/AKfycbzA6nwRccq8U7nqzqDg0W3n6JsNyZ96gcsNd5k8b6QO_r0PDITB7p3Sx55gqMd_FVl1/exec", {
+        method: "POST",
+        body: JSON.stringify(data)
+      }).catch(err => console.error("Log failed:", err));
+    }
+  
     function rotateImage(img) {
       return img.animate(
         [
