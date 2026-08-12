@@ -354,6 +354,7 @@
     });
 
     //rudimentary check for any downloads (inaccurate without a backend server)
+    const downloadButton = document.getElementById("download");
     downloadButton.addEventListener("click", function () {
         sendVisitorData(
             "Download",
