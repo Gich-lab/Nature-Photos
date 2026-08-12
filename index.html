@@ -19,6 +19,7 @@
       <div id="gallery" class="gallery"></div>
       <div id="lightbox" class="lightbox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:9999;">
       <img id="lightbox-img" src="" alt="Enlarged image" style="max-width:90%; max-height:90%; object-fit:contain;">
+      <a id="download" class="download-btn" download>Download</a>
       <button class="prev" style="position:absolute; top:50%; left:20px;">Prev</button>
       <button class="next" style="position:absolute; top:50%; right:20px;">Next</button>
       </div>
@@ -304,16 +305,31 @@
     function showImage(index) {
       images = document.querySelectorAll("#gallery img");
       if (!images.length) return;
+
+      currentIndex = index;
+      lightboxImg.src = images[index].src;
+
+      const downloadLink = document.getElementById("download");
+      downloadLink.href = images[index].src;
+      downloadLink.download = images[index].src.split('/').pop();
+    }
+    
+    /*
+    // Protect against invalid indexes
+    function showImage(index) {
+      images = document.querySelectorAll("#gallery img");
+      if (!images.length) return;
       currentIndex = index;
       lightboxImg.src = images[index].src;
     }
-      
+     */ 
     // Add click event to images
     gallery.addEventListener("click", (e) => {
       if (e.target.tagName !== "IMG") return;
       images = document.querySelectorAll("#gallery img");
       currentIndex = Array.from(images).indexOf(e.target);
       lightbox.style.display = "flex";
+      lightbox.classList.add("show-download");//added download button
       showImage(currentIndex);
     });
 
@@ -341,6 +357,7 @@
     lightbox.addEventListener("click", (e) => {
       if(e.target===lightbox){
         lightbox.style.display = "none";
+        lightbox.classList.remove("show-download"); //remove download button upon click
       }
     });
 
@@ -354,12 +371,10 @@
     });
 
     //rudimentary check for any downloads (inaccurate without a backend server)
-    const downloadButton = document.getElementById("download");
-    downloadButton.addEventListener("click", function () {
-        sendVisitorData(
-            "Download",
-            lightboxImg.src.split('/').pop()
-        );
+    document.getElementById("download").addEventListener("click", function () {
+      sendVisitorData(
+        "download",
+        lightboxImg.src.split('/').pop());
     });
  
     // Device detection functions 
