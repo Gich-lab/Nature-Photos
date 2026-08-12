@@ -51,8 +51,7 @@ img {
     object-fit: contain;
 }
 
-/*
-/* Lightbox styles (unchanged)
+/* Lightbox styles (unchanged) */
 .lightbox {
   position: fixed;
   top: 0;
@@ -60,7 +59,7 @@ img {
   width: 100vw;
   height: 100vh;
   background: rgba(0,0,0,0.95);
-  /*display: none;
+  /*display: none;*/
   align-items: center;
   justify-content: center;
   z-index: 1000;
@@ -76,7 +75,7 @@ img {
   object-fit: contain;
   border-radius: 10px;
 }
-*/
+
 /*defines the animation sequence*/
 @keyframes rotateOnce {
   from { transform: rotate(0deg); }
@@ -118,66 +117,4 @@ img {
     background: rgba(0, 0, 0, 0.7);
     color: white;
     z-index: 1000;
-}
-
-.lightbox-content {
-    position: relative;
-    display: inline-block;
-
-    padding: 8px;
-    border-radius: 12px;
-
-    background: rgba(255,255,255,0.08);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-
-    border: 1px solid rgba(255,255,255,0.12);
-}
-
-#lightbox-img {
-    display: block;
-    max-width: 90vw;
-    max-height: 90vh;
-    object-fit: contain;
-
-    border-radius: 8px;
-}
-
-.download-btn {
-    position: absolute;
-    left: 50%;
-    bottom: 15px;
-    transform: translateX(-50%);
-
-    padding: 6px 14px;
-
-    background: rgba(255,255,255,0.12);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-
-    border: 1px solid rgba(0,255,0,0.25);
-    border-radius: 20px;
-
-    color: #00cc44;
-    text-decoration: none;
-    font-weight: bold;
-    font-family: Arial, sans-serif;
-    font-size: 12px;
-
-    box-shadow: 0 4px 12px rgba(0,0,0,0.35);
-
-    transition: all 0.25s ease;
-}
-
-.download-btn:hover {
-    background: rgba(255,255,255,0.18);
-    color: #00ff55;
-    transform: translateX(-50%) scale(1.05);
-}
-
-.download-btn:visited,
-.download-btn:hover,
-.download-btn:active {
-    color: #00ff55 !important;
-    text-decoration: none !important;
 }
