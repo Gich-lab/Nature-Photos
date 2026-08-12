@@ -39,43 +39,30 @@
               max-height:90vh;
               object-fit:contain;
               border-radius:8px;">
-
-          <button class="prev" onclick="this.style.background='rgba(0,120,255,0.8)';
-            setTimeout(()=>this.style.background='rgba(255,255,255,0.12)',200);"
-            style="
-                  position:absolute;
-                  top:50%;
-                  left:-5px;
-                  transform:translateY(-50%);
-                  background:rgba(255,255,255,0.12);
-                  backdrop-filter:blur(7px);
-                  -webkit-backdrop-filter:blur(7px);
-                  border:1px solid rgba(0,255,0,0.25);
-                  color:#00ff44;
-                  border-radius:20px;
-                  padding:8px 12px;
-                  cursor:pointer;
-                  z-index:10001;">
-            ❮ Prev
-          </button>
-          <button class="prev" onclick="this.style.background='rgba(0,120,255,0.8)';
-            setTimeout(()=>this.style.background='rgba(255,255,255,0.12)',200);"
-            style="
-                  position:absolute;
-                  top:50%;
-                  right:-5px;
-                  transform:translateY(-50%);
-                  background:rgba(255,255,255,0.12);
-                  backdrop-filter:blur(7px);
-                  -webkit-backdrop-filter:blur(7px);
-                  border:1px solid rgba(0,255,0,0.25);
-                  color:#00ff44;
-                  border-radius:20px;
-                  padding:8px 12px;
-                  cursor:pointer;
-                  z-index:10001;">
-            Next ❯
-          </button>
+        <button class="prev"
+                onclick="
+                this.style.background='rgba(0,120,255,0.8)';
+                this.style.color='white';
+                setTimeout(()=>{
+                    this.style.background='rgba(255,255,255,0.12)';
+                    this.style.color='#00ff44';
+                },200);"
+                style="
+                position:absolute;
+                top:50%;
+                left:-5px;
+                transform:translateY(-50%);
+                background:rgba(255,255,255,0.12);
+                backdrop-filter:blur(7px);
+                -webkit-backdrop-filter:blur(7px);
+                border:1px solid rgba(0,255,0,0.25);
+                color:#00ff44;
+                border-radius:20px;
+                padding:8px 12px;
+                cursor:pointer;
+                z-index:10001;">
+          ❮ Prev
+        </button>     
 
         </div>
         <a id="download"
