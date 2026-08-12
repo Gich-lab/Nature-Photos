@@ -120,73 +120,37 @@ img {
     z-index: 1000;
 }
 
-.lightbox {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-
-    background: rgba(0, 0, 0, 0.95);
-
-    display: none;
-
-    align-items: center;
-    justify-content: center;
-
-    z-index: 1000;
-}
-
-.lightbox.active {
-    display: flex;
-}
-
-
-/* Image and button are kept together */
 .lightbox-image-container {
     position: relative;
-
     display: inline-block;
-
-    max-width: 90vw;
-    max-height: 90vh;
 }
 
-
-/* Lightbox image */
 #lightbox-img {
     display: block;
-
     max-width: 90vw;
     max-height: 90vh;
-
-    width: auto;
-    height: auto;
-
     object-fit: contain;
-
     border-radius: 10px;
 }
 
-
-/* Download button */
-.download-btn {
+#download.download-btn {
     position: absolute;
 
     bottom: 5px;
     left: 50%;
     transform: translateX(-50%);
 
-    padding: 4px 10px;
+    padding: 3px 8px;
 
     background: rgba(0, 0, 0, 0.65);
 
     color: white !important;
     text-decoration: none !important;
 
-    border-radius: 4px;
-
     font-size: 12px;
+    line-height: 1.2;
+
+    border-radius: 4px;
 
     white-space: nowrap;
 }
