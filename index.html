@@ -334,6 +334,7 @@
       if (e.target.tagName !== "IMG") return;
       images = document.querySelectorAll("#gallery img");
       currentIndex = Array.from(images).indexOf(e.target);
+      console.log(lightbox);
       lightbox.classList.add("active");
       showImage(currentIndex);
     });
