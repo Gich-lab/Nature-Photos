@@ -16,6 +16,7 @@
       </div>
     </header>
     <main>
+      <div id="gallery" class="gallery"></div>
       <div id="lightbox" class="lightbox">
         <div class="lightbox-content">
           <button class="prev lightbox-btn">❮ Prev</button>
@@ -330,16 +331,6 @@
     }
      */ 
 
-    console.log("gallery", gallery);
-    console.log("lightbox", lightbox);
-    console.log("prev", document.querySelector(".prev"));
-    console.log("next", document.querySelector(".next"));
-    console.log("download", document.querySelector(".download-btn"));
-
-
-    
-
-    
     // Add click event to images
     gallery.addEventListener("click", (e) => {
       if (e.target.tagName !== "IMG") return;
