@@ -329,6 +329,17 @@
       lightboxImg.src = images[index].src;
     }
      */ 
+
+    console.log("gallery", gallery);
+    console.log("lightbox", lightbox);
+    console.log("prev", document.querySelector(".prev"));
+    console.log("next", document.querySelector(".next"));
+    console.log("download", document.querySelector(".download-btn"));
+
+
+    
+
+    
     // Add click event to images
     gallery.addEventListener("click", (e) => {
       if (e.target.tagName !== "IMG") return;
