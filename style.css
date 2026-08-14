@@ -142,8 +142,14 @@ img {
 /*change button color to black on hover*/
 .prev:hover,
 .next:hover,
-.download-btn:hover{
-    background: rgba(0,0,0,0.55);
-    color: white;
-    border-color: rgba(255,255,255,0.3);
+.download-btn:hover {
+    background: rgba(0,0,0,0.55) !important;
+    color: white !important;
+    border: 1px solid rgba(255,255,255,0.3) !important;
+}
+
+.prev,
+.next,
+.download-btn {
+    transition: all 0.25s ease;
 }
