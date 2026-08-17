@@ -506,7 +506,7 @@
     // Device detection functions 
     function detectDevice() {
       const ua = navigator.userAgent;
-      if(/Mobile|Android|iPhone/i.test(ua)) return "Mobile";
+      if(/Mobile|Android|iPhone/i.test(ua)) return "Phone";
       return "Desktop";
     }
     
@@ -617,7 +617,7 @@
       const width = window.innerWidth;
       const imgs = document.querySelectorAll("#gallery img");
       const gallery = document.getElementById("gallery");
-      const isMobile = detectDevice() === "Mobile";
+      const isMobile = detectDevice() === "Phone";
 
       gallery.classList.remove("fullscreen");
       gallery.style.display = "flex";
