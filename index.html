@@ -225,7 +225,7 @@
       textCycleDuration: 15000,
       cascadeDuration: 6,
       textLinger: 10,
-      imageAnimationDuration: 600,
+      imageAnimationDuration: 700,
       imageDelayBetween: 0,
       touchSwipeThreshold: 50,
       headerTexts: [
@@ -257,7 +257,8 @@
       currentImageIndex: 0,
       images: [],
       startX: 0,
-      currentHeaderTextIndex: 0
+      currentHeaderTextIndex: 0,
+      galleryInitialized: false
     };
 
     // ============================================
@@ -486,17 +487,17 @@
     // ============================================
 
     /**
-     * Animate image with 3D perspective effect - images move toward viewer
+     * Animate image with scale pinpoint effect
      */
     function animateImageAppearance(img) {
       return img.animate(
         [
-          { opacity: 0, transform: "perspective(1000px) rotateY(45deg) translateZ(-50px)" },
-          { opacity: 1, transform: "perspective(1000px) rotateY(0deg) translateZ(0)" }
+          { opacity: 0, transform: "scale(0.05)" },
+          { opacity: 1, transform: "scale(1)" }
         ],
         {
           duration: CONFIG.imageAnimationDuration,
-          easing: "ease-out",
+          easing: "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
           iterations: 1
         }
       ).finished;
@@ -529,6 +530,7 @@
 
       state.images = document.querySelectorAll("#gallery img");
       DOM.footerText.style.opacity = "1";
+      state.galleryInitialized = true;
     }
 
     /**
@@ -653,10 +655,19 @@
           initializeTracking();
 
           if (latestCommitSha === storedSha && isPageReloaded()) {
+            // Page reloaded with same content - don't reload images, just show footer
             DOM.headerText.textContent = "More images soon...";
             triggerCascade(DOM.headerText, DOM.headerText.textContent, CONFIG.cascadeDuration, false);
             setTimeout(cycleHeaderTexts, CONFIG.textCycleDuration);
+            
+            // Show existing images without animation
+            state.images = document.querySelectorAll("#gallery img");
+            if (state.images.length > 0) {
+              DOM.footerText.style.opacity = "1";
+              state.galleryInitialized = true;
+            }
           } else if (latestCommitSha !== storedSha) {
+            // New content - load images with animation
             cycleHeaderTexts();
             localStorage.setItem('storedSha', latestCommitSha);
             loadGA();
@@ -731,7 +742,10 @@
 
       // Page load initialization
       window.addEventListener("load", async () => {
-        await loadImagesSequentially();
+        // Only load images if gallery is not already initialized
+        if (!state.galleryInitialized) {
+          await loadImagesSequentially();
+        }
       });
       window.addEventListener("load", adjustGalleryPosition);
     }
