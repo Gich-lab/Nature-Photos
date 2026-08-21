@@ -251,21 +251,6 @@
     };
 
     // ============================================
-    // DOM ELEMENTS
-    // ============================================
-    const DOM = {
-      header: document.getElementById("header"),
-      headerText: document.getElementById("header-text"),
-      gallery: document.getElementById("gallery"),
-      lightbox: document.getElementById("lightbox"),
-      lightboxImg: document.getElementById("lightbox-img"),
-      downloadBtn: document.getElementById("download"),
-      footerText: document.getElementById("footerText"),
-      nextBtn: document.querySelector(".next"),
-      prevBtn: document.querySelector(".prev")
-    };
-
-    // ============================================
     // STATE
     // ============================================
     let state = {
@@ -274,6 +259,25 @@
       startX: 0,
       currentHeaderTextIndex: 0
     };
+
+    // ============================================
+    // DOM ELEMENTS - Initialized after DOMContentLoaded
+    // ============================================
+    let DOM = {};
+
+    function initializeDOMElements() {
+      DOM = {
+        header: document.getElementById("header"),
+        headerText: document.getElementById("header-text"),
+        gallery: document.getElementById("gallery"),
+        lightbox: document.getElementById("lightbox"),
+        lightboxImg: document.getElementById("lightbox-img"),
+        downloadBtn: document.getElementById("download"),
+        footerText: document.getElementById("footerText"),
+        nextBtn: document.querySelector(".next"),
+        prevBtn: document.querySelector(".prev")
+      };
+    }
 
     // ============================================
     // UTILITY FUNCTIONS
@@ -740,12 +744,13 @@
      * Initialize the entire application
      */
     function initializeApp() {
+      initializeDOMElements();
       fetchLatestCommitSha();
       setupEventListeners();
     }
 
-    // Start the application
-    window.addEventListener('load', initializeApp);
+    // Start the application when DOM is ready
+    document.addEventListener('DOMContentLoaded', initializeApp);
   </script>
 </body>
 </html>
