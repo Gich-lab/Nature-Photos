@@ -225,7 +225,7 @@
       textCycleDuration: 15000,
       cascadeDuration: 6,
       textLinger: 10,
-      imageAnimationDuration: 300,
+      imageAnimationDuration: 400,
       imageDelayBetween: 0,
       touchSwipeThreshold: 50,
       headerTexts: [
@@ -486,13 +486,13 @@
     // ============================================
 
     /**
-     * Animate image with fade in + scale effect
+     * Animate image with 3D flip effect
      */
     function animateImageAppearance(img) {
       return img.animate(
         [
-          { opacity: 0, transform: "scale(0.8)" },
-          { opacity: 1, transform: "scale(1)" }
+          { opacity: 0, transform: "rotateY(90deg)" },
+          { opacity: 1, transform: "rotateY(0deg)" }
         ],
         {
           duration: CONFIG.imageAnimationDuration,
