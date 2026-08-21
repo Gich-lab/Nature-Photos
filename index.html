@@ -486,13 +486,13 @@
     // ============================================
 
     /**
-     * Animate image rotation
+     * Animate image with fade in + scale effect
      */
-    function rotateImage(img) {
+    function animateImageAppearance(img) {
       return img.animate(
         [
-          { transform: "rotate(0deg)" },
-          { transform: "rotate(360deg)" }
+          { opacity: 0, transform: "scale(0.8)" },
+          { opacity: 1, transform: "scale(1)" }
         ],
         {
           duration: CONFIG.imageAnimationDuration,
@@ -523,7 +523,7 @@
         DOM.gallery.appendChild(img);
         updateLayout();
         img.style.visibility = "visible";
-        await rotateImage(img);
+        await animateImageAppearance(img);
         await new Promise(resolve => setTimeout(resolve, CONFIG.imageDelayBetween));
       }
 
