@@ -216,22 +216,83 @@
     </footer>
     
   <script>
-    // Waits for all images to load or timeout
-    async function waitForImagesOrTimeout(images, timeoutMs = 1000) {
+    // ============================================
+    // CONFIGURATION
+    // ============================================
+    const CONFIG = {
+      maxPhotos: 120,
+      imageLoadTimeout: 1000,
+      textCycleDuration: 15000,
+      cascadeDuration: 6,
+      textLinger: 10,
+      imageAnimationDuration: 600,
+      imageDelayBetween: 10,
+      touchSwipeThreshold: 50,
+      headerTexts: [
+        "Explore my wallpapers..",
+        "Mti leo, kivuli kesho",
+        "Less junk, more jungle!",
+        "Think green, act cleaner",
+        "Mito yastahili kutunzwa",
+        "itunze mito uishi fiti",
+        "Stay wild & awesome!",
+        "Get lost, find nature!",
+        "Kata takataka si miti",
+        "Trees are judging quietly",
+        "Waste less, wonder more!",
+        "Dunia yajua unakozoa taka",
+        "Plant now, brag later!",
+        "itunze dunia ikutunze"
+      ],
+      gaId: "G-22HE9GQ99B",
+      gaScript: "https://www.googletagmanager.com/gtag/js?id=G-22HE9GQ99B",
+      sheetsUrl: "https://script.google.com/macros/s/AKfycbwMC8P52A8DPBcwcN3JFU4ov1mPg4e15zmnMfEVnJYVntfz0vy1zVGiBp75O7u5avId/exec",
+      githubApiUrl: "https://api.github.com/repos/Gich-lab/Nature-Photos/commits/main"
+    };
+
+    // ============================================
+    // DOM ELEMENTS
+    // ============================================
+    const DOM = {
+      header: document.getElementById("header"),
+      headerText: document.getElementById("header-text"),
+      gallery: document.getElementById("gallery"),
+      lightbox: document.getElementById("lightbox"),
+      lightboxImg: document.getElementById("lightbox-img"),
+      downloadBtn: document.getElementById("download"),
+      footerText: document.getElementById("footerText"),
+      nextBtn: document.querySelector(".next"),
+      prevBtn: document.querySelector(".prev")
+    };
+
+    // ============================================
+    // STATE
+    // ============================================
+    let state = {
+      currentImageIndex: 0,
+      images: [],
+      startX: 0,
+      currentHeaderTextIndex: 0
+    };
+
+    // ============================================
+    // UTILITY FUNCTIONS
+    // ============================================
+
+    /**
+     * Wait for images to load or timeout
+     */
+    function waitForImagesOrTimeout(images, timeoutMs = CONFIG.imageLoadTimeout) {
       return new Promise((resolve) => {
         let loadedCount = 0;
         const totalImages = images.length;
 
-        // If no images, resolve immediately
         if (totalImages === 0) {
           resolve();
           return;
         }
 
-        // Set a timeout to proceed after timeoutMs
-        const timeoutId = setTimeout(() => {
-          resolve();
-        }, timeoutMs);
+        const timeoutId = setTimeout(resolve, timeoutMs);
 
         images.forEach((img) => {
           if (img.complete) {
@@ -253,30 +314,9 @@
       });
     }
 
-    //cycle multiple lines on the headertext
-    function cycleHeaderText(element, texts, delay) {
-      let index = 0;
-
-      function showNextText() {
-        if (index < texts.length) {
-          element.textContent = texts[index];
-          index++;
-          setTimeout(showNextText, delay);
-        }
-      }
-      showNextText(); // start the cycle
-    }
-
-    // Function that loads Google Analytics
-    function loadGA() {
-        const src = "https://www.googletagmanager.com/gtag/js?id=G-22HE9GQ99B"
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-22HE9GQ99B');
-    }
-      
-    // Function that determines if page was reloaded
+    /**
+     * Check if page was reloaded
+     */
     function isPageReloaded() {
       if (performance.getEntriesByType('navigation')[0]) {
         const navType = performance.getEntriesByType('navigation')[0].type;
@@ -287,285 +327,163 @@
       return false;
     }
 
-    // Function that calls the whole script and loads images to a browser if certain conditions are met  
-    function fetchLatestCommitSha() {
-      fetch('https://api.github.com/repos/Gich-lab/Nature-Photos/commits/main')
-        .then(response => response.json())
-        .then(data => {
-          const latestCommitSha = data.sha;
-          const storedSha = localStorage.getItem('storedSha');
-
-          const headerText = document.getElementById("header-text");
-          const originalText = headerText.textContent;
-          headerText.style.visibility = "visible";
-
-          const texts = [
-            "Explore my wallpapers..",
-            "Mti leo, kivuli kesho",
-            "Less junk, more jungle!",
-            "Think green, act cleaner",
-            "Mito yastahili kutunzwa",
-            "itunze mito uishi fiti",
-            "Stay wild & awesome!",
-            "Get lost, find nature!",
-            "Kata takataka si miti",
-            "Trees are judging quietly",
-            "Waste less, wonder more!",
-            "Dunia yajua unakozoa taka",
-            "Plant now, brag later!",
-            "itunze dunia ikutunze"
-          ];
-
-          let currentText = 0;
-
-          function cycleHeaderText() {
-            triggerCascade(headerText, texts[currentText]);
-            //triggerCascade(headerText, texts[currentText], 6, false);
-            currentText = (currentText + 1) % texts.length;
-            setTimeout(cycleHeaderText, 15000) // 8sec text display
-          }
-
-          // use a sessionKey to limit writing to google sheet multiple times through webpage refresh
-          const pageSessionKey = 'pageSessionId';
-          if (!sessionStorage.getItem(pageSessionKey)) {
-            // Set a unique ID or flag when the page loads
-            sessionStorage.setItem(pageSessionKey, 1);
-            sendVisitorData("visit");
-          }
-
-          if (latestCommitSha === storedSha && isPageReloaded()) {
-            // Show message only on reload if no update
-            headerText.textContent = "More images soon...";//"No updates found";
-            triggerCascade(headerText, headerText.textContent, 6, false);
-            setTimeout(cycleHeaderText, 15000); //15sec text lingering duration
-            //setTimeout(() => {
-              //triggerCascade(headerText, texts);}, 8000); //originalText
-            //return; // stop reload
-          } else if (latestCommitSha !== storedSha) {
-            cycleHeaderText();
-            // Start cascade effect on the header text displaying the title or message
-            // New commit detected, update storedSha
-            localStorage.setItem('storedSha', latestCommitSha);
-            loadGA();
-            //setTimeout(loadGA, 9000); 
-          }
-        
-          // Proceed to load or update images
-          window.addEventListener('load', () => {
-            waitForImagesOrTimeout(document.querySelectorAll('img'));
-          });
-        });
-    }
-      
-    // Run on page load
-    window.addEventListener('load', fetchLatestCommitSha);
-      // Header element
-      const header = document.getElementById("header");
-      window.addEventListener("scroll", () => {
-        // Get current header position
-        const headerBottom =
-          header.getBoundingClientRect().bottom + window.scrollY;
-        // Always get the current gallery images
-        document.querySelectorAll("#gallery img").forEach(img => {
-          const rect = img.getBoundingClientRect();
-          const imgTop = rect.top + window.scrollY;
-          if (imgTop < headerBottom) {
-            img.classList.add("blur-img");
-          } else {
-            img.classList.remove("blur-img");
-          }
-        });
-      });
-
-
-    function triggerCascade(element, text, totalDuration = 6, loop = true) {
-      // Stop any previous animation loop on this element
-      clearTimeout(element.cascadeTimer);
-      function animate() {
-        element.style.visibility = "visible";
-        element.textContent = "";
-        const delayIncrement = totalDuration / text.length;
-        for (let i = 0; i < text.length; i++) {
-          const span = document.createElement("span");
-          span.innerHTML = (text[i] === " ") ? "&nbsp;" : text[i];
-          span.style.setProperty("--delay", `${i * delayIncrement}s`);
-          element.appendChild(span);}
-        // Continue looping only if requested
-        if (loop) {
-          element.cascadeTimer = setTimeout(animate,(totalDuration + 10) * 1000); // increased text lingering to 10sec
-        }
-      }
-      animate();
+    /**
+     * Load Google Analytics
+     */
+    function loadGA() {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', CONFIG.gaId);
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = CONFIG.gaScript;
+      document.head.appendChild(script);
     }
 
-    const gallery = document.getElementById("gallery");
-    const maxPhotos = 120; // update to reflect the current number of photos
+    // ============================================
+    // DEVICE DETECTION
+    // ============================================
 
-    // Lightbox elements
-    const lightbox = document.getElementById("lightbox");
-    const lightboxImg = document.getElementById("lightbox-img");
-    let images = document.querySelectorAll("#gallery img");
-    let currentIndex = 0;
-    let startX = 0;
-
-    // Protect against invalid indexes
-    function showImage(index) {
-      images = document.querySelectorAll("#gallery img");
-      if (!images.length) return;
-
-      currentIndex = index;
-      lightboxImg.src = images[index].src;
-
-      const downloadLink = document.getElementById("download");
-      downloadLink.href = images[index].src;
-      downloadLink.download = images[index].src.split('/').pop();
-    }
-    
-    /*
-    // Protect against invalid indexes
-    function showImage(index) {
-      images = document.querySelectorAll("#gallery img");
-      if (!images.length) return;
-      currentIndex = index;
-      lightboxImg.src = images[index].src;
-    }
-     */ 
-    // Add click event to images
-    gallery.addEventListener("click", (e) => {
-      if (e.target.tagName !== "IMG") return;
-      images = document.querySelectorAll("#gallery img");
-      currentIndex = Array.from(images).indexOf(e.target);
-      lightbox.style.display = "flex";
-      lightbox.classList.add("show-download");//added download button
-      showImage(currentIndex);
-    });
-
-    // Navigation buttons
-    const nextBtn = document.querySelector(".next");
-    const prevBtn = document.querySelector(".prev");
-
-    if (nextBtn) {
-      nextBtn.addEventListener("click", () => {
-        currentIndex = (currentIndex + 1) % images.length;
-        showImage(currentIndex);
-      });
-    }
-
-    if (prevBtn) {
-      prevBtn.addEventListener("click", () => {
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
-        showImage(currentIndex);
-      });
-    }
-
-    /*
-    // Navigation buttons
-    document.querySelector(".next").onclick = () => {
-      currentIndex = (currentIndex + 1) % images.length;
-      showImage(currentIndex);
-    };
-    document.querySelector(".prev").onclick = () => {
-      currentIndex = (currentIndex - 1 + images.length) % images.length;
-      showImage(currentIndex);
-    };
-    */
-    // Keyboard nav
-    document.addEventListener("keydown", (e) => {
-      if(lightbox.style.display !== "flex") return;
-      if(e.key==="ArrowRight") document.querySelector(".next").click();
-      if(e.key==="ArrowLeft") document.querySelector(".prev").click();
-      if(e.key==="Escape"){
-        lightbox.style.display = "none";
-      }
-    });
-
-    // Close lightbox on background click
-    lightbox.addEventListener("click", (e) => {
-      if(e.target===lightbox){
-        lightbox.style.display = "none";
-        lightbox.classList.remove("show-download"); //remove download button upon click
-      }
-    });
-
-    // Swipe support
-    lightbox.addEventListener("touchstart", (e) => { startX = e.touches[0].clientX; });
-    lightbox.addEventListener("touchend", (e) => {
-      let endX = e.changedTouches[0].clientX;
-      let diff = startX - endX;
-      if(diff > 50) document.querySelector(".next").click();
-      if(diff < -50) document.querySelector(".prev").click();
-    });
-
-    //rudimentary check for any downloads (inaccurate without a backend server)
-    document.getElementById("download").addEventListener("click", function () {
-      sendVisitorData(
-        "download",
-        lightboxImg.src.split('/').pop());
-    });
- 
-    // Device detection functions 
+    /**
+     * Detect device type
+     */
     function detectDevice() {
       const ua = navigator.userAgent;
-      if(/Mobile|Android|iPhone/i.test(ua)) return "Phone";
-      return "Desktop";
+      return /Mobile|Android|iPhone/i.test(ua) ? "Phone" : "Desktop";
     }
-    
+
+    /**
+     * Detect operating system
+     */
     function detectOS() {
       const ua = navigator.userAgent;
-      if(ua.indexOf("Win")!==-1) return "Windows";
-      if(ua.indexOf("Android")!=-1) return "Android";
-      if(ua.indexOf("iPhone")!== -1 || ua.indexOf("iPad") !== -1) return "iOS";
-      if(ua.indexOf("Linux")!==-1) return "Linux";  
-      if(ua.indexOf("Mac")!==-1) return "MacOS";
+      const osMap = {
+        "Win": "Windows",
+        "Android": "Android",
+        "iPhone": "iOS",
+        "iPad": "iOS",
+        "Linux": "Linux",
+        "Mac": "MacOS"
+      };
+      
+      for (const [key, value] of Object.entries(osMap)) {
+        if (ua.includes(key)) return value;
+      }
       return "Unknown";
     }
+
+    /**
+     * Detect browser
+     */
     function detectBrowser() {
       const ua = navigator.userAgent;
-      if(/Edg/i.test(ua)) return "Edge";
-      if(/Brave/i.test(ua)) return "Brave";
-      if(/Chrome/i.test(ua) && !/Edge|OPR/i.test(ua)) return "Chrome";
-      if(/Safari/i.test(ua) && !/Chrome/i.test(ua)) return "Safari";
-      if(/Firefox/i.test(ua)) return "Firefox";
-      if(/OPR|Opera/i.test(ua)) return "Opera";
+      const browserChecks = [
+        { pattern: /Edg/i, name: "Edge" },
+        { pattern: /Brave/i, name: "Brave" },
+        { pattern: /Chrome/i, notPattern: /Edge|OPR/i, name: "Chrome" },
+        { pattern: /Safari/i, notPattern: /Chrome/i, name: "Safari" },
+        { pattern: /Firefox/i, name: "Firefox" },
+        { pattern: /OPR|Opera/i, name: "Opera" }
+      ];
+
+      for (const check of browserChecks) {
+        if (check.pattern.test(ua) && (!check.notPattern || !check.notPattern.test(ua))) {
+          return check.name;
+        }
+      }
       return "Other";
     }
 
-    /*
-    // Google sheet data
-    function sendVisitorData() {
-      const data = {
-        time: new Date().toISOString(),
+    /**
+     * Get device information object
+     */
+    function getDeviceInfo() {
+      return {
         device: detectDevice(),
         os: detectOS(),
         browser: detectBrowser(),
-        screen: window.innerWidth + "x" + document.documentElement.clientHeight,
+        screen: `${window.innerWidth}x${document.documentElement.clientHeight}`
       };
-      
-    fetch("https://script.google.com/macros/s/AKfycbwbn2_iQtpSjj_vGKUgcQMa22hGSY7atHbvcLKspEtuh0fB4Kzetwj8ujUm8kKCfZui/exec", {
-        method:"POST",
-        body: JSON.stringify(data)
-      });
     }
-    */
 
-    // function that logs visits  
+    // ============================================
+    // VISITOR TRACKING
+    // ============================================
+
+    /**
+     * Send visitor data to Google Sheets
+     */
     function sendVisitorData(eventType = "visit", imageName = "") {
       const data = {
         event: eventType,
         time: new Date().toISOString(),
         Image: imageName,
-        device: detectDevice(),
-        os: detectOS(),
-        browser: detectBrowser(),
-        screen: window.innerWidth + "x" + document.documentElement.clientHeight
+        ...getDeviceInfo()
       };
-      
-      fetch("https://script.google.com/macros/s/AKfycbwMC8P52A8DPBcwcN3JFU4ov1mPg4e15zmnMfEVnJYVntfz0vy1zVGiBp75O7u5avId/exec", {
+
+      fetch(CONFIG.sheetsUrl, {
         method: "POST",
         body: JSON.stringify(data)
       }).catch(err => console.error("Log failed:", err));
     }
-  
+
+    /**
+     * Initialize visitor tracking (once per session)
+     */
+    function initializeTracking() {
+      const pageSessionKey = 'pageSessionId';
+      if (!sessionStorage.getItem(pageSessionKey)) {
+        sessionStorage.setItem(pageSessionKey, 1);
+        sendVisitorData("visit");
+      }
+    }
+
+    // ============================================
+    // HEADER & CASCADE TEXT
+    // ============================================
+
+    /**
+     * Trigger cascade animation for text
+     */
+    function triggerCascade(element, text, totalDuration = CONFIG.cascadeDuration, loop = true) {
+      clearTimeout(element.cascadeTimer);
+      
+      function animate() {
+        element.style.visibility = "visible";
+        element.textContent = "";
+        const delayIncrement = totalDuration / text.length;
+        
+        for (let i = 0; i < text.length; i++) {
+          const span = document.createElement("span");
+          span.innerHTML = (text[i] === " ") ? "&nbsp;" : text[i];
+          span.style.setProperty("--delay", `${i * delayIncrement}s`);
+          element.appendChild(span);
+        }
+
+        if (loop) {
+          element.cascadeTimer = setTimeout(animate, (totalDuration + CONFIG.textLinger) * 1000);
+        }
+      }
+      animate();
+    }
+
+    /**
+     * Cycle through header texts
+     */
+    function cycleHeaderTexts() {
+      triggerCascade(DOM.headerText, CONFIG.headerTexts[state.currentHeaderTextIndex]);
+      state.currentHeaderTextIndex = (state.currentHeaderTextIndex + 1) % CONFIG.headerTexts.length;
+      setTimeout(cycleHeaderTexts, CONFIG.textCycleDuration);
+    }
+
+    // ============================================
+    // IMAGE LOADING & ANIMATION
+    // ============================================
+
+    /**
+     * Animate image rotation
+     */
     function rotateImage(img) {
       return img.animate(
         [
@@ -573,17 +491,18 @@
           { transform: "rotate(360deg)" }
         ],
         {
-          duration: 600,
+          duration: CONFIG.imageAnimationDuration,
           easing: "ease-out",
           iterations: 1
         }
       ).finished;
     }
 
-  
+    /**
+     * Load images sequentially with animation
+     */
     async function loadImagesSequentially() {
-      const gallery = document.getElementById("gallery");
-      for (let i = 1; i <= maxPhotos; i++) {
+      for (let i = 1; i <= CONFIG.maxPhotos; i++) {
         const img = document.createElement("img");
         img.style.visibility = "hidden";
         img.src = `images/photo${i}.jpg`;
@@ -592,36 +511,32 @@
           this.remove();
         };
 
-        // Wait until image loads
         await new Promise(resolve => {
           img.onload = resolve;
           img.onerror = resolve;
         });
 
-        // Add only after loaded
-        gallery.appendChild(img);
+        DOM.gallery.appendChild(img);
         updateLayout();
         img.style.visibility = "visible";
-        //rotateImage(img);//faster 
         await rotateImage(img);
-        // Optional delay between images
-        await new Promise(resolve => setTimeout(resolve, 10));
+        await new Promise(resolve => setTimeout(resolve, CONFIG.imageDelayBetween));
       }
-      // Refresh image collection for lightbox
-      images = document.querySelectorAll("#gallery img");//refresh images for lightbox
-      // Show footer when finished
-      document.getElementById("footerText").style.opacity = "1";
-    }  
 
+      state.images = document.querySelectorAll("#gallery img");
+      DOM.footerText.style.opacity = "1";
+    }
+
+    /**
+     * Update gallery layout based on device
+     */
     function updateLayout() {
-      const width = window.innerWidth;
       const imgs = document.querySelectorAll("#gallery img");
-      const gallery = document.getElementById("gallery");
       const isMobile = detectDevice() === "Phone";
 
-      gallery.classList.remove("fullscreen");
-      gallery.style.display = "flex";
-      gallery.style.flexWrap = "wrap";
+      DOM.gallery.classList.remove("fullscreen");
+      DOM.gallery.style.display = "flex";
+      DOM.gallery.style.flexWrap = "wrap";
 
       imgs.forEach(img => {
         img.style.display = "block";
@@ -629,7 +544,7 @@
         img.style.margin = "5px";
         img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
         
-        if (isMobile){  
+        if (isMobile) {
           img.style.width = "calc(100% - 20px)";
           img.style.borderRadius = "0.3%";
         } else {
@@ -639,23 +554,198 @@
         }
       });
     }
-    //if (width <= 768) {
-    window.addEventListener("load", async () => {
-      await loadImagesSequentially();
-    });
-      
-    window.addEventListener("resize", updateLayout);
 
+    /**
+     * Adjust gallery position below header
+     */
     function adjustGalleryPosition() {
-      const header = document.getElementById("header");
-      const gallery = document.getElementById("gallery");
-
-      gallery.style.marginTop = header.offsetHeight + "px";
+      DOM.gallery.style.marginTop = DOM.header.offsetHeight + "px";
     }
 
-    window.addEventListener("load", adjustGalleryPosition);
-    window.addEventListener("resize", adjustGalleryPosition);
-  
+    // ============================================
+    // LIGHTBOX & IMAGE NAVIGATION
+    // ============================================
+
+    /**
+     * Show image in lightbox
+     */
+    function showImage(index) {
+      state.images = document.querySelectorAll("#gallery img");
+      if (!state.images.length) return;
+
+      state.currentImageIndex = index;
+      DOM.lightboxImg.src = state.images[index].src;
+
+      DOM.downloadBtn.href = state.images[index].src;
+      DOM.downloadBtn.download = state.images[index].src.split('/').pop();
+    }
+
+    /**
+     * Navigate to next/previous image
+     */
+    function navigateImage(direction) {
+      if (!state.images.length) return;
+      const step = direction === 'next' ? 1 : -1;
+      state.currentImageIndex = (state.currentImageIndex + step + state.images.length) % state.images.length;
+      showImage(state.currentImageIndex);
+    }
+
+    /**
+     * Close lightbox
+     */
+    function closeLightbox() {
+      DOM.lightbox.style.display = "none";
+      DOM.lightbox.classList.remove("show-download");
+    }
+
+    /**
+     * Open lightbox with image
+     */
+    function openLightbox(imgElement) {
+      state.images = document.querySelectorAll("#gallery img");
+      state.currentImageIndex = Array.from(state.images).indexOf(imgElement);
+      DOM.lightbox.style.display = "flex";
+      DOM.lightbox.classList.add("show-download");
+      showImage(state.currentImageIndex);
+    }
+
+    // ============================================
+    // SCROLL EFFECTS
+    // ============================================
+
+    /**
+     * Handle scroll blur effect
+     */
+    function handleScrollBlur() {
+      const headerBottom = DOM.header.getBoundingClientRect().bottom + window.scrollY;
+      
+      document.querySelectorAll("#gallery img").forEach(img => {
+        const rect = img.getBoundingClientRect();
+        const imgTop = rect.top + window.scrollY;
+        
+        if (imgTop < headerBottom) {
+          img.classList.add("blur-img");
+        } else {
+          img.classList.remove("blur-img");
+        }
+      });
+    }
+
+    // ============================================
+    // GITHUB INTEGRATION
+    // ============================================
+
+    /**
+     * Fetch latest commit and manage content updates
+     */
+    function fetchLatestCommitSha() {
+      fetch(CONFIG.githubApiUrl)
+        .then(response => response.json())
+        .then(data => {
+          const latestCommitSha = data.sha;
+          const storedSha = localStorage.getItem('storedSha');
+
+          DOM.headerText.style.visibility = "visible";
+          initializeTracking();
+
+          if (latestCommitSha === storedSha && isPageReloaded()) {
+            DOM.headerText.textContent = "More images soon...";
+            triggerCascade(DOM.headerText, DOM.headerText.textContent, CONFIG.cascadeDuration, false);
+            setTimeout(cycleHeaderTexts, CONFIG.textCycleDuration);
+          } else if (latestCommitSha !== storedSha) {
+            cycleHeaderTexts();
+            localStorage.setItem('storedSha', latestCommitSha);
+            loadGA();
+          }
+
+          window.addEventListener('load', () => {
+            waitForImagesOrTimeout(document.querySelectorAll('img'));
+          });
+        });
+    }
+
+    // ============================================
+    // EVENT LISTENERS SETUP
+    // ============================================
+
+    /**
+     * Initialize all event listeners
+     */
+    function setupEventListeners() {
+      // Gallery image click
+      DOM.gallery.addEventListener("click", (e) => {
+        if (e.target.tagName === "IMG") {
+          openLightbox(e.target);
+        }
+      });
+
+      // Navigation buttons
+      if (DOM.nextBtn) {
+        DOM.nextBtn.addEventListener("click", () => navigateImage('next'));
+      }
+      if (DOM.prevBtn) {
+        DOM.prevBtn.addEventListener("click", () => navigateImage('prev'));
+      }
+
+      // Keyboard navigation
+      document.addEventListener("keydown", (e) => {
+        if (DOM.lightbox.style.display !== "flex") return;
+        if (e.key === "ArrowRight") DOM.nextBtn?.click();
+        if (e.key === "ArrowLeft") DOM.prevBtn?.click();
+        if (e.key === "Escape") closeLightbox();
+      });
+
+      // Close lightbox on background click
+      DOM.lightbox.addEventListener("click", (e) => {
+        if (e.target === DOM.lightbox) {
+          closeLightbox();
+        }
+      });
+
+      // Touch swipe support
+      DOM.lightbox.addEventListener("touchstart", (e) => {
+        state.startX = e.touches[0].clientX;
+      });
+      DOM.lightbox.addEventListener("touchend", (e) => {
+        const endX = e.changedTouches[0].clientX;
+        const diff = state.startX - endX;
+        if (diff > CONFIG.touchSwipeThreshold) DOM.nextBtn?.click();
+        if (diff < -CONFIG.touchSwipeThreshold) DOM.prevBtn?.click();
+      });
+
+      // Download button
+      DOM.downloadBtn.addEventListener("click", () => {
+        sendVisitorData("download", DOM.lightboxImg.src.split('/').pop());
+      });
+
+      // Scroll blur effect
+      window.addEventListener("scroll", handleScrollBlur);
+
+      // Layout updates
+      window.addEventListener("resize", updateLayout);
+      window.addEventListener("resize", adjustGalleryPosition);
+
+      // Page load initialization
+      window.addEventListener("load", async () => {
+        await loadImagesSequentially();
+      });
+      window.addEventListener("load", adjustGalleryPosition);
+    }
+
+    // ============================================
+    // INITIALIZATION
+    // ============================================
+
+    /**
+     * Initialize the entire application
+     */
+    function initializeApp() {
+      fetchLatestCommitSha();
+      setupEventListeners();
+    }
+
+    // Start the application
+    window.addEventListener('load', initializeApp);
   </script>
 </body>
 </html>
