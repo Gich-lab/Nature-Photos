@@ -111,7 +111,7 @@
       </style>
 
     <footer>
-      <p id = "footerText", class="footer" style="text-align: center; display:none; transition:opacity 1s;">
+      <p id = "footerText" class="footer" style="text-align: center; display:none; transition:opacity 1s;">
           &copy; <span id="year"></span> 2026 Gichuki. All rights reserved.
         <!--&copy; 2026 Gichuki. All rights reserved.-->
         <a href="mailto:kenngich@proton.me" style="text-decoration: none !important;">✉️</a> E-mail
@@ -432,7 +432,7 @@
       }
 
       state.images = document.querySelectorAll("#gallery img");
-      document.getElementById("footer").style.display = "block";
+      document.getElementById("footerText").style.display = "block";
       DOM.footerText.style.opacity = "1";
       state.galleryInitialized = true;
     }
