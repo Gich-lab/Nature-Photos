@@ -69,11 +69,17 @@ img {
     border-radius: 10px;
 }
 
+/*
 .lightbox-content {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+}*/
+
+.lightbox-content{
+    position:relative;
+    display:inline-block;
 }
 
 /* Reusable glass button style */
