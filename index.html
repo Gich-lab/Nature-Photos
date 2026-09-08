@@ -624,18 +624,19 @@
 
     // Favourite image button support
     function toggleFavorite() {
-      const imageId = img; 
+      const btn = document.getElementById("favorite-btn");
+      const imageId = DOM.lightboxImg.src.split('/').pop();
 
       let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
       if (favorites.includes(imageId)) {
         favorites = favorites.filter(id => id !== imageId);
-        document.getElementById("favorite-btn").innerHTML = "♡";
-        document.getElementById("favorite-btn").style.color = "#ffcc00";
+        btn.innerHTML = "♡";
+        btn.style.color = "#ffcc00";
       } else {
         favorites.push(imageId);
-        document.getElementById("favorite-btn").innerHTML = "♥";
-        document.getElementById("favorite-btn").style.color = "#00ff66";
+        btn.innerHTML = "♥";
+        btn.style.color = "#00ff66";
       }
       localStorage.setItem("favorites", JSON.stringify(favorites));
     }
