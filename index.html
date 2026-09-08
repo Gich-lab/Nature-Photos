@@ -653,6 +653,24 @@
         }
       });
 
+      // Favourite image button support
+      function toggleFavorite() {
+        const imageId = img; 
+
+        let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+        if (favorites.includes(imageId)) {
+          favorites = favorites.filter(id => id !== imageId);
+          document.getElementById("favorite-btn").innerHTML = "♡";
+          document.getElementById("favorite-btn").style.color = "#ffcc00";
+        } else {
+          favorites.push(imageId);
+          document.getElementById("favorite-btn").innerHTML = "♥";
+          document.getElementById("favorite-btn").style.color = "#00ff66";
+        }
+        localStorage.setItem("favorites", JSON.stringify(favorites));
+      }
+      
       // Touch swipe support
       DOM.lightbox.addEventListener("touchstart", (e) => {
         state.startX = e.touches[0].clientX;
@@ -667,6 +685,11 @@
       // Download button
       DOM.downloadBtn.addEventListener("click", () => {
         sendVisitorData("download", DOM.lightboxImg.src.split('/').pop());
+      });
+
+      // Favourite button
+      DOM.favoriteBtn.addEventListener("click", () => {
+        toggleFavorite();
       });
 
       // Scroll blur effect
@@ -690,7 +713,7 @@
     function initializeApp() {
       initializeDOMElements();
       fetchLatestCommitSha();
-      setupEventListeners();
+      setupEventListeners();  
     }
 
     // Start the application when DOM is ready
