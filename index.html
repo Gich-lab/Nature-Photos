@@ -624,21 +624,23 @@
 
     // Favourite image button support
     function toggleFavorite() {
-      const btn = document.getElementById("favorite-btn");
       const imageId = DOM.lightboxImg.src.split('/').pop();
+
+      if (!imageId) return;
 
       let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
       if (favorites.includes(imageId)) {
         favorites = favorites.filter(id => id !== imageId);
-        btn.innerHTML = "♡";
-        btn.style.color = "#ffcc00";
+        DOM.favoriteBtn.innerHTML = "♡";
+        DOM.favoriteBtn.style.color = "#ffcc00";
       } else {
         favorites.push(imageId);
-        btn.innerHTML = "♥";
-        btn.style.color = "#00ff66";
+        DOM.favoriteBtn.innerHTML = "♥";
+        DOM.favoriteBtn.style.color = "#00ff66";
       }
       localStorage.setItem("favorites", JSON.stringify(favorites));
+      console.log("Favorites:", favorites);
     }
     
     // Initialize all event listeners 
@@ -690,9 +692,7 @@
       });
 
       // Favourite button
-      DOM.favoriteBtn.addEventListener("click", () => {
-        toggleFavorite();
-      });
+      //DOM.favoriteBtn.addEventListener("click", toggleFavorite);
 
       // Scroll blur effect
       window.addEventListener("scroll", handleScrollBlur);
