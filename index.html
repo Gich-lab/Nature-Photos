@@ -9,6 +9,19 @@
   </style>   
 </head>
 <body>
+  <div id="favorite-indicator"
+    style="
+    position:fixed;
+    top:15px;
+    right:15px;
+    font-size:32px;
+    color:#00ff66;
+    z-index:100000;
+    display:none;
+    text-shadow:0 0 10px rgba(0,0,0,0.6);">
+    ♥
+  </div>
+  
     <header class="main-header" id="header">
       <div class="header-inner">
         <span class="cascade-text" id="header-text" style="visibility: hidden;"></span>     
@@ -564,6 +577,14 @@
       DOM.downloadBtn.href = imageSrc;
       DOM.downloadBtn.download = imageId;
 
+      const indicator = document.getElementById("favorite-indicator");
+      
+      if (favorites.includes(imageId)) {
+        indicator.style.display = "block";
+      } else {
+        indicator.style.display = "none";
+      }
+
       const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
       if (favorites.includes(imageId)) {
@@ -651,26 +672,33 @@
     }
 
     // Favourite image button support
-    function toggleFavorite() {
+    function toggleFavorite()
       const imageId = DOM.lightboxImg.src.split('/').pop();
-
       if (!imageId) return;
+
+      const indicator = document.getElementById("favorite-indicator");
 
       let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
       if (favorites.includes(imageId)) {
         favorites = favorites.filter(id => id !== imageId);
+
         DOM.favoriteBtn.innerHTML = "♡";
         DOM.favoriteBtn.style.color = "#ffcc00";
+
+        indicator.style.display = "none";
       } else {
         favorites.push(imageId);
+
         DOM.favoriteBtn.innerHTML = "♥";
         DOM.favoriteBtn.style.color = "#00ff66";
+
+        indicator.style.display = "block";
       }
+
       localStorage.setItem("favorites", JSON.stringify(favorites));
-      console.log("Favorites:", favorites);
     }
-    
+
     // Initialize all event listeners 
     function setupEventListeners() {
       // Gallery image click
