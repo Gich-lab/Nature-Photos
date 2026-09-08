@@ -6,8 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     .main-header {color: green;font-weight: bold;font-size: 2em;text-align: center;margin-top: 15px; margin-bottom: 20px}
-  </style>
-   
+  </style>   
 </head>
 <body>
     <header class="main-header" id="header">
@@ -216,9 +215,7 @@
     </footer>
     
   <script>
-    // ============================================
     // CONFIGURATION
-    // ============================================
     const CONFIG = {
       maxPhotos: 120,
       imageLoadTimeout: 1000,
@@ -250,9 +247,7 @@
       githubApiUrl: "https://api.github.com/repos/Gich-lab/Nature-Photos/commits/main"
     };
 
-    // ============================================
     // STATE
-    // ============================================
     let state = {
       currentImageIndex: 0,
       images: [],
@@ -261,9 +256,7 @@
       galleryInitialized: false
     };
 
-    // ============================================
     // DOM ELEMENTS - Initialized after DOMContentLoaded
-    // ============================================
     let DOM = {};
 
     function initializeDOMElements() {
@@ -280,13 +273,7 @@
       };
     }
 
-    // ============================================
-    // UTILITY FUNCTIONS
-    // ============================================
-
-    /**
-     * Wait for images to load or timeout
-     */
+    // Wait for images to load or timeout 
     function waitForImagesOrTimeout(images, timeoutMs = CONFIG.imageLoadTimeout) {
       return new Promise((resolve) => {
         let loadedCount = 0;
@@ -319,9 +306,7 @@
       });
     }
 
-    /**
-     * Check if page was reloaded
-     */
+    // Check if page was reloaded 
     function isPageReloaded() {
       if (performance.getEntriesByType('navigation')[0]) {
         const navType = performance.getEntriesByType('navigation')[0].type;
@@ -332,9 +317,7 @@
       return false;
     }
 
-    /**
-     * Load Google Analytics
-     */
+    // Load Google Analytics 
     function loadGA() {
       window.dataLayer = window.dataLayer || [];
       function gtag() { dataLayer.push(arguments); }
@@ -346,21 +329,13 @@
       document.head.appendChild(script);
     }
 
-    // ============================================
-    // DEVICE DETECTION
-    // ============================================
-
-    /**
-     * Detect device type
-     */
+    // Detect device type 
     function detectDevice() {
       const ua = navigator.userAgent;
       return /Mobile|Android|iPhone/i.test(ua) ? "Phone" : "Desktop";
     }
 
-    /**
-     * Detect operating system
-     */
+    // Detect operating system 
     function detectOS() {
       const ua = navigator.userAgent;
       const osMap = {
@@ -378,9 +353,7 @@
       return "Unknown";
     }
 
-    /**
-     * Detect browser
-     */
+    // Detect browser 
     function detectBrowser() {
       const ua = navigator.userAgent;
       const browserChecks = [
@@ -400,9 +373,7 @@
       return "Other";
     }
 
-    /**
-     * Get device information object
-     */
+    // Get device information object 
     function getDeviceInfo() {
       return {
         device: detectDevice(),
@@ -412,13 +383,7 @@
       };
     }
 
-    // ============================================
-    // VISITOR TRACKING
-    // ============================================
-
-    /**
-     * Send visitor data to Google Sheets
-     */
+    // Send visitor data to Google Sheets 
     function sendVisitorData(eventType = "visit", imageName = "") {
       const data = {
         event: eventType,
@@ -433,9 +398,7 @@
       }).catch(err => console.error("Log failed:", err));
     }
 
-    /**
-     * Initialize visitor tracking (once per session)
-     */
+    // Initialize visitor tracking (once per session) 
     function initializeTracking() {
       const pageSessionKey = 'pageSessionId';
       if (!sessionStorage.getItem(pageSessionKey)) {
@@ -444,13 +407,7 @@
       }
     }
 
-    // ============================================
-    // HEADER & CASCADE TEXT
-    // ============================================
-
-    /**
-     * Trigger cascade animation for text
-     */
+    // Trigger cascade animation for text 
     function triggerCascade(element, text, totalDuration = CONFIG.cascadeDuration, loop = true) {
       clearTimeout(element.cascadeTimer);
       
@@ -473,22 +430,14 @@
       animate();
     }
 
-    /**
-     * Cycle through header texts
-     */
+    // Cycle through header texts 
     function cycleHeaderTexts() {
       triggerCascade(DOM.headerText, CONFIG.headerTexts[state.currentHeaderTextIndex]);
       state.currentHeaderTextIndex = (state.currentHeaderTextIndex + 1) % CONFIG.headerTexts.length;
       setTimeout(cycleHeaderTexts, CONFIG.textCycleDuration);
     }
 
-    // ============================================
-    // IMAGE LOADING & ANIMATION
-    // ============================================
-
-    /**
-     * Animate image with scale pinpoint effect
-     */
+    // Animate image with scale pinpoint effect 
     function animateImageAppearance(img) {
       return img.animate(
         [
@@ -503,9 +452,7 @@
       ).finished;
     }
 
-    /**
-     * Load images sequentially with animation
-     */
+    // Load images sequentially with animation 
     async function loadImagesSequentially() {
       for (let i = 1; i <= CONFIG.maxPhotos; i++) {
         const img = document.createElement("img");
@@ -534,9 +481,7 @@
       state.galleryInitialized = true;
     }
 
-    /**
-     * Update gallery layout based on device
-     */
+    // Update gallery layout based on device 
     function updateLayout() {
       const imgs = document.querySelectorAll("#gallery img");
       const isMobile = detectDevice() === "Phone";
@@ -562,20 +507,12 @@
       });
     }
 
-    /**
-     * Adjust gallery position below header
-     */
+    // Adjust gallery position below header 
     function adjustGalleryPosition() {
       DOM.gallery.style.marginTop = DOM.header.offsetHeight + "px";
     }
 
-    // ============================================
-    // LIGHTBOX & IMAGE NAVIGATION
-    // ============================================
-
-    /**
-     * Show image in lightbox
-     */
+    // Show image in lightbox 
     function showImage(index) {
       state.images = document.querySelectorAll("#gallery img");
       if (!state.images.length) return;
@@ -587,9 +524,7 @@
       DOM.downloadBtn.download = state.images[index].src.split('/').pop();
     }
 
-    /**
-     * Navigate to next/previous image
-     */
+    // Navigate to next/previous image 
     function navigateImage(direction) {
       if (!state.images.length) return;
       const step = direction === 'next' ? 1 : -1;
@@ -597,17 +532,13 @@
       showImage(state.currentImageIndex);
     }
 
-    /**
-     * Close lightbox
-     */
+    // Close lightbox 
     function closeLightbox() {
       DOM.lightbox.style.display = "none";
       DOM.lightbox.classList.remove("show-download");
     }
 
-    /**
-     * Open lightbox with image
-     */
+    // Open lightbox with image 
     function openLightbox(imgElement) {
       state.images = document.querySelectorAll("#gallery img");
       state.currentImageIndex = Array.from(state.images).indexOf(imgElement);
@@ -616,13 +547,7 @@
       showImage(state.currentImageIndex);
     }
 
-    // ============================================
-    // SCROLL EFFECTS
-    // ============================================
-
-    /**
-     * Handle scroll blur effect
-     */
+    // Handle scroll blur effect 
     function handleScrollBlur() {
       const headerBottom = DOM.header.getBoundingClientRect().bottom + window.scrollY;
       
@@ -638,13 +563,7 @@
       });
     }
 
-    // ============================================
-    // GITHUB INTEGRATION
-    // ============================================
-
-    /**
-     * Fetch latest commit and manage content updates
-     */
+    // Fetch latest commit and manage content updates 
     function fetchLatestCommitSha() {
       fetch(CONFIG.githubApiUrl)
         .then(response => response.json())
@@ -680,13 +599,7 @@
         });
     }
 
-    // ============================================
-    // EVENT LISTENERS SETUP
-    // ============================================
-
-    /**
-     * Initialize all event listeners
-     */
+    // Initialize all event listeners 
     function setupEventListeners() {
       // Gallery image click
       DOM.gallery.addEventListener("click", (e) => {
@@ -751,13 +664,7 @@
       window.addEventListener("load", adjustGalleryPosition);
     }
 
-    // ============================================
-    // INITIALIZATION
-    // ============================================
-
-    /**
-     * Initialize the entire application
-     */
+    // Initialize the entire application
     function initializeApp() {
       initializeDOMElements();
       fetchLatestCommitSha();
