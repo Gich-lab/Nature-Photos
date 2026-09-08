@@ -622,6 +622,24 @@
         });
     }
 
+    // Favourite image button support
+    function toggleFavorite() {
+      const imageId = img; 
+
+      let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+      if (favorites.includes(imageId)) {
+        favorites = favorites.filter(id => id !== imageId);
+        document.getElementById("favorite-btn").innerHTML = "♡";
+        document.getElementById("favorite-btn").style.color = "#ffcc00";
+      } else {
+        favorites.push(imageId);
+        document.getElementById("favorite-btn").innerHTML = "♥";
+        document.getElementById("favorite-btn").style.color = "#00ff66";
+      }
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+    }
+    
     // Initialize all event listeners 
     function setupEventListeners() {
       // Gallery image click
@@ -653,24 +671,6 @@
           closeLightbox();
         }
       });
-
-      // Favourite image button support
-      function toggleFavorite() {
-        const imageId = img; 
-
-        let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-
-        if (favorites.includes(imageId)) {
-          favorites = favorites.filter(id => id !== imageId);
-          document.getElementById("favorite-btn").innerHTML = "♡";
-          document.getElementById("favorite-btn").style.color = "#ffcc00";
-        } else {
-          favorites.push(imageId);
-          document.getElementById("favorite-btn").innerHTML = "♥";
-          document.getElementById("favorite-btn").style.color = "#00ff66";
-        }
-        localStorage.setItem("favorites", JSON.stringify(favorites));
-      }
       
       // Touch swipe support
       DOM.lightbox.addEventListener("touchstart", (e) => {
