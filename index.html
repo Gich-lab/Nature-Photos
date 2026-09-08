@@ -535,6 +535,7 @@
       DOM.gallery.style.marginTop = DOM.header.offsetHeight + "px";
     }
 
+    /*
     // Show image in lightbox 
     function showImage(index) {
       state.images = document.querySelectorAll("#gallery img");
@@ -546,7 +547,34 @@
       DOM.downloadBtn.href = state.images[index].src;
       DOM.downloadBtn.download = state.images[index].src.split('/').pop();
     }
+    */
+    
+    // Show image in lightbox 
+    function showImage(index) {
+      state.images = document.querySelectorAll("#gallery img");
+      if (!state.images.length) return;
 
+      state.currentImageIndex = index;
+
+      const imageSrc = state.images[index].src;
+      const imageId = imageSrc.split('/').pop();
+
+      DOM.lightboxImg.src = imageSrc;
+
+      DOM.downloadBtn.href = imageSrc;
+      DOM.downloadBtn.download = imageId;
+
+      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+      if (favorites.includes(imageId)) {
+        DOM.favoriteBtn.innerHTML = "♥";
+        DOM.favoriteBtn.style.color = "#00ff66";
+      } else {
+        DOM.favoriteBtn.innerHTML = "♡";
+        DOM.favoriteBtn.style.color = "#ffcc00";
+      }
+    }
+    
     // Navigate to next/previous image 
     function navigateImage(direction) {
       if (!state.images.length) return;
