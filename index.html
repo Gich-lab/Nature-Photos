@@ -562,33 +562,25 @@
     }
     */
     
-    // Show image in lightbox 
-    function showImage(index) {
-      state.images = document.querySelectorAll("#gallery img");
-      if (!state.images.length) return;
+    // Show image in lightbox together with the favorite icon
+    function toggleFavorite() {
+      const imageId = DOM.lightboxImg.src.split('/').pop();
+      if (!imageId) return;
 
-      state.currentImageIndex = index;
-
-      const imageSrc = state.images[index].src;
-      const imageId = imageSrc.split('/').pop();
-
-      DOM.lightboxImg.src = imageSrc;
-
-      DOM.downloadBtn.href = imageSrc;
-      DOM.downloadBtn.download = imageId;
-
-      DOM.favoriteBtn.textContent = favorites.includes(imageId) ? "♥" : "♡";
-      DOM.favoriteBtn.style.color = favorites.includes(imageId) ? "limegreen" : "white";
-
-      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
       if (favorites.includes(imageId)) {
-        DOM.favoriteBtn.innerHTML = "♥";
-        DOM.favoriteBtn.style.color = "#00ff66";
-      } else {
+        favorites = favorites.filter(id => id !== imageId);
+
         DOM.favoriteBtn.innerHTML = "♡";
         DOM.favoriteBtn.style.color = "#ffcc00";
+      } else {
+        favorites.push(imageId);
+
+        DOM.favoriteBtn.innerHTML = "♥";
+        DOM.favoriteBtn.style.color = "#00ff66";
       }
+      localStorage.setItem("favorites", JSON.stringify(favorites));
     }
     
     // Navigate to next/previous image 
