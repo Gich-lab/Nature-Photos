@@ -577,13 +577,8 @@
       DOM.downloadBtn.href = imageSrc;
       DOM.downloadBtn.download = imageId;
 
-      const indicator = document.getElementById("favorite-indicator");
-      
-      if (favorites.includes(imageId)) {
-        indicator.style.display = "block";
-      } else {
-        indicator.style.display = "none";
-      }
+      DOM.favoriteBtn.textContent = favorites.includes(imageId) ? "♥" : "♡";
+      DOM.favoriteBtn.style.color = favorites.includes(imageId) ? "limegreen" : "white";
 
       const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
