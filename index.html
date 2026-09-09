@@ -561,6 +561,20 @@
       DOM.downloadBtn.download = state.images[index].src.split('/').pop();
     }
     */
+    // add the favorite icon to an image after selection on lightbox
+    function updateFavoriteIndicators() {
+        const favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
+
+        document.querySelectorAll("#gallery img").forEach(img => {
+            const imageId = img.src.split('/').pop();
+            const wrapper = img.parentElement;
+
+            wrapper.classList.toggle(
+                "favorite",
+                favorites.includes(imageId)
+            );
+        });
+    }
     
     // Show image in lightbox, toggle and update favorite status
     function toggleFavorite() {
@@ -580,8 +594,8 @@
             DOM.favoriteBtn.innerHTML = "♥";
             DOM.favoriteBtn.style.color = "#00ff66";
         }
-
-        sessionStorage.setItem("favorites", JSON.stringify(favorites));
+      sessionStorage.setItem("favorites", JSON.stringify(favorites));
+      updateFavoriteIndicators();
     }
 
     // Open image in lightbox
@@ -600,16 +614,19 @@
         const imageId = DOM.lightboxImg.src.split('/').pop();
         const favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
 
-        if (favorites.includes(imageId)) {
+        if (DOM.favoriteBtn) {
+          if (favorites.includes(imageId)) {
             DOM.favoriteBtn.innerHTML = "♥";
             DOM.favoriteBtn.style.color = "#00ff66";
-        } else {
+
+            updateFavoriteIndicators();
+          } else {
             DOM.favoriteBtn.innerHTML = "♡";
             DOM.favoriteBtn.style.color = "#ffcc00";
+          }
         }
-
-        DOM.lightbox.style.display = "flex";
-    }
+      
+      DOM.lightbox.style.display = "flex";
     
     // Navigate to next/previous image 
     function navigateImage(direction) {
