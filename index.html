@@ -578,22 +578,21 @@
     
     // Show image in lightbox, toggle and update favorite status
     function toggleFavorite() {
-        const imageId = DOM.lightboxImg.src.split('/').pop();
-        if (!imageId) return;
+      const imageId = DOM.lightboxImg.src.split('/').pop();
+      if (!imageId) return;
+      let favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
 
-        let favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
+      if (favorites.includes(imageId)) {
+        favorites = favorites.filter(id => id !== imageId);
 
-        if (favorites.includes(imageId)) {
-            favorites = favorites.filter(id => id !== imageId);
+        DOM.favoriteBtn.innerHTML = "♡";
+        DOM.favoriteBtn.style.color = "#ffcc00";
+      } else {
+        favorites.push(imageId);
 
-            DOM.favoriteBtn.innerHTML = "♡";
-            DOM.favoriteBtn.style.color = "#ffcc00";
-        } else {
-            favorites.push(imageId);
-
-            DOM.favoriteBtn.innerHTML = "♥";
-            DOM.favoriteBtn.style.color = "#00ff66";
-        }
+        DOM.favoriteBtn.innerHTML = "♥";
+        DOM.favoriteBtn.style.color = "#00ff66";
+      }
       sessionStorage.setItem("favorites", JSON.stringify(favorites));
       updateFavoriteIndicators();
     }
