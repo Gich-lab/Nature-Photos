@@ -761,7 +761,9 @@
       });
 
       // Favourite button
-      DOM.favoriteBtn.addEventListener("click", toggleFavorite);
+      if (DOM.favoriteBtn) {
+        DOM.favoriteBtn.addEventListener("click", toggleFavorite);
+      }
 
       // Scroll blur effect
       window.addEventListener("scroll", handleScrollBlur);
