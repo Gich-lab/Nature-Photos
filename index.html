@@ -577,30 +577,11 @@
     }
     
     // Show image in lightbox, toggle and update favorite status
-    function toggleFavorite() {
-      const imageId = DOM.lightboxImg.src.split('/').pop();
-      if (!imageId) return;
-      let favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
-
-      if (favorites.includes(imageId)) {
-        favorites = favorites.filter(id => id !== imageId);
-
-        DOM.favoriteBtn.innerHTML = "♡";
-        DOM.favoriteBtn.style.color = "#ffcc00";
-      } else {
-        favorites.push(imageId);
-
-        DOM.favoriteBtn.innerHTML = "♥";
-        DOM.favoriteBtn.style.color = "#00ff66";
-      }
-      sessionStorage.setItem("favorites", JSON.stringify(favorites));
-      updateFavoriteIndicators();
-    }
-
-    // Open image in lightbox
     function showImage(index) {
         state.images = document.querySelectorAll("#gallery img");
+
         if (!state.images.length) return;
+        if (index < 0 || index >= state.images.length) return;
 
         state.currentImageIndex = index;
 
@@ -609,23 +590,19 @@
         DOM.downloadBtn.href = state.images[index].src;
         DOM.downloadBtn.download = state.images[index].src.split('/').pop();
 
-        // Update favorite icon
-        const imageId = DOM.lightboxImg.src.split('/').pop();
+        const imageId = state.images[index].src.split('/').pop();
         const favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
 
         if (DOM.favoriteBtn) {
-          if (favorites.includes(imageId)) {
-            DOM.favoriteBtn.innerHTML = "♥";
-            DOM.favoriteBtn.style.color = "#00ff66";
+            const isFavorite = favorites.includes(imageId);
 
-            updateFavoriteIndicators();
-          } else {
-            DOM.favoriteBtn.innerHTML = "♡";
-            DOM.favoriteBtn.style.color = "#ffcc00";
-          }
+            DOM.favoriteBtn.innerHTML = isFavorite ? "♥" : "♡";
+            DOM.favoriteBtn.style.color = isFavorite ? "#00ff66" : "#ffcc00";
         }
-      
-      DOM.lightbox.style.display = "flex";
+
+        updateFavoriteIndicators();
+        DOM.lightbox.style.display = "flex";
+    }
     
     // Navigate to next/previous image 
     function navigateImage(direction) {
