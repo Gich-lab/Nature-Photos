@@ -562,11 +562,7 @@
     }
     */
     
-    // Show image in lightbox and update favorite icon
-    // Favorite button click
-    DOM.favoriteBtn.addEventListener("click", toggleFavorite);
-
-    // Toggle favorite status
+    // Show image in lightbox, toggle and update favorite status
     function toggleFavorite() {
         const imageId = DOM.lightboxImg.src.split('/').pop();
         if (!imageId) return;
@@ -765,7 +761,7 @@
       });
 
       // Favourite button
-      //DOM.favoriteBtn.addEventListener("click", toggleFavorite);
+      DOM.favoriteBtn.addEventListener("click", toggleFavorite);
 
       // Scroll blur effect
       window.addEventListener("scroll", handleScrollBlur);
