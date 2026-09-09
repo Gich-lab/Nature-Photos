@@ -662,32 +662,30 @@
         });
     }
 
-    // Favourite image button support
-    function toggleFavorite()
+
+    // Show image in lightbox and update favorite icon
+    function showImage(index) {
+      state.images = document.querySelectorAll("#gallery img");
+      if (!state.images.length) return;
+
+      state.currentImageIndex = index;
+
+      DOM.lightboxImg.src = state.images[index].src;
+
+      DOM.downloadBtn.href = state.images[index].src;
+      DOM.downloadBtn.download = state.images[index].src.split('/').pop();
+
+      // Update favorite icon
       const imageId = DOM.lightboxImg.src.split('/').pop();
-      if (!imageId) return;
-
-      const indicator = document.getElementById("favorite-indicator");
-
-      let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
       if (favorites.includes(imageId)) {
-        favorites = favorites.filter(id => id !== imageId);
-
-        DOM.favoriteBtn.innerHTML = "♡";
-        DOM.favoriteBtn.style.color = "#ffcc00";
-
-        indicator.style.display = "none";
-      } else {
-        favorites.push(imageId);
-
         DOM.favoriteBtn.innerHTML = "♥";
         DOM.favoriteBtn.style.color = "#00ff66";
-
-        indicator.style.display = "block";
+      } else {
+        DOM.favoriteBtn.innerHTML = "♡";
+        DOM.favoriteBtn.style.color = "#ffcc00";
       }
-
-      localStorage.setItem("favorites", JSON.stringify(favorites));
     }
 
     // Initialize all event listeners 
