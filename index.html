@@ -782,7 +782,7 @@
     // Start the application when DOM is ready
     document.addEventListener('DOMContentLoaded', initializeApp);
     window.addEventListener("beforeunload", () => {
-      localStorage.removeItem("favorites");
+      sessionStorage.removeItem("favorites");
     });
   </script>
 </body>
