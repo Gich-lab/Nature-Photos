@@ -770,6 +770,7 @@
       DOM.lightbox.style.display = "flex";
     }
 
+    /*
     // Update the selected images with an icon
     function updateFavoriteIndicators() {
       const favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
@@ -792,6 +793,21 @@
           indicator.remove();
         }
       }
+      });
+    }
+    */
+    // test
+    function updateFavoriteIndicators() {
+      const favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
+
+      document.querySelectorAll("#gallery img").forEach(img => {
+        const imageId = img.src.split('/').pop();
+
+        if (favorites.includes(imageId)) {
+          img.style.border = "4px solid #00ff66";
+        } else {
+          img.style.border = "";
+        }
       });
     }
     
