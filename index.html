@@ -796,6 +796,7 @@
       });
     }
     */
+    /*
     // test
     function updateFavoriteIndicators() {
       const favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
@@ -807,6 +808,35 @@
           img.style.border = "4px solid #00ff66";
         } else {
           img.style.border = "";
+        }
+      });
+    }
+    */
+    // Add a favorite icon to liked images
+    function updateFavoriteIndicators() {
+      const favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
+
+      document.querySelectorAll("#gallery img").forEach(img => {
+        const imageId = img.src.split('/').pop();
+
+        // Make parent container positionable
+        const container = img.parentElement;
+        container.style.position = "relative";
+
+        let indicator = container.querySelector(".favorite-indicator");
+
+        if (favorites.includes(imageId)) {
+
+            if (!indicator) {
+                indicator = document.createElement("div");
+                indicator.className = "favorite-indicator";
+                indicator.innerHTML = "♥";
+                container.appendChild(indicator);
+            }
+        } else {
+          if (indicator) {
+            indicator.remove();
+          }
         }
       });
     }
