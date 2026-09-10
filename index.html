@@ -504,7 +504,13 @@
           img.onerror = resolve;
         });
 
-        DOM.gallery.appendChild(img);
+        //DOM.gallery.appendChild(img);
+        // changed from DOM to wrapper
+        const wrapper = document.createElement("div");
+        wrapper.className = "gallery-item";
+        wrapper.appendChild(img);
+        DOM.gallery.appendChild(wrapper);
+        
         updateLayout();
         img.style.visibility = "visible";
         await animateImageAppearance(img);
@@ -811,6 +817,7 @@
         }
       });
     }
+    */
     
     // Add a favorite icon to liked images
     function updateFavoriteIndicators() {
@@ -828,7 +835,8 @@
         if (favorites.includes(imageId)) {
 
             if (!indicator) {
-                indicator = document.createElement("div");
+                //indicator = document.createElement("div");
+                indicator = document.createElement("span");
                 indicator.className = "favorite-indicator";
                 indicator.innerHTML = "♥";
                 container.appendChild(indicator);
@@ -840,8 +848,8 @@
         }
       });
     }
-    */
-
+    
+    /*
     function updateFavoriteIndicators() {
         const favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
 
@@ -869,7 +877,7 @@
             }
         });
     }
-    
+    */
     // Initialize all event listeners 
     function setupEventListeners() {
       // Gallery image click
