@@ -811,7 +811,7 @@
         }
       });
     }
-    */
+    
     // Add a favorite icon to liked images
     function updateFavoriteIndicators() {
       const favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
@@ -839,6 +839,35 @@
           }
         }
       });
+    }
+    */
+
+    function updateFavoriteIndicators() {
+        const favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
+
+        console.log("Favorites:", favorites);
+
+        document.querySelectorAll("#gallery img").forEach(img => {
+            const imageId = img.src.split('/').pop();
+
+            if (favorites.includes(imageId)) {
+                console.log("Creating indicator for:", imageId);
+
+                const indicator = document.createElement("span");
+                indicator.className = "favorite-indicator";
+                indicator.innerHTML = "♥";
+
+                indicator.style.position = "absolute";
+                indicator.style.top = "5px";
+                indicator.style.right = "5px";
+                indicator.style.color = "red";
+                indicator.style.fontSize = "40px";
+                indicator.style.zIndex = "9999";
+
+                img.parentElement.style.position = "relative";
+                img.parentElement.appendChild(indicator);
+            }
+        });
     }
     
     // Initialize all event listeners 
