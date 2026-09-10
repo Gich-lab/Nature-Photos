@@ -146,12 +146,11 @@ img {
 
 .favorite-indicator {
     position: absolute;
-    top: 8px;
-    right: 8px;
-    color: #00ff66;
-    font-size: 22px;
-    font-weight: bold;
-    z-index: 10;
-    pointer-events: none;
-    text-shadow: 0 0 5px rgba(0,0,0,0.8);
+    top: 5px;
+    left: 5px;
+    color: lime;
+    font-size: 40px;
+    z-index: 9999;
+    background: red;
 }
+
