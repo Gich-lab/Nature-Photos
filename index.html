@@ -302,7 +302,6 @@
         lightbox: document.getElementById("lightbox"),
         lightboxImg: document.getElementById("lightbox-img"),
         downloadBtn: document.getElementById("download"),
-        favoriteBtn: document.getElementById("favorite-btn"),
         footerText: document.getElementById("footerText"),
         nextBtn: document.querySelector(".next"),
         prevBtn: document.querySelector(".prev")
@@ -504,12 +503,7 @@
           img.onerror = resolve;
         });
 
-        //DOM.gallery.appendChild(img);
-        // changed from DOM to wrapper
-        const wrapper = document.createElement("div");
-        wrapper.className = "gallery-item";
-        wrapper.appendChild(img);
-        DOM.gallery.appendChild(wrapper);
+        DOM.gallery.appendChild(img);
         
         updateLayout();
         img.style.visibility = "visible";
@@ -554,7 +548,6 @@
       DOM.gallery.style.marginTop = DOM.header.offsetHeight + "px";
     }
 
-    /*
     // Show image in lightbox 
     function showImage(index) {
       state.images = document.querySelectorAll("#gallery img");
@@ -566,92 +559,7 @@
       DOM.downloadBtn.href = state.images[index].src;
       DOM.downloadBtn.download = state.images[index].src.split('/').pop();
     }
-    */
-    // add the favorite icon to an image after selection on lightbox
-    function updateFavoriteIndicators() {
-      const favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
 
-      // Remove old indicators
-      document.querySelectorAll(".favorite-indicator").forEach(el => el.remove());
-
-      document.querySelectorAll("#gallery img").forEach(img => {
-        const imageId = img.src.split("/").pop();
-
-        if (favorites.includes(imageId)) {
-            const indicator = document.createElement("span");
-            indicator.className = "favorite-indicator";
-            indicator.innerHTML = "♥";
-
-            const wrapper = img.closest(".gallery-item");
-            if (wrapper) {
-              wrapper.appendChild(indicator);
-            }
-        }
-      });
-    }
-
-    // activate favorite button
-    function toggleFavorite() {
-        if (!DOM.lightboxImg) return;
-
-        const imageId = DOM.lightboxImg.src.split('/').pop();
-        if (!imageId) return;
-
-        let favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
-
-        if (favorites.includes(imageId)) {
-            favorites = favorites.filter(id => id !== imageId);
-
-            if (DOM.favoriteBtn) {
-                DOM.favoriteBtn.innerHTML = "♡";
-                DOM.favoriteBtn.style.color = "#ffcc00";
-            }
-        } else {
-            favorites.push(imageId);
-
-            if (DOM.favoriteBtn) {
-                DOM.favoriteBtn.innerHTML = "♥";
-                DOM.favoriteBtn.style.color = "#00ff66";
-            }
-        }
-
-        sessionStorage.setItem("favorites", JSON.stringify(favorites));
-
-        console.log("Favorites:", favorites);
-
-        if (typeof updateFavoriteIndicators === "function") {
-            updateFavoriteIndicators();
-        }
-    }
-    
-    // Show image in lightbox, toggle and update favorite status
-    function showImage(index) {
-        state.images = document.querySelectorAll("#gallery img");
-
-        if (!state.images.length) return;
-        if (index < 0 || index >= state.images.length) return;
-
-        state.currentImageIndex = index;
-
-        DOM.lightboxImg.src = state.images[index].src;
-
-        DOM.downloadBtn.href = state.images[index].src;
-        DOM.downloadBtn.download = state.images[index].src.split('/').pop();
-
-        const imageId = state.images[index].src.split('/').pop();
-        const favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
-
-        if (DOM.favoriteBtn) {
-          const isFavorite = favorites.includes(imageId);
-
-          DOM.favoriteBtn.innerHTML = isFavorite ? "♥" : "♡";
-          DOM.favoriteBtn.style.color = isFavorite ? "#00ff66" : "#ffcc00";
-        }
-
-        updateFavoriteIndicators();
-        DOM.lightbox.style.display = "flex";
-    }
-    
     // Navigate to next/previous image 
     function navigateImage(direction) {
       if (!state.images.length) return;
