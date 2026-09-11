@@ -569,17 +569,25 @@
     */
     // add the favorite icon to an image after selection on lightbox
     function updateFavoriteIndicators() {
-        const favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
+      const favorites = JSON.parse(sessionStorage.getItem("favorites")) || [];
 
-        document.querySelectorAll("#gallery img").forEach(img => {
-            const imageId = img.src.split('/').pop();
-            const wrapper = img.parentElement;
+      // Remove old indicators
+      document.querySelectorAll(".favorite-indicator").forEach(el => el.remove());
 
-            wrapper.classList.toggle(
-                "favorite",
-                favorites.includes(imageId)
-            );
-        });
+      document.querySelectorAll("#gallery img").forEach(img => {
+        const imageId = img.src.split("/").pop();
+
+        if (favorites.includes(imageId)) {
+            const indicator = document.createElement("span");
+            indicator.className = "favorite-indicator";
+            indicator.innerHTML = "♥";
+
+            const wrapper = img.closest(".gallery-item");
+            if (wrapper) {
+              wrapper.appendChild(indicator);
+            }
+        }
+      });
     }
 
     // activate favorite button
@@ -836,7 +844,7 @@
 
             if (!indicator) {
                 //indicator = document.createElement("div");
-                indicator = document.createElement("div");//span
+                indicator = document.createElement("span");
                 indicator.className = "favorite-indicator";
                 indicator.innerHTML = "♥";
                 container.appendChild(indicator);
