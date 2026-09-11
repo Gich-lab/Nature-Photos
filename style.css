@@ -139,18 +139,18 @@ img {
     right:max(10px, env(safe-area-inset-right));
 }
 
-.image-container {
+.gallery-item {
     position: relative;
     display: inline-block;
 }
 
 .favorite-indicator {
     position: absolute;
-    top: 5px;
-    left: 5px;
-    color: lime;
-    font-size: 40px;
-    z-index: 9999;
-    background: red;
+    top: 8px;
+    left: 8px;
+    color: red;
+    font-size: 20px;
+    z-index: 100;
+    pointer-events: none;
 }
 
