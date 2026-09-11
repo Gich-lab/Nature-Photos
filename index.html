@@ -4,253 +4,60 @@
   <link rel="icon" href="tab-icon.ico" type="image/x-icon" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    .main-header {color: green;font-weight: bold;font-size: 2em;text-align: center;margin-top: 15px; margin-bottom: 20px}
-  </style>   
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div id="favorite-indicator"
-    style="
-    position:fixed;
-    top:15px;
-    right:15px;
-    font-size:32px;
-    color:#00ff66;
-    z-index:100000;
-    display:none;
-    text-shadow:0 0 10px rgba(0,0,0,0.6);">
+    style="position:fixed; top:15px; right:15px; font-size:32px; color:#00ff66; z-index:100000; display:none; text-shadow:0 0 10px rgba(0,0,0,0.6);">
     ♥
   </div>
   
-    <header class="main-header" id="header">
-      <div class="header-inner">
-        <span class="cascade-text" id="header-text" style="visibility: hidden;"></span>     
-      </div>
-    </header>
-    <main>
-      <div id="gallery" class="gallery"></div>
-      <div id="lightbox" class="lightbox"
-          style="
-          display:none;
-          position:fixed;
-          inset:0;
-          background:rgba(0,0,0,0.85);
-          justify-content:center;
-          align-items:center;
-          z-index:9999;">
+  <header class="main-header" id="header">
+    <div class="header-inner">
+      <span class="cascade-text" id="header-text" style="visibility: hidden;"></span>     
+    </div>
+  </header>
 
-        <div class="lightbox-content"
-          style="
-          position:relative;
-          display:flex;
-          align-items:center;
-          justify-content:center;">
-          <button class="prev"
-            onmouseover="
-            this.style.background='rgba(0,0,0,0.55)';
-            this.style.color='white';
-            this.style.borderColor='rgba(255,255,255,0.3)';
-            "
-            onmouseout="
-            this.style.background='rgba(255,255,255,0.12)';
-            this.style.color='#00ff44';
-            this.style.borderColor='rgba(0,255,0,0.25)';
-            "
-            style="
-            position:absolute;
-            top:50%;
-            left:5px;
-            transform:translateY(-50%);
-            background:rgba(255,255,255,0.12);
-            backdrop-filter:blur(7px);
-            -webkit-backdrop-filter:blur(7px);
-            border:1px solid rgba(0,255,0,0.25);
-            color:#00ff44;
-            border-radius:20px;
-            padding:8px 12px;
-            cursor:pointer;
-            z-index:10001;">
-            ❮ Prev
-          </button>   
+  <main>
+    <div id="gallery" class="gallery"></div>
 
-          <img id="lightbox-img"
-            src=""
-            alt="Enlarged image"
-            style="
-            display:block;
-            max-width:90vw;
-            max-height:90vh;
-            object-fit:contain;
-            border-radius:8px;">
-            <button class="next"
-              onmouseover="
-              this.style.background='rgba(0,0,0,0.55)';
-              this.style.color='white';
-              this.style.borderColor='rgba(255,255,255,0.3)';
-              "
-              onmouseout="
-              this.style.background='rgba(255,255,255,0.12)';
-              this.style.color='#00ff44';
-              this.style.borderColor='rgba(0,255,0,0.25)';
-              "
-              style="
-              position:absolute;
-              top:50%;
-              right:5px;
-              transform:translateY(-50%);
-              background:rgba(255,255,255,0.12);
-              backdrop-filter:blur(7px);
-              -webkit-backdrop-filter:blur(7px);
-              border:1px solid rgba(0,255,0,0.25);
-              color:#00ff44;
-              border-radius:20px;
-              padding:8px 12px;
-              cursor:pointer;
-              z-index:10001;">
-              Next ❯
-          </button>
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox" style="display:none; z-index:9999;">
+      <div class="lightbox-content">
+        <button class="prev" aria-label="Previous">❮ Prev</button>
+
+        <img id="lightbox-img" src="" alt="Enlarged image" style="display:block; max-width:90vw; max-height:90vh; object-fit:contain; border-radius:8px;">
+
+        <button class="next" aria-label="Next">Next ❯</button>
+
+        <!-- Centered controls at the bottom of the lightbox image -->
+        <div class="lightbox-controls" role="group" aria-label="Lightbox controls">
+          <button id="favorite-btn" class="favorite-btn" aria-pressed="false" title="Favorite">♡</button>
+
+          <a id="download" class="download-btn" href="#" download title="Download">Download</a>
         </div>
-
-        <button id="favorite-btn"
-          onclick="toggleFavorite()"
-          onmouseover="this.style.transform='translateX(-50%) scale(1.15)'"
-          onmouseout="this.style.transform='translateX(-50%) scale(1)'"
-          style="
-          position:absolute;
-          bottom:20px;
-          left:calc(50% - 90px);
-          transform:translateX(-50%);
-          background:none;
-          border:none;
-          color:#ffcc00;
-          font-size:36px;
-          cursor:pointer;
-          z-index:10001;
-          padding:0;
-          line-height:1;
-          transition:transform 0.2s ease;
-          text-shadow:0 0 8px rgba(0,0,0,0.6);">
-          ♡
-        </button>
-        
-        <a id="download"
-          class="download-btn"
-          download
-          onmouseover="
-          this.style.background='rgba(0,0,0,0.55)';
-          this.style.color='white';
-          this.style.borderColor='rgba(255,255,255,0.3)';
-          "
-          onmouseout="
-          this.style.background='rgba(255,255,255,0.12)';
-          this.style.color='#00ff44';
-          this.style.borderColor='rgba(0,255,0,0.25)';
-          "
-          style="
-          position:absolute;
-          bottom:20px;
-          left:50%;
-          transform:translateX(-50%);
-          background:rgba(255,255,255,0.12);
-          backdrop-filter:blur(7px);
-          -webkit-backdrop-filter:blur(7px);
-          border:1px solid rgba(0,255,0,0.25);
-          color:#00ff44;
-          text-decoration:none;
-          border-radius:20px;
-          padding: 8px 14px;
-          font-size: 14px;        
-          z-index:10001;">
-          Download
-        </a>
       </div>
-    </main>
+    </div>
 
-    <style>
-        /* Basic styles for gallery */
-        #gallery {display:flex;flex-wrap:wrap;gap:10px;}
-        #gallery img {max-width:100%;height:auto;display:block;}
-        /* Full-screen styles for desktop view */
-        #gallery.fullscreen img {width:100vw !important;height:100vh !important;object-fit:contain;}  
+    <!-- Download confirmation modal -->
+    <div id="download-confirm" class="download-confirm hidden" role="dialog" aria-modal="true" aria-labelledby="download-confirm-title">
+      <p id="download-confirm-title" style="margin:0 0 12px 0;">Proceed to download all?</p>
+      <div style="display:flex; gap:12px; justify-content:center;">
+        <button id="confirm-yes" class="confirm-yes">Yes</button>
+        <button id="confirm-no" class="confirm-no">No</button>
+      </div>
+    </div>
+  </main>
 
-        .main-header {
-          position: fixed;
-          top: 0;
-          margin: 0;
-          right: 0; /*8px;*/
-          left: 0; /*6px; or left: 0;*/
-          /*width: calc(100% - 14px);*/
-          z-index: 99999;
-          color: green;
-          font-family: "Times New Roman", serif;
-          font-style: italic;
-          font-weight: bold;
-          font-size: 2em;
-          text-align: center;
-          padding: 5px 0;
-          background: rgba(255,255,255,0.7);
-          backdrop-filter: blur(3px);
-        }
+  <footer>
+    <p id="footerText" class="footer" style="text-align: center; display:none; transition:opacity 1s;">
+      &copy; <span id="year"></span> 2026 Gichuki. All rights reserved.
+      <a href="mailto:kenngich@proton.me" style="text-decoration: none !important;">✉️</a> E-mail
+    </p>
+  </footer>
 
-        .cascade-text {
-          display: block;
-          width: 100%;
-          box-sizing: border-box;
-        }
-            
-        #gallery {
-          margin-top: 0;
-        }
-      
-        .cascade-text {
-          display: inline-block;
-          /* Animate fade out to create looping effect */
-          animation: cascadeLoop 12s infinite;
-        }
-
-        /* Style each character span */
-        .cascade-text span {
-          opacity: 0;
-          display: inline-block;
-          transform: translateY(20px);
-          /*box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8); web title transition shadow*/
-          animation: cascadeIn 1.2s forwards;
-          /* Use CSS variable for delay */
-          --delay: 0s;
-          animation-delay: var(--delay);
-        }
-
-        @keyframes cascadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes cascadeLoop {
-          0%, 99.9% {
-            opacity: 1;
-          }
-          100% {
-            opacity: 0;
-          }
-        }
-      </style>
-
-    <footer>
-      <p id = "footerText" class="footer" style="text-align: center; display:none; transition:opacity 1s;">
-          &copy; <span id="year"></span> 2026 Gichuki. All rights reserved.
-        <!--&copy; 2026 Gichuki. All rights reserved.-->
-        <a href="mailto:kenngich@proton.me" style="text-decoration: none !important;">✉️</a> E-mail
-      </p>
-    </footer>
-    
   <script>
-    // CONFIGURATION
+    // CONFIG + existing code (kept as in original) with additions for favorites & downloads
     const CONFIG = {
       maxPhotos: 120,
       imageLoadTimeout: 1000,
@@ -291,7 +98,11 @@
       galleryInitialized: false
     };
 
-    // DOM ELEMENTS - Initialized after DOMContentLoaded
+    // Favorites storage key
+    const FAVORITES_KEY = 'lightboxFavorites';
+    let favorites = new Set();
+
+    // DOM placeholders
     let DOM = {};
 
     function initializeDOMElements() {
@@ -304,44 +115,135 @@
         downloadBtn: document.getElementById("download"),
         footerText: document.getElementById("footerText"),
         nextBtn: document.querySelector(".next"),
-        prevBtn: document.querySelector(".prev")
+        prevBtn: document.querySelector(".prev"),
+        favoriteBtn: document.getElementById("favorite-btn"),
+        downloadConfirm: document.getElementById("download-confirm"),
+        confirmYes: document.getElementById("confirm-yes"),
+        confirmNo: document.getElementById("confirm-no"),
+        favoriteIndicator: document.getElementById("favorite-indicator")
       };
     }
 
-    // Wait for images to load or timeout 
+    // Utility: load favorites from localStorage
+    function loadFavorites() {
+      try {
+        const raw = localStorage.getItem(FAVORITES_KEY);
+        if (raw) {
+          const arr = JSON.parse(raw);
+          if (Array.isArray(arr)) arr.forEach(id => favorites.add(id));
+        }
+      } catch (err) {
+        console.warn('Failed to load favorites:', err);
+      }
+    }
+
+    // Utility: save favorites to localStorage (called on lightbox close)
+    function saveFavorites() {
+      try {
+        localStorage.setItem(FAVORITES_KEY, JSON.stringify(Array.from(favorites)));
+        console.log('Favorites saved');
+      } catch (err) {
+        console.warn('Failed to save favorites:', err);
+      }
+    }
+
+    // Toggle favorite for the current image
+    function toggleFavorite() {
+      const current = state.images[state.currentImageIndex];
+      if (!current) return;
+      const id = current.src; // using src as unique id; change to filename/id if available
+      if (favorites.has(id)) favorites.delete(id);
+      else favorites.add(id);
+      updateFavoriteUI(id);
+    }
+
+    function updateFavoriteUI(id) {
+      const isFav = favorites.has(id);
+      if (DOM.favoriteBtn) {
+        DOM.favoriteBtn.classList.toggle('favorited', isFav);
+        DOM.favoriteBtn.textContent = isFav ? '♥' : '♡';
+        DOM.favoriteBtn.setAttribute('aria-pressed', String(isFav));
+        DOM.favoriteBtn.title = isFav ? 'Unfavorite' : 'Favorite';
+      }
+      if (DOM.favoriteIndicator) {
+        DOM.favoriteIndicator.style.display = isFav ? 'block' : 'none';
+      }
+    }
+
+    // --- Download helpers (fetch -> blob -> anchor) ---
+    async function downloadImageByFetch(url, filename) {
+      // Note: requires CORS headers on the image host or a proxy
+      const resp = await fetch(url, { mode: 'cors' });
+      if (!resp.ok) throw new Error(`Fetch failed: ${resp.status}`);
+      const blob = await resp.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      triggerAnchorDownload(blobUrl, filename);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 20000);
+    }
+
+    function triggerAnchorDownload(href, filename) {
+      const a = document.createElement('a');
+      a.href = href;
+      a.download = filename || (href.split('/').pop());
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    async function downloadCurrentImage() {
+      const item = state.images[state.currentImageIndex];
+      if (!item) throw new Error('No image to download');
+      await downloadImageByFetch(item.src, item.src.split('/').pop());
+      sendVisitorData("download", item.src.split('/').pop());
+    }
+
+    async function downloadAllSequential() {
+      for (let i = 0; i < state.images.length; i++) {
+        const item = state.images[i];
+        try {
+          await downloadImageByFetch(item.src, item.src.split('/').pop() || `image-${i+1}.jpg`);
+          await new Promise(res => setTimeout(res, 150)); // tiny pause
+          sendVisitorData("download_all", item.src.split('/').pop());
+        } catch (err) {
+          console.error('Failed to download', item.src, err);
+          // continue to next
+        }
+      }
+    }
+
+    // Show/hide confirm modal
+    function showDownloadConfirm() {
+      if (DOM.downloadConfirm) DOM.downloadConfirm.classList.remove('hidden');
+    }
+    function hideDownloadConfirm() {
+      if (DOM.downloadConfirm) DOM.downloadConfirm.classList.add('hidden');
+    }
+
+    // --- Existing helpers adapted from your original script ---
     function waitForImagesOrTimeout(images, timeoutMs = CONFIG.imageLoadTimeout) {
       return new Promise((resolve) => {
         let loadedCount = 0;
         const totalImages = images.length;
-
-        if (totalImages === 0) {
-          resolve();
-          return;
-        }
-
+        if (totalImages === 0) { resolve(); return; }
         const timeoutId = setTimeout(resolve, timeoutMs);
-
         images.forEach((img) => {
           if (img.complete) {
             loadedCount++;
-            if (loadedCount === totalImages) {
-              clearTimeout(timeoutId);
-              resolve();
-            }
+            if (loadedCount === totalImages) { clearTimeout(timeoutId); resolve(); }
           } else {
             img.addEventListener('load', () => {
               loadedCount++;
-              if (loadedCount === totalImages) {
-                clearTimeout(timeoutId);
-                resolve();
-              }
+              if (loadedCount === totalImages) { clearTimeout(timeoutId); resolve(); }
+            });
+            img.addEventListener('error', () => {
+              loadedCount++;
+              if (loadedCount === totalImages) { clearTimeout(timeoutId); resolve(); }
             });
           }
         });
       });
     }
 
-    // Check if page was reloaded 
     function isPageReloaded() {
       if (performance.getEntriesByType('navigation')[0]) {
         const navType = performance.getEntriesByType('navigation')[0].type;
@@ -352,7 +254,6 @@
       return false;
     }
 
-    // Load Google Analytics 
     function loadGA() {
       window.dataLayer = window.dataLayer || [];
       function gtag() { dataLayer.push(arguments); }
@@ -364,31 +265,18 @@
       document.head.appendChild(script);
     }
 
-    // Detect device type 
     function detectDevice() {
       const ua = navigator.userAgent;
       return /Mobile|Android|iPhone/i.test(ua) ? "Phone" : "Desktop";
     }
 
-    // Detect operating system 
     function detectOS() {
       const ua = navigator.userAgent;
-      const osMap = {
-        "Win": "Windows",
-        "Android": "Android",
-        "iPhone": "iOS",
-        "iPad": "iOS",
-        "Linux": "Linux",
-        "Mac": "MacOS"
-      };
-      
-      for (const [key, value] of Object.entries(osMap)) {
-        if (ua.includes(key)) return value;
-      }
+      const osMap = {"Win":"Windows","Android":"Android","iPhone":"iOS","iPad":"iOS","Linux":"Linux","Mac":"MacOS"};
+      for (const [key, value] of Object.entries(osMap)) if (ua.includes(key)) return value;
       return "Unknown";
     }
 
-    // Detect browser 
     function detectBrowser() {
       const ua = navigator.userAgent;
       const browserChecks = [
@@ -399,16 +287,12 @@
         { pattern: /Firefox/i, name: "Firefox" },
         { pattern: /OPR|Opera/i, name: "Opera" }
       ];
-
       for (const check of browserChecks) {
-        if (check.pattern.test(ua) && (!check.notPattern || !check.notPattern.test(ua))) {
-          return check.name;
-        }
+        if (check.pattern.test(ua) && (!check.notPattern || !check.notPattern.test(ua))) return check.name;
       }
       return "Other";
     }
 
-    // Get device information object 
     function getDeviceInfo() {
       return {
         device: detectDevice(),
@@ -418,120 +302,70 @@
       };
     }
 
-    // Send visitor data to Google Sheets 
     function sendVisitorData(eventType = "visit", imageName = "") {
-      const data = {
-        event: eventType,
-        time: new Date().toISOString(),
-        Image: imageName,
-        ...getDeviceInfo()
-      };
-
-      fetch(CONFIG.sheetsUrl, {
-        method: "POST",
-        body: JSON.stringify(data)
-      }).catch(err => console.error("Log failed:", err));
+      const data = { event: eventType, time: new Date().toISOString(), Image: imageName, ...getDeviceInfo() };
+      fetch(CONFIG.sheetsUrl, { method: "POST", body: JSON.stringify(data) }).catch(err => console.error("Log failed:", err));
     }
 
-    // Initialize visitor tracking (once per session) 
-    function initializeTracking() {
-      const pageSessionKey = 'pageSessionId';
-      if (!sessionStorage.getItem(pageSessionKey)) {
-        sessionStorage.setItem(pageSessionKey, 1);
-        sendVisitorData("visit");
-      }
-    }
-
-    // Trigger cascade animation for text 
     function triggerCascade(element, text, totalDuration = CONFIG.cascadeDuration, loop = true) {
       clearTimeout(element.cascadeTimer);
-      
       function animate() {
         element.style.visibility = "visible";
         element.textContent = "";
-        const delayIncrement = totalDuration / text.length;
-        
+        const delayIncrement = totalDuration / Math.max(1, text.length);
         for (let i = 0; i < text.length; i++) {
           const span = document.createElement("span");
           span.innerHTML = (text[i] === " ") ? "&nbsp;" : text[i];
           span.style.setProperty("--delay", `${i * delayIncrement}s`);
           element.appendChild(span);
         }
-
-        if (loop) {
-          element.cascadeTimer = setTimeout(animate, (totalDuration + CONFIG.textLinger) * 1000);
-        }
+        if (loop) element.cascadeTimer = setTimeout(animate, (totalDuration + CONFIG.textLinger) * 1000);
       }
       animate();
     }
 
-    // Cycle through header texts 
     function cycleHeaderTexts() {
       triggerCascade(DOM.headerText, CONFIG.headerTexts[state.currentHeaderTextIndex]);
       state.currentHeaderTextIndex = (state.currentHeaderTextIndex + 1) % CONFIG.headerTexts.length;
       setTimeout(cycleHeaderTexts, CONFIG.textCycleDuration);
     }
 
-    // Animate image with scale pinpoint effect 
     function animateImageAppearance(img) {
-      return img.animate(
-        [
-          { opacity: 0, transform: "scale(0.05)" },
-          { opacity: 1, transform: "scale(1)" }
-        ],
-        {
-          duration: CONFIG.imageAnimationDuration,
-          easing: "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
-          iterations: 1
-        }
-      ).finished;
+      return img.animate([{ opacity: 0, transform: "scale(0.05)" }, { opacity: 1, transform: "scale(1)" }], {
+        duration: CONFIG.imageAnimationDuration, easing: "cubic-bezier(0.68, -0.55, 0.265, 1.55)", iterations: 1
+      }).finished;
     }
 
-    // Load images sequentially with animation 
     async function loadImagesSequentially() {
       for (let i = 1; i <= CONFIG.maxPhotos; i++) {
         const img = document.createElement("img");
         img.style.visibility = "hidden";
         img.src = `images/photo${i}.jpg`;
-
-        img.onerror = function () {
-          this.remove();
-        };
-
-        await new Promise(resolve => {
-          img.onload = resolve;
-          img.onerror = resolve;
-        });
-
+        img.onerror = function () { this.remove(); };
+        await new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
         DOM.gallery.appendChild(img);
-        
         updateLayout();
         img.style.visibility = "visible";
         await animateImageAppearance(img);
         await new Promise(resolve => setTimeout(resolve, CONFIG.imageDelayBetween));
       }
-
       state.images = document.querySelectorAll("#gallery img");
       document.getElementById("footerText").style.display = "block";
       DOM.footerText.style.opacity = "1";
       state.galleryInitialized = true;
     }
 
-    // Update gallery layout based on device 
     function updateLayout() {
       const imgs = document.querySelectorAll("#gallery img");
       const isMobile = detectDevice() === "Phone";
-
       DOM.gallery.classList.remove("fullscreen");
       DOM.gallery.style.display = "flex";
       DOM.gallery.style.flexWrap = "wrap";
-
       imgs.forEach(img => {
         img.style.display = "block";
         img.style.height = "auto";
         img.style.margin = "5px";
         img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-        
         if (isMobile) {
           img.style.width = "calc(100% - 20px)";
           img.style.borderRadius = "0.3%";
@@ -543,24 +377,22 @@
       });
     }
 
-    // Adjust gallery position below header 
     function adjustGalleryPosition() {
       DOM.gallery.style.marginTop = DOM.header.offsetHeight + "px";
     }
 
-    // Show image in lightbox 
+    // Show image in lightbox and update UI (including favorite state)
     function showImage(index) {
       state.images = document.querySelectorAll("#gallery img");
       if (!state.images.length) return;
-
       state.currentImageIndex = index;
       DOM.lightboxImg.src = state.images[index].src;
-
+      // Set download link href (used as fallback if confirm is bypassed)
       DOM.downloadBtn.href = state.images[index].src;
-      DOM.downloadBtn.download = state.images[index].src.split('/').pop();
+      DOM.downloadBtn.setAttribute('download', state.images[index].src.split('/').pop());
+      updateFavoriteUI(state.images[index].src);
     }
 
-    // Navigate to next/previous image 
     function navigateImage(direction) {
       if (!state.images.length) return;
       const step = direction === 'next' ? 1 : -1;
@@ -568,13 +400,13 @@
       showImage(state.currentImageIndex);
     }
 
-    // Close lightbox 
     function closeLightbox() {
       DOM.lightbox.style.display = "none";
       DOM.lightbox.classList.remove("show-download");
+      saveFavorites(); // save when closing lightbox
+      hideDownloadConfirm();
     }
 
-    // Open lightbox with image 
     function openLightbox(imgElement) {
       state.images = document.querySelectorAll("#gallery img");
       state.currentImageIndex = Array.from(state.images).indexOf(imgElement);
@@ -583,75 +415,56 @@
       showImage(state.currentImageIndex);
     }
 
-    // Handle scroll blur effect 
     function handleScrollBlur() {
       const headerBottom = DOM.header.getBoundingClientRect().bottom + window.scrollY;
-      
       document.querySelectorAll("#gallery img").forEach(img => {
         const rect = img.getBoundingClientRect();
         const imgTop = rect.top + window.scrollY;
-        
-        if (imgTop < headerBottom) {
-          img.classList.add("blur-img");
-        } else {
-          img.classList.remove("blur-img");
-        }
+        if (imgTop < headerBottom) img.classList.add("blur-img"); else img.classList.remove("blur-img");
       });
     }
 
-    // Fetch latest commit and manage content updates 
     function fetchLatestCommitSha() {
       fetch(CONFIG.githubApiUrl)
         .then(response => response.json())
         .then(data => {
           const latestCommitSha = data.sha;
           const storedSha = localStorage.getItem('storedSha');
-
           DOM.headerText.style.visibility = "visible";
           initializeTracking();
-
           if (latestCommitSha === storedSha && isPageReloaded()) {
-            // Page reloaded with same content - don't reload images, just show footer
             DOM.headerText.textContent = "More images soon...";
             triggerCascade(DOM.headerText, DOM.headerText.textContent, CONFIG.cascadeDuration, false);
             setTimeout(cycleHeaderTexts, CONFIG.textCycleDuration);
-            
-            // Show existing images without animation
             state.images = document.querySelectorAll("#gallery img");
-            if (state.images.length > 0) {
-              DOM.footerText.style.opacity = "1";
-              state.galleryInitialized = true;
-            }
+            if (state.images.length > 0) { DOM.footerText.style.opacity = "1"; state.galleryInitialized = true; }
           } else if (latestCommitSha !== storedSha) {
-            // New content - load images with animation
             cycleHeaderTexts();
             localStorage.setItem('storedSha', latestCommitSha);
             loadGA();
           }
-
-          window.addEventListener('load', () => {
-            waitForImagesOrTimeout(document.querySelectorAll('img'));
-          });
+          window.addEventListener('load', () => { waitForImagesOrTimeout(document.querySelectorAll('img')); });
+        })
+        .catch(err => {
+          // If GitHub API fails, continue with initialization
+          console.warn('GitHub API failed:', err);
+          DOM.headerText.style.visibility = "visible";
+          initializeTracking();
+          cycleHeaderTexts();
+          window.addEventListener('load', () => { waitForImagesOrTimeout(document.querySelectorAll('img')); });
         });
     }
 
-    // Initialize all event listeners 
     function setupEventListeners() {
-      // Gallery image click
+      // Gallery image click (open lightbox)
       DOM.gallery.addEventListener("click", (e) => {
-        if (e.target.tagName === "IMG") {
-          openLightbox(e.target);
-        }
+        if (e.target.tagName === "IMG") openLightbox(e.target);
       });
 
-      // Navigation buttons
-      if (DOM.nextBtn) {
-        DOM.nextBtn.addEventListener("click", () => navigateImage('next'));
-      }
-      if (DOM.prevBtn) {
-        DOM.prevBtn.addEventListener("click", () => navigateImage('prev'));
-      }
-      
+      // Navigation
+      DOM.nextBtn?.addEventListener("click", () => navigateImage('next'));
+      DOM.prevBtn?.addEventListener("click", () => navigateImage('prev'));
+
       // Keyboard navigation
       document.addEventListener("keydown", (e) => {
         if (DOM.lightbox.style.display !== "flex") return;
@@ -660,17 +473,11 @@
         if (e.key === "Escape") closeLightbox();
       });
 
-      // Close lightbox on background click
-      DOM.lightbox.addEventListener("click", (e) => {
-        if (e.target === DOM.lightbox) {
-          closeLightbox();
-        }
-      });
-      
-      // Touch swipe support
-      DOM.lightbox.addEventListener("touchstart", (e) => {
-        state.startX = e.touches[0].clientX;
-      });
+      // Close on outside click
+      DOM.lightbox.addEventListener("click", (e) => { if (e.target === DOM.lightbox) closeLightbox(); });
+
+      // Touch swipe
+      DOM.lightbox.addEventListener("touchstart", (e) => { state.startX = e.touches[0].clientX; });
       DOM.lightbox.addEventListener("touchend", (e) => {
         const endX = e.changedTouches[0].clientX;
         const diff = state.startX - endX;
@@ -678,9 +485,32 @@
         if (diff < -CONFIG.touchSwipeThreshold) DOM.prevBtn?.click();
       });
 
-      // Download button
-      DOM.downloadBtn.addEventListener("click", () => {
-        sendVisitorData("download", DOM.lightboxImg.src.split('/').pop());
+      // Favorite button
+      DOM.favoriteBtn.addEventListener("click", () => toggleFavorite());
+
+      // Download button: show confirm prompt with Yes/No
+      DOM.downloadBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        showDownloadConfirm();
+      });
+
+      // Confirm modal handlers
+      DOM.confirmYes.addEventListener("click", async () => {
+        hideDownloadConfirm();
+        try {
+          await downloadAllSequential();
+        } catch (err) {
+          console.error('Download all failed:', err);
+        }
+      });
+
+      DOM.confirmNo.addEventListener("click", async () => {
+        hideDownloadConfirm();
+        try {
+          await downloadCurrentImage();
+        } catch (err) {
+          console.error('Download current failed:', err);
+        }
       });
 
       // Scroll blur effect
@@ -692,22 +522,30 @@
 
       // Page load initialization
       window.addEventListener("load", async () => {
-        // Only load images if gallery is not already initialized
-        if (!state.galleryInitialized) {
-          await loadImagesSequentially();
-        }
+        if (!state.galleryInitialized) { await loadImagesSequentially(); }
       });
       window.addEventListener("load", adjustGalleryPosition);
     }
 
-    // Initialize the entire application
-    function initializeApp() {
-      initializeDOMElements();
-      fetchLatestCommitSha();
-      setupEventListeners();  
+    // Tracking initialization
+    function initializeTracking() {
+      const pageSessionKey = 'pageSessionId';
+      if (!sessionStorage.getItem(pageSessionKey)) {
+        sessionStorage.setItem(pageSessionKey, 1);
+        sendVisitorData("visit");
+      }
     }
 
-    // Start the application when DOM is ready
+    // Bootstrap
+    function initializeApp() {
+      initializeDOMElements();
+      loadFavorites();
+      fetchLatestCommitSha();
+      setupEventListeners();
+      // Fill year in footer
+      document.getElementById('year').textContent = new Date().getFullYear();
+    }
+
     document.addEventListener('DOMContentLoaded', initializeApp);
   </script>
 </body>
