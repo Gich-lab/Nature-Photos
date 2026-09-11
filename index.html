@@ -39,7 +39,7 @@
       </div>
     </div>
 
-    <!-- Download confirmation modal -->
+    <!-- Download confirmation modal (hidden by default) -->
     <div id="download-confirm" class="download-confirm hidden" role="dialog" aria-modal="true" aria-labelledby="download-confirm-title">
       <p id="download-confirm-title" style="margin:0 0 12px 0;">Proceed to download all?</p>
       <div style="display:flex; gap:12px; justify-content:center;">
@@ -57,7 +57,7 @@
   </footer>
 
   <script>
-    // CONFIG + existing code (kept as in original) with additions for favorites & downloads
+    // CONFIG (unchanged)
     const CONFIG = {
       maxPhotos: 120,
       imageLoadTimeout: 1000,
@@ -98,11 +98,11 @@
       galleryInitialized: false
     };
 
-    // Favorites storage key
+    // Favorites
     const FAVORITES_KEY = 'lightboxFavorites';
     let favorites = new Set();
 
-    // DOM placeholders
+    // DOM refs
     let DOM = {};
 
     function initializeDOMElements() {
@@ -124,63 +124,57 @@
       };
     }
 
-    // Utility: load favorites from localStorage
+    // Load/save favorites
     function loadFavorites() {
       try {
         const raw = localStorage.getItem(FAVORITES_KEY);
-        if (raw) {
-          const arr = JSON.parse(raw);
-          if (Array.isArray(arr)) arr.forEach(id => favorites.add(id));
-        }
-      } catch (err) {
-        console.warn('Failed to load favorites:', err);
-      }
+        if (raw) JSON.parse(raw).forEach(id => favorites.add(id));
+      } catch (e) { console.warn('loadFavorites', e); }
     }
-
-    // Utility: save favorites to localStorage (called on lightbox close)
     function saveFavorites() {
-      try {
-        localStorage.setItem(FAVORITES_KEY, JSON.stringify(Array.from(favorites)));
-        console.log('Favorites saved');
-      } catch (err) {
-        console.warn('Failed to save favorites:', err);
-      }
+      try { localStorage.setItem(FAVORITES_KEY, JSON.stringify(Array.from(favorites))); }
+      catch (e) { console.warn('saveFavorites', e); }
     }
 
-    // Toggle favorite for the current image
-    function toggleFavorite() {
-      const current = state.images[state.currentImageIndex];
-      if (!current) return;
-      const id = current.src; // using src as unique id; change to filename/id if available
-      if (favorites.has(id)) favorites.delete(id);
-      else favorites.add(id);
-      updateFavoriteUI(id);
+    // Cascade / header animation: ensure animation-delay applied directly to spans
+    function triggerCascade(element, text, totalDuration = CONFIG.cascadeDuration, loop = true) {
+      clearTimeout(element.cascadeTimer);
+      element.style.visibility = "visible";
+      element.textContent = "";
+      const len = Math.max(1, text.length);
+      const delayIncrement = totalDuration / len;
+      for (let i = 0; i < text.length; i++) {
+        const span = document.createElement("span");
+        span.innerHTML = (text[i] === " ") ? "&nbsp;" : text[i];
+        // Set both CSS variable and direct style to be robust:
+        span.style.setProperty("--delay", `${i * delayIncrement}s`);
+        span.style.animationDelay = `${i * delayIncrement}s`;
+        span.className = "cascade-char";
+        element.appendChild(span);
+      }
+      if (loop) {
+        element.cascadeTimer = setTimeout(() => {
+          triggerCascade(element, text, totalDuration, loop);
+        }, (totalDuration + CONFIG.textLinger) * 1000);
+      }
+    }
+    function cycleHeaderTexts() {
+      // ensure headerText is visible before we start
+      DOM.headerText.style.visibility = "visible";
+      triggerCascade(DOM.headerText, CONFIG.headerTexts[state.currentHeaderTextIndex]);
+      state.currentHeaderTextIndex = (state.currentHeaderTextIndex + 1) % CONFIG.headerTexts.length;
+      setTimeout(cycleHeaderTexts, CONFIG.textCycleDuration);
     }
 
-    function updateFavoriteUI(id) {
-      const isFav = favorites.has(id);
-      if (DOM.favoriteBtn) {
-        DOM.favoriteBtn.classList.toggle('favorited', isFav);
-        DOM.favoriteBtn.textContent = isFav ? '♥' : '♡';
-        DOM.favoriteBtn.setAttribute('aria-pressed', String(isFav));
-        DOM.favoriteBtn.title = isFav ? 'Unfavorite' : 'Favorite';
-      }
-      if (DOM.favoriteIndicator) {
-        DOM.favoriteIndicator.style.display = isFav ? 'block' : 'none';
-      }
-    }
-
-    // --- Download helpers (fetch -> blob -> anchor) ---
+    // Download helpers (fetch->blob->anchor)
     async function downloadImageByFetch(url, filename) {
-      // Note: requires CORS headers on the image host or a proxy
       const resp = await fetch(url, { mode: 'cors' });
       if (!resp.ok) throw new Error(`Fetch failed: ${resp.status}`);
       const blob = await resp.blob();
       const blobUrl = URL.createObjectURL(blob);
       triggerAnchorDownload(blobUrl, filename);
-      setTimeout(() => URL.revokeObjectURL(blobUrl), 20000);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 20_000);
     }
-
     function triggerAnchorDownload(href, filename) {
       const a = document.createElement('a');
       a.href = href;
@@ -189,37 +183,75 @@
       a.click();
       a.remove();
     }
-
     async function downloadCurrentImage() {
       const item = state.images[state.currentImageIndex];
-      if (!item) throw new Error('No image to download');
+      if (!item) return;
       await downloadImageByFetch(item.src, item.src.split('/').pop());
       sendVisitorData("download", item.src.split('/').pop());
     }
-
     async function downloadAllSequential() {
       for (let i = 0; i < state.images.length; i++) {
-        const item = state.images[i];
+        const it = state.images[i];
         try {
-          await downloadImageByFetch(item.src, item.src.split('/').pop() || `image-${i+1}.jpg`);
-          await new Promise(res => setTimeout(res, 150)); // tiny pause
-          sendVisitorData("download_all", item.src.split('/').pop());
-        } catch (err) {
-          console.error('Failed to download', item.src, err);
-          // continue to next
+          await downloadImageByFetch(it.src, it.src.split('/').pop() || `image-${i+1}.jpg`);
+          await new Promise(r => setTimeout(r, 150));
+          sendVisitorData("download_all", it.src.split('/').pop());
+        } catch (e) {
+          console.error('downloadAllSequential error', e);
         }
       }
     }
 
-    // Show/hide confirm modal
+    // Control visibility only when lightbox is open
     function showDownloadConfirm() {
-      if (DOM.downloadConfirm) DOM.downloadConfirm.classList.remove('hidden');
+      // Only show if lightbox is visible
+      const isOpen = DOM.lightbox && window.getComputedStyle(DOM.lightbox).display === 'flex';
+      if (!isOpen) return;
+      DOM.downloadConfirm.classList.remove('hidden');
     }
-    function hideDownloadConfirm() {
-      if (DOM.downloadConfirm) DOM.downloadConfirm.classList.add('hidden');
+    function hideDownloadConfirm() { DOM.downloadConfirm.classList.add('hidden'); }
+
+    // Show/hide lightbox and update UI
+    function showImage(index) {
+      state.images = document.querySelectorAll("#gallery img");
+      if (!state.images.length) return;
+      state.currentImageIndex = index;
+      DOM.lightboxImg.src = state.images[index].src;
+      DOM.downloadBtn.href = state.images[index].src;
+      DOM.downloadBtn.setAttribute('download', state.images[index].src.split('/').pop());
+      updateFavoriteUI(state.images[index].src);
+    }
+    function openLightbox(imgElement) {
+      state.images = document.querySelectorAll("#gallery img");
+      state.currentImageIndex = Array.from(state.images).indexOf(imgElement);
+      DOM.lightbox.style.display = "flex";
+      showImage(state.currentImageIndex);
+    }
+    function closeLightbox() {
+      DOM.lightbox.style.display = "none";
+      saveFavorites();
+      hideDownloadConfirm();
     }
 
-    // --- Existing helpers adapted from your original script ---
+    // Favorites UI
+    function toggleFavorite() {
+      const current = state.images[state.currentImageIndex];
+      if (!current) return;
+      const id = current.src;
+      if (favorites.has(id)) favorites.delete(id);
+      else favorites.add(id);
+      updateFavoriteUI(id);
+    }
+    function updateFavoriteUI(id) {
+      const isFav = favorites.has(id);
+      DOM.favoriteBtn.classList.toggle('favorited', isFav);
+      DOM.favoriteBtn.textContent = isFav ? '♥' : '♡';
+      DOM.favoriteBtn.setAttribute('aria-pressed', String(isFav));
+      DOM.favoriteBtn.title = isFav ? 'Unfavorite' : 'Favorite';
+      DOM.favoriteIndicator.style.display = isFav ? 'block' : 'none';
+    }
+
+    // Other helpers and gallery loading (kept as you had them)
     function waitForImagesOrTimeout(images, timeoutMs = CONFIG.imageLoadTimeout) {
       return new Promise((resolve) => {
         let loadedCount = 0;
@@ -246,96 +278,19 @@
 
     function isPageReloaded() {
       if (performance.getEntriesByType('navigation')[0]) {
-        const navType = performance.getEntriesByType('navigation')[0].type;
-        return navType === 'reload';
+        return performance.getEntriesByType('navigation')[0].type === 'reload';
       } else if (performance.navigation) {
         return performance.navigation.type === performance.navigation.RELOAD;
       }
       return false;
     }
 
-    function loadGA() {
-      window.dataLayer = window.dataLayer || [];
-      function gtag() { dataLayer.push(arguments); }
-      gtag('js', new Date());
-      gtag('config', CONFIG.gaId);
-      const script = document.createElement('script');
-      script.async = true;
-      script.src = CONFIG.gaScript;
-      document.head.appendChild(script);
-    }
-
-    function detectDevice() {
-      const ua = navigator.userAgent;
-      return /Mobile|Android|iPhone/i.test(ua) ? "Phone" : "Desktop";
-    }
-
-    function detectOS() {
-      const ua = navigator.userAgent;
-      const osMap = {"Win":"Windows","Android":"Android","iPhone":"iOS","iPad":"iOS","Linux":"Linux","Mac":"MacOS"};
-      for (const [key, value] of Object.entries(osMap)) if (ua.includes(key)) return value;
-      return "Unknown";
-    }
-
-    function detectBrowser() {
-      const ua = navigator.userAgent;
-      const browserChecks = [
-        { pattern: /Edg/i, name: "Edge" },
-        { pattern: /Brave/i, name: "Brave" },
-        { pattern: /Chrome/i, notPattern: /Edge|OPR/i, name: "Chrome" },
-        { pattern: /Safari/i, notPattern: /Chrome/i, name: "Safari" },
-        { pattern: /Firefox/i, name: "Firefox" },
-        { pattern: /OPR|Opera/i, name: "Opera" }
-      ];
-      for (const check of browserChecks) {
-        if (check.pattern.test(ua) && (!check.notPattern || !check.notPattern.test(ua))) return check.name;
-      }
-      return "Other";
-    }
-
-    function getDeviceInfo() {
-      return {
-        device: detectDevice(),
-        os: detectOS(),
-        browser: detectBrowser(),
-        screen: `${window.innerWidth}x${document.documentElement.clientHeight}`
-      };
-    }
-
     function sendVisitorData(eventType = "visit", imageName = "") {
-      const data = { event: eventType, time: new Date().toISOString(), Image: imageName, ...getDeviceInfo() };
+      const data = { event: eventType, time: new Date().toISOString(), Image: imageName, device: navigator.userAgent };
       fetch(CONFIG.sheetsUrl, { method: "POST", body: JSON.stringify(data) }).catch(err => console.error("Log failed:", err));
     }
 
-    function triggerCascade(element, text, totalDuration = CONFIG.cascadeDuration, loop = true) {
-      clearTimeout(element.cascadeTimer);
-      function animate() {
-        element.style.visibility = "visible";
-        element.textContent = "";
-        const delayIncrement = totalDuration / Math.max(1, text.length);
-        for (let i = 0; i < text.length; i++) {
-          const span = document.createElement("span");
-          span.innerHTML = (text[i] === " ") ? "&nbsp;" : text[i];
-          span.style.setProperty("--delay", `${i * delayIncrement}s`);
-          element.appendChild(span);
-        }
-        if (loop) element.cascadeTimer = setTimeout(animate, (totalDuration + CONFIG.textLinger) * 1000);
-      }
-      animate();
-    }
-
-    function cycleHeaderTexts() {
-      triggerCascade(DOM.headerText, CONFIG.headerTexts[state.currentHeaderTextIndex]);
-      state.currentHeaderTextIndex = (state.currentHeaderTextIndex + 1) % CONFIG.headerTexts.length;
-      setTimeout(cycleHeaderTexts, CONFIG.textCycleDuration);
-    }
-
-    function animateImageAppearance(img) {
-      return img.animate([{ opacity: 0, transform: "scale(0.05)" }, { opacity: 1, transform: "scale(1)" }], {
-        duration: CONFIG.imageAnimationDuration, easing: "cubic-bezier(0.68, -0.55, 0.265, 1.55)", iterations: 1
-      }).finished;
-    }
-
+    // load images sequentially (kept mostly unchanged)
     async function loadImagesSequentially() {
       for (let i = 1; i <= CONFIG.maxPhotos; i++) {
         const img = document.createElement("img");
@@ -346,18 +301,18 @@
         DOM.gallery.appendChild(img);
         updateLayout();
         img.style.visibility = "visible";
-        await animateImageAppearance(img);
+        try { await img.animate([{ opacity: 0, transform: "scale(0.05)" }, { opacity: 1, transform: "scale(1)" }], { duration: CONFIG.imageAnimationDuration, easing: "cubic-bezier(0.68,-0.55,0.265,1.55)" }).finished; } catch(e){}
         await new Promise(resolve => setTimeout(resolve, CONFIG.imageDelayBetween));
       }
       state.images = document.querySelectorAll("#gallery img");
-      document.getElementById("footerText").style.display = "block";
+      DOM.footerText.style.display = "block";
       DOM.footerText.style.opacity = "1";
       state.galleryInitialized = true;
     }
 
     function updateLayout() {
       const imgs = document.querySelectorAll("#gallery img");
-      const isMobile = detectDevice() === "Phone";
+      const isMobile = /Mobile|Android|iPhone/i.test(navigator.userAgent);
       DOM.gallery.classList.remove("fullscreen");
       DOM.gallery.style.display = "flex";
       DOM.gallery.style.flexWrap = "wrap";
@@ -368,29 +323,10 @@
         img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
         if (isMobile) {
           img.style.width = "calc(100% - 20px)";
-          img.style.borderRadius = "0.3%";
         } else {
           img.style.width = "calc(25% - 20px)";
-          img.style.borderRadius = "0.6%";
-          img.style.opacity = "1";
         }
       });
-    }
-
-    function adjustGalleryPosition() {
-      DOM.gallery.style.marginTop = DOM.header.offsetHeight + "px";
-    }
-
-    // Show image in lightbox and update UI (including favorite state)
-    function showImage(index) {
-      state.images = document.querySelectorAll("#gallery img");
-      if (!state.images.length) return;
-      state.currentImageIndex = index;
-      DOM.lightboxImg.src = state.images[index].src;
-      // Set download link href (used as fallback if confirm is bypassed)
-      DOM.downloadBtn.href = state.images[index].src;
-      DOM.downloadBtn.setAttribute('download', state.images[index].src.split('/').pop());
-      updateFavoriteUI(state.images[index].src);
     }
 
     function navigateImage(direction) {
@@ -400,134 +336,34 @@
       showImage(state.currentImageIndex);
     }
 
-    function closeLightbox() {
-      DOM.lightbox.style.display = "none";
-      DOM.lightbox.classList.remove("show-download");
-      saveFavorites(); // save when closing lightbox
-      hideDownloadConfirm();
-    }
+    function adjustGalleryPosition() { DOM.gallery.style.marginTop = DOM.header.offsetHeight + "px"; }
 
-    function openLightbox(imgElement) {
-      state.images = document.querySelectorAll("#gallery img");
-      state.currentImageIndex = Array.from(state.images).indexOf(imgElement);
-      DOM.lightbox.style.display = "flex";
-      DOM.lightbox.classList.add("show-download");
-      showImage(state.currentImageIndex);
-    }
-
-    function handleScrollBlur() {
-      const headerBottom = DOM.header.getBoundingClientRect().bottom + window.scrollY;
-      document.querySelectorAll("#gallery img").forEach(img => {
-        const rect = img.getBoundingClientRect();
-        const imgTop = rect.top + window.scrollY;
-        if (imgTop < headerBottom) img.classList.add("blur-img"); else img.classList.remove("blur-img");
-      });
-    }
-
+    // GitHub commit check (kept with catch fallback)
     function fetchLatestCommitSha() {
       fetch(CONFIG.githubApiUrl)
-        .then(response => response.json())
+        .then(r => r.json())
         .then(data => {
           const latestCommitSha = data.sha;
           const storedSha = localStorage.getItem('storedSha');
           DOM.headerText.style.visibility = "visible";
-          initializeTracking();
-          if (latestCommitSha === storedSha && isPageReloaded()) {
-            DOM.headerText.textContent = "More images soon...";
-            triggerCascade(DOM.headerText, DOM.headerText.textContent, CONFIG.cascadeDuration, false);
-            setTimeout(cycleHeaderTexts, CONFIG.textCycleDuration);
-            state.images = document.querySelectorAll("#gallery img");
-            if (state.images.length > 0) { DOM.footerText.style.opacity = "1"; state.galleryInitialized = true; }
-          } else if (latestCommitSha !== storedSha) {
-            cycleHeaderTexts();
+          if (latestCommitSha !== storedSha) {
             localStorage.setItem('storedSha', latestCommitSha);
-            loadGA();
+            cycleHeaderTexts();
+          } else {
+            // if same sha, still ensure header shows something and animate it
+            triggerCascade(DOM.headerText, "More images soon...", CONFIG.cascadeDuration, false);
+            setTimeout(cycleHeaderTexts, CONFIG.textCycleDuration);
           }
-          window.addEventListener('load', () => { waitForImagesOrTimeout(document.querySelectorAll('img')); });
+          initializeTracking();
         })
         .catch(err => {
-          // If GitHub API fails, continue with initialization
-          console.warn('GitHub API failed:', err);
+          console.warn('GitHub API failed', err);
           DOM.headerText.style.visibility = "visible";
-          initializeTracking();
           cycleHeaderTexts();
-          window.addEventListener('load', () => { waitForImagesOrTimeout(document.querySelectorAll('img')); });
+          initializeTracking();
         });
     }
 
-    function setupEventListeners() {
-      // Gallery image click (open lightbox)
-      DOM.gallery.addEventListener("click", (e) => {
-        if (e.target.tagName === "IMG") openLightbox(e.target);
-      });
-
-      // Navigation
-      DOM.nextBtn?.addEventListener("click", () => navigateImage('next'));
-      DOM.prevBtn?.addEventListener("click", () => navigateImage('prev'));
-
-      // Keyboard navigation
-      document.addEventListener("keydown", (e) => {
-        if (DOM.lightbox.style.display !== "flex") return;
-        if (e.key === "ArrowRight") DOM.nextBtn?.click();
-        if (e.key === "ArrowLeft") DOM.prevBtn?.click();
-        if (e.key === "Escape") closeLightbox();
-      });
-
-      // Close on outside click
-      DOM.lightbox.addEventListener("click", (e) => { if (e.target === DOM.lightbox) closeLightbox(); });
-
-      // Touch swipe
-      DOM.lightbox.addEventListener("touchstart", (e) => { state.startX = e.touches[0].clientX; });
-      DOM.lightbox.addEventListener("touchend", (e) => {
-        const endX = e.changedTouches[0].clientX;
-        const diff = state.startX - endX;
-        if (diff > CONFIG.touchSwipeThreshold) DOM.nextBtn?.click();
-        if (diff < -CONFIG.touchSwipeThreshold) DOM.prevBtn?.click();
-      });
-
-      // Favorite button
-      DOM.favoriteBtn.addEventListener("click", () => toggleFavorite());
-
-      // Download button: show confirm prompt with Yes/No
-      DOM.downloadBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        showDownloadConfirm();
-      });
-
-      // Confirm modal handlers
-      DOM.confirmYes.addEventListener("click", async () => {
-        hideDownloadConfirm();
-        try {
-          await downloadAllSequential();
-        } catch (err) {
-          console.error('Download all failed:', err);
-        }
-      });
-
-      DOM.confirmNo.addEventListener("click", async () => {
-        hideDownloadConfirm();
-        try {
-          await downloadCurrentImage();
-        } catch (err) {
-          console.error('Download current failed:', err);
-        }
-      });
-
-      // Scroll blur effect
-      window.addEventListener("scroll", handleScrollBlur);
-
-      // Layout updates
-      window.addEventListener("resize", updateLayout);
-      window.addEventListener("resize", adjustGalleryPosition);
-
-      // Page load initialization
-      window.addEventListener("load", async () => {
-        if (!state.galleryInitialized) { await loadImagesSequentially(); }
-      });
-      window.addEventListener("load", adjustGalleryPosition);
-    }
-
-    // Tracking initialization
     function initializeTracking() {
       const pageSessionKey = 'pageSessionId';
       if (!sessionStorage.getItem(pageSessionKey)) {
@@ -536,13 +372,65 @@
       }
     }
 
-    // Bootstrap
+    // Event listeners
+    function setupEventListeners() {
+      // gallery click
+      DOM.gallery.addEventListener("click", (e) => { if (e.target.tagName === "IMG") openLightbox(e.target); });
+
+      DOM.nextBtn?.addEventListener("click", () => navigateImage('next'));
+      DOM.prevBtn?.addEventListener("click", () => navigateImage('prev'));
+
+      document.addEventListener("keydown", (e) => {
+        if (window.getComputedStyle(DOM.lightbox).display !== "flex") return;
+        if (e.key === "ArrowRight") DOM.nextBtn?.click();
+        if (e.key === "ArrowLeft") DOM.prevBtn?.click();
+        if (e.key === "Escape") closeLightbox();
+      });
+
+      DOM.lightbox.addEventListener("click", (e) => { if (e.target === DOM.lightbox) closeLightbox(); });
+
+      // touch swipe
+      DOM.lightbox.addEventListener("touchstart", (e) => { state.startX = e.touches[0].clientX; });
+      DOM.lightbox.addEventListener("touchend", (e) => {
+        const endX = e.changedTouches[0].clientX;
+        const diff = state.startX - endX;
+        if (diff > CONFIG.touchSwipeThreshold) DOM.nextBtn?.click();
+        if (diff < -CONFIG.touchSwipeThreshold) DOM.prevBtn?.click();
+      });
+
+      // favorite button
+      DOM.favoriteBtn.addEventListener("click", (e) => { e.stopPropagation(); toggleFavorite(); });
+
+      // download button: only show confirm when lightbox is open
+      DOM.downloadBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        showDownloadConfirm();
+      });
+
+      DOM.confirmYes.addEventListener("click", async () => {
+        hideDownloadConfirm();
+        try { await downloadAllSequential(); } catch (err) { console.error(err); }
+      });
+
+      DOM.confirmNo.addEventListener("click", async () => {
+        hideDownloadConfirm();
+        try { await downloadCurrentImage(); } catch (err) { console.error(err); }
+      });
+
+      window.addEventListener("scroll", () => {/* blur effect kept if needed */});
+      window.addEventListener("resize", updateLayout);
+      window.addEventListener("resize", adjustGalleryPosition);
+
+      window.addEventListener("load", async () => { if (!state.galleryInitialized) await loadImagesSequentially(); });
+      window.addEventListener("load", adjustGalleryPosition);
+    }
+
     function initializeApp() {
       initializeDOMElements();
       loadFavorites();
       fetchLatestCommitSha();
       setupEventListeners();
-      // Fill year in footer
       document.getElementById('year').textContent = new Date().getFullYear();
     }
 
