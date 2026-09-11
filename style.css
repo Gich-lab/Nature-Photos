@@ -138,14 +138,3 @@ img {
 .next{
     right:max(10px, env(safe-area-inset-right));
 }
-
-.favorite-indicator {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    color: red;
-    font-size: 20px;
-    z-index: 100;
-    pointer-events: none;
-}
-
