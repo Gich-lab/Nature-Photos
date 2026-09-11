@@ -10,30 +10,42 @@
   text-align: center;
 }
 
+/* style for cascade characters: ensure animation uses --delay var and fallback */
+.cascade-text span,
+.cascade-char {
+  opacity: 0;
+  display: inline-block;
+  transform: translateY(20px);
+  animation: cascadeIn 1.2s forwards;
+  animation-delay: var(--delay, 0s); /* use CSS var */
+}
+
+/* Fallback for older browsers: if JS sets animationDelay directly, it will work too */
+
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   background: #111;
   color: white;
-  overflow-x: hidden; /* Prevent horizontal scroll */
+  overflow-x: hidden;
   word-wrap: break-word;
 }
 
-/* Make images responsive and prevent overflow */
+/* Make images responsive */
 img {
-  max-width: 100%;      /* Ensure images don't overflow their containers */
-  height: auto;         /* Maintain aspect ratio */
-  display: block;       /* Remove inline spacing */
-  object-fit: contain;  /* Fit within container without overflow */
-  margin: 0 auto;       /* Center images if needed */
+  max-width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  margin: 0 auto;
 }
 
-/* Ensure containers are responsive */
+/* Gallery */
 #gallery {
-  margin-top: 20px;   
+  margin-top: 20px;
   display: flex;
-  flex-wrap: wrap; /*wrap allows images to move onto new rows*/
-  gap: 20px; /*adds spacing between images*/
+  flex-wrap: wrap;
+  gap: 20px;
   padding: 0 20px;
   max-width: 100%;
   box-sizing: border-box;
@@ -42,13 +54,7 @@ img {
   background: rgba(0,0,255,0.04);
 }
 
-#gallery.fullscreen img {
-    width: 100vw !important;
-    height: 100vh !important;
-    object-fit: contain;
-}
-
-/* Lightbox styles */
+/* Lightbox */
 .lightbox {
   position: fixed;
   top: 0;
@@ -61,10 +67,7 @@ img {
   z-index: 1000;
   display: none;
 }
-
-.lightbox[style*="display:flex"], .lightbox.active {
-  display: flex;
-}
+.lightbox[style*="display:flex"], .lightbox.active { display: flex; }
 
 .lightbox img {
   max-width: 90%;
@@ -80,14 +83,13 @@ img {
   padding: 6px;
 }
 
-/* Prev/Next buttons */
+/* Prev/Next */
 .prev, .next {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   background: rgba(255,255,255,0.12);
   backdrop-filter: blur(7px);
-  -webkit-backdrop-filter: blur(7px);
   border: 1px solid rgba(0,255,0,0.25);
   color: #00ff44;
   border-radius: 20px;
@@ -95,12 +97,10 @@ img {
   cursor: pointer;
   z-index: 1001;
 }
-
-/* Ensure left/right safe area */
 .prev { left: max(10px, env(safe-area-inset-left)); }
 .next { right: max(10px, env(safe-area-inset-right)); }
 
-/* Centered bottom controls container */
+/* Centered bottom controls container (favorite + download) */
 .lightbox-controls {
   position: absolute;
   left: 50%;
@@ -125,16 +125,12 @@ img {
   transition: transform 0.15s ease;
   text-shadow: 0 0 8px rgba(0,0,0,0.6);
 }
-.favorite-btn.favorited {
-  color: #ff4b6e;
-  transform: scale(1.08);
-}
+.favorite-btn.favorited { color: #ff4b6e; transform: scale(1.08); }
 
-/* Download button (styled as pill) */
+/* Download button (pill) */
 .download-btn {
   background: rgba(255,255,255,0.12);
   backdrop-filter: blur(7px);
-  -webkit-backdrop-filter: blur(7px);
   border: 1px solid rgba(0,255,0,0.25);
   color: #00ff44;
   text-decoration: none;
@@ -160,27 +156,12 @@ img {
   text-align: center;
   color: #fff;
 }
-
-/* Hidden utility */
 .hidden { display: none !important; }
-
-/*defines the animation sequence*/
-@keyframes rotateOnce {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
 
 @keyframes cascadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
-@keyframes cascadeLoop {
-  0%, 99.9% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
-.rotate-once { animation: rotateOnce 2s linear forwards; }
 
 .footer {
   position: fixed;
