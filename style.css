@@ -139,42 +139,40 @@ img {
     right:max(10px, env(safe-area-inset-right));
 }
 
-/* Glassy tooltip */
-.download-btn::after{
-    content:"Click to download the image in HD";
-    position:absolute;
-    bottom:130%;
-    left:50%;
-    transform:translateX(-50%);
+/*Hover effect with a message on download button*/
+.download-btn::after {
+    content: attr(data-tooltip);
 
-    padding:10px 15px;
-    border-radius:18px;
+    position: absolute;
+    bottom: 140%;
+    left: 50%;
+    transform: translateX(-50%);
 
-    color:#39ff14;
-    font-size:0.9rem;
-    font-weight:600;
-    white-space:nowrap;
+    padding: 10px 16px;
+    border-radius: 20px;
 
-    background:rgba(255,255,255,0.15);
-    backdrop-filter:blur(12px);
-    -webkit-backdrop-filter:blur(12px);
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(12px);
 
-    border:1px solid rgba(57,255,20,0.4);
+    border: 1px solid rgba(57,255,20,.5);
+
+    color: #39ff14;
+    font-weight: 700;
+    white-space: nowrap;
 
     box-shadow:
-        0 0 15px rgba(57,255,20,0.4),
-        0 8px 20px rgba(0,0,0,0.25);
+        0 0 15px rgba(57,255,20,.4),
+        0 8px 20px rgba(0,0,0,.3);
 
-    opacity:0;
-    visibility:hidden;
-    transition:all .25s ease;
+    opacity: 0;
+    visibility: hidden;
+    transition: .25s;
 
-    pointer-events:none;
-    z-index:10000;
+    pointer-events: none;
+    z-index: 999999;
 }
 
-/* Show tooltip on hover */
-.download-btn:hover::after{
-    opacity:1;
-    visibility:visible;
+.download-btn:hover::after {
+    opacity: 1;
+    visibility: visible;
 }
