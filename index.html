@@ -660,29 +660,6 @@
       DOM.downloadBtn.addEventListener("click", () => {
         sendVisitorData("download", DOM.lightboxImg.src.split('/').pop());
       });
-
-      // Download confirmation message
-      DOM.downloadBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        document.getElementById("downloadConfirm").style.display = "flex";
-      });
-
-        document.getElementById("confirmNo").addEventListener("click", () => {
-          document.getElementById("downloadConfirm").style.display = "none";
-        });
-
-        document.getElementById("confirmYes").addEventListener("click", () => {
-          sendVisitorData(
-            "download",
-            DOM.lightboxImg.src.split("/").pop()
-          );
-          const link = document.createElement("a");
-          link.href = DOM.downloadBtn.href;
-          link.download = DOM.downloadBtn.download;
-          link.click();
-          document.getElementById("downloadConfirm").style.display = "none";
-        });
-
       
       // Scroll blur effect
       window.addEventListener("scroll", handleScrollBlur);
