@@ -129,6 +129,7 @@ img {
     left:50%;
     bottom:8px;
     transform:translateX(-50%);
+    overflow: visible !important;
 }
 
 .prev{
