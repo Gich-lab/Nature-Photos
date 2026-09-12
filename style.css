@@ -139,13 +139,6 @@ img {
     right:max(10px, env(safe-area-inset-right));
 }
 
-.download-btn{
-    position:absolute;
-    left:50%;
-    bottom:8px;
-    transform:translateX(-50%);
-}
-
 /* Glassy tooltip */
 .download-btn::after{
     content:"Click to download the image in HD";
