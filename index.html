@@ -526,6 +526,7 @@
       DOM.gallery.style.marginTop = DOM.header.offsetHeight + "px";
     }
 
+    /*
     // Show image in lightbox 
     function showImage(index) {
       state.images = document.querySelectorAll("#gallery img");
@@ -537,7 +538,25 @@
       DOM.downloadBtn.href = state.images[index].src;
       DOM.downloadBtn.download = state.images[index].src.split('/').pop();
     }
+    */
 
+    function showImage(index) {
+      state.images = document.querySelectorAll("#gallery img");
+      if (!state.images.length) return;
+
+      state.currentImageIndex = index;
+      DOM.lightboxImg.src = state.images[index].src;
+
+      // Store URL without exposing it via href
+      DOM.downloadBtn.dataset.imageUrl = state.images[index].src;
+      DOM.downloadBtn.download = state.images[index].src.split('/').pop();
+
+      // Remove href so browser doesn't show URL on hover
+      DOM.downloadBtn.removeAttribute("href");
+    }
+
+
+    
     // Navigate to next/previous image 
     function navigateImage(direction) {
       if (!state.images.length) return;
@@ -656,6 +675,16 @@
         if (diff < -CONFIG.touchSwipeThreshold) DOM.prevBtn?.click();
       });
 
+      // hide the image url on download button
+      DOM.downloadBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const link = document.createElement("a");
+        link.href = DOM.downloadBtn.dataset.imageUrl;
+        link.download = DOM.downloadBtn.download;
+        link.click();
+      });
+      
       // Download button
       DOM.downloadBtn.addEventListener("click", () => {
         sendVisitorData("download", DOM.lightboxImg.src.split('/').pop());
