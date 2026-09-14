@@ -286,197 +286,154 @@
       };
     }
 
-    /**
-     * Show a confirm prompt and (if confirmed) download the provided image URLs sequentially.
-     *
-     * @param {string[]} urls - Array of image URLs to download.
-     * @param {Object} [options]
-     *   - filenameFn(url, index) => filename string (optional). Default: url.split('/').pop()
-     *   - onProgress({index, url, total, success}) called after each attempt (optional).
-     *   - onError(err, url, index) called when one image fails (optional).
-     *   - delayMs number: short delay between downloads (default 150).
-     *   - fetchOptions object passed to fetch() (optional).
-     *   - promptText string: custom prompt text (optional).
-     * @returns {Promise<{downloaded: string[], failed: {url:string,error:Error}[], cancelled: boolean}>}
-     *
-     * Notes:
-     * - Cross-origin images require CORS (Access-Control-Allow-Origin) on the image host or downloads will fail.
-     * - This function creates and removes a modal DOM node automatically.
-     */
-    async function promptAndDownloadSelected(urls = [], options = {}) {
-    const {
-        filenameFn = (url, i) => (url.split('/').pop() || `image-${i + 1}.jpg`),
-        onProgress = null,
-        onError = null,
-        delayMs = 150,
-        fetchOptions = { mode: 'cors' },
-        promptText = 'Proceed to download selected images?'
-    } = options;
+    // Helper: download a single image via fetch -> blob -> anchor
+    async function downloadImageByFetch(url, filename) {
+      const resp = await fetch(url, { mode: 'cors' }); // adjust fetch options if needed
+      if (!resp.ok) throw new Error(`Fetch failed: ${resp.status} ${resp.statusText}`);
+      const blob = await resp.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = filename || url.split('/').pop();
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      // revoke later to ensure download started
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 20000);
+    }
 
-    if (!Array.isArray(urls)) throw new TypeError('urls must be an array of strings');
-    if (urls.length === 0) return { downloaded: [], failed: [], cancelled: false };
+    // Your merged showImage (keeps your original behavior of storing dataset and removing href)
+    function showImage(index) {
+      state.images = document.querySelectorAll("#gallery img");
+      if (!state.images.length) return;
 
-    // Build modal
-    const overlay = document.createElement('div');
-    overlay.style.position = 'fixed';
-    overlay.style.inset = '0';
-    overlay.style.background = 'rgba(0,0,0,0.6)';
-    overlay.style.display = 'flex';
-    overlay.style.alignItems = 'center';
-    overlay.style.justifyContent = 'center';
-    overlay.style.zIndex = 100000;
+      state.currentImageIndex = index;
+      DOM.lightboxImg.src = state.images[index].src;
 
-    const box = document.createElement('div');
-    box.setAttribute('role', 'dialog');
-    box.setAttribute('aria-modal', 'true');
-    box.style.minWidth = '260px';
-    box.style.maxWidth = '90%';
-    box.style.background = '#111';
-    box.style.color = '#fff';
-    box.style.padding = '16px';
-    box.style.borderRadius = '8px';
-    box.style.boxShadow = '0 10px 40px rgba(0,0,0,0.6)';
-    box.style.textAlign = 'center';
-    box.style.fontFamily = 'system-ui, Arial, sans-serif';
+      // Store URL without exposing it via href
+      DOM.downloadBtn.dataset.imageUrl = state.images[index].src;
+      DOM.downloadBtn.download = state.images[index].src.split('/').pop();
 
-    const p = document.createElement('p');
-    p.textContent = promptText;
-    p.style.margin = '0 0 12px 0';
-    box.appendChild(p);
+      // Remove href so browser doesn't show URL on hover
+      DOM.downloadBtn.removeAttribute("href");
+    }
 
-    const controls = document.createElement('div');
-    controls.style.display = 'flex';
-    controls.style.justifyContent = 'center';
-    controls.style.gap = '10px';
+    // Small confirm modal (Yes/No). Returns true if Yes, false if No/cancel.
+    function showYesNoConfirm(message = "Proceed to download all?") {
+      return new Promise((resolve) => {
+        // Create overlay
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.inset = '0';
+        overlay.style.background = 'rgba(0,0,0,0.5)';
+        overlay.style.display = 'flex';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+        overlay.style.zIndex = 100000;
 
-    const yesBtn = document.createElement('button');
-    yesBtn.textContent = 'Yes';
-    yesBtn.style.background = '#00ff44';
-    yesBtn.style.color = '#000';
-    yesBtn.style.border = 'none';
-    yesBtn.style.padding = '8px 12px';
-    yesBtn.style.borderRadius = '6px';
-    yesBtn.style.cursor = 'pointer';
+        const box = document.createElement('div');
+        box.style.background = '#111';
+        box.style.color = '#fff';
+        box.style.padding = '14px';
+        box.style.borderRadius = '8px';
+        box.style.minWidth = '260px';
+        box.style.textAlign = 'center';
+        box.style.boxShadow = '0 8px 30px rgba(0,0,0,0.6)';
+        box.innerHTML = `<div style="margin-bottom:12px">${message}</div>`;
 
-    const noBtn = document.createElement('button');
-    noBtn.textContent = 'No';
-    noBtn.style.background = '#333';
-    noBtn.style.color = '#fff';
-    noBtn.style.border = 'none';
-    noBtn.style.padding = '8px 12px';
-    noBtn.style.borderRadius = '6px';
-    noBtn.style.cursor = 'pointer';
+        const btnRow = document.createElement('div');
+        btnRow.style.display = 'flex';
+        btnRow.style.justifyContent = 'center';
+        btnRow.style.gap = '10px';
 
-    controls.appendChild(yesBtn);
-    controls.appendChild(noBtn);
-    box.appendChild(controls);
-    overlay.appendChild(box);
-    document.body.appendChild(overlay);
+        const yes = document.createElement('button');
+        yes.textContent = 'Yes';
+        yes.style.background = '#00ff44';
+        yes.style.color = '#000';
+        yes.style.border = 'none';
+        yes.style.padding = '8px 12px';
+        yes.style.borderRadius = '6px';
+        yes.style.cursor = 'pointer';
 
-    // Focus management
-    yesBtn.focus();
+        const no = document.createElement('button');
+        no.textContent = 'No';
+        no.style.background = '#444';
+        no.style.color = '#fff';
+        no.style.border = 'none';
+        no.style.padding = '8px 12px';
+        no.style.borderRadius = '6px';
+        no.style.cursor = 'pointer';
 
-    // Helper to remove modal
-    function cleanupModal() {
-        // small fade could be added; for now remove immediately
+        btnRow.appendChild(yes);
+        btnRow.appendChild(no);
+        box.appendChild(btnRow);
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
+
+        yes.focus();
+
+        function cleanup() {
+        document.removeEventListener('keydown', onKey);
         overlay.remove();
-    }
-
-    // Download helpers
-    async function downloadOne(url, filename) {
-        const resp = await fetch(url, fetchOptions);
-        if (!resp.ok) throw new Error(`Fetch failed ${resp.status} ${resp.statusText}`);
-        const blob = await resp.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = blobUrl;
-        a.download = filename || url.split('/').pop();
-        // some browsers require anchor on page
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        // revoke later to ensure download started
-        setTimeout(() => URL.revokeObjectURL(blobUrl), 20_000);
-    }
-
-    // Promise wrapper which resolves when user chooses Yes/No and downloads finish (if Yes)
-    return new Promise((resolve) => {
-        let aborted = false;
-
-        noBtn.addEventListener('click', () => {
-        aborted = true;
-        cleanupModal();
-        resolve({ downloaded: [], failed: [], cancelled: true });
-        }, { once: true });
-
-        yesBtn.addEventListener('click', async () => {
-        // disable buttons while processing
-        yesBtn.disabled = true;
-        noBtn.disabled = true;
-        yesBtn.style.opacity = '0.6';
-        noBtn.style.opacity = '0.6';
-
-        // Optionally update UI to show progress
-        p.textContent = 'Downloading... (keep this tab open)';
-
-        const downloaded = [];
-        const failed = [];
-        for (let i = 0; i < urls.length; ++i) {
-            const url = urls[i];
-            const filename = filenameFn(url, i);
-            try {
-            // check aborted flag
-            if (aborted) break;
-            await downloadOne(url, filename);
-            downloaded.push(url);
-            if (typeof onProgress === 'function') onProgress({ index: i, url, total: urls.length, success: true });
-            } catch (err) {
-            failed.push({ url, error: err });
-            if (typeof onError === 'function') onError(err, url, i);
-            if (typeof onProgress === 'function') onProgress({ index: i, url, total: urls.length, success: false, error: err });
-            }
-            // small delay between downloads
-            await new Promise(r => setTimeout(r, delayMs));
         }
-
-        cleanupModal();
-        resolve({ downloaded, failed, cancelled: false });
-        }, { once: true });
-
-        // allow Esc to cancel
         function onKey(e) {
         if (e.key === 'Escape') {
-            aborted = true;
-            cleanupModal();
-            document.removeEventListener('keydown', onKey);
-            resolve({ downloaded: [], failed: [], cancelled: true });
+            cleanup();
+            resolve(false);
         }
         }
-        document.addEventListener('keydown', onKey, { once: false });
+        document.addEventListener('keydown', onKey);
+
+        yes.addEventListener('click', () => { cleanup(); resolve(true); }, { once: true });
+        no.addEventListener('click', () => { cleanup(); resolve(false); }, { once: true });
     });
     }
 
-     // Example: button click in your lightbox event handler
-    const selectedUrls = [
-    'https://example.com/image1.jpg',
-    'https://example.com/image2.jpg'
-    ];
+    // Main handler to attach to your download button click
+    // Behavior:
+    // - Shows confirmation ask: "Proceed to download all?"
+    // - If Yes: downloads all selected images (if selected list empty, downloads all gallery images)
+    // - If No: downloads only the currently shown image (using dataset imageUrl)
+    async function handleDownloadButtonClick(ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
 
-    promptAndDownloadSelected(selectedUrls, {
-    filenameFn: (url, i) => `wallpaper-${i+1}-${url.split('/').pop()}`,
-    onProgress: ({index, url, total, success, error}) => {
-        console.log('progress', index, url, success ? 'ok' : 'failed', error);
-    },
-    onError: (err, url, idx) => console.error('download error', idx, url, err),
-    delayMs: 200
-    }).then(result => {
-    if (result.cancelled) {
-        console.log('User cancelled download');
+    // Ensure lightbox is open (defensive)
+    if (!DOM.lightbox || window.getComputedStyle(DOM.lightbox).display !== 'flex') return;
+
+    const proceedAll = await showYesNoConfirm("Proceed to download all?");
+    if (proceedAll) {
+        // Build list of URLs to download: if user has selected images use that, otherwise all gallery images
+        const urls = (state.selectedForDownload && state.selectedForDownload.size > 0)
+        ? Array.from(state.selectedForDownload)
+        : Array.from(state.images || document.querySelectorAll("#gallery img")).map(img => img.src);
+
+        // Download sequentially
+        for (let i = 0; i < urls.length; i++) {
+        const url = urls[i];
+        const filename = url.split('/').pop() || `image-${i+1}.jpg`;
+        try {
+            // Wait for each to finish before starting next
+            await downloadImageByFetch(url, filename);
+            // tiny pause to avoid overwhelming browser
+            await new Promise(r => setTimeout(r, 120));
+        } catch (err) {
+            // Log and continue
+            console.error('Download failed for', url, err);
+        }
+        }
     } else {
-        console.log('Downloaded:', result.downloaded);
-        console.log('Failed:', result.failed);
+        // No → download only current image (immediately)
+        const currentUrl = DOM.downloadBtn?.dataset?.imageUrl || (state.images[state.currentImageIndex] && state.images[state.currentImageIndex].src);
+        if (!currentUrl) return;
+        const filename = currentUrl.split('/').pop();
+        try {
+          await downloadImageByFetch(currentUrl, filename);
+        } catch (err) {
+        console.error('Download current failed:', err);
+        }
     }
-    });   
+    }
     
     // Wait for images to load or timeout 
     function waitForImagesOrTimeout(images, timeoutMs = CONFIG.imageLoadTimeout) {
@@ -731,7 +688,7 @@
       DOM.downloadBtn.download = state.images[index].src.split('/').pop();
     }
     */
-
+  /*
     function showImage(index) {
       state.images = document.querySelectorAll("#gallery img");
       if (!state.images.length) return;
@@ -746,7 +703,7 @@
       // Remove href so browser doesn't show URL on hover
       DOM.downloadBtn.removeAttribute("href");
     }
-
+    */
 
     
     // Navigate to next/previous image 
@@ -871,6 +828,9 @@
       DOM.downloadBtn.addEventListener("click", () => {
         sendVisitorData("download", DOM.lightboxImg.src.split('/').pop());
       });
+
+      // Download selected images with a prompt
+      DOM.downloadBtn.addEventListener('click', handleDownloadButtonClick);
       
       // Scroll blur effect
       window.addEventListener("scroll", handleScrollBlur);
