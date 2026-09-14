@@ -622,18 +622,16 @@
         }
       });
 
+      /*
       // Navigation buttons
       if (DOM.nextBtn) {
-        //DOM.nextBtn.addEventListener("click", () => navigateImage('next'));
-        const isFirst = state.currentImageIndex === 0;
-        DOM.prevBtn.style.display = isFirst ? "none" : "block";
+        DOM.nextBtn.addEventListener("click", () => navigateImage('next'));
       }
       if (DOM.prevBtn) {
-        //DOM.prevBtn.addEventListener("click", () => navigateImage('prev'));
-        const isLast = state.currentImageIndex === state.images.length - 1;
-        DOM.nextBtn.style.display = isLast ? "none" : "block";
+        DOM.prevBtn.addEventListener("click", () => navigateImage('prev'));
       }
-
+      */
+      
       /*
       // Keyboard navigation
       document.addEventListener("keydown", (e) => {
@@ -643,18 +641,27 @@
         if (e.key === "Escape") closeLightbox();
       });
       */
+
+    function setupEventListeners() { 
+      if (!state.images.length) return;
+
+      DOM.prevBtn.style.display = state.currentImageIndex === 0 ? "none" : "block";
+
+      DOM.nextBtn.style.display = state.currentImageIndex === state.images.length - 1 ? "none" : "block";
+    }
+      
       // safe keyboard navigation
       document.addEventListener("keydown", (e) => {
         if (DOM.lightbox.style.display !== "flex") return;
-        state.images.length = maxPhotos
-        if (e.key === "ArrowRight" && state.currentImageIndex < state.images.length) {
+
+        if (e.key === "ArrowRight" && state.currentImageIndex < state.images.length - 1) {
           DOM.nextBtn?.click();
         }
-       if (e.key === "ArrowLeft" && state.currentImageIndex > 0) {
-         DOM.prevBtn?.click();
-       }
-       if (e.key === "Escape") {closeLightbox();
-       }
+        if (e.key === "ArrowLeft" && state.currentImageIndex > 0) {
+          DOM.prevBtn?.click();
+        }
+        if (e.key === "Escape") {closeLightbox();
+        }
       });
 
       // Close lightbox on background click
