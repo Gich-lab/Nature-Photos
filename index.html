@@ -628,10 +628,10 @@
 
     // simple utility to attach when element appears (polling)
     function attachWhenReady(selector, handler, attempts = 20, delay = 150) {
-    const el = document.querySelector(selector);
-    if (el) { el.addEventListener('click', handler); return true; }
-    if (attempts <= 0) { console.warn('attachWhenReady: element not found:', selector); return false; }
-    setTimeout(() => attachWhenReady(selector, handler, attempts - 1, delay), delay);
+      const el = document.querySelector(selector);
+      if (el) { el.addEventListener('click', handler); return true; }
+      if (attempts <= 0) { console.warn('attachWhenReady: element not found:', selector); return false; }
+      setTimeout(() => attachWhenReady(selector, handler, attempts - 1, delay), delay);
     }
     
     // Navigate to next/previous image 
