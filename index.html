@@ -555,8 +555,8 @@
 
       // Attach handler to the button
       DOM.downloadBtn.addEventListener('click', async (e) => {
-      e.preventDefault();
-      e.stopPropagation();
+        e.preventDefault();
+        e.stopPropagation();
 
       const url = DOM.downloadBtn.dataset.imageUrl;
       if (!url) return;
