@@ -646,14 +646,14 @@
       // safe keyboard navigation
       document.addEventListener("keydown", (e) => {
         if (DOM.lightbox.style.display !== "flex") return;
-        if (e.key === "ArrowRight" && state.currentImageIndex < state.images.length - 1) {
+        state.images.length = maxPhotos
+        if (e.key === "ArrowRight" && state.currentImageIndex < state.images.length) {
           DOM.nextBtn?.click();
         }
        if (e.key === "ArrowLeft" && state.currentImageIndex > 0) {
          DOM.prevBtn?.click();
        }
-       if (e.key === "Escape") {
-         closeLightbox();
+       if (e.key === "Escape") {closeLightbox();
        }
       });
 
