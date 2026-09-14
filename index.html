@@ -526,6 +526,7 @@
       DOM.gallery.style.marginTop = DOM.header.offsetHeight + "px";
     }
 
+    /*
     // Show image in lightbox 
     function showImage(index) {
       state.images = document.querySelectorAll("#gallery img");
@@ -537,8 +538,8 @@
       DOM.downloadBtn.href = state.images[index].src;
       DOM.downloadBtn.download = state.images[index].src.split('/').pop();
     }
-   
-    /*
+   */
+    // Set the dataset on the button instead of an anchor
     function showImage(index) {
       state.images = document.querySelectorAll("#gallery img");
       if (!state.images.length) return;
@@ -546,14 +547,28 @@
       state.currentImageIndex = index;
       DOM.lightboxImg.src = state.images[index].src;
 
-      // Store URL without exposing it via href
+      // If using a button (no href), store url in data-image-url for the handler
       DOM.downloadBtn.dataset.imageUrl = state.images[index].src;
-      DOM.downloadBtn.download = state.images[index].src.split('/').pop();
+      // optional: store filename for convenience
+      DOM.downloadBtn.dataset.filename = state.images[index].src.split('/').pop();
+    }
 
-      // Remove href so browser doesn't show URL on hover
-      DOM.downloadBtn.removeAttribute("href");
-    }  
-    */
+      // Attach handler to the button
+      DOM.downloadBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const url = DOM.downloadBtn.dataset.imageUrl;
+      if (!url) return;
+
+      const filename = DOM.downloadBtn.dataset.filename || url.split('/').pop();
+      try {
+        await downloadImageByFetch(url, filename);
+      } catch (err) {
+        console.error('Download failed:', err);
+        alert('Failed to download image. See console for details.');
+      }
+      });
     
     // Navigate to next/previous image 
     function navigateImage(direction) {
