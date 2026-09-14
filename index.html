@@ -110,6 +110,28 @@
               Next ❯
           </button>
         </div>
+
+        <button id="favorite-btn"
+          onclick="toggleFavorite()"
+          onmouseover="this.style.transform='translateX(-50%) scale(1.15)'"
+          onmouseout="this.style.transform='translateX(-50%) scale(1)'"
+          style="
+          position:absolute;
+          bottom:20px;
+          left:calc(50% - 90px);
+          transform:translateX(-50%);
+          background:none;
+          border:none;
+          color:#ffcc00;
+          font-size:36px;
+          cursor:pointer;
+          z-index:10001;
+          padding:0;
+          line-height:1;
+          transition:transform 0.2s ease;
+          text-shadow:0 0 8px rgba(0,0,0,0.6);">
+          ♡
+        </button>
         
         <a id="download"
           class="download-btn"
@@ -285,7 +307,7 @@
         prevBtn: document.querySelector(".prev")
       };
     }
-   
+
     // Wait for images to load or timeout 
     function waitForImagesOrTimeout(images, timeoutMs = CONFIG.imageLoadTimeout) {
       return new Promise((resolve) => {
@@ -537,7 +559,7 @@
       DOM.downloadBtn.href = state.images[index].src;
       DOM.downloadBtn.download = state.images[index].src.split('/').pop();
     }
-      
+
     // Navigate to next/previous image 
     function navigateImage(direction) {
       if (!state.images.length) return;
@@ -612,7 +634,7 @@
           });
         });
     }
-    
+
     // Initialize all event listeners 
     function setupEventListeners() {
       // Gallery image click
@@ -621,7 +643,7 @@
           openLightbox(e.target);
         }
       });
-      
+
       // Navigation buttons
       if (DOM.nextBtn) {
         DOM.nextBtn.addEventListener("click", () => navigateImage('next'));
@@ -629,7 +651,7 @@
       if (DOM.prevBtn) {
         DOM.prevBtn.addEventListener("click", () => navigateImage('prev'));
       }
-            
+      
       // Keyboard navigation
       document.addEventListener("keydown", (e) => {
         if (DOM.lightbox.style.display !== "flex") return;
@@ -637,7 +659,7 @@
         if (e.key === "ArrowLeft") DOM.prevBtn?.click();
         if (e.key === "Escape") closeLightbox();
       });
-    
+
       // Close lightbox on background click
       DOM.lightbox.addEventListener("click", (e) => {
         if (e.target === DOM.lightbox) {
@@ -655,7 +677,7 @@
         if (diff > CONFIG.touchSwipeThreshold) DOM.nextBtn?.click();
         if (diff < -CONFIG.touchSwipeThreshold) DOM.prevBtn?.click();
       });
-     
+
       // Download button
       DOM.downloadBtn.addEventListener("click", () => {
         sendVisitorData("download", DOM.lightboxImg.src.split('/').pop());
