@@ -626,12 +626,12 @@
       if (DOM.nextBtn) {
         //DOM.nextBtn.addEventListener("click", () => navigateImage('next'));
         const isFirst = state.currentImageIndex === 0;
-        DOM.prevBtn.style.opacity = isFirst ? "0.3" : "1";
+        DOM.prevBtn.style.display = isFirst ? "none" : "block";
       }
       if (DOM.prevBtn) {
         //DOM.prevBtn.addEventListener("click", () => navigateImage('prev'));
         const isLast = state.currentImageIndex === state.images.length - 1;
-        DOM.nextBtn.style.opacity = isLast ? "0.3" : "1";
+        DOM.nextBtn.style.display = isLast ? "none" : "block";
       }
 
       /*
