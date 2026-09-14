@@ -526,7 +526,6 @@
       DOM.gallery.style.marginTop = DOM.header.offsetHeight + "px";
     }
 
-    /*
     // Show image in lightbox 
     function showImage(index) {
       state.images = document.querySelectorAll("#gallery img");
@@ -538,102 +537,7 @@
       DOM.downloadBtn.href = state.images[index].src;
       DOM.downloadBtn.download = state.images[index].src.split('/').pop();
     }
-   */
-    // Helper - fetch -> blob -> anchor download (requires CORS on image server)
-    async function downloadImageByFetch(url, filename) {
-    const resp = await fetch(url, { mode: 'cors' });
-    if (!resp.ok) throw new Error(`Fetch failed: ${resp.status} ${resp.statusText}`);
-    const blob = await resp.blob();
-    const blobUrl = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = blobUrl;
-    a.download = filename || url.split('/').pop();
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(blobUrl), 20000);
-    }
-
-    // showImage that sets dataset on the download control (safe: doesn't assume control exists)
-    function showImage(index) {
-      state.images = document.querySelectorAll("#gallery img");
-      if (!state.images.length) return;
-      state.currentImageIndex = index;
-      DOM.lightboxImg.src = state.images[index].src;
-
-      // Set dataset on both possible controls (anchor or button) if present
-      const url = state.images[index].src;
-      const filename = url.split('/').pop();
-
-      const d1 = document.getElementById('download');
-      const d2 = document.getElementById('downloadBtn');
-      if (d1) { d1.dataset.imageUrl = url; d1.download = filename; d1.removeAttribute('href'); }
-      if (d2) { d2.dataset.imageUrl = url; d2.dataset.filename = filename; }
-    }
-
-      // Unified handler that works for either anchor (#download) or button (#downloadBtn)
-      async function handleDownloadClick(event) {
-      event.preventDefault();
-      event.stopPropagation();
-
-      // find dataset on either control (the element that triggered the event may be the anchor/button)
-      const el = event.currentTarget;
-      const url = el?.dataset?.imageUrl || el?.dataset?.imageurl || (state.images[state.currentImageIndex] && state.images[state.currentImageIndex].src);
-      const filename = el?.dataset?.filename || el?.getAttribute && el.getAttribute('download') || (url && url.split('/').pop());
-
-      if (!url) {
-        console.warn('No image URL available to download.');
-        return;
-      }
-
-      // Ask user: proceed to download all?
-      const proceedAll = confirm('Proceed to download all? Click OK to download all selected (or all images if none selected). Cancel downloads only the current image.');
-
-      if (proceedAll) {
-        // build list to download: use selected set if available, otherwise all images
-        const urls = (state.selectedForDownload && state.selectedForDownload.size > 0)
-        ? Array.from(state.selectedForDownload)
-        : Array.from(state.images || document.querySelectorAll("#gallery img")).map(i => i.src);
-
-        for (let i = 0; i < urls.length; i++) {
-          try {
-            await downloadImageByFetch(urls[i], urls[i].split('/').pop() || `image-${i+1}.jpg`);
-            await new Promise(r => setTimeout(r, 120));
-          } catch (err) {
-            console.error('Download failed for', urls[i], err);
-          }
-        }
-      } else {
-        // No -> download only the current image
-        try {
-          await downloadImageByFetch(url, filename);
-        } catch (err) {
-          console.error('Download current image failed', err);
-        }
-      }
-      }
-
-    // Attach listeners after DOM ready (safe)
-    document.addEventListener('DOMContentLoaded', () => {
-    // prefer button id 'downloadBtn' but support anchor 'download' too
-    const btn = document.getElementById('downloadBtn') || document.getElementById('download');
-    if (btn) {
-        btn.addEventListener('click', handleDownloadClick);
-    } else {
-        // fallback: try to attach later if element is added dynamically
-        console.warn('#downloadBtn or #download not found — will poll briefly to attach');
-        attachWhenReady('#downloadBtn, #download', handleDownloadClick, 30, 200);
-    }
-    });
-
-    // simple utility to attach when element appears (polling)
-    function attachWhenReady(selector, handler, attempts = 20, delay = 150) {
-      const el = document.querySelector(selector);
-      if (el) { el.addEventListener('click', handler); return true; }
-      if (attempts <= 0) { console.warn('attachWhenReady: element not found:', selector); return false; }
-      setTimeout(() => attachWhenReady(selector, handler, attempts - 1, delay), delay);
-    }
-    
+      
     // Navigate to next/previous image 
     function navigateImage(direction) {
       if (!state.images.length) return;
