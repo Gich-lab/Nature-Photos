@@ -631,7 +631,7 @@
       }
       if (DOM.prevBtn) {
         //DOM.prevBtn.addEventListener("click", () => navigateImage('prev'));
-        const isLast = state.currentImageIndex === maxPhotos - 1;
+        const isLast = state.currentImageIndex === images - 1;
         DOM.nextBtn.style.display = isLast ? "none" : "block";
         DOM.nextBtn.style.opacity = isLast ? "0.3" : "1";
       }
