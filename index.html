@@ -702,7 +702,8 @@
       window.addEventListener("load", async () => {
         // Only load images if gallery is not already initialized
         if (!state.galleryInitialized) {
-          await loadImagesSequentially();
+          //await loadImagesSequentially();
+          await loadImagesFast();
         }
       });
       window.addEventListener("load", adjustGalleryPosition);
