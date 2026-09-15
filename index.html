@@ -457,6 +457,7 @@
       ).finished;
     }
 
+    /*
     // Load images sequentially with animation 
     async function loadImagesSequentially() {
       for (let i = 1; i <= CONFIG.maxPhotos; i++) {
@@ -486,7 +487,44 @@
       DOM.footerText.style.opacity = "1";
       state.galleryInitialized = true;
     }
+    */
+    
+    // Faster image loading
+    async function loadImagesFast() {
+      const fragment = document.createDocumentFragment();
 
+      for (let i = 1; i <= CONFIG.maxPhotos; i++) {
+        const img = document.createElement("img");
+
+        img.src = `images/photo${i}.webp`; // use WebP if available
+        // img.src = `images/photo${i}.jpg`; // keep if not converted
+
+        img.loading = "lazy";
+        img.decoding = "async";
+
+        img.style.height = "auto";
+        img.style.display = "block";
+        img.style.boxShadow = "0 4px 12px rgba(0,0,0,0.9)";
+        img.style.borderRadius = "0.6%";
+
+        img.onerror = () => img.remove();
+
+        fragment.appendChild(img);
+    }
+
+    DOM.gallery.appendChild(fragment);
+
+    state.images = document.querySelectorAll("#gallery img");
+
+    updateLayout();
+
+    DOM.footerText.style.display = "block";
+    DOM.footerText.style.opacity = "1";
+
+    state.galleryInitialized = true;
+    }
+
+    
     // Update gallery layout based on device 
     function updateLayout() {
       const imgs = document.querySelectorAll("#gallery img");
@@ -568,7 +606,7 @@
         }
       });
     }
-
+    
     // Fetch latest commit and manage content updates 
     function fetchLatestCommitSha() {
       fetch(CONFIG.githubApiUrl)
