@@ -496,8 +496,7 @@
       for (let i = 1; i <= CONFIG.maxPhotos; i++) {
         const img = document.createElement("img");
 
-        img.src = `images/photo${i}.webp`; // use WebP if available
-        // img.src = `images/photo${i}.jpg`; // keep if not converted
+        img.src = `images/photo${i}.jpg`; 
 
         img.loading = "lazy";
         img.decoding = "async";
