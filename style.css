@@ -111,13 +111,6 @@ img {
     align-items: center;
 }
 
-#lightbox-img {
-    display: block;
-    max-width: 90vw;
-    max-height: 90vh;
-    object-fit: contain;
-}
-
 .lightbox-btn {
     position: absolute;
     background: rgba(255,255,255,0.12);
