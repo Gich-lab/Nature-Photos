@@ -14,6 +14,7 @@
         <span class="cascade-text" id="header-text" style="visibility: hidden;"></span>     
       </div>
     </header>
+    <!--
     <main>
         <div id="gallery" class="gallery"></div>
 
@@ -133,9 +134,33 @@
 
             </div> <!-- lightbox-content -->
 
-        </div> <!-- lightbox -->
-    </main>
+        <!--</div>  lightbox -->
+    <!--</main>-->
+    <main>
+      <div id="gallery" class="gallery"></div>
 
+      <div id="lightbox" class="lightbox">
+        <div class="lightbox-content">
+          <button id="prev" class="lightbox-btn prev-btn">
+            ❮ Prev
+          </button>
+          <img
+            id="lightbox-img"
+            src=""
+            alt="Enlarged image"
+            >
+          <button id="next" class="lightbox-btn next-btn">
+            Next ❯
+          </button>
+          <a
+            id="download"
+            class="lightbox-btn download-btn"
+            download>
+            Download
+          </a>
+        </div>
+      </div>
+    </main>
     <style>
         /* Basic styles for gallery */
         #gallery {display:flex;flex-wrap:wrap;gap:10px;}
