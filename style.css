@@ -135,21 +135,21 @@ img {
     z-index: 10001;
 }
 
+/* Side navigation buttons */
 .prev-btn {
     top: 50%;
-    left: 5px;
+    left: 20px; /* increased margin for better position */
     transform: translateY(-50%);
 }
-
 .next-btn {
     top: 50%;
-    right: 5px;
+    right: 20px; /* increased margin */
     transform: translateY(-50%);
 }
 
+/* Download button at bottom center */
 .download-btn {
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    text-decoration: none;
 }
