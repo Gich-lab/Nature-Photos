@@ -109,6 +109,17 @@ img {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+#lightbox-img {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
 }
 
 .lightbox-btn {
@@ -124,37 +135,21 @@ img {
     z-index: 10001;
 }
 
-button#prev,
-button#next,
-a#download {
-    position: absolute !important;
-    z-index: 10001 !important;
+.prev-btn {
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
 }
 
-button#prev {
-    top: 50% !important;
-    left: 5px !important;
-    transform: translateY(-50%) !important;
+.next-btn {
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
 }
 
-button#next {
-    top: 50% !important;
-    right: 5px !important;
-    transform: translateY(-50%) !important;
-}
-
-a#download {
-    bottom: 20px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-}
-
-#lightbox-img {
-    display: block !important;
-    width: auto !important;
-    height: auto !important;
-    max-width: 90vw !important;
-    max-height: 90vh !important;
-    object-fit: contain !important;
-    margin: 0 !important;
+.download-btn {
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-decoration: none;
 }
