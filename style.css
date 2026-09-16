@@ -51,7 +51,7 @@ img {
     object-fit: contain;
 }
 
-/* Lightbox styles (unchanged)
+/* Lightbox styles (unchanged)*/
 .lightbox {
   position: fixed;
   top: 0;
@@ -60,7 +60,7 @@ img {
   height: 100vh;
   background: rgba(0,0,0,0.95);
   /*display: none;*/
-  /*align-items: center;
+  align-items: center;
   justify-content: center;
   z-index: 1000;
 }
@@ -68,7 +68,7 @@ img {
 .lightbox.active {
   display: flex;
 }
-
+/*
 .lightbox img {
   max-width: 90%;
   max-height: 90%;
