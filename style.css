@@ -124,6 +124,7 @@ img {
     display:inline-block;
 }
 
+/*
 .download-btn{
     position:absolute;
     left:50%;
@@ -138,12 +139,10 @@ img {
 .next{
     right:max(10px, env(safe-area-inset-right));
 }
-
+*/
 /* previous & next button on lightbox */
-.nav-btn {
+.lightbox-btn {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
     background: rgba(255,255,255,0.12);
     backdrop-filter: blur(7px);
     -webkit-backdrop-filter: blur(7px);
@@ -156,16 +155,29 @@ img {
     transition: all 0.2s ease;
 }
 
-.nav-btn:hover {
+.lightbox-btn:hover {
     background: rgba(0,0,0,0.55);
     color: white;
     border-color: rgba(255,255,255,0.3);
 }
 
-.nav-btn-left {
+.prev-btn {
+    top: 50%;
     left: 5px;
+    transform: translateY(-50%);
 }
 
-.nav-btn-right {
+.next-btn {
+    top: 50%;
     right: 5px;
+    transform: translateY(-50%);
+}
+
+.download-btn {
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-decoration: none;
+    font-size: 14px;
+    padding: 8px 14px;
 }
