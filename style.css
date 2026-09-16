@@ -163,6 +163,13 @@ img {
     border-color: rgba(255,255,255,0.3);
 }
 
+.lightbox-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .prev-btn {
     top: 50%;
     left: 5px;
