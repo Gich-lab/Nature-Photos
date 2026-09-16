@@ -68,14 +68,14 @@ img {
 .lightbox.active {
   display: flex;
 }
-/*
+
 .lightbox img {
   max-width: 90%;
   max-height: 90%;
   object-fit: contain;
   border-radius: 10px;
 }
-*/
+
 /*defines the animation sequence*/
 @keyframes rotateOnce {
   from { transform: rotate(0deg); }
