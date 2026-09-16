@@ -95,7 +95,7 @@ img {
 }
 
 /* Lightbox overlay */
-#lightbox {
+.lightbox {
   display: none;
   position: fixed;
   inset: 0;
