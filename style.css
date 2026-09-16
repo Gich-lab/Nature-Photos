@@ -51,7 +51,7 @@ img {
     object-fit: contain;
 }
 
-/* Lightbox styles (unchanged) 
+/* Lightbox styles (unchanged)*/ 
 .lightbox {
   position: fixed;
   top: 0;
@@ -60,7 +60,7 @@ img {
   height: 100vh;
   background: rgba(0,0,0,0.95);
   /*display: none;*/
-  /*align-items: center;
+  align-items: center;
   justify-content: center;
   z-index: 1000;
 }
@@ -75,7 +75,7 @@ img {
   object-fit: contain;
   border-radius: 10px;
 }
-*/
+
 /*defines the animation sequence*/
 @keyframes rotateOnce {
   from { transform: rotate(0deg); }
@@ -118,7 +118,7 @@ img {
     color: white;
     z-index: 1000;
 }
-/*
+
 .lightbox-content{
     position:relative;
     display:inline-block;
@@ -138,85 +138,45 @@ img {
 .next{
     right:max(10px, env(safe-area-inset-right));
 }
-*/
+
 /* previous & next button on lightbox */
-.lightbox.active {
-  display: flex;
-}
-
-.lightbox {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.95);
-  /*display: none;*/
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.lightbox-content {
-    position: relative;
-    display: inline-block;
-    align-items: center;
-    justify-content: center;
-}
-
-#lightbox-img {
-    display: block;
-    max-width: 90vw;
-    max-height: 90vh;
-    object-fit: contain;
-    border-radius: 8px;
-}
-
-/* Shared style for all lightbox buttons */
 .lightbox-btn {
+    position: absolute;
     background: rgba(255,255,255,0.12);
     backdrop-filter: blur(7px);
     -webkit-backdrop-filter: blur(7px);
     border: 1px solid rgba(0,255,0,0.25);
     color: #00ff44;
     border-radius: 20px;
+    padding: 8px 12px;
     cursor: pointer;
     z-index: 10001;
     transition: all 0.2s ease;
 }
 
-/* Hover effect */
 .lightbox-btn:hover {
     background: rgba(0,0,0,0.55);
     color: white;
     border-color: rgba(255,255,255,0.3);
 }
 
-/* Previous button */
 .prev-btn {
-    position: absolute;
     top: 50%;
     left: 5px;
     transform: translateY(-50%);
-    padding: 8px 12px;
 }
 
-/* Next button */
 .next-btn {
-    position: absolute;
     top: 50%;
     right: 5px;
     transform: translateY(-50%);
-    padding: 8px 12px;
 }
 
-/* Download button */
 .download-btn {
-    position: absolute;
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     text-decoration: none;
-    padding: 8px 14px;
     font-size: 14px;
+    padding: 8px 14px;
 }
