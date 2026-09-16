@@ -51,31 +51,6 @@ img {
     object-fit: contain;
 }
 
-/* Lightbox styles (unchanged) */
-.lightbox {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.95);
-  /*display: none;*/
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.lightbox.active {
-  display: flex;
-}
-
-.lightbox img {
-  max-width: 90%;
-  max-height: 90%;
-  object-fit: contain;
-  border-radius: 10px;
-}
-
 /*defines the animation sequence*/
 @keyframes rotateOnce {
   from { transform: rotate(0deg); }
@@ -119,22 +94,97 @@ img {
     z-index: 1000;
 }
 
-.lightbox-content{
-    position:relative;
-    display:inline-block;
+/* Lightbox overlay */
+#lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
 }
 
-.download-btn{
-    position:absolute;
-    left:50%;
-    bottom:8px;
-    transform:translateX(-50%);
+/* Container inside the lightbox */
+.lightbox-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.prev{
-    left:max(10px, env(safe-area-inset-left));
+/* Navigation buttons (prev & next) common styles */
+.lightbox-content button.prev,
+.lightbox-content button.next {
+  position: absolute;
+  top: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  border: 1px solid rgba(0, 255, 0, 0.25);
+  border-radius: 20px;
+  padding: 8px 12px;
+  cursor: pointer;
+  z-index: 10001;
+  color: #00ff44;
+  font-size: 1em;
+  transition: all 0.3s ease;
 }
 
-.next{
-    right:max(10px, env(safe-area-inset-right));
+/* Hover effects for prev & next buttons */
+.lightbox-content button.prev:hover,
+.lightbox-content button.next:hover {
+  background: rgba(0, 0, 0, 0.55);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Positioning for prev button */
+.lightbox-content button.prev {
+  left: 5px;
+  transform: translateY(-50%);
+  top: 50%;
+}
+
+/* Positioning for next button */
+.lightbox-content button.next {
+  right: 5px;
+  transform: translateY(-50%);
+  top: 50%;
+}
+
+/* Image styling */
+#lightbox-img {
+  display: block;
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* Download button styles */
+#download {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  border: 1px solid rgba(0, 255, 0, 0.25);
+  border-radius: 20px;
+  padding: 8px 14px;
+  font-size: 14px;
+  text-decoration: none;
+  color: #00ff44;
+  cursor: pointer;
+  z-index: 10001;
+}
+
+/* Optional: hover effects for download button */
+#download:hover {
+  background: rgba(0, 0, 0, 0.55);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.3);
 }
