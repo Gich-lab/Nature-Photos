@@ -51,7 +51,7 @@ img {
     object-fit: contain;
 }
 
-/* Lightbox styles (unchanged)*/ 
+/* Lightbox styles (unchanged)
 .lightbox {
   position: fixed;
   top: 0;
@@ -60,7 +60,7 @@ img {
   height: 100vh;
   background: rgba(0,0,0,0.95);
   /*display: none;*/
-  align-items: center;
+  /*align-items: center;
   justify-content: center;
   z-index: 1000;
 }
@@ -75,7 +75,7 @@ img {
   object-fit: contain;
   border-radius: 10px;
 }
-
+*/
 /*defines the animation sequence*/
 @keyframes rotateOnce {
   from { transform: rotate(0deg); }
@@ -119,9 +119,12 @@ img {
     z-index: 1000;
 }
 
-.lightbox-content{
-    position:relative;
-    display:inline-block;
+/*
+.lightbox-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .download-btn{
@@ -138,7 +141,7 @@ img {
 .next{
     right:max(10px, env(safe-area-inset-right));
 }
-
+*/
 /* previous & next button on lightbox */
 .lightbox-btn {
     position: absolute;
@@ -179,4 +182,5 @@ img {
     text-decoration: none;
     font-size: 14px;
     padding: 8px 14px;
+    position:absolute;
 }
