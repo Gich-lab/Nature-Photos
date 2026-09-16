@@ -150,3 +150,13 @@ img {
     transform: translateX(-50%);
     text-decoration: none;
 }
+
+#lightbox-img {
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    max-width: 90vw !important;
+    max-height: 90vh !important;
+    object-fit: contain !important;
+    margin: 0 !important;
+}
