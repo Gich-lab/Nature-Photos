@@ -124,24 +124,29 @@ img {
     z-index: 10001;
 }
 
-.prev-btn {
-    top: 50%;
-    left: 5px;
-    transform: translateY(-50%);
+button#prev,
+button#next,
+a#download {
+    position: absolute !important;
+    z-index: 10001 !important;
 }
 
-.next-btn {
-    top: 50%;
-    right: 5px;
-    transform: translateY(-50%);
+button#prev {
+    top: 50% !important;
+    left: 5px !important;
+    transform: translateY(-50%) !important;
 }
 
-.download-btn {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-decoration: none;
+button#next {
+    top: 50% !important;
+    right: 5px !important;
+    transform: translateY(-50%) !important;
+}
+
+a#download {
+    bottom: 20px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
 }
 
 #lightbox-img {
