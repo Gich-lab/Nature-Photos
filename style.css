@@ -118,13 +118,12 @@ img {
     color: white;
     z-index: 1000;
 }
-
+/*
 .lightbox-content{
     position:relative;
     display:inline-block;
 }
 
-/*
 .download-btn{
     position:absolute;
     left:50%;
@@ -146,18 +145,21 @@ img {
 }
 
 .lightbox {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.95);
+  /*display: none;*/
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
 .lightbox-content {
     position: relative;
-    display: flex;
+    display: inline-block;
     align-items: center;
     justify-content: center;
 }
