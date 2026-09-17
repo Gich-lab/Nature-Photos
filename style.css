@@ -1,102 +1,53 @@
-/* Global reset and fix */
-*, *::before, *::after {
-  box-sizing: border-box;
-  overflow-wrap: break-word;
-}
+/* =========================================================
+   GLOBAL
+========================================================= */
 
-#header-text {
-  display: inline-block;
-  width: 100%;
-  text-align: center;
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    overflow-wrap: break-word;
 }
 
 body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #111;
-  color: white;
-  overflow-x: hidden; /* Prevent horizontal scroll */
-  word-wrap: break-word;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #111;
+    color: white;
+    overflow-x: hidden;
+    word-wrap: break-word;
 }
 
-/* Make images responsive and prevent overflow */
 img {
-  max-width: 100%;      /* Ensure images don't overflow their containers */
-  height: auto;         /* Maintain aspect ratio */
-  display: block;       /* Remove inline spacing */
-  object-fit: contain;  /* Fit within container without overflow */
-  margin: 0 auto;       /* Center images if needed */
-}
-
-/* Ensure containers are responsive */
-#gallery {
-  margin-top: 20px;   
-  display: flex;
-  flex-wrap: wrap; /*wrap allows images to move onto new rows*/
-  gap: 20px; /*adds spacing between images*/
-  padding-top: 0;
-  padding-right: 20px;
-  padding-bottom: 0;
-  padding-left: 20px;
-  max-width: 100%;
-  box-sizing: border-box;
-  opacity: 1;
-  transition: opacity 0.5s ease;
-  background: rgba(0,0,255,0.2);
-}
-
-#gallery.fullscreen img {
-    width: 100vw !important;
-    height: 100vh !important;
-    object-fit: contain;
-}
-
-/*applies that animation to an element*/
-.rotate-once {
-  animation: rotateOnce 2s linear forwards; 
-}
-
-/* ===== Gallery ===== */
-
-#gallery {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 0;
-}
-
-#gallery img {
+    display: block;
     max-width: 100%;
     height: auto;
-    display: block;
-}
-
-#gallery.fullscreen img {
-    width: 100vw !important;
-    height: 100vh !important;
     object-fit: contain;
+    margin: 0 auto;
 }
 
-/* ===== Header ===== */
+/* =========================================================
+   HEADER
+========================================================= */
 
 .main-header {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    margin: 0;
     z-index: 99999;
+
+    margin: 0;
+    padding: 5px 0;
 
     color: green;
     font-family: "Times New Roman", serif;
+    font-size: 2em;
     font-style: italic;
     font-weight: bold;
-    font-size: 2em;
     text-align: center;
 
-    padding: 5px 0;
-
-    background: rgba(255,255,255,0.7);
+    background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(3px);
 }
 
@@ -104,27 +55,60 @@ img {
     visibility: hidden;
 }
 
-/* ===== Cascade Text ===== */
+#header-text {
+    width: 100%;
+    text-align: center;
+}
+
+/* =========================================================
+   CASCADE TEXT
+========================================================= */
 
 .cascade-text {
     display: inline-block;
     width: 100%;
-    box-sizing: border-box;
     animation: cascadeLoop 12s infinite;
 }
 
 .cascade-text span {
-    opacity: 0;
+    --delay: 0s;
+
     display: inline-block;
+    opacity: 0;
     transform: translateY(20px);
 
     animation: cascadeIn 1.2s forwards;
     animation-delay: var(--delay);
-
-    --delay: 0s;
 }
 
-/* ===== Lightbox ===== */
+/* =========================================================
+   GALLERY
+========================================================= */
+
+#gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    margin-top: 0;
+    padding: 0 20px;
+
+    max-width: 100%;
+    opacity: 1;
+
+    background: rgba(0, 0, 255, 0.2);
+    transition: opacity 0.5s ease;
+}
+
+#gallery.fullscreen img {
+    width: 100vw !important;
+    height: 100vh !important;
+    object-fit: contain;
+}
+
+/* =========================================================
+   LIGHTBOX
+========================================================= */
 
 .lightbox {
     display: none;
@@ -134,7 +118,7 @@ img {
     justify-content: center;
     align-items: center;
 
-    background: rgba(0,0,0,0.85);
+    background: rgba(0, 0, 0, 0.85);
     z-index: 9999;
 }
 
@@ -153,23 +137,35 @@ img {
     border-radius: 8px;
 }
 
-/* ===== Shared Glass Button ===== */
+/* =========================================================
+   SHARED GLASS BUTTON STYLES
+========================================================= */
 
 .nav-btn,
 .download-btn {
-    background: rgba(255,255,255,0.12);
+    background: rgba(255, 255, 255, 0.12);
+
     backdrop-filter: blur(7px);
     -webkit-backdrop-filter: blur(7px);
 
-    border: 1px solid rgba(0,255,0,0.25);
-    color: #00ff44;
-
+    border: 1px solid rgba(0, 255, 0, 0.25);
     border-radius: 20px;
+
+    color: #00ff44;
     cursor: pointer;
     z-index: 10001;
 }
 
-/* ===== Navigation Buttons ===== */
+.nav-btn:hover,
+.download-btn:hover {
+    background: rgba(0, 0, 0, 0.55);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* =========================================================
+   NAVIGATION BUTTONS
+========================================================= */
 
 .nav-btn {
     position: absolute;
@@ -186,7 +182,9 @@ img {
     right: 5px;
 }
 
-/* ===== Download Button ===== */
+/* =========================================================
+   DOWNLOAD BUTTON
+========================================================= */
 
 .download-btn {
     position: absolute;
@@ -196,15 +194,16 @@ img {
 
     padding: 8px 14px;
     font-size: 14px;
-
     text-decoration: none;
 }
 
-/* ===== Footer ===== */
+/* =========================================================
+   FOOTER
+========================================================= */
 
 .footer {
-    text-align: center;
     display: none;
+    text-align: center;
     transition: opacity 1s;
 }
 
@@ -212,7 +211,13 @@ img {
     text-decoration: none !important;
 }
 
-/* ===== Animations ===== */
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+.rotate-once {
+    animation: rotateOnce 2s linear forwards;
+}
 
 @keyframes cascadeIn {
     from {
