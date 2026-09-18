@@ -1,69 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="tab-icon.ico" type="image/x-icon" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    .main-header {color: green;font-weight: bold;font-size: 2em;text-align: center;margin-top: 15px; margin-bottom: 20px}
-  </style>   
- </head>
-  <body>
-    <header id="header" class="main-header">
-      <div class="header-inner"><span id="header-text" class="cascade-text header-hidden"></span></div>
-    </header>
-    <main>
-      <div id="gallery" class="gallery"></div>
-      <div id="lightbox" class="lightbox">
-        <div class="lightbox-content">
-          <button
-            class="prev nav-btn"
-            onmouseover="
-            this.style.background='rgba(0,0,0,0.55)';
-            this.style.color='white';
-            this.style.borderColor='rgba(255,255,255,0.3)';
-            "
-            onmouseout="
-            this.style.background='rgba(255,255,255,0.12)';
-            this.style.color='#00ff44';
-            this.style.borderColor='rgba(0,255,0,0.25)';
-            "> ❮ Prev </button>
-          <img
-            id="lightbox-img"
-            src=""
-            alt="Enlarged image">
-          <button
-            class="next nav-btn"
-            onmouseover="
-            this.style.background='rgba(0,0,0,0.55)';
-            this.style.color='white';
-            this.style.borderColor='rgba(255,255,255,0.3)';
-            "
-            onmouseout="
-            this.style.background='rgba(255,255,255,0.12)';
-            this.style.color='#00ff44';
-            this.style.borderColor='rgba(0,255,0,0.25)';
-            "> Next ❯ </button>
-        </div>
-        <a
-          id="download"
-          class="download-btn"
-          download
-          onmouseover="
-          this.style.background='rgba(0,0,0,0.55)';
-          this.style.color='white';
-          this.style.borderColor='rgba(255,255,255,0.12)';
-          this.style.color='#00ff44';
-          this.style.borderColor='rgba(0,255,0,0.25)';
-          "> Download </a>
-      </div>
-    </main>
-    <footer>
-      <p id="footerText" class="footer">
-        &copy; <span id="year"></span> 2026 Gichuki. All rights reserved.
-        <a href="mailto:kenngich@proton.me" class="email-link">✉️</a>
-        E-mail </p>
-    </footer>   
+  <link rel="icon" href="tab-icon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Gallery</title>
+</head>
+<body>
+  <header class="main-header" id="header">
+    <div class="header-inner">
+      <span class="cascade-text" id="header-text"></span>
+    </div>
+  </header>
+  <main>
+    <div id="gallery" class="gallery"></div>
+
+    <div id="lightbox" class="lightbox">
+      <div class="lightbox-content">
+        <button class="lightbox-btn prev">❮ Prev</button>
+        <img id="lightbox-img" src="" alt="Enlarged image">
+        <button class="lightbox-btn next">Next ❯</button>
+        <a id="download" class="lightbox-btn download-btn" download>Download</a>
+      </div> <!-- lightbox-content -->
+    </div> <!-- lightbox -->
+  </main>
+
+  <footer>
+    <p id="footerText" class="footer">
+      &copy; <span id="year"></span> 2026 Gichuki. All rights reserved.
+      <a href="mailto:kenngich@proton.me" class="mail-link">✉️</a> E-mail
+    </p>
+  </footer>
+</body>
+</html>
     
   <script>
     // CONFIGURATION
