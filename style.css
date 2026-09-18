@@ -8,7 +8,6 @@
   display: inline-block;
   width: 100%;
   text-align: center;
-  visibility: hidden; /* restored from the removed inline attribute; JS reveals it */
 }
 
 body {
@@ -27,41 +26,6 @@ img {
   display: block;       /* Remove inline spacing */
   object-fit: contain;  /* Fit within container without overflow */
   margin: 0 auto;       /* Center images if needed */
-}
-
-/* ===== Header (needed by this document's header/cascade markup) ===== */
-.main-header {
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  margin: 0;
-  z-index: 99999;
-  color: green;
-  font-family: "Times New Roman", serif;
-  font-style: italic;
-  font-weight: bold;
-  font-size: 2em;
-  text-align: center;
-  padding: 5px 0;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(3px);
-}
-
-.cascade-text {
-  display: inline-block;
-  width: 100%;
-  box-sizing: border-box;
-  animation: cascadeLoop 12s infinite;
-}
-
-.cascade-text span {
-  opacity: 0;
-  display: inline-block;
-  transform: translateY(20px);
-  animation: cascadeIn 1.2s forwards;
-  --delay: 0s;
-  animation-delay: var(--delay);
 }
 
 /* Ensure containers are responsive */
@@ -89,13 +53,13 @@ img {
 
 /* Lightbox styles (unchanged) */
 .lightbox {
-  display: none; /* restored default; JS toggles style.display flex/none */
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   background: rgba(0,0,0,0.95);
+  /*display: none;*/
   align-items: center;
   justify-content: center;
   z-index: 1000;
@@ -144,7 +108,6 @@ img {
 }
 
 .footer {
-    display: none; /* JS sets this to "block" once the gallery finishes loading */
     position: fixed;
     bottom: 0;
     left: 0;
@@ -154,11 +117,6 @@ img {
     background: rgba(0, 0, 0, 0.7);
     color: white;
     z-index: 1000;
-    transition: opacity 1s; /* restored from removed inline style */
-}
-
-.mail-link {
-  text-decoration: none !important;
 }
 
 .lightbox-content{
@@ -166,44 +124,17 @@ img {
     display:inline-block;
 }
 
-/* Needed by this document's buttons (the confirmed CSS didn't yet cover them) */
-.lightbox-btn {
-  position: absolute;
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(7px);
-  -webkit-backdrop-filter: blur(7px);
-  border: 1px solid rgba(0, 255, 0, 0.25);
-  color: #00ff44;
-  border-radius: 20px;
-  padding: 8px 12px;
-  cursor: pointer;
-  text-decoration: none;
-  z-index: 10001;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
-
-.lightbox-btn:hover {
-  background: rgba(0, 0, 0, 0.55);
-  color: white;
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
 .download-btn{
+    position:absolute;
     left:50%;
     bottom:8px;
     transform:translateX(-50%);
-    padding: 8px 14px;
-    font-size: 14px;
 }
 
 .prev{
-    top: 50%;
-    transform: translateY(-50%);
     left:max(10px, env(safe-area-inset-left));
 }
 
 .next{
-    top: 50%;
-    transform: translateY(-50%);
     right:max(10px, env(safe-area-inset-right));
 }
