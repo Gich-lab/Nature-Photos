@@ -53,7 +53,6 @@ img {
 
 /* Lightbox styles (unchanged) */
 .lightbox {
-  display: none; 
   position: fixed;
   top: 0;
   left: 0;
@@ -103,6 +102,11 @@ img {
   }
 }
 
+/*applies that animation to an element*/
+.rotate-once {
+  animation: rotateOnce 2s linear forwards; 
+}
+
 .footer {
     position: fixed;
     bottom: 0;
@@ -133,44 +137,4 @@ img {
 
 .next{
     right:max(10px, env(safe-area-inset-right));
-}
-
-/* Added: visual look for prev/next/download (background, blur, border, hover) */
-.prev,
-.next,
-.download-btn {
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(7px);
-  -webkit-backdrop-filter: blur(7px);
-  border: 1px solid rgba(0, 255, 0, 0.25);
-  color: #00ff44;
-  border-radius: 20px;
-  padding: 8px 12px;
-  cursor: pointer;
-  text-decoration: none;
-  z-index: 10001;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
-
-.prev:hover,
-.next:hover,
-.download-btn:hover {
-  background: rgba(0, 0, 0, 0.55);
-  color: white;
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-/* Added: .prev/.next had no position or vertical centering set,
-   so their left/right offsets above had nothing to apply against */
-.prev,
-.next {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-/* Added: download button's distinct padding/font-size from the markup */
-.download-btn {
-  padding: 8px 14px;
-  font-size: 14px;
 }
