@@ -362,12 +362,15 @@
         };
 
         await new Promise(resolve => {
-          img.onload = resolve;
-          img.onerror = resolve;
+          img.addEventListener('load', resolve, { once: true });
+          img.addEventListener('error', () => {
+            img.remove();
+            resolve();
+          }, { once: true });
         });
 
         DOM.gallery.appendChild(img);
-        
+                
         updateLayout();
         img.style.visibility = "visible";
         await animateImageAppearance(img);
