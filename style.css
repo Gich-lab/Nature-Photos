@@ -103,11 +103,6 @@ img {
   }
 }
 
-/*applies that animation to an element*/
-.rotate-once {
-  animation: rotateOnce 2s linear forwards; 
-}
-
 .footer {
     position: fixed;
     bottom: 0;
@@ -140,8 +135,7 @@ img {
     right:max(10px, env(safe-area-inset-right));
 }
 
-/* Added: visual look for prev/next/download (background, blur,
-   border, hover) — none of this existed yet for these three classes */
+/* Added: visual look for prev/next/download (background, blur, border, hover) */
 .prev,
 .next,
 .download-btn {
