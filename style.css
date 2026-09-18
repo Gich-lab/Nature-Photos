@@ -26,65 +26,6 @@ img {
     margin: 0 auto;
 }
 
-/* =========================================================
-   HEADER
-========================================================= */
-
-.main-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 99999;
-
-    margin: 0;
-    padding: 5px 0;
-
-    color: green;
-    font-family: "Times New Roman", serif;
-    font-size: 2em;
-    font-style: italic;
-    font-weight: bold;
-    text-align: center;
-
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(3px);
-}
-
-.header-hidden {
-    visibility: hidden;
-}
-
-#header-text {
-    width: 100%;
-    text-align: center;
-}
-
-/* =========================================================
-   CASCADE TEXT
-========================================================= */
-
-.cascade-text {
-    display: inline-block;
-    width: 100%;
-    animation: cascadeLoop 12s infinite;
-}
-
-.cascade-text span {
-    --delay: 0s;
-
-    display: inline-block;
-    opacity: 0;
-    transform: translateY(20px);
-
-    animation: cascadeIn 1.2s forwards;
-    animation-delay: var(--delay);
-}
-
-/* =========================================================
-   GALLERY
-========================================================= */
-
 #gallery {
     display: flex;
     flex-wrap: wrap;
@@ -100,144 +41,153 @@ img {
     transition: opacity 0.5s ease;
 }
 
+/* ===== Gallery ===== */
+#gallery img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Full-screen styles for desktop view */
 #gallery.fullscreen img {
-    width: 100vw !important;
-    height: 100vh !important;
-    object-fit: contain;
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: contain;
 }
 
-/* =========================================================
-   LIGHTBOX
-========================================================= */
-
-.lightbox {
-    display: none;
-    position: fixed;
-    inset: 0;
-
-    justify-content: center;
-    align-items: center;
-
-    background: rgba(0, 0, 0, 0.85);
-    z-index: 9999;
+/* ===== Header ===== */
+.main-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  margin: 0;
+  z-index: 99999;
+  color: green;
+  font-family: "Times New Roman", serif;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 2em;
+  text-align: center;
+  padding: 5px 0;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(3px);
 }
 
-.lightbox-content {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* ===== Cascading title text ===== */
+.cascade-text {
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+  animation: cascadeLoop 12s infinite;
 }
 
-#lightbox-img {
-    display: block;
-    max-width: 90vw;
-    max-height: 90vh;
-    object-fit: contain;
-    border-radius: 8px;
-}
-
-/* =========================================================
-   SHARED GLASS BUTTON STYLES
-========================================================= */
-
-.nav-btn,
-.download-btn {
-    background: rgba(255, 255, 255, 0.12);
-
-    backdrop-filter: blur(7px);
-    -webkit-backdrop-filter: blur(7px);
-
-    border: 1px solid rgba(0, 255, 0, 0.25);
-    border-radius: 20px;
-
-    color: #00ff44;
-    cursor: pointer;
-    z-index: 10001;
-}
-
-.nav-btn:hover,
-.download-btn:hover {
-    background: rgba(0, 0, 0, 0.55);
-    color: white;
-    border-color: rgba(255, 255, 255, 0.3);
-}
-
-/* =========================================================
-   NAVIGATION BUTTONS
-========================================================= */
-
-.nav-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    padding: 8px 12px;
-}
-
-.prev {
-    left: 5px;
-}
-
-.next {
-    right: 5px;
-}
-
-/* =========================================================
-   DOWNLOAD BUTTON
-========================================================= */
-
-.download-btn {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-
-    padding: 8px 14px;
-    font-size: 14px;
-    text-decoration: none;
-}
-
-/* =========================================================
-   FOOTER
-========================================================= */
-
-.footer {
-    display: none;
-    text-align: center;
-    transition: opacity 1s;
-}
-
-.email-link {
-    text-decoration: none !important;
-}
-
-/* =========================================================
-   ANIMATIONS
-========================================================= */
-
-.rotate-once {
-    animation: rotateOnce 2s linear forwards;
+.cascade-text span {
+  opacity: 0;
+  display: inline-block;
+  transform: translateY(20px);
+  animation: cascadeIn 1.2s forwards;
+  --delay: 0s;
+  animation-delay: var(--delay);
 }
 
 @keyframes cascadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes cascadeLoop {
-    0%,
-    99.9% {
-        opacity: 1;
-    }
+  0%, 99.9% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 
-    100% {
-        opacity: 0;
-    }
+/* ===== Lightbox ===== */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.lightbox-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-img {
+  display: block;
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+/* Shared style for prev/next/download controls, replacing the
+   three near-identical inline style + hover/mouseout blocks */
+.lightbox-btn {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  border: 1px solid rgba(0, 255, 0, 0.25);
+  color: #00ff44;
+  border-radius: 20px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  z-index: 10001;
+}
+
+.lightbox-btn:hover {
+  background: rgba(0, 0, 0, 0.55);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.prev {
+  position: absolute;
+  top: 50%;
+  left: 5px;
+  transform: translateY(-50%);
+}
+
+.next {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+}
+
+.download-btn {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ===== Footer ===== */
+.footer {
+  text-align: center;
+  display: none;
+  transition: opacity 1s;
+}
+
+.mail-link {
+  text-decoration: none !important;
 }
