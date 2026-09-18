@@ -114,41 +114,9 @@ img {
     z-index: 1000;
 }
 
-.lightbox-content{
-    position:relative;
-    display:inline-block;
-}
-
-.download-btn{
-    position:absolute;
-    left:50%;
-    bottom:8px;
-    transform:translateX(-50%);
-}
-
-.prev{
-    left:max(10px, env(safe-area-inset-left));
-}
-
-.next{
-    right:max(10px, env(safe-area-inset-right));
-}
-
-.lightbox {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.85);
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
 .lightbox-content {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-block;
 }
 
 #lightbox-img {
