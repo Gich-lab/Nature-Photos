@@ -1,58 +1,26 @@
-/* =========================================================
-   GLOBAL
-========================================================= */
-
+/* ===== Global reset ===== */
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
-    overflow-wrap: break-word;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
 }
 
 body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #111;
-    color: white;
-    overflow-x: hidden;
-    word-wrap: break-word;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #111;
+  color: white;
+  overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
+/* Make images responsive and prevent overflow by default */
 img {
-    display: block;
-    max-width: 100%;
-    height: auto;
-    object-fit: contain;
-    margin: 0 auto;
-}
-
-#gallery {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-
-    margin-top: 0;
-    padding: 0 20px;
-
-    max-width: 100%;
-    opacity: 1;
-
-    background: rgba(0, 0, 255, 0.2);
-    transition: opacity 0.5s ease;
-}
-
-/* ===== Gallery ===== */
-#gallery img {
   max-width: 100%;
   height: auto;
   display: block;
-}
-
-/* Full-screen styles for desktop view */
-#gallery.fullscreen img {
-  width: 100vw !important;
-  height: 100vh !important;
   object-fit: contain;
+  margin: 0 auto;
 }
 
 /* ===== Header ===== */
@@ -74,7 +42,13 @@ img {
   backdrop-filter: blur(3px);
 }
 
-/* ===== Cascading title text ===== */
+#header-text {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+}
+
+/* ===== Cascading text animation ===== */
 .cascade-text {
   display: inline-block;
   width: 100%;
@@ -111,35 +85,80 @@ img {
   }
 }
 
+/* ===== Rotate-once utility animation ===== */
+@keyframes rotateOnce {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotate-once {
+  animation: rotateOnce 2s linear forwards;
+}
+
+/* ===== Gallery ===== */
+#gallery {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap; /* allows images to move onto new rows */
+  gap: 20px; /* adds spacing between images */
+  padding: 0 20px;
+  max-width: 100%;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  background: rgba(0, 0, 255, 0.2);
+}
+
+#gallery img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Full-screen styles for desktop view */
+#gallery.fullscreen img {
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: contain;
+}
+
 /* ===== Lightbox ===== */
 .lightbox {
   display: none;
   position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.85);
-  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.95);
   align-items: center;
-  z-index: 9999;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.lightbox.active {
+  display: flex;
 }
 
 .lightbox-content {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-block;
 }
 
-.lightbox-img {
-  display: block;
-  max-width: 90vw;
-  max-height: 90vh;
+.lightbox img {
+  max-width: 90%;
+  max-height: 90%;
   object-fit: contain;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
-/* Shared style for prev/next/download controls, replacing the
-   three near-identical inline style + hover/mouseout blocks */
+/* Shared style for prev/next/download controls, replacing the three
+   near-identical inline style + hover/mouseout blocks from the markup */
 .lightbox-btn {
+  position: absolute;
   background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(7px);
   -webkit-backdrop-filter: blur(7px);
@@ -148,7 +167,6 @@ img {
   border-radius: 20px;
   padding: 8px 12px;
   cursor: pointer;
-  font-size: 14px;
   text-decoration: none;
   transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   z-index: 10001;
@@ -160,31 +178,40 @@ img {
   border-color: rgba(255, 255, 255, 0.3);
 }
 
-.prev {
-  position: absolute;
+.prev,
+.next {
   top: 50%;
-  left: 5px;
   transform: translateY(-50%);
+}
+
+.prev {
+  left: max(10px, env(safe-area-inset-left));
 }
 
 .next {
-  position: absolute;
-  top: 50%;
-  right: 5px;
-  transform: translateY(-50%);
+  right: max(10px, env(safe-area-inset-right));
 }
 
 .download-btn {
-  position: absolute;
-  bottom: 20px;
   left: 50%;
+  bottom: 8px;
   transform: translateX(-50%);
+  padding: 8px 14px;
+  font-size: 14px;
 }
 
 /* ===== Footer ===== */
 .footer {
-  text-align: center;
   display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  z-index: 1000;
   transition: opacity 1s;
 }
 
