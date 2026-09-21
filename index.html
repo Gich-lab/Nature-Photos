@@ -131,6 +131,8 @@
                     Download
                 </a>
 
+                <div id="lightbox-caption"></div>
+
             </div> <!-- lightbox-content -->
 
         </div> <!-- lightbox -->
@@ -233,6 +235,30 @@
         #photo-tip.visible { opacity: 1; }
         #photo-tip strong { display: block; color: #00ff44; }
         #photo-tip span { display: block; margin-top: 2px; }
+
+        /* Caption inside the enlarged (lightbox) view - used on touch screens, which have no hover */
+        #lightbox-caption {
+          display: none;
+          position: absolute;
+          top: 12px;
+          left: 50%;
+          transform: translateX(-50%);
+          max-width: 85vw;
+          box-sizing: border-box;
+          padding: 8px 14px;
+          border-radius: 14px;
+          text-align: center;
+          background: rgba(0, 0, 0, 0.6);
+          backdrop-filter: blur(7px);
+          -webkit-backdrop-filter: blur(7px);
+          border: 1px solid rgba(0, 255, 0, 0.25);
+          color: #fff;
+          font: 14px/1.35 system-ui, -apple-system, "Segoe UI", sans-serif;
+          pointer-events: none;   /* never blocks taps or swipes */
+          z-index: 10001;
+        }
+        #lightbox-caption strong { display: block; color: #00ff44; }
+        #lightbox-caption span { display: block; margin-top: 2px; }
       </style>
 
     <footer>
@@ -285,8 +311,16 @@
         "photo2.jpg": "White rhinos in Mt. Kenya forest.",
         "photo3.jpg": "A giraffe poses mid-feeding to admire a photographer in Kenyan plains.",
         "photo7.jpg": "Wildlife at ILRI Kapiti Conservancy - Credit to Newton.",
-        "photo13.jpg": "Don't stare at my plumage, jipe shughuli buana!"   
+        "photo13.jpg": "Don't stare at my plumage, jipe shughuli buana!",
+        "photo47.jpg": "Zebra at ILRI Kapiti Conservancy - Credit to Newton.",
+        "photo87.jpg": "Lantana camara flowers at ILRI offices.",
+        "photo99.jpg": "Photo of the earth taken by Artemis 2 crew as they went around the moon - Credit to NASA."  
       },
+
+      // Caption shown inside the enlarged (lightbox) view, using the same photoCaptions:
+      //   "touch"  = only on touch screens, which have no hover (default)
+      //   "always" = on every device        "never" = off
+      lightboxCaption: "touch",
 
       gaId: "G-22HE9GQ99B",
       gaScript: "https://www.googletagmanager.com/gtag/js?id=G-22HE9GQ99B",
@@ -313,6 +347,7 @@
         gallery: document.getElementById("gallery"),
         lightbox: document.getElementById("lightbox"),
         lightboxImg: document.getElementById("lightbox-img"),
+        lightboxCaption: document.getElementById("lightbox-caption"),
         downloadBtn: document.getElementById("download"),
         footerText: document.getElementById("footerText"),
         nextBtn: document.querySelector(".next"),
@@ -567,6 +602,7 @@
 
       state.currentImageIndex = index;
       DOM.lightboxImg.src = state.images[index].src;
+      updateLightboxCaption(state.images[index]);
 
       DOM.downloadBtn.href = state.images[index].src;
       DOM.downloadBtn.download = state.images[index].src.split('/').pop();
@@ -620,6 +656,29 @@
       const entry = CONFIG.photoCaptions[file] ?? (num ? CONFIG.photoCaptions[Number(num[1])] : undefined);
       if (!entry) return null;
       return typeof entry === "string" ? { title: entry, text: "" } : entry;
+    }
+
+    // Show (or hide) the caption inside the lightbox for the photo now on display
+    function updateLightboxCaption(img) {
+      const box = DOM.lightboxCaption;
+      if (!box) return;
+      const mode = CONFIG.lightboxCaption;
+      const wanted = mode === "always" ||
+                     (mode === "touch" && !window.matchMedia("(hover: hover)").matches);
+      const caption = wanted ? getCaption(img) : null;
+      if (!caption) {
+        box.style.display = "none";
+        return;
+      }
+      const title = document.createElement("strong");
+      title.textContent = caption.title;               // textContent: never treated as HTML
+      box.replaceChildren(title);
+      if (caption.text) {
+        const text = document.createElement("span");
+        text.textContent = caption.text;
+        box.appendChild(text);
+      }
+      box.style.display = "block";
     }
 
     // Hover popup with a description of the photo under the mouse
