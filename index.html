@@ -210,6 +210,29 @@
             opacity: 0;
           }
         }
+
+        /* Hover caption popup for gallery photos (same glass style as the lightbox buttons) */
+        #photo-tip {
+          position: fixed;
+          top: 0;
+          left: 0;
+          max-width: 280px;
+          padding: 8px 12px;
+          border-radius: 12px;
+          background: rgba(0, 0, 0, 0.72);
+          backdrop-filter: blur(7px);
+          -webkit-backdrop-filter: blur(7px);
+          border: 1px solid rgba(0, 255, 0, 0.25);
+          color: #fff;
+          font: 14px/1.35 system-ui, -apple-system, "Segoe UI", sans-serif;
+          pointer-events: none;   /* never blocks the mouse, so it can't cause flicker */
+          opacity: 0;
+          transition: opacity 0.15s ease;
+          z-index: 100000;        /* above the fixed header (99999) */
+        }
+        #photo-tip.visible { opacity: 1; }
+        #photo-tip strong { display: block; color: #00ff44; }
+        #photo-tip span { display: block; margin-top: 2px; }
       </style>
 
     <footer>
@@ -247,6 +270,24 @@
         "Plant now, brag later!",
         "itunze dunia ikutunze"
       ],
+
+      // ==========================================================================
+      // PHOTO CAPTIONS - shown in a popup when the mouse hovers over a photo.
+      // The number is the photo number: 1 = images/photo1.jpg, 2 = images/photo2.jpg ...
+      //
+      // !! EDIT THESE: entries 1 and 2 are only EXAMPLES - replace them with the
+      // !! real description of your own photo1.jpg, photo2.jpg, and so on.
+      //
+      // A caption can be just text:            3: "Sunrise over Lake Naivasha",
+      // or a title plus a longer description:  4: { title: "Mt. Kenya",
+      //                                              text: "Taken from the Sirimon route." },
+      // Photos with no entry here simply show no popup.
+      // ==========================================================================
+      photoCaptions: {
+        1: "Wildlife in Kapiti Conservancy",
+        2: "Mt. Kenya"
+      },
+
       gaId: "G-22HE9GQ99B",
       gaScript: "https://www.googletagmanager.com/gtag/js?id=G-22HE9GQ99B",
       sheetsUrl: "https://script.google.com/macros/s/AKfycbwMC8P52A8DPBcwcN3JFU4ov1mPg4e15zmnMfEVnJYVntfz0vy1zVGiBp75O7u5avId/exec",
@@ -507,7 +548,7 @@
           img.style.width = "calc(100% - 20px)";
           img.style.borderRadius = "0.3%";
         } else {
-          img.style.width = "calc(100% - 20px)";//"calc(25% - 20px)";
+          img.style.width = "cal(100% - 20px)";//"calc(25% - 20px)";
           img.style.borderRadius = "0.6%";
           img.style.opacity = "1";
         }
@@ -568,6 +609,71 @@
           img.classList.remove("blur-img");
         }
       });
+    }
+
+    // Look up the caption for a gallery image from CONFIG.photoCaptions.
+    // Returns { title, text } or null when that photo has no caption.
+    function getCaption(img) {
+      const match = img.src.match(/photo(\d+)\.jpg/i);
+      if (!match) return null;
+      const entry = CONFIG.photoCaptions[Number(match[1])];
+      if (!entry) return null;
+      return typeof entry === "string" ? { title: entry, text: "" } : entry;
+    }
+
+    // Hover popup with a description of the photo under the mouse
+    function setupPhotoTooltip() {
+      // Touch screens have no hover (a tap opens the lightbox instead), so skip them
+      if (!window.matchMedia("(hover: hover)").matches) return;
+
+      const tip = document.createElement("div");
+      tip.id = "photo-tip";
+      tip.setAttribute("role", "tooltip");
+      const tipTitle = document.createElement("strong");
+      const tipText = document.createElement("span");
+      tip.append(tipTitle, tipText);
+      document.body.appendChild(tip);
+
+      // Keep the popup next to the cursor, flipping it if it would leave the screen
+      function place(e) {
+        const gap = 16, margin = 8;
+        const w = tip.offsetWidth, h = tip.offsetHeight;
+        let x = e.clientX + gap;
+        let y = e.clientY + gap;
+        if (x + w > window.innerWidth - margin) x = e.clientX - w - gap;
+        if (y + h > window.innerHeight - margin) y = e.clientY - h - gap;
+        tip.style.transform = `translate(${Math.max(margin, x)}px, ${Math.max(margin, y)}px)`;
+      }
+
+      function hide() {
+        tip.classList.remove("visible");
+      }
+
+      function show(e) {
+        const caption = getCaption(e.target);
+        if (!caption) { hide(); return; }
+        tipTitle.textContent = caption.title;      // textContent: text is never treated as HTML
+        tipText.textContent = caption.text || "";
+        tipText.style.display = caption.text ? "block" : "none";
+        place(e);
+        tip.classList.add("visible");
+      }
+
+      // Listen on the gallery container so images added later are covered too
+      DOM.gallery.addEventListener("mouseover", (e) => {
+        if (e.target.tagName === "IMG") show(e);
+      });
+      DOM.gallery.addEventListener("mousemove", (e) => {
+        if (e.target.tagName !== "IMG") return;
+        // Follow the cursor; if the popup was hidden by a scroll or click while the
+        // mouse stayed on the same photo, bring it back on the next mouse movement
+        if (tip.classList.contains("visible")) place(e); else show(e);
+      });
+      DOM.gallery.addEventListener("mouseout", (e) => {
+        if (e.target.tagName === "IMG") hide();
+      });
+      DOM.gallery.addEventListener("click", hide);        // the lightbox opens on click
+      window.addEventListener("scroll", hide, { passive: true });
     }
 
     // Fetch latest commit and manage content updates 
@@ -676,6 +782,7 @@
       initializeDOMElements();
       fetchLatestCommitSha();
       setupEventListeners();  
+      setupPhotoTooltip();
     }
 
     // Start the application when DOM is ready
