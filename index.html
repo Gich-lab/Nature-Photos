@@ -282,11 +282,13 @@
       touchSwipeThreshold: 50,
       headerTexts: [
         "Explore my wallpapers..",
+        "Protect what you photograph",
         "Mti leo, kivuli kesho",
         "Less junk, more jungle!",
         "Think green, act cleaner",
         "Mito yastahili kutunzwa",
         "itunze mito uishi fiti",
+        "Admire, don't interfere",
         "Stay wild & awesome!",
         "Get lost, find nature!",
         "Kata takataka si miti",
@@ -294,6 +296,7 @@
         "Waste less, wonder more!",
         "Dunia yajua unakozoa taka",
         "Plant now, brag later!",
+        "Let wildlife be wild!",
         "itunze dunia ikutunze"
       ],
 
@@ -308,13 +311,16 @@
       // Photos with no entry here simply show no popup. Separate entries with commas.
       // ==========================================================================
       photoCaptions: {
-        "photo2.jpg": "White rhinos in Mt. Kenya forest.",
-        "photo3.jpg": "A giraffe poses mid-feeding to admire a photographer in Kenyan plains.",
-        "photo7.jpg": "Wildlife at ILRI Kapiti Conservancy - Credit to Newton.",
+        "photo2.jpg": "White rhinos in the Mt. Kenya forest.”,
+        "photo3.jpg": "A giraffe poses mid-feeding to admire a photographer in the Kenyan plains.",
+        "photo7.jpg": "Wildlife at ILRI Kapiti Conservancy. Credit to Newton.",
         "photo13.jpg": "Don't stare at my plumage, jipe shughuli buana!",
-        "photo47.jpg": "Zebra at ILRI Kapiti Conservancy - Credit to Newton.",
+        "photo47.jpg": "Zebra at ILRI Kapiti Conservancy. Credit to Newton.",
+        "photo73.jpg": "Sssh...i have a secret...",
         "photo87.jpg": "Lantana camara flowers at ILRI offices.",
-        "photo99.jpg": "Photo of the earth taken by Artemis 2 crew as they went around the moon - Credit to NASA."  
+        "photo99.jpg": "Photo of the earth taken by Artemis 2 crew as they went around the moon. Credit to NASA.",
+        "photo112.jpg":"A Black hole. Credit to NASA.",
+        "photo116.jpg":"An elephant in its habit at the Mt. Kenya forest."
       },
 
       // Caption shown inside the enlarged (lightbox) view, using the same photoCaptions:
@@ -647,8 +653,7 @@
       });
     }
 
-    // Look up the caption for a gallery image from CONFIG.photoCaptions, by file name
-    // ("photo7.jpg") or by photo number (7).
+    // Look up the caption for a gallery image from CONFIG.photoCaptions, by file name or by photo number.
     // Returns { title, text } or null when that photo has no caption.
     function getCaption(img) {
       const file = decodeURIComponent(img.src.split("?")[0].split("/").pop());
