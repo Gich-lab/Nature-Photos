@@ -273,19 +273,17 @@
 
       // ==========================================================================
       // PHOTO CAPTIONS - shown in a popup when the mouse hovers over a photo.
-      // The number is the photo number: 1 = images/photo1.jpg, 2 = images/photo2.jpg ...
+      // Use the photo's file name IN QUOTES (a name containing a dot must be quoted),
+      // or just its number:   "photo7.jpg": "..."   and   7: "..."   both work.
       //
-      // !! EDIT THESE: entries 1 and 2 are only EXAMPLES - replace them with the
-      // !! real description of your own photo1.jpg, photo2.jpg, and so on.
-      //
-      // A caption can be just text:            3: "Sunrise over Lake Naivasha",
-      // or a title plus a longer description:  4: { title: "Mt. Kenya",
+      // A caption can be just text:            "photo3.jpg": "Sunrise over Lake Naivasha",
+      // or a title plus a longer description:  "photo4.jpg": { title: "Mt. Kenya",
       //                                              text: "Taken from the Sirimon route." },
-      // Photos with no entry here simply show no popup.
+      // Photos with no entry here simply show no popup. Separate entries with commas.
       // ==========================================================================
       photoCaptions: {
-        1: "Wildlife in Kapiti Conservancy",
-        2: "Mt. Kenya"
+        "photo7.jpg": "Wildlife at ILRI Kapiti Conservancy",
+        "photo3.jpg": "A giraffe poses mid-feeding to admire a photographer in Kenyan plains."
       },
 
       gaId: "G-22HE9GQ99B",
@@ -611,12 +609,13 @@
       });
     }
 
-    // Look up the caption for a gallery image from CONFIG.photoCaptions.
+    // Look up the caption for a gallery image from CONFIG.photoCaptions, by file name
+    // ("photo7.jpg") or by photo number (7).
     // Returns { title, text } or null when that photo has no caption.
     function getCaption(img) {
-      const match = img.src.match(/photo(\d+)\.jpg/i);
-      if (!match) return null;
-      const entry = CONFIG.photoCaptions[Number(match[1])];
+      const file = decodeURIComponent(img.src.split("?")[0].split("/").pop());
+      const num = file.match(/^photo(\d+)\.jpg$/i);
+      const entry = CONFIG.photoCaptions[file] ?? (num ? CONFIG.photoCaptions[Number(num[1])] : undefined);
       if (!entry) return null;
       return typeof entry === "string" ? { title: entry, text: "" } : entry;
     }
