@@ -139,7 +139,7 @@ img {
     right:max(10px, env(safe-area-inset-right));
 }
 
-.igxLightbox {
+.lightbox {
     display: none;
     position: fixed;
     inset: 0;
@@ -149,14 +149,14 @@ img {
     z-index: 9999;
 }
 
-.igxLightbox__content {
+.lightbox-content {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.igxLightbox__navBtn {
+.nav-btn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -172,21 +172,21 @@ img {
     transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
-.igxLightbox__navBtn:hover {
+.nav-btn:hover {
     background: rgba(0, 0, 0, 0.55);
     color: white;
     border-color: rgba(255, 255, 255, 0.3);
 }
 
-.igxLightbox__navBtn--prev {
+.prev {
     left: 5px;
 }
 
-.igxLightbox__navBtn--next {
+.next {
     right: 5px;
 }
 
-.igxLightbox__img {
+.lightbox-img {
     display: block;
     max-width: 90vw;
     max-height: 90vh;
@@ -194,7 +194,7 @@ img {
     border-radius: 8px;
 }
 
-.igxLightbox__download {
+.download-btn {
     position: absolute;
     bottom: 20px;
     left: 50%;
@@ -212,7 +212,7 @@ img {
     transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
-.igxLightbox__download:hover {
+.download-btn:hover {
     background: rgba(0, 0, 0, 0.55);
     color: white;
     border-color: rgba(255, 255, 255, 0.3);
