@@ -4,39 +4,264 @@
   <link rel="icon" href="tab-icon.ico" type="image/x-icon" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="gallery.css" />
+  <style>
+    .main-header {color: green;font-weight: bold;font-size: 2em;text-align: center;margin-top: 15px; margin-bottom: 20px}
+  </style>   
 </head>
-<body>
+<body> 
     <header class="main-header" id="header">
       <div class="header-inner">
-        <span class="cascade-text" id="header-text"></span>
+        <span class="cascade-text" id="header-text" style="visibility: hidden;"></span>     
       </div>
     </header>
     <main>
           <div id="gallery" class="gallery"></div>
-          <div id="lightbox" class="lightbox">
+          <div id="lightbox" class="lightbox"
+              style="
+              display:none;
+              position:fixed;
+              inset:0;
+              background:rgba(0,0,0,0.85);
+              justify-content:center;
+              align-items:center;
+              z-index:9999;">
 
-            <div class="lightbox-content">
-              <button class="prev">❮ Prev</button>
+            <div class="lightbox-content"
+              style="
+              position:relative;
+              display:flex;
+              align-items:center;
+              justify-content:center;">
+              <button class="prev"
+                onmouseover="
+                this.style.background='rgba(0,0,0,0.55)';
+                this.style.color='white';
+                this.style.borderColor='rgba(255,255,255,0.3)';
+                "
+                onmouseout="
+                this.style.background='rgba(255,255,255,0.12)';
+                this.style.color='#00ff44';
+                this.style.borderColor='rgba(0,255,0,0.25)';
+                "
+                style="
+                position:absolute;
+                top:50%;
+                left:5px;
+                transform:translateY(-50%);
+                background:rgba(255,255,255,0.12);
+                backdrop-filter:blur(7px);
+                -webkit-backdrop-filter:blur(7px);
+                border:1px solid rgba(0,255,0,0.25);
+                color:#00ff44;
+                border-radius:20px;
+                padding:8px 12px;
+                cursor:pointer;
+                z-index:10001;">
+                ❮ Prev
+              </button>   
 
-              <img id="lightbox-img" src="" alt="Enlarged image">
-
-              <button class="next">Next ❯</button>
+              <img id="lightbox-img"
+                src=""
+                alt="Enlarged image"
+                style="
+                display:block;
+                max-width:90vw;
+                max-height:90vh;
+                object-fit:contain;
+                border-radius:8px;">
+                <button class="next"
+                  onmouseover="
+                  this.style.background='rgba(0,0,0,0.55)';
+                  this.style.color='white';
+                  this.style.borderColor='rgba(255,255,255,0.3)';
+                  "
+                  onmouseout="
+                  this.style.background='rgba(255,255,255,0.12)';
+                  this.style.color='#00ff44';
+                  this.style.borderColor='rgba(0,255,0,0.25)';
+                  "
+                  style="
+                  position:absolute;
+                  top:50%;
+                  right:5px;
+                  transform:translateY(-50%);
+                  background:rgba(255,255,255,0.12);
+                  backdrop-filter:blur(7px);
+                  -webkit-backdrop-filter:blur(7px);
+                  border:1px solid rgba(0,255,0,0.25);
+                  color:#00ff44;
+                  border-radius:20px;
+                  padding:8px 12px;
+                  cursor:pointer;
+                  z-index:10001;">
+                  Next ❯
+              </button>
             </div>
-
-            <a id="download" class="download-btn" download>Download</a>
-
-            <div id="lightbox-caption"></div>
+                
+            <a id="download"
+              class="download-btn"
+              download
+              onmouseover="
+              this.style.background='rgba(0,0,0,0.55)';
+              this.style.color='white';
+              this.style.borderColor='rgba(255,255,255,0.3)';
+              "
+              onmouseout="
+              this.style.background='rgba(255,255,255,0.12)';
+              this.style.color='#00ff44';
+              this.style.borderColor='rgba(0,255,0,0.25)';
+              "
+              style="
+              position:absolute;
+              bottom:20px;
+              left:50%;
+              transform:translateX(-50%);
+              background:rgba(255,255,255,0.12);
+              backdrop-filter:blur(7px);
+              -webkit-backdrop-filter:blur(7px);
+              border:1px solid rgba(0,255,0,0.25);
+              color:#00ff44;
+              text-decoration:none;
+              border-radius:20px;
+              padding: 8px 14px;
+              font-size: 14px;        
+              z-index:10001;">
+              Download
+            </a>
           </div>
         </main>
 
+    <!--Javascript-->
+    <style>
+        /* Basic styles for gallery */
+        #gallery {display:flex;flex-wrap:wrap;gap:10px;}
+        #gallery img {max-width:100%;height:auto;display:block;}
+        /* Full-screen styles for desktop view */
+        #gallery.fullscreen img {width:100vw !important;height:100vh !important;object-fit:contain;}  
+
+        .main-header {
+          position: fixed;
+          top: 0;
+          margin: 0;
+          right: 0; /*8px;*/
+          left: 0; /*6px; or left: 0;*/
+          /*width: calc(100% - 14px);*/
+          z-index: 99999;
+          color: green;
+          font-family: "Times New Roman", serif;
+          font-style: italic;
+          font-weight: bold;
+          font-size: 2em;
+          text-align: center;
+          padding: 5px 0;
+          background: rgba(255,255,255,0.7);
+          backdrop-filter: blur(3px);
+        }
+
+        .cascade-text {
+          display: block;
+          width: 100%;
+          box-sizing: border-box;
+        }
+            
+        #gallery {
+          margin-top: 0;
+        }
+      
+        .cascade-text {
+          display: inline-block;
+          /* Animate fade out to create looping effect */
+          animation: cascadeLoop 12s infinite;
+        }
+
+        /* Style each character span */
+        .cascade-text span {
+          opacity: 0;
+          display: inline-block;
+          transform: translateY(20px);
+          /*box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8); web title transition shadow*/
+          animation: cascadeIn 1.2s forwards;
+          /* Use CSS variable for delay */
+          --delay: 0s;
+          animation-delay: var(--delay);
+        }
+
+        @keyframes cascadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes cascadeLoop {
+          0%, 99.9% {
+            opacity: 1;
+          }
+          100% {
+            opacity: 0;
+          }
+        }
+
+        /* Hover caption popup for gallery photos (same glass style as the lightbox buttons) */
+        #photo-tip {
+          position: fixed;
+          top: 0;
+          left: 0;
+          max-width: 280px;
+          padding: 8px 12px;
+          border-radius: 12px;
+          background: rgba(0, 0, 0, 0.72);
+          backdrop-filter: blur(7px);
+          -webkit-backdrop-filter: blur(7px);
+          border: 1px solid rgba(0, 255, 0, 0.25);
+          color: #fff;
+          font: 14px/1.35 system-ui, -apple-system, "Segoe UI", sans-serif;
+          pointer-events: none;   /* never blocks the mouse, so it can't cause flicker */
+          opacity: 0;
+          transition: opacity 0.15s ease;
+          z-index: 100000;        /* above the fixed header (99999) */
+        }
+        #photo-tip.visible { opacity: 1; }
+        #photo-tip strong { display: block; color: #00ff44; }
+        #photo-tip span { display: block; margin-top: 2px; }
+
+        /* Caption inside the enlarged (lightbox) view - used on touch screens, which have no hover */
+        #lightbox-caption {
+          display: none;
+          position: absolute;
+          top: 12px;
+          left: 50%;
+          transform: translateX(-50%);
+          max-width: 85vw;
+          box-sizing: border-box;
+          padding: 8px 14px;
+          border-radius: 14px;
+          text-align: center;
+          background: rgba(0, 0, 0, 0.6);
+          backdrop-filter: blur(7px);
+          -webkit-backdrop-filter: blur(7px);
+          border: 1px solid rgba(0, 255, 0, 0.25);
+          color: #fff;
+          font: 14px/1.35 system-ui, -apple-system, "Segoe UI", sans-serif;
+          pointer-events: none;   /* never blocks taps or swipes */
+          z-index: 10001;
+        }
+        #lightbox-caption strong { display: block; color: #00ff44; }
+        #lightbox-caption span { display: block; margin-top: 2px; }
+      </style>
+
     <footer>
-      <p id="footerText" class="footer">
+      <p id = "footerText" class="footer" style="text-align: center; display:none; transition:opacity 1s;">
           &copy; <span id="year"></span> 2026 Gichuki. All rights reserved.
-        <a href="mailto:kenngich@proton.me">✉️</a> E-mail
+        <!--&copy; 2026 Gichuki. All rights reserved.-->
+        <a href="mailto:kenngich@proton.me" style="text-decoration: none !important;">✉️</a> E-mail
       </p>
     </footer>
-
+    
   <script>
     // CONFIGURATION
     const CONFIG = {
