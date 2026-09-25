@@ -48,72 +48,62 @@ img {
   object-fit: contain;
 }
 
-/* Lightbox styles — existing logic unchanged */
-.lightbox {
+/* Keep the overlay above the page and center its contents */
+#lightbox {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.95);
-  /* display: none; */
+  inset: 0;
+  z-index: 1000;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  background: rgba(0, 0, 0, 0.65);
 }
 
-.lightbox.active {
+/* Keep the existing .active behavior */
+#lightbox.active {
   display: flex;
 }
 
-.lightbox img {
-  max-width: 90%;
-  max-height: 90%;
-  object-fit: contain;
-  border-radius: 10px;
-}
-
-/* Lightbox-specific layout */
 #lightbox .lightbox-content {
   position: relative;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  max-width: 100vw;
-  max-height: 100vh;
+  width: 100%;
+  height: 100%;
 }
 
 #lightbox #lightbox-img {
   display: block;
+  max-width: 90vw;
+  max-height: 85vh;
   width: auto;
   height: auto;
-  max-width: 90vw;
-  max-height: 90vh;
-  margin: 0;
   object-fit: contain;
-  border-radius: 10px;
+  margin: 0;
+  z-index: 1;
 }
 
 #lightbox .prev,
 #lightbox .next {
-  position: absolute;
+  position: fixed;
   top: 50%;
+  z-index: 2;
   transform: translateY(-50%);
-  z-index: 1;
 }
 
 #lightbox .prev {
-  left: max(10px, env(safe-area-inset-left));
+  left: 16px;
 }
 
 #lightbox .next {
-  right: max(10px, env(safe-area-inset-right));
+  right: 16px;
 }
 
 #lightbox .download-btn {
-  position: absolute;
+  position: fixed;
   left: 50%;
-  bottom: 8px;
+  bottom: 16px;
+  z-index: 2;
   transform: translateX(-50%);
 }
 
