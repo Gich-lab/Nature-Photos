@@ -39,13 +39,11 @@ img {
 #gallery {
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start; /* prevents vertical centering in each row */
   gap: 20px;
   max-width: 100%;
   margin-top: 20px;
   padding: 0 20px;
-  background: transparent;
-  opacity: 1;
-  transition: opacity 0.5s ease;
 }
 
 #gallery img {
@@ -53,6 +51,7 @@ img {
   width: auto;
   height: auto;
   max-width: 100%;
+  margin: 0;
   object-fit: contain;
 }
 
