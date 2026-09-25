@@ -75,6 +75,7 @@ img {
 
 /* Lightbox-specific layout */
 #lightbox .lightbox-content {
+  display: none;
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -91,6 +92,10 @@ img {
   this.style.color='#00ff44';
   this.style.borderColor='rgba(0,255,0,0.25)';
   "
+}
+
+#lightbox.active {
+  display: flex;
 }
 
 #lightbox #lightbox-img {
