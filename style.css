@@ -54,8 +54,8 @@ img {
 
 @media (max-width: 600px) {
   #gallery {
-    padding: 0 4px;  /* phone side margin */
-    gap: 8px;
+    padding: 0 6px;  /* 4px; phone side margin */
+    gap: 10px;
   }
 }
 
