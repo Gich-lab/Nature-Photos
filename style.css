@@ -241,15 +241,36 @@ img {
   animation: rotateOnce 2s linear forwards;
 }
 
-/* Footer */
+/* Footer 
 .footer {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
   padding: 10px;
-  background: rgba(0, 80, 0, 0.3); /*more transparency of footer background*/
+  background: rgba(0, 80, 0, 0.3); /*more transparency of footer background
   color: #fff;
   text-align: center;
   z-index: 1000;
+}
+*/
+
+.footer {
+  position: fixed;
+  bottom: 20px; /* 20px above the bottom of the screen */
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background: transparent;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+}
+
+.footer p {
+  margin: 0; /* removes the default paragraph margins */
+  padding: 0;
 }
