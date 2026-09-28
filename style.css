@@ -37,13 +37,19 @@ img {
 
 /* Gallery */
 #gallery {
+  margin-top: 20px;   
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start; /* prevents vertical centering in each row */
-  gap: 20px;
+  flex-wrap: wrap; /*wrap allows images to move onto new rows*/
+  gap: 20px; /*adds spacing between images*/
+  padding-top: 0;
+  padding-right: 20px;
+  padding-bottom: 0;
+  padding-left: 20px;
   max-width: 100%;
-  margin-top: 20px;
-  padding: 0 20px;
+  box-sizing: border-box;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  background: rgba(0,0,255,0.2);
 }
 
 #gallery img {
@@ -55,10 +61,12 @@ img {
   object-fit: contain;
 }
 
+/*
 #gallery img:hover {
   transform: scale(1.04);
   filter: brightness(1.08);
 }
+*/
 
 #gallery.fullscreen img {
   width: 100vw !important;
