@@ -42,9 +42,9 @@ img {
   flex-wrap: wrap; /*wrap allows images to move onto new rows*/
   gap: 20px; /*adds spacing between images*/
   padding-top: 0;
-  padding-right: 20px;
+  padding-right: 8px; /*20px;*/
   padding-bottom: 0;
-  padding-left: 20px;
+  padding-left: 8px; /*20px;*/
   max-width: 100%;
   box-sizing: border-box;
   opacity: 1;
