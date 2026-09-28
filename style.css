@@ -119,7 +119,7 @@ img {
   border-radius: 10px;
 }
 
-/* Previous and next buttons */
+/* Previous and next buttons 
 #lightbox .prev,
 #lightbox .next {
   position: absolute;
@@ -144,6 +144,51 @@ img {
 #lightbox .next {
   right: max(5px, env(safe-area-inset-right));
 }
+*/
+
+/* shared look for all three buttons */
+#lightbox .prev,
+#lightbox .next,
+#lightbox .download-btn {
+  position: absolute;
+  z-index: 10001;
+  padding: 8px 12px;
+  border: 1px solid rgba(0, 255, 0, 0.25);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #00ff44;
+  cursor: pointer;
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+
+  /* only needed for the <a> tag */
+  font: inherit;
+  text-decoration: none;
+  line-height: normal;
+}
+
+/* side buttons: vertically centered */
+#lightbox .prev,
+#lightbox .next {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#lightbox .prev {
+  left: max(5px, env(safe-area-inset-left));
+}
+
+#lightbox .next {
+  right: max(5px, env(safe-area-inset-right));
+}
+
+/* download: bottom center */
+#lightbox .download-btn {
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+}
 
 #lightbox .prev:hover,
 #lightbox .next:hover {
@@ -152,14 +197,14 @@ img {
   border-color: rgba(255, 255, 255, 0.3);
 }
 
-/* Download button */
+/* Download button *
 #lightbox .download-btn {
   position: absolute;
   bottom: 8px;
   left: 50%;
   transform: translateX(-50%);
 }
-
+*/
 /* Animations */
 @keyframes rotateOnce {
   from {
