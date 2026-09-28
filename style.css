@@ -248,7 +248,7 @@ img {
   left: 0;
   width: 100%;
   padding: 10px;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 80, 0, 0.3); /*more transparency of footer background*/
   color: #fff;
   text-align: center;
   z-index: 1000;
