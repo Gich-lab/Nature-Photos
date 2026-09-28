@@ -40,7 +40,7 @@ img {
   margin-top: 20px;   
   display: flex;
   flex-wrap: wrap; /*wrap allows images to move onto new rows*/
-  gap: 20px; /*adds spacing between images*/
+  gap: 40px; /*adds spacing between images*/
   padding-top: 0;
   padding-right: 20px;
   padding-bottom: 0;
