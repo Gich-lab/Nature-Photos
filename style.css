@@ -284,6 +284,12 @@ img {
 }
 */
 
+.mail-icon {
+  width: 1.5em;
+  height: 1.5em;
+  vertical-align: -0.35em;
+}
+
 .footer {
   position: fixed;
   /*bottom: 10px;*/
