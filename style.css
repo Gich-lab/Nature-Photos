@@ -286,7 +286,8 @@ img {
 
 .footer {
   position: fixed;
-  bottom: 10px;
+  /*bottom: 10px;*/
+  bottom: clamp(6px, 1.5vh, 10px);
   left: 0;
   right: 0;
   margin: 0;
@@ -294,7 +295,9 @@ img {
   box-sizing: border-box;
   text-align: center;
   z-index: 1000;
-  font-size: 1em;
+
+  /* Scales with viewport height: capped at 1rem in portrait, shrinks toward 0.55rem in landscape */
+  font-size: clamp(0.55rem, 2vh, 1rem);
 
   /* Silver: light top, darker band in the middle, soft bounce light at the bottom */
   background: linear-gradient(
@@ -311,14 +314,6 @@ img {
   -webkit-text-fill-color: transparent;
   -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.55);
   filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.7));
-}
-
-/* Smaller footer text on phones held in landscape */
-@media (orientation: landscape) and (max-height: 500px) {
-  .footer {
-    font-size: 0.6em;
-    bottom: 6px;
-  }
 }
 
 .footer p {
