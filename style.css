@@ -192,9 +192,12 @@ img {
 
 /* download: bottom center */
 #lightbox .download-btn {
-  bottom: 8px;
+  top: 100%; /* starts at the image's bottom edge */
+  bottom: auto; /* cancels the old bottom: 8px */
+  /*bottom: 8px;*/
   left: 50%;
   transform: translateX(-50%);
+  margin-top: 0;
 }
 
 #lightbox .prev:hover,
