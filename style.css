@@ -302,19 +302,18 @@ img {
   /* Silver: light top, darker band in the middle, soft bounce light at the bottom */
   background: linear-gradient(
     180deg,
-    rgba(105, 111, 119, 1) 0%,      /* darker top edge */
-    rgba(235, 238, 242, 1) 25%,     /* bright highlight */
-    rgba(190, 196, 203, 1) 45%,
-    rgba(95, 102, 111, 1) 58%,      /* dark reflective band */
-    rgba(215, 219, 224, 1) 78%,     /* soft bounce light */
-    rgba(100, 106, 114, 1) 100%     /* darker bottom edge */
+    rgba(135, 141, 149, 1) 0%,      /* slightly darker top edge */
+    rgba(208, 213, 219, 1) 30%,     /* soft glassy highlight */
+    rgba(186, 192, 199, 1) 60%,     /* even mid grey */
+    rgba(140, 146, 154, 1) 100%     /* slightly darker bottom edge */
   );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.55);
-  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.7));
+  /*-webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.55);*/
+  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.35)
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.85)); /*drop-shadow(0 1px 3px rgba(0, 0, 0, 0.7));*/
 }
 
 .footer p {
