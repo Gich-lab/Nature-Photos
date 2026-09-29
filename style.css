@@ -295,6 +295,7 @@ img {
   box-sizing: border-box;
   text-align: center;
   z-index: 1000;
+  font-weight: 600; 
 
   /* Scales with viewport height: capped at 1rem in portrait, shrinks toward 0.55rem in landscape */
   font-size: clamp(0.55rem, 2vh, 1rem);
