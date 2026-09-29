@@ -303,10 +303,9 @@ img {
   /* Silver: light top, darker band in the middle, soft bounce light at the bottom */
   background: linear-gradient(
     180deg,
-    rgba(135, 141, 149, 1) 0%,      /* slightly darker top edge */
-    rgba(208, 213, 219, 1) 30%,     /* soft glassy highlight */
-    rgba(186, 192, 199, 1) 60%,     /* even mid grey */
-    rgba(140, 146, 154, 1) 100%     /* slightly darker bottom edge */
+    #fffdf4 0%,
+    #f3e7bd 55%,
+    #d9c48a 100%
   );
   -webkit-background-clip: text;
   background-clip: text;
