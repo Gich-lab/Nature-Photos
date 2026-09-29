@@ -296,7 +296,7 @@ img {
   text-align: center;
   z-index: 1000;
 
-  font-size: 0.8em; /* reduced text size*/
+  font-size: 1em; /* reduced text size*/
 
   /* Glassy text: bright-to-clear gradient fill with a light edge */
   background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.25));
