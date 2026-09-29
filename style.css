@@ -302,11 +302,12 @@ img {
   /* Silver: light top, darker band in the middle, soft bounce light at the bottom */
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(214, 218, 223, 0.90) 40%,
-    rgba(150, 157, 166, 0.85) 55%,
-    rgba(226, 229, 233, 0.90) 75%,
-    rgba(184, 190, 197, 0.80) 100%
+    rgba(105, 111, 119, 1) 0%,      /* darker top edge */
+    rgba(235, 238, 242, 1) 25%,     /* bright highlight */
+    rgba(190, 196, 203, 1) 45%,
+    rgba(95, 102, 111, 1) 58%,      /* dark reflective band */
+    rgba(215, 219, 224, 1) 78%,     /* soft bounce light */
+    rgba(100, 106, 114, 1) 100%     /* darker bottom edge */
   );
   -webkit-background-clip: text;
   background-clip: text;
