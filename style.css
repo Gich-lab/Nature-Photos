@@ -286,28 +286,26 @@ img {
 
 .footer {
   position: fixed;
-  bottom: 10px;                 /* 10px above the bottom of the screen */
+  bottom: 10px;
   left: 0;
   right: 0;
-  width: fit-content;           /* shrink the panel to the text */
-  max-width: 90vw;
-  margin: 0 auto;               /* centers it, since left and right are both 0 */
-  padding: 8px 18px;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
-
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(7px) saturate(150%);
-  -webkit-backdrop-filter: blur(7px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 14px;
-  box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);   /* glossy top edge */
-
-  color: #fff;
+  background: transparent;
   text-align: center;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
   z-index: 1000;
+
+  font-size: 0.8em; /* reduced text size*/
+
+  /* Glassy text: bright-to-clear gradient fill with a light edge */
+  background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.25));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.6);
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.7));
 }
 
 .footer p {
