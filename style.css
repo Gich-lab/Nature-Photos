@@ -292,19 +292,24 @@ img {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background: transparent;
   text-align: center;
   z-index: 1000;
+  font-size: 1em;
 
-  font-size: 1em; /* reduced text size*/
-
-  /* Glassy text: bright-to-clear gradient fill with a light edge */
-  background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.25));
+  /* Silver: light top, darker band in the middle, soft bounce light at the bottom */
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(214, 218, 223, 0.90) 40%,
+    rgba(150, 157, 166, 0.85) 55%,
+    rgba(226, 229, 233, 0.90) 75%,
+    rgba(184, 190, 197, 0.80) 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.6);
+  -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.55);
   filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.7));
 }
 
