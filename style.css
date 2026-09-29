@@ -313,6 +313,14 @@ img {
   filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.7));
 }
 
+/* Smaller footer text on phones held in landscape */
+@media (orientation: landscape) and (max-height: 500px) {
+  .footer {
+    font-size: 0.6em;
+    bottom: 6px;
+  }
+}
+
 .footer p {
   margin: 0;
   padding: 0;
