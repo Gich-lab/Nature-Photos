@@ -126,6 +126,16 @@ img {
   border-radius: 10px;
 }
 
+#lightbox-caption {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* no left: 50%, no transform */
+  /* ...rest unchanged... */
+  z-index: 10001;
+}
+
 /* Previous and next buttons 
 #lightbox .prev,
 #lightbox .next {
