@@ -524,6 +524,8 @@
     function closeLightbox() {
       DOM.lightbox.style.display = "none";
       DOM.lightbox.classList.remove("show-download");
+      if (DOM.lightboxCaption) DOM.lightboxCaption.style.display = "none";
+      captionImg = null;
     }
 
     // Open lightbox with image 
