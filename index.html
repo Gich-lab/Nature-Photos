@@ -224,7 +224,7 @@
       sheetsUrl: "https://script.google.com/macros/s/AKfycbwMC8P52A8DPBcwcN3JFU4ov1mPg4e15zmnMfEVnJYVntfz0vy1zVGiBp75O7u5avId/exec",
       githubApiUrl: "https://api.github.com/repos/Gich-lab/Nature-Photos/commits/main"
     };
-
+    
     // STATE
     let state = {
       currentImageIndex: 0,
@@ -238,6 +238,14 @@
     let DOM = {};
 
     function initializeDOMElements() {
+      if (!document.getElementById("lightbox-caption")) {
+        const cap = document.createElement("div");
+        cap.id = "lightbox-caption";
+        cap.setAttribute("role", "status");
+        cap.setAttribute("aria-live", "polite");
+        document.body.appendChild(cap);
+      }
+      
       DOM = {
         header: document.getElementById("header"),
         headerText: document.getElementById("header-text"),
