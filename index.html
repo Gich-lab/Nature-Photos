@@ -561,6 +561,7 @@
       return typeof entry === "string" ? { title: entry, text: "" } : entry;
     }
 
+    /*
     // Show (or hide) the caption inside the lightbox for the photo now on display
     function updateLightboxCaption(img) {
       const box = DOM.lightboxCaption;
@@ -583,7 +584,40 @@
       }
       box.style.display = "block";
     }
+    */
+    // This lowers the caption so that it is not hidden
+    let captionImg = null;
 
+    function updateLightboxCaption(img) {
+      const box = DOM.lightboxCaption;
+      if (!box) return;
+      const mode = CONFIG.lightboxCaption;
+      const isTouch = window.matchMedia("(hover: none), (pointer: coarse)").matches;
+      const wanted = mode === "always" || (mode === "touch" && isTouch);
+      const caption = wanted ? getCaption(img) : null;
+      if (!caption) {
+        box.style.display = "none";
+        captionImg = null;
+        return;
+      }
+      const title = document.createElement("strong");
+      title.textContent = caption.title;               // textContent: never treated as HTML
+      box.replaceChildren(title);
+      if (caption.text) {
+        const text = document.createElement("span");
+        text.textContent = caption.text;
+        box.appendChild(text);
+      }
+      box.style.display = "block";
+
+      // Position 10px above the image, and re-position after load/animation
+      captionImg = img;
+      positionLightboxCaption();
+      if (!img.complete) img.addEventListener("load", positionLightboxCaption, { once: true });
+      requestAnimationFrame(positionLightboxCaption);
+    }    
+
+    
     // Hover popup with a description of the photo under the mouse
     function setupPhotoTooltip() {
       // Touch screens have no hover (a tap opens the lightbox instead), so skip them
