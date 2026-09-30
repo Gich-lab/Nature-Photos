@@ -68,10 +68,12 @@ img {
   object-fit: contain;
 }
 
+/*
 #gallery img:hover {
   transform: scale(1.04);
   filter: brightness(1.08);
 }
+*/
 
 #gallery.fullscreen img {
   width: 100vw !important;
