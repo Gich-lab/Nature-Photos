@@ -644,7 +644,13 @@
 
       const left = rect.left + (rect.width - w) / 2;
       btn.style.left = Math.max(8, Math.min(left, vw - w - 8)) + "px";
-      btn.style.top = Math.min(rect.bottom + 10, vh - h - 8) + "px";
+      if (isMobile){
+        // Mobile: 10px below the image, kept on screen
+        btn.style.top = Math.min(rect.bottom + 10, vh - h - 8) + "px";
+      } else {
+        // Desktop: inside the image, 12px above its bottom edge
+        btn.style.top = (rect.bottom - h - 12) + "px";
+      }
     }
     
     let captionRaf = 0;
