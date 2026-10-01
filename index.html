@@ -653,9 +653,9 @@
       box.style.display = "block";
 
       // Position 10px above the image, and re-position after load/animation
-      captionImg = img;
+      captionImg = DOM.lightboxImg;   // the big image inside the lightbox, NOT the gallery thumbnail
       trackLightboxCaption();
-      if (!img.complete) img.addEventListener("load", () => trackLightboxCaption(), { once: true });
+      if (!captionImg.complete) captionImg.addEventListener("load", () => trackLightboxCaption(), { once: true });
     }    
     
     // Hover popup with a description of the photo under the mouse
