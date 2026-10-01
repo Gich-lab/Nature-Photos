@@ -172,7 +172,8 @@ img {
   padding: 8px 12px;
   border: 1px solid rgba(0, 255, 0, 0.25);
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.12);
+  /*background: rgba(255, 255, 255, 0.12);*/
+  background: rgba(0, 30, 8, 0.85); /*dark green button*/
   color: #00ff44;
   cursor: pointer;
   backdrop-filter: blur(7px);
@@ -200,12 +201,13 @@ img {
   right: max(5px, env(safe-area-inset-right));
 }
 
-/* download: bottom center */
+/* download: bottom center 
 #lightbox .download-btn {
   bottom: 8px;
   left: 50%;
   transform: translateX(-50%);
 }
+*/
 
 #lightbox .prev:hover,
 #lightbox .next:hover,
