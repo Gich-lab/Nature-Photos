@@ -121,10 +121,10 @@
           border: 1px solid rgba(0, 255, 0, 0.25);
           color: #fff;
           font: 14px/1.35 system-ui, -apple-system, "Segoe UI", sans-serif;
-          pointer-events: none;   /* never blocks the mouse, so it can't cause flicker */
+          pointer-events: none; /* never blocks the mouse, so it can't cause flicker */
           opacity: 0;
           transition: opacity 0.15s ease;
-          z-index: 100000;        /* above the fixed header (99999) */
+          z-index: 100000; /* above the fixed header (99999) */
         }
         #photo-tip.visible { opacity: 1; }
         #photo-tip strong { display: block; color: #00ff44; }
@@ -565,31 +565,7 @@
       return typeof entry === "string" ? { title: entry, text: "" } : entry;
     }
 
-    /*
-    // Show (or hide) the caption inside the lightbox for the photo now on display
-    function updateLightboxCaption(img) {
-      const box = DOM.lightboxCaption;
-      if (!box) return;
-      const mode = CONFIG.lightboxCaption;
-      const wanted = mode === "always" ||
-                     (mode === "touch" && !window.matchMedia("(hover: hover)").matches);
-      const caption = wanted ? getCaption(img) : null;
-      if (!caption) {
-        box.style.display = "none";
-        return;
-      }
-      const title = document.createElement("strong");
-      title.textContent = caption.title;               // textContent: never treated as HTML
-      box.replaceChildren(title);
-      if (caption.text) {
-        const text = document.createElement("span");
-        text.textContent = caption.text;
-        box.appendChild(text);
-      }
-      box.style.display = "block";
-    }
-    */
-    // This lowers the caption so that it is not hidden
+     // This lowers the caption so that it is not hidden
     let captionImg = null;
 
     function positionLightboxCaption() {
@@ -641,7 +617,7 @@
 
       const w = btn.offsetWidth;
       const h = btn.offsetHeight;
-      console.log("rect:", rect.top, rect.bottom, rect.height, "| h:", h, "| top set to:", btn.style.top, "| computed:", getComputedStyle(btn).top, getComputedStyle(btn).transform);
+
       const left = rect.left + (rect.width - w) / 2;
       btn.style.left = Math.max(8, Math.min(left, vw - w - 8)) + "px";
       if (isMobile){
