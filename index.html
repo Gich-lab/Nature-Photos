@@ -628,7 +628,7 @@
       if (!btn || !img) return;
 
       const lb = btn.closest("#lightbox");
-      if (lb && !lb.classList.contains("active")) return;   // lightbox closed
+      if (lb && getComputedStyle(lb).display === "none") return;
 
       const rect = img.getBoundingClientRect();
       const vw = document.documentElement.clientWidth;
