@@ -590,6 +590,20 @@
     // This lowers the caption so that it is not hidden
     let captionImg = null;
 
+    function positionLightboxCaption() {
+      const box = DOM.lightboxCaption;
+      if (!box || !captionImg || box.style.display === "none") return;
+
+      const rect = captionImg.getBoundingClientRect();
+
+      box.style.position = "fixed";
+      box.style.left = rect.left + "px";
+      box.style.width = rect.width + "px";
+      box.style.top = "auto";
+      // bottom edge of the caption sits 10px above the top edge of the image
+      box.style.bottom = (window.innerHeight - rect.top + 10) + "px";
+    }
+
     function updateLightboxCaption(img) {
       const box = DOM.lightboxCaption;
       if (!box) return;
@@ -765,7 +779,8 @@
       // Layout updates
       window.addEventListener("resize", updateLayout);
       window.addEventListener("resize", adjustGalleryPosition);
-
+      window.addEventListener("resize", positionLightboxCaption);
+      
       // Page load initialization
       window.addEventListener("load", async () => {
         // Only load images if gallery is not already initialized
