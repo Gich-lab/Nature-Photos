@@ -596,29 +596,40 @@
 
       const rect = captionImg.getBoundingClientRect();
       const vw = document.documentElement.clientWidth;
-      const vh = document.documentElement.clientHeight;
 
-      // Fit the text, but never be wider than the image (or the screen)
       box.style.position = "fixed";
+      box.style.transition = "none";          // don't let CSS animate the caption itself
+      box.style.transform = "none";
       box.style.boxSizing = "border-box";
-      box.style.width = "max-content"; // shrink to text
-      box.style.maxWidth = Math.min(rect.width, vw - 16) + "px";
-      box.style.whiteSpace = "normal"; // wrap once max-width is hit
-      box.style.overflowWrap = "anywhere"; // break very long words
+      box.style.width = "max-content";        // shrink to the text...
+      box.style.maxWidth = Math.min(rect.width, vw - 16) + "px";   // ...up to the image width
+      box.style.whiteSpace = "normal";        // then wrap onto more lines
+      box.style.overflowWrap = "anywhere";
       box.style.textAlign = "center";
       box.style.right = "auto";
-      box.style.top = "auto";
-      box.style.transform = "none";
+      box.style.bottom = "auto";
 
-      // Centre over the image, using the box's real (measured) width
+      // Measure the real size, then centre over the image
       const w = box.offsetWidth;
+      const h = box.offsetHeight;
       const left = rect.left + (rect.width - w) / 2;
       box.style.left = Math.max(8, Math.min(left, vw - w - 8)) + "px";
 
-      // Anchor the BOTTOM edge 10px above the image, so extra lines grow upward
-      box.style.bottom = (vh - rect.top + 10) + "px";
+      // Bottom edge 10px above the image; more lines make h larger, so it grows upward
+      box.style.top = Math.max(8, rect.top - h - 10) + "px";
     }
 
+    let captionRaf = 0;
+    function trackLightboxCaption(ms = 800) {
+      cancelAnimationFrame(captionRaf);
+      const end = performance.now() + ms;
+      const tick = () => {
+        positionLightboxCaption();
+        if (performance.now() < end) captionRaf = requestAnimationFrame(tick);
+      };
+      tick();
+    }
+    
     function updateLightboxCaption(img) {
       const box = DOM.lightboxCaption;
       if (!box) return;
@@ -643,11 +654,9 @@
 
       // Position 10px above the image, and re-position after load/animation
       captionImg = img;
-      positionLightboxCaption();
-      if (!img.complete) img.addEventListener("load", positionLightboxCaption, { once: true });
-      requestAnimationFrame(positionLightboxCaption);
+      trackLightboxCaption();
+      if (!img.complete) img.addEventListener("load", () => trackLightboxCaption(), { once: true });
     }    
-
     
     // Hover popup with a description of the photo under the mouse
     function setupPhotoTooltip() {
@@ -794,7 +803,7 @@
       // Layout updates
       window.addEventListener("resize", updateLayout);
       window.addEventListener("resize", adjustGalleryPosition);
-      window.addEventListener("resize", positionLightboxCaption);
+      window.addEventListener("resize", () => trackLightboxCaption(300));
       
       // Page load initialization
       window.addEventListener("load", async () => {
