@@ -595,13 +595,28 @@
       if (!box || !captionImg || box.style.display === "none") return;
 
       const rect = captionImg.getBoundingClientRect();
+      const vw = document.documentElement.clientWidth;
+      const vh = document.documentElement.clientHeight;
 
+      // Fit the text, but never be wider than the image (or the screen)
       box.style.position = "fixed";
-      box.style.left = rect.left + "px";
-      box.style.width = rect.width + "px";
+      box.style.boxSizing = "border-box";
+      box.style.width = "max-content"; // shrink to text
+      box.style.maxWidth = Math.min(rect.width, vw - 16) + "px";
+      box.style.whiteSpace = "normal"; // wrap once max-width is hit
+      box.style.overflowWrap = "anywhere"; // break very long words
+      box.style.textAlign = "center";
+      box.style.right = "auto";
       box.style.top = "auto";
-      // bottom edge of the caption sits 10px above the top edge of the image
-      box.style.bottom = (window.innerHeight - rect.top + 10) + "px";
+      box.style.transform = "none";
+
+      // Centre over the image, using the box's real (measured) width
+      const w = box.offsetWidth;
+      const left = rect.left + (rect.width - w) / 2;
+      box.style.left = Math.max(8, Math.min(left, vw - w - 8)) + "px";
+
+      // Anchor the BOTTOM edge 10px above the image, so extra lines grow upward
+      box.style.bottom = (vh - rect.top + 10) + "px";
     }
 
     function updateLightboxCaption(img) {
