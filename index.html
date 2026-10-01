@@ -641,7 +641,7 @@
 
       const w = btn.offsetWidth;
       const h = btn.offsetHeight;
-
+      console.log("rect:", rect.top, rect.bottom, rect.height, "| h:", h, "| top set to:", btn.style.top, "| computed:", getComputedStyle(btn).top, getComputedStyle(btn).transform);
       const left = rect.left + (rect.width - w) / 2;
       btn.style.left = Math.max(8, Math.min(left, vw - w - 8)) + "px";
       if (isMobile){
