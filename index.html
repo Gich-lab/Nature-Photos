@@ -522,6 +522,7 @@
 
     // Close lightbox 
     function closeLightbox() {
+      cancelAnimationFrame(captionRaf);
       DOM.lightbox.style.display = "none";
       DOM.lightbox.classList.remove("show-download");
       if (DOM.lightboxCaption) DOM.lightboxCaption.style.display = "none";
@@ -619,31 +620,63 @@
       box.style.top = Math.max(8, rect.top - h - 10) + "px";
     }
 
+    // ---------- Download button: position below the lightbox image ----------
+    function positionLightboxDownload() {
+      const btn = DOM.lightboxDownload;
+      const img = DOM.lightboxImg;
+      if (!btn || !img) return;
+
+      const lb = btn.closest("#lightbox");
+      if (lb && !lb.classList.contains("active")) return;   // lightbox closed
+
+      const rect = img.getBoundingClientRect();
+      const vw = document.documentElement.clientWidth;
+      const vh = document.documentElement.clientHeight;
+
+      btn.style.position = "fixed";
+      btn.style.transform = "none";
+      btn.style.right = "auto";
+      btn.style.bottom = "auto";
+
+      const w = btn.offsetWidth;
+      const h = btn.offsetHeight;
+
+      const left = rect.left + (rect.width - w) / 2;
+      btn.style.left = Math.max(8, Math.min(left, vw - w - 8)) + "px";
+      btn.style.top = Math.min(rect.bottom + 10, vh - h - 8) + "px";
+    }
+    
     let captionRaf = 0;
     function trackLightboxCaption(ms = 800) {
       cancelAnimationFrame(captionRaf);
       const end = performance.now() + ms;
       const tick = () => {
         positionLightboxCaption();
+        positionLightboxDownload();
         if (performance.now() < end) captionRaf = requestAnimationFrame(tick);
       };
       tick();
     }
     
+    // Caption content + start tracking 
     function updateLightboxCaption(img) {
       const box = DOM.lightboxCaption;
       if (!box) return;
+
       const mode = CONFIG.lightboxCaption;
       const isTouch = window.matchMedia("(hover: none), (pointer: coarse)").matches;
       const wanted = mode === "always" || (mode === "touch" && isTouch);
-      const caption = wanted ? getCaption(img) : null;
+      const caption = wanted ? getCaption(img) : null; // img = thumbnail, used for text only
+
       if (!caption) {
         box.style.display = "none";
         captionImg = null;
+        trackLightboxCaption(); // still position the download button
         return;
       }
+
       const title = document.createElement("strong");
-      title.textContent = caption.title;               // textContent: never treated as HTML
+      title.textContent = caption.title;
       box.replaceChildren(title);
       if (caption.text) {
         const text = document.createElement("span");
@@ -652,11 +685,12 @@
       }
       box.style.display = "block";
 
-      // Position 10px above the image, and re-position after load/animation
-      captionImg = DOM.lightboxImg;   // the big image inside the lightbox, NOT the gallery thumbnail
+      captionImg = DOM.lightboxImg; // measure the big lightbox image, not the thumbnail
       trackLightboxCaption();
-      if (!captionImg.complete) captionImg.addEventListener("load", () => trackLightboxCaption(), { once: true });
-    }    
+      if (!captionImg.complete) {
+        captionImg.addEventListener("load", () => trackLightboxCaption(), { once: true });
+      }
+    }  
     
     // Hover popup with a description of the photo under the mouse
     function setupPhotoTooltip() {
