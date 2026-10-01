@@ -52,12 +52,14 @@ img {
   background: #fff; /*white background*/
 }
 
+/*
 @media (max-width: 600px) {
   #gallery {
-    padding: 0 6px;  /* 4px; phone side margin */
+    padding: 0 6px;  /* 4px; phone side margin 
     gap: 10px;
   }
 }
+*/
 
 #gallery img {
   display: block;
