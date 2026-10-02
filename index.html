@@ -38,8 +38,13 @@
         #gallery {display:flex;flex-wrap:wrap;gap:20px;}
         @media (max-width: 600px) {
           #gallery {
-          row-gap: 12px; /* horizontal spacing between rows */
-          column-gap: 2px;   /* vertical spacing*/
+          row-gap: 10px;
+          column-gap: 5px;
+          padding-left: 10px;
+          padding-right: 10px;
+          }
+          #gallery img {
+            margin: 0;
           }
         }
         #gallery img {max-width:100%;height:auto;display:block;}
