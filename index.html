@@ -26,8 +26,7 @@
           <button class="next" type="button"> ❯ </button>
         </div>
 
-        <!-- <a id="download" class="download-btn" download>Download</a>*/ -->
-        <button id="downloadBtn" type="button">Download</button>
+        <a id="download" class="download-btn" download>Download</a>
       </div>
     </main>
 
@@ -823,23 +822,8 @@
       });
 
       // Download button
-      //DOM.downloadBtn.addEventListener("click", () => {
-      //  sendVisitorData("download", DOM.lightboxImg.src.split('/').pop());
-      //});
-
-      // Hide download url on hover
       DOM.downloadBtn.addEventListener("click", () => {
-        const src = DOM.lightboxImg.src;
-        const filename = src.split('/').pop();
-
-        sendVisitorData("download", filename);
-
-        const a = document.createElement("a");
-        a.href = src;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
+        sendVisitorData("download", DOM.lightboxImg.src.split('/').pop());
       });
       
       // Scroll blur effect
