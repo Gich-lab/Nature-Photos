@@ -37,8 +37,10 @@
         /* Basic styles for gallery */
         #gallery {display:flex;flex-wrap:wrap;gap:20px;}
         @media (max-width: 600px) {
+          #gallery {
           row-gap: 10px; /* vertical spacing between rows */
           column-gap: 5px;   /* horizontal spacing*/
+          }
         }
         #gallery img {max-width:100%;height:auto;display:block;}
         /* Full-screen styles for desktop view */
