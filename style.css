@@ -261,3 +261,27 @@ img {
   margin: 0;
   padding: 0;
 }
+
+#gallery .gallery-item {
+  overflow: hidden;            /* keeps the movement inside the rounded frame */
+  border-radius: 12px;
+}
+#gallery .gallery-item img {
+  width: 100%;
+  transform: scale(1.12);      /* extra size for the parallax shift */
+  will-change: transform;
+}
+
+/* Reveal as each image enters */
+#gallery .gallery-item {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+#gallery .gallery-item.in-view { opacity: 1; transform: none; }
+
+/* Break the uniform full-width stack */
+#gallery .gallery-item:nth-child(even) { width: 88%; margin-left: auto; }
+#gallery .gallery-item:nth-child(3n)   { width: 92%; }
+
+html { scroll-behavior: auto; }   /* smooth scrolling would fight the auto-roll */
