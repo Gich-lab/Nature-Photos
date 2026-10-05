@@ -778,33 +778,20 @@
         });
     }
 
-    const DURATION = 60000; // top to bottom in 60 seconds
-    const SPEED = 50;  
-    const imgs = [...document.querySelectorAll("#gallery .gallery-item img")];
-
-    // Reveal on entry
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => e.isIntersecting && e.target.classList.add("in-view"));
-    }, { threshold: 0.15 });
-    document.querySelectorAll("#gallery .gallery-item").forEach(el => io.observe(el));
-
-    // Image content drifts slower than the page, so each photo feels like a window
-    function parallax() {
-      const vh = innerHeight;
-      imgs.forEach(img => {
-        const r = img.closest(".gallery-item").getBoundingClientRect();
-        if (r.bottom < 0 || r.top > vh) return;
-        const p = (r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2);  // -1 to 1
-        img.style.transform = `translateY(${p * -5}%) scale(1.12)`;
-      });
-    }
-
-    // Auto-roll
+    // Auto-roll that follows the visitor's scroll direction
     const lightboxOpen = () => document.body.classList.contains("lb-disable-scrolling"); // Lightbox2
-    let y = scrollY, last = null, lastInput = -Infinity;
-    ["wheel", "touchstart", "keydown", "mousedown"].forEach(ev =>
-      addEventListener(ev, () => { lastInput = performance.now(); }, { passive: true })
-    );
+    const SPEED = 40;                       // pixels per second
+    let y = scrollY, last = null, lastInput = -Infinity, dir = 1;   // dir: 1 = down, -1 = up
+
+    // Any scroll the script didn't cause (wheel, touch, keys, scrollbar drag) sets the direction
+    addEventListener("scroll", () => {
+      const diff = scrollY - y;
+      if (Math.abs(diff) > 2) {
+        dir = diff > 0 ? 1 : -1;
+        y = scrollY;
+        lastInput = performance.now();
+      }
+    }, { passive: true });
 
     function roll(t) {
       const dt = last === null ? 0 : t - last;
@@ -812,11 +799,12 @@
       const max = document.documentElement.scrollHeight - innerHeight;
 
       if (t - lastInput < 3000) {
-        y = scrollY;                               // visitor is in control; resume 3s after they stop
+        y = scrollY;                        // visitor is in control; resume 3s after they stop
       } else if (!lightboxOpen() && max > 0) {
-        const wave = 1 + 0.5 * Math.sin(t / 4000); // gentle speed-up and slow-down
-        // y = Math.min(y + (max / DURATION) * dt * wave, max);
-        y = Math.min(y + (SPEED / 1000) * dt * wave, max);
+        const wave = 1 + 0.25 * Math.sin(t / 5000);
+        y += dir * (SPEED / 1000) * dt * wave;
+        if (y >= max) { y = max; dir = -1; }      // reverse at the bottom
+        else if (y <= 0) { y = 0; dir = 1; }      // reverse at the top
         scrollTo(0, y);
       }
       parallax();
