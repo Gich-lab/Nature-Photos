@@ -778,7 +778,8 @@
         });
     }
 
-    const DURATION = 60000;                       // top to bottom in 60 seconds
+    const DURATION = 60000; // top to bottom in 60 seconds
+    const SPEED = 25;  
     const imgs = [...document.querySelectorAll("#gallery .gallery-item img")];
 
     // Reveal on entry
@@ -814,7 +815,8 @@
         y = scrollY;                               // visitor is in control; resume 3s after they stop
       } else if (!lightboxOpen() && max > 0) {
         const wave = 1 + 0.5 * Math.sin(t / 4000); // gentle speed-up and slow-down
-        y = Math.min(y + (max / DURATION) * dt * wave, max);
+        // y = Math.min(y + (max / DURATION) * dt * wave, max);
+        y = Math.min(y + (SPEED / 1000) * dt * wave, max);
         scrollTo(0, y);
       }
       parallax();
