@@ -778,6 +778,56 @@
         });
     }
 
+    const DURATION = 60000;                       // top to bottom in 60 seconds
+    const imgs = [...document.querySelectorAll("#gallery .gallery-item img")];
+
+    // Reveal on entry
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => e.isIntersecting && e.target.classList.add("in-view"));
+    }, { threshold: 0.15 });
+    document.querySelectorAll("#gallery .gallery-item").forEach(el => io.observe(el));
+
+    // Image content drifts slower than the page, so each photo feels like a window
+    function parallax() {
+      const vh = innerHeight;
+      imgs.forEach(img => {
+        const r = img.closest(".gallery-item").getBoundingClientRect();
+        if (r.bottom < 0 || r.top > vh) return;
+        const p = (r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2);  // -1 to 1
+        img.style.transform = `translateY(${p * -5}%) scale(1.12)`;
+      });
+    }
+
+    // Auto-roll
+    const lightboxOpen = () => document.body.classList.contains("lb-disable-scrolling"); // Lightbox2
+    let y = scrollY, last = null, lastInput = -Infinity;
+    ["wheel", "touchstart", "keydown", "mousedown"].forEach(ev =>
+      addEventListener(ev, () => { lastInput = performance.now(); }, { passive: true })
+    );
+
+    function roll(t) {
+      const dt = last === null ? 0 : t - last;
+      last = t;
+      const max = document.documentElement.scrollHeight - innerHeight;
+
+      if (t - lastInput < 3000) {
+        y = scrollY;                               // visitor is in control; resume 3s after they stop
+      } else if (!lightboxOpen() && max > 0) {
+        const wave = 1 + 0.5 * Math.sin(t / 4000); // gentle speed-up and slow-down
+        y = Math.min(y + (max / DURATION) * dt * wave, max);
+        scrollTo(0, y);
+      }
+      parallax();
+      requestAnimationFrame(roll);
+    }
+
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      requestAnimationFrame(roll);
+    } else {
+      document.querySelectorAll("#gallery .gallery-item").forEach(el => el.classList.add("in-view"));
+    }
+
+    
     // Initialize all event listeners 
     function setupEventListeners() {
       // Gallery image click
