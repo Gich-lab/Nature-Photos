@@ -788,17 +788,6 @@
     }, { threshold: 0.15 });
     document.querySelectorAll("#gallery .gallery-item").forEach(el => io.observe(el));
 
-    // Image content drifts slower than the page, so each photo feels like a window
-    function parallax() {
-      const vh = innerHeight;
-      imgs.forEach(img => {
-        const r = img.closest(".gallery-item").getBoundingClientRect();
-        if (r.bottom < 0 || r.top > vh) return;
-        const p = (r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2);  // -1 to 1
-        img.style.transform = `translateY(${p * -5}%) scale(1.12)`;
-      });
-    }
-
     // Auto-roll
     const lightboxOpen = () => document.body.classList.contains("lb-disable-scrolling"); // Lightbox2
     let y = scrollY, last = null, lastInput = -Infinity;
@@ -819,8 +808,6 @@
         y = Math.min(y + (SPEED / 1000) * dt * wave, max);
         scrollTo(0, y);
       }
-      parallax();
-      requestAnimationFrame(roll);
     }
 
     if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
