@@ -1,4 +1,4 @@
-2 October 2026 backup:
+6 Oct 2026
 
 <!DOCTYPE html>
 <html lang="en">
@@ -780,6 +780,45 @@
         });
     }
 
+    // Auto-roll that follows the visitor's scroll direction
+    const SPEED = 55; // pixels per second
+
+    // Reveal on entry
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => e.isIntersecting && e.target.classList.add("in-view"));
+    }, { threshold: 0.15 });
+    document.querySelectorAll("#gallery .gallery-item").forEach(el => io.observe(el));
+
+    // Auto-roll
+    const lightboxOpen = () => document.body.classList.contains("lb-disable-scrolling"); // Lightbox2
+    const typing = () => /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName);
+
+    let y = scrollY, last = null, lastInput = -Infinity;
+    ["wheel", "touchstart", "touchmove", "keydown", "mousedown"].forEach(ev =>
+      addEventListener(ev, () => { lastInput = performance.now(); }, { passive: true })
+    );
+
+    function roll(t) {
+      const dt = last === null ? 0 : Math.min(t - last, 50);   // clamp so returning from another tab doesn't jump
+      last = t;
+      const max = document.documentElement.scrollHeight - innerHeight;
+
+      if (t - lastInput < 3000) {
+        y = scrollY; // visitor is in control; resume 3s after they stop
+      } else if (!lightboxOpen() && !typing() && max > 0) {
+        const wave = 1 + 0.5 * Math.sin(t / 4000); // gentle speed-up and slow-down
+        y = Math.min(y + (SPEED / 1000) * dt * wave, max);
+        scrollTo(0, y);
+      }
+      requestAnimationFrame(roll); // keeps the loop going
+    }
+
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      requestAnimationFrame(roll); // starts the loop once
+    } else {
+      document.querySelectorAll("#gallery .gallery-item").forEach(el => el.classList.add("in-view"));
+    }
+    
     // Initialize all event listeners 
     function setupEventListeners() {
       // Gallery image click
@@ -827,7 +866,7 @@
       DOM.downloadBtn.addEventListener("click", () => {
         sendVisitorData("download", DOM.lightboxImg.src.split('/').pop());
       });
-
+      
       // Scroll blur effect
       window.addEventListener("scroll", handleScrollBlur);
 
