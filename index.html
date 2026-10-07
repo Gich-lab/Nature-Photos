@@ -814,37 +814,10 @@
     }
 
     if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      tilt(); // update rotation every frame, including when the visitor scrolls manually
       requestAnimationFrame(roll); // starts the loop once
     } else {
       document.querySelectorAll("#gallery .gallery-item").forEach(el => el.classList.add("in-view"));
     }
-
-    const items = [...document.querySelectorAll("#gallery .gallery-item")];
-    const ROT = 6;    // max flat rotation, degrees
-    const TILT = 18;  // max 3D swing, degrees
-    let smooth = new Map(items.map(el => [el, 0]));
-
-    function tilt() {
-      const mid = innerHeight / 2;
-      items.forEach((el, i) => {
-        const r = el.getBoundingClientRect();
-        if (r.bottom < -100 || r.top > innerHeight + 100) return; // skip offscreen
-
-        // +1 = entering at bottom, 0 = centered, -1 = leaving at top
-        const target = Math.max(-1, Math.min(1, (r.top + r.height / 2 - mid) / mid));
-
-        // ease toward the target so it feels fluid, not mechanical
-        const p = smooth.get(el) + (target - smooth.get(el)) * 0.12;
-        smooth.set(el, p);
-
-        const dir = i % 2 ? -1 : 1; // alternate sides
-        el.style.setProperty("--rot",  (p * ROT * dir).toFixed(2) + "deg");
-        el.style.setProperty("--tilt", (-p * TILT * dir).toFixed(2) + "deg");
-        el.style.setProperty("--s",    (1 - Math.abs(p) * 0.08).toFixed(3));
-      });
-    }
-    
     
     // Initialize all event listeners 
     function setupEventListeners() {
