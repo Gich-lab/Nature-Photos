@@ -280,9 +280,6 @@ img {
 }
 #gallery .gallery-item.in-view { opacity: 1; transform: none; }
 
-.gallery-item { clip-path: inset(0 0 100% 0); transition: clip-path 1s cubic-bezier(.2,.7,.2,1); }
-.gallery-item.in-view { clip-path: inset(0); }
-
 /* Break the uniform full-width stack */
 #gallery .gallery-item:nth-child(even) { width: 88%; margin-left: auto; }
 #gallery .gallery-item:nth-child(3n)   { width: 92%; }
