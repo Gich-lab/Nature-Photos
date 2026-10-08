@@ -130,9 +130,11 @@ img {
 }
 
 #lightbox-caption {
-  display: none;
+  /*display: none;*/
+  display: block !important; 
   position: fixed;
-  top: 0;
+  /*top: 0;*/
+  top: 70px !important;
   left: 0;
   /* no left: 50%, no transform */
   /* ...rest unchanged... */
