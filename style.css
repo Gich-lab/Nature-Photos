@@ -62,12 +62,6 @@ img {
 }
 */
 
-@media (min-width: 769px) { /*desktop only*/
-  #lightbox-caption {
-    top: 70px;
-  }
-}
-
 #gallery img {
   display: block;
   width: auto;
@@ -143,6 +137,12 @@ img {
   /* no left: 50%, no transform */
   /* ...rest unchanged... */
   z-index: 10001;
+}
+
+@media (min-width: 760px) { /*desktop only*/
+  #lightbox-caption {
+    top: 70px;
+  }
 }
 
 /* shared look for all three buttons */
