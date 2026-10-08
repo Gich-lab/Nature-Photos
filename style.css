@@ -139,16 +139,11 @@ img {
   z-index: 10001;
 }
 
-@media (min-width: 760px) { /*desktop only*/
-  #lightbox-caption {
-    top: 70px;
-  }
-}
-
 /* shared look for all three buttons */
 #lightbox .prev,
 #lightbox .next,
-#lightbox .download-btn {
+#lightbox .download-btn,
+#lightbox-caption {
   position: absolute;
   z-index: 10001;
   padding: 8px 12px;
@@ -166,6 +161,35 @@ img {
   font: inherit;
   text-decoration: none;
   line-height: normal;
+}
+
+/* caption overrides: must come after the shared rule */
+#lightbox-caption {
+  display: none;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 85vw;
+  box-sizing: border-box;
+  padding: 8px 14px;
+  border-radius: 14px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  cursor: default;
+  font: 14px/1.35 system-ui, -apple-system, "Segoe UI", sans-serif;
+  pointer-events: none;
+}
+
+#lightbox-caption strong { display: block; color: #00ff44; }
+#lightbox-caption span { display: block; margin-top: 2px; }
+
+/* desktop only: drop it below the header so it sits on the photo */
+@media (min-width: 769px) {
+  #lightbox-caption {
+    top: 70px;
+    max-width: 60vw;
+  }
 }
 
 /* side buttons: vertically centered */
