@@ -217,6 +217,11 @@ img {
   border-color: rgba(0, 255, 68, 0.8);
 }
 
+/*hide caption if none for an image*/
+#lightbox-caption:empty {
+  display: none;
+}
+
 /* Animations */
 @keyframes rotateOnce {
   from {
