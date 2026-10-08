@@ -62,6 +62,12 @@ img {
 }
 */
 
+@media (min-width: 769px) { /*desktop only*/
+  #lightbox-caption {
+    top: 70px;
+  }
+}
+
 #gallery img {
   display: block;
   width: auto;
