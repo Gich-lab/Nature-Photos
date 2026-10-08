@@ -495,12 +495,13 @@
         img.style.display = "block";
         img.style.height = "auto";
         img.style.margin = "0";                 // gap handles the spacing
-        img.style.width = "100%";               // fills the row exactly
         img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
 
         if (isMobile) {
+          img.style.width = "100%"; // One image per row exactly
           img.style.borderRadius = "0.3%";
         } else {
+          img.style.width = "calc(25% - 20px)"; // Fourimages per row on desktop
           img.style.borderRadius = "0.6%";
           img.style.opacity = "1";
         }
