@@ -37,6 +37,7 @@ img {
 
 /* Gallery */
 #gallery {
+  align-items: flex-start;
   margin-top: 20px;   
   display: flex;
   flex-wrap: wrap; /*wrap allows images to move onto new rows*/
