@@ -188,7 +188,7 @@ img {
 /* desktop only: drop it below the header so it sits on the photo */
 @media (min-width: 769px) {
   #lightbox-caption {
-    top: 140px;
+    top: 60px !important;
     max-width: 60vw;
   }
 }
