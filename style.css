@@ -49,7 +49,7 @@ img {
   opacity: 1;
   transition: opacity 0.5s ease;
   background: #fff;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
 }
 
 #gallery img {
