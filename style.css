@@ -59,7 +59,7 @@ img {
   gap: var(--gap);
   align-items: start;
   margin-top: 20px;
-  padding: 0 20px 80px;   /* see note below */
+  padding: 0 20px 20px;   /* see note below */
   width: 100%;
   box-sizing: border-box;
   opacity: 1;
