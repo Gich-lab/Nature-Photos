@@ -37,7 +37,7 @@ img {
 
 #gallery {
   --gap: 40px;
-  display: grid;
+  display: grid !important;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--gap);
   align-items: start;
