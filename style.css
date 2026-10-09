@@ -107,7 +107,7 @@ img {
   flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
   width: calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
   height: auto;
-  aspect-ratio: 4 / 3; /* same shape for every image */
+  aspect-ratio: 16 / 9; /*4 / 3; /* same shape for every image */
   object-fit: cover; /* crop to fill the box, no stretching */
   object-position: center;
   margin: 0;  /* the old "0 auto" would interfere with the flex sizing */
