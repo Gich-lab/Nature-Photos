@@ -52,35 +52,43 @@ img {
   padding-bottom: 10px;
 }
 
+#gallery {
+  --gap: 40px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--gap);
+  align-items: start;
+  margin-top: 20px;
+  padding: 0 20px 80px;   /* see note below */
+  width: 100%;
+  box-sizing: border-box;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  background: #fff;
+}
+
 #gallery img {
   display: block;
-  /* each image takes 1/N of the row, minus its share of the gaps */
-  flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
-  width: calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
+  width: 100%;
   height: auto;
-  aspect-ratio: 16 / 9; /*4 / 3; /* same shape for every image */
-  object-fit: cover; /* crop to fill the box, no stretching */
-  object-position: center;
-  margin: 0;  /* the old "0 auto" would interfere with the flex sizing */
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  margin: 0;
 }
 
-/* Fewer columns on smaller screens */
 @media (max-width: 900px) {
-  #gallery { --cols: 2; --gap: 20px; }
+  #gallery { --gap: 20px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 500px) {
-  #gallery { --cols: 1; }
+  #gallery { grid-template-columns: 1fr; }
 }
 
-/* Fullscreen: undo the uniform box so the whole image shows */
 #gallery.fullscreen img {
-  flex: 0 0 100vw;
   width: 100vw !important;
   height: 100vh !important;
   aspect-ratio: auto;
   object-fit: contain;
 }
-
 
 /* Lightbox: hidden until it has the active class */
 .lightbox {
