@@ -35,13 +35,13 @@ img {
   margin: 0 auto;
 }
 
-/* Gallery */
+/* Gallery 
 #gallery {
   align-items: flex-start;
   margin-top: 20px;   
   display: flex;
   flex-wrap: wrap; /*wrap allows images to move onto new rows*/
-  gap: 40px; /*adds spacing between images*/
+  gap: 40px; /*adds spacing between images
   padding-top: 0;
   padding-right: 20px;
   padding-bottom: 0;
@@ -50,9 +50,9 @@ img {
   box-sizing: border-box;
   opacity: 1;
   transition: opacity 0.5s ease;
-  background: #fff; /*white background*/
+  background: #fff; /*white background
 }
-
+*/
 /*
 @media (max-width: 600px) {
   #gallery {
@@ -61,7 +61,7 @@ img {
   }
 }
 */
-
+/*
 #gallery img {
   display: block;
   width: auto;
@@ -77,12 +77,59 @@ img {
   filter: brightness(1.08);
 }
 */
-
+/*
 #gallery.fullscreen img {
   width: 100vw !important;
   height: 100vh !important;
   object-fit: contain;
 }
+*/
+
+#gallery {
+  --cols: 4;
+  --gap: 40px;
+  align-items: flex-start;
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap);
+  padding: 0 20px;
+  max-width: 100%;
+  box-sizing: border-box;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  background: #fff;
+}
+
+#gallery img {
+  display: block;
+  /* each image takes 1/N of the row, minus its share of the gaps */
+  flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
+  width: calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
+  height: auto;
+  aspect-ratio: 4 / 3; /* same shape for every image */
+  object-fit: cover; /* crop to fill the box, no stretching */
+  object-position: center;
+  margin: 0;  /* the old "0 auto" would interfere with the flex sizing */
+}
+
+/* Fewer columns on smaller screens */
+@media (max-width: 900px) {
+  #gallery { --cols: 2; --gap: 20px; }
+}
+@media (max-width: 500px) {
+  #gallery { --cols: 1; }
+}
+
+/* Fullscreen: undo the uniform box so the whole image shows */
+#gallery.fullscreen img {
+  flex: 0 0 100vw;
+  width: 100vw !important;
+  height: 100vh !important;
+  aspect-ratio: auto;
+  object-fit: contain;
+}
+
 
 /* Lightbox: hidden until it has the active class */
 .lightbox {
