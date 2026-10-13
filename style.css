@@ -311,3 +311,7 @@ img {
 #gallery .gallery-item:nth-child(3n)   { width: 92%; }
 
 html { scroll-behavior: auto; }   /* smooth scrolling would fight the auto-roll */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
