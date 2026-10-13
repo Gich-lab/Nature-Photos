@@ -455,7 +455,8 @@
 
     // Load images sequentially with animation 
     async function loadImagesSequentially() {
-      for (let i = 1; i <= CONFIG.maxPhotos; i++) {
+      for (let i = CONFIG.maxPhotos; i >= 1; i--) { //start from the latest image uploaded
+      // for (let i = 1; i <= CONFIG.maxPhotos; i++) {
         const img = document.createElement("img");
         img.style.visibility = "hidden";
         img.src = `images/photo${i}.jpg`;
