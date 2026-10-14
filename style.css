@@ -325,8 +325,8 @@ img {
 }
 #gallery .gallery-item img {
   width: 100%;
-  transform: scale(1.12);      /* extra size for the parallax shift */
-  will-change: transform;
+  /*transform: scale(1.12);       extra size for the parallax shift */
+  /*will-change: transform;*/
 }
 
 /* Reveal as each image enters */
