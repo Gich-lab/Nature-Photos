@@ -552,7 +552,7 @@
         })
         .then(data => {
           const latestCommitSha = data.sha;
-          const storedSha = localStorage.getItem("storedSha");
+          const storedSha = sessionStorage.getItem("storedSha");
 
           DOM.headerText.style.visibility = "visible";
           initializeTracking();
@@ -571,7 +571,7 @@
           } else if (latestCommitSha !== storedSha) {
             // New content
             cycleHeaderTexts();
-            localStorage.setItem("storedSha", latestCommitSha);
+            sessionStorage.setItem("storedSha", latestCommitSha);
             loadGA();
           }
         })
