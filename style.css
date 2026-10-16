@@ -1,4 +1,6 @@
-/* Global reset */
+/* =========================================================
+   Base
+   ========================================================= */
 *,
 *::before,
 *::after {
@@ -6,99 +8,160 @@
   overflow-wrap: break-word;
 }
 
-html,
-body {
+html {
   min-height: 100%;
+  scroll-behavior: auto; /* smooth scrolling would fight the auto-roll */
 }
 
 body {
+  min-height: 100%;
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   background: #fff;
   color: #111;
   overflow-x: hidden;
-  word-wrap: break-word;
 }
 
-#header-text {
-  display: inline-block;
-  width: 100%;
-  text-align: center;
-}
-
-/* Responsive images */
 img {
   display: block;
   max-width: 100%;
   height: auto;
-  object-fit: contain;
-  margin: 0 auto;
 }
 
+/* =========================================================
+   Header (fixed) and cascading title text
+   ========================================================= */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99999;
+  margin: 0;
+  padding: 5px 0;
+  color: green;
+  font-family: "Times New Roman", serif;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 2em;
+  text-align: center;
+  /* Solid-ish background instead of backdrop-filter: a live blur over content
+     that scrolls every frame is a common cause of flicker on phones. */
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.cascade-text {
+  display: inline-block;
+  width: 100%;
+  animation: cascadeLoop 12s infinite; /* fades out at the end of each loop */
+}
+
+#header-text {
+  visibility: hidden; /* JS makes it visible when the text starts */
+}
+
+.cascade-text span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: cascadeIn 1.2s forwards;
+  animation-delay: var(--delay, 0s); /* set per character by JS */
+}
+
+@keyframes cascadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cascadeLoop {
+  0%, 99.9% { opacity: 1; }
+  100%      { opacity: 0; }
+}
+
+/* =========================================================
+   Gallery
+   Layout lives here only. JS just appends <img> elements.
+   ========================================================= */
 #gallery {
-  --gap: 40px;
+  --gap: 20px;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--gap);
   align-items: start;
-  margin-top: 20px;
-  padding: 0 20px 20px;   /* see note below */
   width: 100%;
-  box-sizing: border-box;
-  opacity: 1;
-  transition: opacity 0.5s ease;
-  background: #fff;
+  margin-top: 4rem;              /* fallback; JS sets the exact header height */
+  padding: 0 20px 3rem;          /* bottom room so the fixed footer never covers the last row */
 }
 
 #gallery img {
-  display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 16 / 9; /*4 / 3;*/
+  aspect-ratio: 16 / 9;          /* reserves space before decode, so the page height stays stable */
   object-fit: cover;
   margin: 0;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
 }
 
 @media (max-width: 900px) {
-  #gallery { --gap: 20px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (max-width: 500px) {
-  #gallery { grid-template-columns: 1fr; }
-}
-
-#gallery.fullscreen img {
-  width: 100vw !important;
-  height: 100vh !important;
-  aspect-ratio: auto;
-  object-fit: contain;
+  #gallery {
+    --gap: 20px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
-/* Lightbox: hidden until it has the active class */
+@media (max-width: 600px) {
+  #gallery {
+    --gap: 10px;
+    grid-template-columns: 1fr;
+    padding: 0 10px 3rem;
+  }
+}
+
+/* =========================================================
+   Hover caption popup (desktop)
+   ========================================================= */
+#photo-tip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  max-width: 280px;
+  padding: 8px 12px;
+  border: 1px solid rgba(0, 255, 0, 0.25);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  color: #fff;
+  font: 14px/1.35 system-ui, -apple-system, "Segoe UI", sans-serif;
+  pointer-events: none; /* never blocks the mouse, so it can't cause flicker */
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 100000;
+}
+
+#photo-tip.visible { opacity: 1; }
+#photo-tip strong  { display: block; color: #00ff44; }
+#photo-tip span    { display: block; margin-top: 2px; }
+
+/* =========================================================
+   Lightbox
+   Sits above the fixed header (99999) so the caption is never hidden.
+   ========================================================= */
 .lightbox {
   display: none;
   position: fixed;
   inset: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.95);
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 100001;
 }
 
-.lightbox.active {
-  display: flex;
-}
+.lightbox.active { display: flex; }
 
-.lightbox img {
-  max-width: 90%;
-  max-height: 90%;
-  object-fit: contain;
-  border-radius: 10px;
-}
-
-/* Lightbox layout */
-#lightbox .lightbox-content {
+.lightbox-content {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -107,189 +170,80 @@ img {
   max-height: 100vh;
 }
 
-#lightbox #lightbox-img {
+#lightbox-img {
   display: block;
   width: auto;
   height: auto;
   max-width: 90vw;
   max-height: 90vh;
+  max-height: 90dvh;
   margin: 0;
   object-fit: contain;
   border-radius: 10px;
 }
 
-#lightbox-caption {
-  display: none;
-  position: fixed;
-  /*top: 0;*/
-  top: 50px;
-  left: 0;
-  /* no left: 50%, no transform */
-  /* ...rest unchanged... */
-  z-index: 10001;
-}
-
-/* shared look for all three buttons */
-#lightbox .prev,
-#lightbox .next,
-#lightbox .download-btn,
-#lightbox-caption {
+/* Shared look for prev / next / download */
+.lightbox .prev,
+.lightbox .next,
+.lightbox .download-btn {
   position: absolute;
   z-index: 10001;
   padding: 8px 12px;
   border: 1px solid rgba(0, 255, 0, 0.25);
   border-radius: 20px;
-  /*background: rgba(255, 255, 255, 0.12);*/
-  background: rgba(0, 30, 8, 0.85); /*dark green button*/
+  background: rgba(0, 30, 8, 0.85); /* dark green */
   color: #00ff44;
   cursor: pointer;
-  backdrop-filter: blur(7px);
-  -webkit-backdrop-filter: blur(7px);
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-
-  /* only needed for the <a> tag */
-  font: inherit;
-  text-decoration: none;
+  font: inherit;                    /* needed for the <a> */
   line-height: normal;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-/* caption overrides: must come after the shared rule */
-#lightbox-caption {
-  display: none;
-  top: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  max-width: 85vw;
-  box-sizing: border-box;
-  padding: 8px 14px;
-  border-radius: 14px;
-  text-align: center;
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  cursor: default;
-  font: 14px/1.35 system-ui, -apple-system, "Segoe UI", sans-serif;
-  pointer-events: none;
-}
+.lightbox .download-btn { position: fixed; } /* JS positions it under / over the image */
 
-#lightbox-caption strong { display: block; color: #00ff44; }
-#lightbox-caption span { display: block; margin-top: 2px; }
-
-/* desktop only: drop it below the header so it sits on the photo */
-@media (min-width: 769px) {
-  #lightbox-caption {
-    top: 60px !important;
-    max-width: 60vw;
-  }
-}
-
-/* side buttons: vertically centered */
-#lightbox .prev,
-#lightbox .next {
+/* Side buttons: vertically centred */
+.lightbox .prev,
+.lightbox .next {
   top: 50%;
   transform: translateY(-50%);
 }
+.lightbox .prev { left: max(5px, env(safe-area-inset-left)); }
+.lightbox .next { right: max(5px, env(safe-area-inset-right)); }
 
-#lightbox .prev {
-  left: max(5px, env(safe-area-inset-left));
-}
-
-#lightbox .next {
-  right: max(5px, env(safe-area-inset-right));
-}
-
-#lightbox .prev:hover,
-#lightbox .next:hover,
-#lightbox .download-btn:hover {
+.lightbox .prev:hover,
+.lightbox .next:hover,
+.lightbox .download-btn:hover {
   background: rgba(0, 255, 68, 0.55);
   color: #001a08;
   border-color: rgba(0, 255, 68, 0.8);
 }
 
-/*hide caption if none for an image*/
-#lightbox-caption:empty {
+/* Caption: JS sets top/left/width/transform to sit above the image */
+#lightbox-caption {
   display: none;
-}
-
-/* Animations */
-@keyframes rotateOnce {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes cascadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes cascadeLoop {
-  0%,
-  99.9% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-.rotate-once {
-  animation: rotateOnce 2s linear forwards;
-}
-
-.mail-icon {
-  width: 1em;
-  height: 1em;
-  vertical-align: -0.11em; /*lower the icon to align with text*/
-}
-
-/*
-.footer {
   position: fixed;
-  /*bottom: 10px;
-  bottom: clamp(6px, 1.5vh, 8px);
-  left: 0;
-  right: 0;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 85vw;
+  padding: 8px 14px;
+  border: 1px solid rgba(0, 255, 0, 0.25);
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font: 14px/1.35 system-ui, -apple-system, "Segoe UI", sans-serif;
   text-align: center;
-  z-index: 1000;
-  font-weight: 600; 
-
-  /* Scales with viewport height: capped at 1rem in portrait, shrinks toward 0.55rem in landscape 
-  font-size: clamp(0.55rem, 2vh, 1rem);
-  @media (orientation: landscape) {.footer {font-size: clamp(0.8rem, 2.5vw, 1.1rem);}}
-
-  /* Silver: light top, darker band in the middle, soft bounce light at the bottom 
-  background: linear-gradient(
-    180deg,
-    #fffdf4 0%,
-    #f3e7bd 55%,
-    #d9c48a 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  /*-webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.55);
-  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.35);
-  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.85)); /*drop-shadow(0 1px 3px rgba(0, 0, 0, 0.7));
+  pointer-events: none; /* never blocks taps or swipes */
+  z-index: 10001;
 }
 
-.footer p {
-  margin: 0;
-  padding: 0;
-}
-*/
+#lightbox-caption strong { display: block; color: #00ff44; }
+#lightbox-caption span   { display: block; margin-top: 2px; }
+
+/* =========================================================
+   Footer
+   ========================================================= */
 .footer {
   position: fixed;
   left: 0;
@@ -300,46 +254,35 @@ img {
   text-align: center;
   z-index: 1000;
   font-weight: 600;
+  font-size: clamp(0.55rem, 2vh, 1rem);
   font-size: clamp(0.55rem, 2svh, 1rem);
   color: #f3e7bd;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
-  /*pointer-events: none;            optional: footer won't block taps */
-  transform: translateZ(0);       /* own compositing layer */
+  transform: translateZ(0);   /* own compositing layer */
+  pointer-events: none;       /* taps and scrolls pass straight through */
+  transition: opacity 1s;
 }
 
-.footer {
-  pointer-events: none; /*treat the element as invisible to touch or clicks for smooth scrolling*/
-}
-
-.footer a { /*leave the email icon link clickable*/
-  pointer-events: auto;
-}
+.footer a { pointer-events: auto; } /* keep the e-mail link clickable */
 
 @media (orientation: landscape) {
   .footer { font-size: clamp(0.8rem, 2.5vw, 1.1rem); }
 }
 
-#gallery .gallery-item {
-  overflow: hidden;            /* keeps the movement inside the rounded frame */
-  border-radius: 12px;
-}
-#gallery .gallery-item img {
-  width: 100%;
-  /*transform: scale(1.12);       extra size for the parallax shift */
-  /*will-change: transform;*/
+.mail-icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.11em; /* aligns the icon with the text */
 }
 
-/* Reveal as each image enters */
-#gallery .gallery-item {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
+/* =========================================================
+   Reduced motion
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .cascade-text,
+  .cascade-text span {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
 }
-#gallery .gallery-item.in-view { opacity: 1; transform: none; }
-
-/* Break the uniform full-width stack */
-#gallery .gallery-item:nth-child(even) { width: 88%; margin-left: auto; }
-#gallery .gallery-item:nth-child(3n)   { width: 92%; }
-
-html { scroll-behavior: auto; }   /* smooth scrolling would fight the auto-roll */
-
