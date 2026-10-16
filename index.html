@@ -1,198 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="tab-icon.ico" type="image/x-icon" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    .main-header {color: green;font-weight: bold;font-size: 2em;text-align: center;margin-top: 15px; margin-bottom: 20px}
-    #lightbox {display: none;} /*To stop the buttons from appearing unstyled on the webpage*/
-    #lightbox.active {display: flex;}
-  </style>   
+  <title>Nature Photos</title>
+  <link rel="icon" href="tab-icon.ico" type="image/x-icon" />
+  <!-- In <head> so the page never paints unstyled -->
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body> 
-    <header class="main-header" id="header">
-      <div class="header-inner">
-        <span class="cascade-text" id="header-text" style="visibility: hidden;"></span>     
+<body>
+  <header class="main-header" id="header">
+    <div class="header-inner">
+      <span class="cascade-text" id="header-text"></span>
+    </div>
+  </header>
+
+  <main>
+    <div id="gallery" class="gallery"></div>
+
+    <div id="lightbox" class="lightbox">
+      <div class="lightbox-content">
+        <button class="prev" type="button" aria-label="Previous photo"> ❮ </button>
+        <img id="lightbox-img" src="" alt="Enlarged image" />
+        <button class="next" type="button" aria-label="Next photo"> ❯ </button>
       </div>
-    </header>
-    <main>
-      <div id="gallery" class="gallery"></div>
 
-      <div id="lightbox" class="lightbox">
-        <div class="lightbox-content">
-          <button class="prev" type="button"> ❮ </button>
-          <img id="lightbox-img" src="" alt="Enlarged image">
-          <button class="next" type="button"> ❯ </button>
-        </div>
+      <a id="download" class="download-btn" download>Download</a>
+      <div id="lightbox-caption" role="status" aria-live="polite"></div>
+    </div>
+  </main>
 
-        <a id="download" class="download-btn" download>Download</a>
-        <div id="lightbox-caption"></div>
-      </div>
-    </main>
+  <footer>
+    <p id="footerText" class="footer">
+      &copy; 2026 Gichuki. All rights reserved.
+      <a href="mailto:kenngich@proton.me" class="mail-link" aria-label="E-mail">
+        <svg class="mail-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="2" y="4.5" width="20" height="15" rx="2" fill="#b89b4f" stroke="#fffdf4" stroke-width="1.6"/>
+          <path d="M2.8 5.8 L12 13 L21.2 5.8" fill="none" stroke="#fffdf4"
+                stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg></a> E-mail
+    </p>
+  </footer>
 
-    <link rel="stylesheet" href="style.css">
-
-    <!--Javascript-->
-    <style>
-        /* Basic styles for gallery */
-        #gallery {display:flex;flex-wrap:wrap;gap:20px;}
-        /* Small screen devices view*/
-        @media (max-width: 600px) {
-          #gallery {
-          row-gap: 10px;
-          column-gap: 5px;
-          padding-left: 10px;
-          padding-right: 10px;
-          }
-          #gallery img {
-            margin: 0;
-          }
-        }
-        #gallery img {max-width:100%;height:auto;display:block;}
-        /* Full-screen styles for desktop view */
-        #gallery.fullscreen img {width:100vw !important;height:100vh !important;object-fit:contain;}  
-
-        .main-header {
-          position: fixed;
-          top: 0;
-          margin: 0;
-          right: 0; /*8px;*/
-          left: 0; /*6px; or left: 0;*/
-          /*width: calc(100% - 14px);*/
-          z-index: 99999;
-          color: green;
-          font-family: "Times New Roman", serif;
-          font-style: italic;
-          font-weight: bold;
-          font-size: 2em;
-          text-align: center;
-          padding: 5px 0;
-          background: rgba(255,255,255,0.7);
-          backdrop-filter: blur(3px);
-        }
-
-        .cascade-text {
-          display: block;
-          width: 100%;
-          box-sizing: border-box;
-        }
-            
-        #gallery {
-          margin-top: 0;
-        }
-      
-        .cascade-text {
-          display: inline-block;
-          /* Animate fade out to create looping effect */
-          animation: cascadeLoop 12s infinite;
-        }
-
-        /* Style each character span */
-        .cascade-text span {
-          opacity: 0;
-          display: inline-block;
-          transform: translateY(20px);
-          /*box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8); web title transition shadow*/
-          animation: cascadeIn 1.2s forwards;
-          /* Use CSS variable for delay */
-          --delay: 0s;
-          animation-delay: var(--delay);
-        }
-
-        @keyframes cascadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes cascadeLoop {
-          0%, 99.9% {
-            opacity: 1;
-          }
-          100% {
-            opacity: 0;
-          }
-        }
-
-        /* Hover caption popup for gallery photos (same glass style as the lightbox buttons) */
-        #photo-tip {
-          position: fixed;
-          top: 0;
-          left: 0;
-          max-width: 280px;
-          padding: 8px 12px;
-          border-radius: 12px;
-          background: rgba(0, 0, 0, 0.72);
-          backdrop-filter: blur(7px);
-          -webkit-backdrop-filter: blur(7px);
-          border: 1px solid rgba(0, 255, 0, 0.25);
-          color: #fff;
-          font: 14px/1.35 system-ui, -apple-system, "Segoe UI", sans-serif;
-          pointer-events: none; /* never blocks the mouse, so it can't cause flicker */
-          opacity: 0;
-          transition: opacity 0.15s ease;
-          z-index: 100000; /* above the fixed header (99999) */
-        }
-        #photo-tip.visible { opacity: 1; }
-        #photo-tip strong { display: block; color: #00ff44; }
-        #photo-tip span { display: block; margin-top: 2px; }
-
-        /* Caption inside the enlarged (lightbox) view - used on touch screens, which have no hover */
-        #lightbox-caption {
-          display: none;
-          position: absolute;
-          top: 12px;
-          left: 50%;
-          transform: translateX(-50%);
-          max-width: 85vw;
-          box-sizing: border-box;
-          padding: 8px 14px;
-          border-radius: 14px;
-          text-align: center;
-          background: rgba(0, 0, 0, 0.6);
-          backdrop-filter: blur(7px);
-          -webkit-backdrop-filter: blur(7px);
-          border: 1px solid rgba(0, 255, 0, 0.25);
-          color: #fff;
-          font: 14px/1.35 system-ui, -apple-system, "Segoe UI", sans-serif;
-          pointer-events: none;   /* never blocks taps or swipes */
-          z-index: 10001;
-        }
-        #lightbox-caption strong { display: block; color: #00ff44; }
-        #lightbox-caption span { display: block; margin-top: 2px; }
-      </style>
-
-    <footer>
-      <p id = "footerText" class="footer" style="text-align: center; transition:opacity 1s;">
-          &copy; <span id="year"></span> 2026 Gichuki. All rights reserved.
-        <!--&copy; 2026 Gichuki. All rights reserved.-->
-        <!--<a href="mailto:kenngich@proton.me" style="text-decoration: none !important;">✉️</a> E-mail-->
-        <a href="mailto:kenngich@proton.me" class="mail-link" aria-label="E-mail">
-          <svg class="mail-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="2" y="4.5" width="20" height="15" rx="2" fill="#b89b4f" stroke="#fffdf4" stroke-width="1.6"/>
-            <path d="M2.8 5.8 L12 13 L21.2 5.8" fill="none" stroke="#fffdf4"
-              stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg></a> E-mail
-      </p>
-    </footer>
-    
   <script>
+    // =====================================================
     // CONFIGURATION
+    // =====================================================
     const CONFIG = {
       maxPhotos: 128,
-      imageLoadTimeout: 1000,
       textCycleDuration: 15000,
       cascadeDuration: 6,
       textLinger: 10,
       imageAnimationDuration: 700,
+      // Same "pinpoint" pop as before, but the curve stays between 0 and 1 (no overshoot),
+      // so the scale never goes negative or past 1 and never widens a full-width phone image.
+      imageEasing: "cubic-bezier(0.22, 1, 0.36, 1)",
       imageDelayBetween: 0,
       touchSwipeThreshold: 50,
+
+      // Auto-roll: pixels per second, and how long after the visitor's last input it resumes.
+      scrollSpeed: 55,
+      scrollResumeDelay: 3000,
+      // false = keep auto-scrolling while images are still loading (new images are added
+      // below the viewport, so it can't catch up). true = wait until every image is loaded.
+      pauseScrollWhileLoading: false,
+
       headerTexts: [
         "Explore my wallpapers..",
         "Protect what you photograph",
@@ -228,10 +100,10 @@
         "photo121.jpg": "A black rhino (hook-lipped, a browser). Photo taken in a sanctuary in Namibia.",
         "photo126.jpg": "A white rhino (square-lipped, a grazer) stands alert in a park, listening warily to the sound of an approaching vehicle.",
         "photo127.jpg": "A happy Bosco!"
-        },
+      },
 
       // Caption shown inside the enlarged (lightbox) view, using the same photoCaptions:
-      //   "touch"  = only on touch screens, which have no hover (default)
+      //   "touch"  = only on touch screens, which have no hover
       //   "always" = on every device; "never" = off
       lightboxCaption: "always",
 
@@ -240,28 +112,24 @@
       sheetsUrl: "https://script.google.com/macros/s/AKfycbwMC8P52A8DPBcwcN3JFU4ov1mPg4e15zmnMfEVnJYVntfz0vy1zVGiBp75O7u5avId/exec",
       githubApiUrl: "https://api.github.com/repos/Gich-lab/Nature-Photos/commits/main"
     };
-    
+
+    // =====================================================
     // STATE
-    let state = {
+    // =====================================================
+    const state = {
       currentImageIndex: 0,
       images: [],
       startX: 0,
       currentHeaderTextIndex: 0,
-      galleryInitialized: false
+      galleryInitialized: false,
+      loading: false
     };
 
-    // DOM ELEMENTS - Initialized after DOMContentLoaded
     let DOM = {};
+    let captionImg = null;
+    let captionRaf = 0;
 
     function initializeDOMElements() {
-      if (!document.getElementById("lightbox-caption")) {
-        const cap = document.createElement("div");
-        cap.id = "lightbox-caption";
-        cap.setAttribute("role", "status");
-        cap.setAttribute("aria-live", "polite");
-        document.body.appendChild(cap);
-      }
-      
       DOM = {
         header: document.getElementById("header"),
         headerText: document.getElementById("header-text"),
@@ -277,69 +145,23 @@
       };
     }
 
-    // Wait for images to load or timeout 
-    function waitForImagesOrTimeout(images, timeoutMs = CONFIG.imageLoadTimeout) {
-      return new Promise((resolve) => {
-        let loadedCount = 0;
-        const totalImages = images.length;
-
-        if (totalImages === 0) {
-          resolve();
-          return;
-        }
-
-        const timeoutId = setTimeout(resolve, timeoutMs);
-
-        images.forEach((img) => {
-          if (img.complete) {
-            loadedCount++;
-            if (loadedCount === totalImages) {
-              clearTimeout(timeoutId);
-              resolve();
-            }
-          } else {
-            img.addEventListener('load', () => {
-              loadedCount++;
-              if (loadedCount === totalImages) {
-                clearTimeout(timeoutId);
-                resolve();
-              }
-            });
-          }
-        });
-      });
-    }
-
-    // Check if page was reloaded 
+    // =====================================================
+    // DEVICE / PAGE HELPERS
+    // =====================================================
     function isPageReloaded() {
-      if (performance.getEntriesByType('navigation')[0]) {
-        const navType = performance.getEntriesByType('navigation')[0].type;
-        return navType === 'reload';
-      } else if (performance.navigation) {
+      const nav = performance.getEntriesByType("navigation")[0];
+      if (nav) return nav.type === "reload";
+      if (performance.navigation) {
         return performance.navigation.type === performance.navigation.RELOAD;
       }
       return false;
     }
 
-    // Load Google Analytics 
-    function loadGA() {
-      window.dataLayer = window.dataLayer || [];
-      function gtag() { dataLayer.push(arguments); }
-      gtag('js', new Date());
-      gtag('config', CONFIG.gaId);
-      const script = document.createElement('script');
-      script.async = true;
-      script.src = CONFIG.gaScript;
-      document.head.appendChild(script);
-    }
-
-    // Detect device type 
     function detectDevice() {
-      const ua = navigator.userAgent;
-      return /Mobile|Android|iPhone/i.test(ua) ? "Phone" : "Desktop";
+      return /Mobile|Android|iPhone/i.test(navigator.userAgent) ? "Phone" : "Desktop";
     }
+    const isMobile = detectDevice() === "Phone";
 
-    // Detect operating system 
     function detectOS() {
       const ua = navigator.userAgent;
       const osMap = {
@@ -350,14 +172,12 @@
         "Linux": "Linux",
         "Mac": "MacOS"
       };
-      
       for (const [key, value] of Object.entries(osMap)) {
         if (ua.includes(key)) return value;
       }
       return "Unknown";
     }
 
-    // Detect browser 
     function detectBrowser() {
       const ua = navigator.userAgent;
       const browserChecks = [
@@ -368,7 +188,6 @@
         { pattern: /Firefox/i, name: "Firefox" },
         { pattern: /OPR|Opera/i, name: "Opera" }
       ];
-
       for (const check of browserChecks) {
         if (check.pattern.test(ua) && (!check.notPattern || !check.notPattern.test(ua))) {
           return check.name;
@@ -377,7 +196,6 @@
       return "Other";
     }
 
-    // Get device information object 
     function getDeviceInfo() {
       return {
         device: detectDevice(),
@@ -387,7 +205,20 @@
       };
     }
 
-    // Send visitor data to Google Sheets 
+    // =====================================================
+    // ANALYTICS / TRACKING
+    // =====================================================
+    function loadGA() {
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", CONFIG.gaId);
+      const script = document.createElement("script");
+      script.async = true;
+      script.src = CONFIG.gaScript;
+      document.head.appendChild(script);
+    }
+
     function sendVisitorData(eventType = "visit", imageName = "") {
       const data = {
         event: eventType,
@@ -395,31 +226,32 @@
         Image: imageName,
         ...getDeviceInfo()
       };
-
       fetch(CONFIG.sheetsUrl, {
         method: "POST",
         body: JSON.stringify(data)
       }).catch(err => console.error("Log failed:", err));
     }
 
-    // Initialize visitor tracking (once per session) 
+    // Once per session
     function initializeTracking() {
-      const pageSessionKey = 'pageSessionId';
-      if (!sessionStorage.getItem(pageSessionKey)) {
-        sessionStorage.setItem(pageSessionKey, 1);
+      const key = "pageSessionId";
+      if (!sessionStorage.getItem(key)) {
+        sessionStorage.setItem(key, 1);
         sendVisitorData("visit");
       }
     }
 
-    // Trigger cascade animation for text 
+    // =====================================================
+    // HEADER TEXT
+    // =====================================================
     function triggerCascade(element, text, totalDuration = CONFIG.cascadeDuration, loop = true) {
       clearTimeout(element.cascadeTimer);
-      
+
       function animate() {
         element.style.visibility = "visible";
         element.textContent = "";
         const delayIncrement = totalDuration / text.length;
-        
+
         for (let i = 0; i < text.length; i++) {
           const span = document.createElement("span");
           span.innerHTML = (text[i] === " ") ? "&nbsp;" : text[i];
@@ -434,14 +266,27 @@
       animate();
     }
 
-    // Cycle through header texts 
     function cycleHeaderTexts() {
       triggerCascade(DOM.headerText, CONFIG.headerTexts[state.currentHeaderTextIndex]);
       state.currentHeaderTextIndex = (state.currentHeaderTextIndex + 1) % CONFIG.headerTexts.length;
       setTimeout(cycleHeaderTexts, CONFIG.textCycleDuration);
     }
 
-    // Animate image with scale pinpoint effect 
+    // Keep the gallery clear of the fixed header, even when the title wraps to two lines.
+    // A ResizeObserver only fires when the header's own size changes (not when the phone's
+    // address bar shows or hides), so it can't cause layout jumps while scrolling.
+    function watchHeaderHeight() {
+      const apply = () => {
+        const h = DOM.header.offsetHeight + "px";
+        if (DOM.gallery.style.marginTop !== h) DOM.gallery.style.marginTop = h;
+      };
+      apply();
+      new ResizeObserver(apply).observe(DOM.header);
+    }
+
+    // =====================================================
+    // IMAGE LOADING
+    // =====================================================
     function animateImageAppearance(img) {
       return img.animate(
         [
@@ -450,75 +295,57 @@
         ],
         {
           duration: CONFIG.imageAnimationDuration,
-          easing: "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+          easing: CONFIG.imageEasing,
           iterations: 1
         }
       ).finished;
     }
 
-    // Load images sequentially with animation 
+    // decode() resolves once the image is fully decoded, so the first animation frame
+    // doesn't have to do that work. It rejects for missing files (404), which we skip.
+    function whenReady(img) {
+      if (img.decode) return img.decode();
+      return new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+    }
+
     async function loadImagesSequentially() {
-      for (let i = CONFIG.maxPhotos; i >= 1; i--) { //start from the latest image uploaded
-      // for (let i = 1; i <= CONFIG.maxPhotos; i++) {
-        const img = document.createElement("img");
-        img.style.visibility = "hidden";
+      state.loading = true;
+
+      for (let i = CONFIG.maxPhotos; i >= 1; i--) { // newest upload first
+        const img = new Image();
+        img.decoding = "async";
+        img.alt = `Photo ${i}`;
         img.src = `images/photo${i}.jpg`;
 
-        img.onerror = function () {
-          this.remove();
-        };
+        try {
+          await whenReady(img);
+        } catch {
+          continue; // file doesn't exist
+        }
 
-        await new Promise(resolve => {
-          img.onload = resolve;
-          img.onerror = resolve;
-        });
-
-        DOM.gallery.appendChild(img);
-        
-        updateLayout();
-        img.style.visibility = "visible";
+        DOM.gallery.appendChild(img); // sizing and styling come from style.css
         await animateImageAppearance(img);
-        await new Promise(resolve => setTimeout(resolve, CONFIG.imageDelayBetween));
+
+        if (CONFIG.imageDelayBetween > 0) {
+          await new Promise(resolve => setTimeout(resolve, CONFIG.imageDelayBetween));
+        }
       }
 
+      state.loading = false;
       state.images = document.querySelectorAll("#gallery img");
-      document.getElementById("footerText").style.display = "block";
+      DOM.footerText.style.display = "block";
       DOM.footerText.style.opacity = "1";
       state.galleryInitialized = true;
     }
 
-    // Update gallery layout based on device 
-    const isMobile = detectDevice() === "Phone";
-    function updateLayout() {
-      const imgs = document.querySelectorAll("#gallery img");
+    // =====================================================
+    // LIGHTBOX
+    // =====================================================
+    const lightboxOpen = () => DOM.lightbox.classList.contains("active");
 
-      DOM.gallery.classList.remove("fullscreen");
-      DOM.gallery.style.display = "flex";
-      DOM.gallery.style.flexWrap = "wrap";
-
-      imgs.forEach(img => {
-        img.style.display = "block";
-        img.style.height = "auto";
-        img.style.margin = "0";                 // gap handles the spacing
-        img.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.9)";
-
-        if (isMobile) {
-          img.style.width = "100%"; // One image per row exactly
-          img.style.borderRadius = "0.3%";
-        } else {
-          img.style.width = "calc(25% - 20px)"; // Four images per row on desktop
-          img.style.borderRadius = "0.6%";
-          img.style.opacity = "1";
-        }
-      });
-    }
-
-    // Adjust gallery position below header 
-    function adjustGalleryPosition() {
-      DOM.gallery.style.marginTop = DOM.header.offsetHeight + "px";
-    }
-
-    // Show image in lightbox 
     function showImage(index) {
       state.images = document.querySelectorAll("#gallery img");
       if (!state.images.length) return;
@@ -528,52 +355,31 @@
       updateLightboxCaption(state.images[index]);
 
       DOM.downloadBtn.href = state.images[index].src;
-      DOM.downloadBtn.download = state.images[index].src.split('/').pop();
+      DOM.downloadBtn.download = state.images[index].src.split("/").pop();
     }
 
-    // Navigate to next/previous image 
     function navigateImage(direction) {
       if (!state.images.length) return;
-      const step = direction === 'next' ? 1 : -1;
+      const step = direction === "next" ? 1 : -1;
       state.currentImageIndex = (state.currentImageIndex + step + state.images.length) % state.images.length;
       showImage(state.currentImageIndex);
     }
 
-    // Close lightbox 
     function closeLightbox() {
       cancelAnimationFrame(captionRaf);
-      DOM.lightbox.style.display = "none";
-      DOM.lightbox.classList.remove("show-download");
-      if (DOM.lightboxCaption) DOM.lightboxCaption.style.display = "none";
+      DOM.lightbox.classList.remove("active");
+      DOM.lightboxCaption.style.display = "none";
       captionImg = null;
     }
 
-    // Open lightbox with image 
     function openLightbox(imgElement) {
       state.images = document.querySelectorAll("#gallery img");
       state.currentImageIndex = Array.from(state.images).indexOf(imgElement);
-      DOM.lightbox.style.display = "flex";
-      DOM.lightbox.classList.add("show-download");
+      DOM.lightbox.classList.add("active");
       showImage(state.currentImageIndex);
     }
 
-    // Handle scroll blur effect 
-    function handleScrollBlur() {
-      const headerBottom = DOM.header.getBoundingClientRect().bottom + window.scrollY;
-      
-      document.querySelectorAll("#gallery img").forEach(img => {
-        const rect = img.getBoundingClientRect();
-        const imgTop = rect.top + window.scrollY;
-        
-        if (imgTop < headerBottom) {
-          img.classList.add("blur-img");
-        } else {
-          img.classList.remove("blur-img");
-        }
-      });
-    }
-
-    // Look up the caption for a gallery image from CONFIG.photoCaptions, by file name or by photo number.
+    // Look up the caption for a gallery image, by file name or by photo number.
     // Returns { title, text } or null when that photo has no caption.
     function getCaption(img) {
       const file = decodeURIComponent(img.src.split("?")[0].split("/").pop());
@@ -583,9 +389,7 @@
       return typeof entry === "string" ? { title: entry, text: "" } : entry;
     }
 
-     // This lowers the caption so that it is not hidden
-    let captionImg = null;
-
+    // Place the caption just above the enlarged image
     function positionLightboxCaption() {
       const box = DOM.lightboxCaption;
       if (!box || !captionImg || box.style.display === "none") return;
@@ -594,35 +398,27 @@
       const vw = document.documentElement.clientWidth;
 
       box.style.position = "fixed";
-      box.style.transition = "none";          // don't let CSS animate the caption itself
+      box.style.transition = "none";
       box.style.transform = "none";
-      box.style.boxSizing = "border-box";
-      box.style.width = "max-content";        // shrink to the text...
-      box.style.maxWidth = Math.min(rect.width, vw - 16) + "px";   // ...up to the image width
-      box.style.whiteSpace = "normal";        // then wrap onto more lines
+      box.style.width = "max-content";
+      box.style.maxWidth = Math.min(rect.width, vw - 16) + "px";
+      box.style.whiteSpace = "normal";
       box.style.overflowWrap = "anywhere";
-      box.style.textAlign = "center";
       box.style.right = "auto";
       box.style.bottom = "auto";
 
-      // Measure the real size, then centre over the image
       const w = box.offsetWidth;
       const h = box.offsetHeight;
       const left = rect.left + (rect.width - w) / 2;
       box.style.left = Math.max(8, Math.min(left, vw - w - 8)) + "px";
-
-      // Bottom edge 10px above the image; more lines make h larger, so it grows upward
-      box.style.top = Math.max(8, rect.top - h - 10) + "px";
+      box.style.top = Math.max(8, rect.top - h - 10) + "px"; // grows upward with more lines
     }
 
-    // ---------- Download button: position below the lightbox image ----------
+    // Download button: below the image on phones, inside it on desktop
     function positionLightboxDownload() {
       const btn = DOM.lightboxDownload;
       const img = DOM.lightboxImg;
-      if (!btn || !img) return;
-
-      const lb = btn.closest("#lightbox");
-      if (lb && getComputedStyle(lb).display === "none") return;
+      if (!btn || !img || !lightboxOpen()) return;
 
       const rect = img.getBoundingClientRect();
       const vw = document.documentElement.clientWidth;
@@ -635,19 +431,17 @@
 
       const w = btn.offsetWidth;
       const h = btn.offsetHeight;
-
       const left = rect.left + (rect.width - w) / 2;
       btn.style.left = Math.max(8, Math.min(left, vw - w - 8)) + "px";
-      if (isMobile){
-        // Mobile: 10px below the image, kept on screen
+
+      if (isMobile) {
         btn.style.top = Math.min(rect.bottom + 10, vh - h - 4) + "px";
       } else {
-        // Desktop: inside the image, 12px above its bottom edge
         btn.style.top = (rect.bottom - h - 12) + "px";
       }
     }
-    
-    let captionRaf = 0;
+
+    // Re-position for a short while, because the image is still loading / resizing
     function trackLightboxCaption(ms = 800) {
       cancelAnimationFrame(captionRaf);
       const end = performance.now() + ms;
@@ -658,8 +452,7 @@
       };
       tick();
     }
-    
-    // Caption content + start tracking 
+
     function updateLightboxCaption(img) {
       const box = DOM.lightboxCaption;
       if (!box) return;
@@ -691,11 +484,13 @@
       if (!captionImg.complete) {
         captionImg.addEventListener("load", () => trackLightboxCaption(), { once: true });
       }
-    }  
-    
-    // Hover popup with a description of the photo under the mouse
+    }
+
+    // =====================================================
+    // HOVER POPUP (desktop)
+    // =====================================================
     function setupPhotoTooltip() {
-      // Touch screens have no hover (a tap opens the lightbox instead), so skip them
+      // Touch screens have no hover (a tap opens the lightbox instead)
       if (!window.matchMedia("(hover: hover)").matches) return;
 
       const tip = document.createElement("div");
@@ -724,181 +519,178 @@
       function show(e) {
         const caption = getCaption(e.target);
         if (!caption) { hide(); return; }
-        tipTitle.textContent = caption.title;      // textContent: text is never treated as HTML
+        tipTitle.textContent = caption.title; // textContent: never treated as HTML
         tipText.textContent = caption.text || "";
         tipText.style.display = caption.text ? "block" : "none";
         place(e);
         tip.classList.add("visible");
       }
 
-      // Listen on the gallery container so images added later are covered too
+      // Listen on the container so images added later are covered too
       DOM.gallery.addEventListener("mouseover", (e) => {
         if (e.target.tagName === "IMG") show(e);
       });
       DOM.gallery.addEventListener("mousemove", (e) => {
         if (e.target.tagName !== "IMG") return;
-        // Follow the cursor; if the popup was hidden by a scroll or click while the
-        // mouse stayed on the same photo, bring it back on the next mouse movement
         if (tip.classList.contains("visible")) place(e); else show(e);
       });
       DOM.gallery.addEventListener("mouseout", (e) => {
         if (e.target.tagName === "IMG") hide();
       });
-      DOM.gallery.addEventListener("click", hide);        // the lightbox opens on click
+      DOM.gallery.addEventListener("click", hide); // the lightbox opens on click
       window.addEventListener("scroll", hide, { passive: true });
     }
 
-    // Fetch latest commit and manage content updates 
+    // =====================================================
+    // CONTENT UPDATE CHECK (GitHub commit)
+    // =====================================================
     function fetchLatestCommitSha() {
       fetch(CONFIG.githubApiUrl)
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) throw new Error("GitHub API " + response.status);
+          return response.json();
+        })
         .then(data => {
           const latestCommitSha = data.sha;
-          const storedSha = localStorage.getItem('storedSha');
+          const storedSha = localStorage.getItem("storedSha");
 
           DOM.headerText.style.visibility = "visible";
           initializeTracking();
 
           if (latestCommitSha === storedSha && isPageReloaded()) {
-            // Page reloaded with same content - don't reload images, just show footer
+            // Reloaded with the same content
             DOM.headerText.textContent = "More images soon...";
             triggerCascade(DOM.headerText, DOM.headerText.textContent, CONFIG.cascadeDuration, false);
             setTimeout(cycleHeaderTexts, CONFIG.textCycleDuration);
-            
-            // Show existing images without animation
+
             state.images = document.querySelectorAll("#gallery img");
             if (state.images.length > 0) {
               DOM.footerText.style.opacity = "1";
               state.galleryInitialized = true;
             }
           } else if (latestCommitSha !== storedSha) {
-            // New content - load images with animation
+            // New content
             cycleHeaderTexts();
-            localStorage.setItem('storedSha', latestCommitSha);
+            localStorage.setItem("storedSha", latestCommitSha);
             loadGA();
           }
-
-          window.addEventListener('load', () => {
-            waitForImagesOrTimeout(document.querySelectorAll('img'));
-          });
+        })
+        .catch(err => {
+          // GitHub unreachable or rate-limited: still show the header and log the visit
+          console.error("Commit check failed:", err);
+          DOM.headerText.style.visibility = "visible";
+          initializeTracking();
+          cycleHeaderTexts();
         });
     }
 
-    // Auto-roll that follows the visitor's scroll direction
-    const SPEED = 55; // pixels per second
-
-    // Reveal on entry
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => e.isIntersecting && e.target.classList.add("in-view"));
-    }, { threshold: 0.15 });
-    document.querySelectorAll("#gallery .gallery-item").forEach(el => io.observe(el));
-
-    // Auto-roll
-    const lightboxOpen = () => document.body.classList.contains("lb-disable-scrolling"); // Lightbox2
+    // =====================================================
+    // AUTO-ROLL
+    // Follows the page down slowly; pauses while the visitor is in control.
+    // =====================================================
     const typing = () => /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName);
 
     let y = scrollY, last = null, lastInput = -Infinity;
-    ["wheel", "touchstart", "touchmove", "keydown", "mousedown"].forEach(ev =>
-      addEventListener(ev, () => { lastInput = performance.now(); }, { passive: true })
-    );
 
-    function roll(t) {
-      const dt = last === null ? 0 : Math.min(t - last, 50);   // clamp so returning from another tab doesn't jump
-      last = t;
-      const max = document.documentElement.scrollHeight - innerHeight;
+    function setupAutoRoll() {
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-      if (t - lastInput < 3000) {
-        y = scrollY; // visitor is in control; resume 3s after they stop
-      } else if (!lightboxOpen() && !typing() && max > 0) {
-        const wave = 1 + 0.5 * Math.sin(t / 4000); // gentle speed-up and slow-down
-        y = Math.min(y + (SPEED / 1000) * dt * wave, max);
-        scrollTo(0, y);
-      }
-      requestAnimationFrame(roll); // keeps the loop going
-    }
+      // touchend is included so momentum scrolling after a flick isn't overridden
+      ["wheel", "touchstart", "touchmove", "touchend", "keydown", "mousedown"].forEach(ev =>
+        addEventListener(ev, () => { lastInput = performance.now(); }, { passive: true })
+      );
 
-    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      requestAnimationFrame(roll); // starts the loop once
-    } else {
-      document.querySelectorAll("#gallery .gallery-item").forEach(el => el.classList.add("in-view"));
-    }
-    
-    // Initialize all event listeners 
-    function setupEventListeners() {
-      // Gallery image click
-      DOM.gallery.addEventListener("click", (e) => {
-        if (e.target.tagName === "IMG") {
-          openLightbox(e.target);
+      function roll(t) {
+        const dt = last === null ? 0 : Math.min(t - last, 50); // clamp so returning from another tab doesn't jump
+        last = t;
+
+        if (t - lastInput < CONFIG.scrollResumeDelay) {
+          y = scrollY; // visitor is in control
+        } else if (
+          !lightboxOpen() && !typing() &&
+          !(CONFIG.pauseScrollWhileLoading && state.loading)
+        ) {
+          const max = document.documentElement.scrollHeight - innerHeight;
+          if (max > 0) {
+            const wave = 1 + 0.5 * Math.sin(t / 4000); // gentle speed-up and slow-down
+            y = Math.min(y + (CONFIG.scrollSpeed / 1000) * dt * wave, max);
+
+            // Phones snap scroll positions to whole device pixels. Only scroll when the
+            // whole-pixel value changes; fractional calls just make the motion uneven.
+            const target = Math.round(y);
+            if (target !== Math.round(scrollY)) {
+              scrollTo({ top: target, behavior: "instant" });
+            }
+          }
         }
+        requestAnimationFrame(roll);
+      }
+      requestAnimationFrame(roll);
+    }
+
+    // =====================================================
+    // EVENTS
+    // =====================================================
+    function setupEventListeners() {
+      // Open lightbox
+      DOM.gallery.addEventListener("click", (e) => {
+        if (e.target.tagName === "IMG") openLightbox(e.target);
       });
 
-      // Navigation buttons
-      if (DOM.nextBtn) {
-        DOM.nextBtn.addEventListener("click", () => navigateImage('next'));
-      }
-      if (DOM.prevBtn) {
-        DOM.prevBtn.addEventListener("click", () => navigateImage('prev'));
-      }
-      
-      // Keyboard navigation
+      // Prev / next
+      DOM.nextBtn?.addEventListener("click", () => navigateImage("next"));
+      DOM.prevBtn?.addEventListener("click", () => navigateImage("prev"));
+
+      // Keyboard
       document.addEventListener("keydown", (e) => {
-        if (DOM.lightbox.style.display !== "flex") return;
+        if (!lightboxOpen()) return;
         if (e.key === "ArrowRight") DOM.nextBtn?.click();
         if (e.key === "ArrowLeft") DOM.prevBtn?.click();
         if (e.key === "Escape") closeLightbox();
       });
 
-      // Close lightbox on background click
+      // Close on background click
       DOM.lightbox.addEventListener("click", (e) => {
-        if (e.target === DOM.lightbox) {
-          closeLightbox();
-        }
+        if (e.target === DOM.lightbox) closeLightbox();
       });
-      
-      // Touch swipe support
+
+      // Swipe
       DOM.lightbox.addEventListener("touchstart", (e) => {
         state.startX = e.touches[0].clientX;
-      });
+      }, { passive: true });
       DOM.lightbox.addEventListener("touchend", (e) => {
-        const endX = e.changedTouches[0].clientX;
-        const diff = state.startX - endX;
+        const diff = state.startX - e.changedTouches[0].clientX;
         if (diff > CONFIG.touchSwipeThreshold) DOM.nextBtn?.click();
         if (diff < -CONFIG.touchSwipeThreshold) DOM.prevBtn?.click();
-      });
+      }, { passive: true });
 
-      // Download button
+      // Download tracking
       DOM.downloadBtn.addEventListener("click", () => {
-        sendVisitorData("download", DOM.lightboxImg.src.split('/').pop());
+        sendVisitorData("download", DOM.lightboxImg.src.split("/").pop());
       });
-      
-      // Scroll blur effect
-      window.addEventListener("scroll", handleScrollBlur);
 
-      // Layout updates
-      window.addEventListener("resize", updateLayout);
-      window.addEventListener("resize", adjustGalleryPosition);
+      // Re-place the lightbox caption / download button on resize or rotation
       window.addEventListener("resize", () => trackLightboxCaption(300));
-      
-      // Page load initialization
+
+      // Start loading images once the page has loaded
       window.addEventListener("load", async () => {
-        // Only load images if gallery is not already initialized
-        if (!state.galleryInitialized) {
-          await loadImagesSequentially();
-        }
+        if (!state.galleryInitialized) await loadImagesSequentially();
       });
-      window.addEventListener("load", adjustGalleryPosition);
     }
 
-    // Initialize the entire application
+    // =====================================================
+    // START
+    // =====================================================
     function initializeApp() {
       initializeDOMElements();
+      watchHeaderHeight();
       fetchLatestCommitSha();
-      setupEventListeners();  
+      setupEventListeners();
       setupPhotoTooltip();
+      setupAutoRoll();
     }
 
-    // Start the application when DOM is ready
-    document.addEventListener('DOMContentLoaded', initializeApp);
+    document.addEventListener("DOMContentLoaded", initializeApp);
   </script>
 </body>
 </html>
