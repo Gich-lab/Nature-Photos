@@ -1,0 +1,5 @@
+.git
+.gitattributes
+README.md
+wrangler.jsonc
+.assetsignore
