@@ -1,5 +1,5 @@
 {
-  "name": "my-wallpapers",
+  "name": "your-project-name",
   "compatibility_date": "2026-10-29",
-  "assets": { "directory": "./public" }
+  "assets": { "directory": "./" }
 }
