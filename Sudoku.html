@@ -6,7 +6,7 @@
 <title>Sudoku</title>
 <style>
 :root{--bg:#bfe3c9;--panel:#fff;--ink:#17243a;--mute:#6b7a90;--line:#b8c3d1;--box:#17243a;--sel:#bcd4fb;--peer:#e6eef9;--same:#d0e0fa;--user:#2563d6;--bad:#d23b3b;--badbg:#fbe0e0;--btn:#fff;--on:#17243a;--onfg:#fff}
-@media(prefers-color-scheme:dark){:root{--bg:#0f1624;--panel:#18223a;--ink:#e6ecf6;--mute:#8a99b3;--line:#33425f;--box:#8fa3c7;--sel:#2c4a85;--peer:#1f2c48;--same:#28407a;--user:#7fb0ff;--bad:#ff8a8a;--badbg:#4a2230;--btn:#18223a;--on:#e6ecf6;--onfg:#0f1624}}
+@media(prefers-color-scheme:dark){:root{--bg:#10291c;--panel:#18223a;--ink:#e6ecf6;--mute:#8a99b3;--line:#33425f;--box:#8fa3c7;--sel:#2c4a85;--peer:#1f2c48;--same:#28407a;--user:#7fb0ff;--bad:#ff8a8a;--badbg:#4a2230;--btn:#18223a;--on:#e6ecf6;--onfg:#0f1624}}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh;display:flex;justify-content:center;padding:16px}
@@ -32,12 +32,10 @@ button:disabled{opacity:.3;cursor:default}
 .same{background:var(--same)}
 .sel{background:var(--sel)}
 .bad{color:var(--bad);background:var(--badbg)}
-.nt{display:grid;grid-template-columns:repeat(3,1fr);width:100%;height:100%;font-size:clamp(.5rem,2.4vw,.75rem);color:var(--mute);text-align:center;align-items:center;padding:1px}
-.tools{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0 8px}
-.tools button[aria-pressed=true]{background:var(--on);color:var(--onfg);border-color:var(--on)}
+.tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 8px}
 .pad{display:grid;grid-template-columns:repeat(9,1fr);gap:5px}
 .pad button{padding:8px 0;font-size:1.3rem;font-weight:600;display:flex;flex-direction:column;align-items:center;line-height:1.1}
-.pad small{font-size:.65rem;font-weight:400;color:var(--mute)}
+.pad small{font-size:.85rem;font-weight:500;color:var(--mute)}
 #win{margin-bottom:10px;padding:12px 14px;border-radius:8px;background:var(--on);color:var(--onfg);display:flex;justify-content:space-between;align-items:center;gap:10px}
 #win button{background:var(--onfg);color:var(--on);border-color:var(--onfg);font-weight:600;white-space:nowrap}
 .help{margin-top:14px;color:var(--mute);font-size:.82rem;line-height:1.5}
@@ -62,11 +60,10 @@ button:disabled{opacity:.3;cursor:default}
   <div class="tools">
     <button id="undo">Undo</button>
     <button id="erase">Erase</button>
-    <button id="notes" aria-pressed="false">Notes: off</button>
     <button id="hint">Hint</button>
   </div>
   <div class="pad" id="pad"></div>
-  <p class="help">Tap a cell, then a number. On a keyboard: 1–9 to fill, arrow keys to move, Backspace to erase, N for notes, U to undo, H for a hint.</p>
+  <p class="help">Tap a cell, then a number. On a keyboard: 1–9 to fill, arrow keys to move, Backspace to erase, U to undo, H for a hint.</p>
 </main>
 <script>
 const $=s=>document.querySelector(s);
@@ -111,22 +108,13 @@ function generate(level){
 }
 
 /* ---- game state ---- */
-let sol,giv,cur,nt,sel=-1,note=false,hist=[],secs=0,tm,miss=0,hints=0,over=false;
-const peers=i=>{
-  const r=i/9|0,c=i%9,out=[];
-  for(let j=0;j<81;j++){
-    if(j===i)continue;
-    const jr=j/9|0,jc=j%9;
-    if(jr===r||jc===c||((jr/3|0)===(r/3|0)&&(jc/3|0)===(c/3|0)))out.push(j);
-  }
-  return out;
-};
+let sol,giv,cur,sel=-1,hist=[],secs=0,tm,miss=0,hints=0,over=false;
 const fmt=s=>String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
-const snap=()=>{hist.push([cur.slice(),nt.slice(),miss]);if(hist.length>200)hist.shift()};
+const snap=()=>{hist.push([cur.slice(),miss]);if(hist.length>200)hist.shift()};
 
 function newGame(){
   const[s,p]=generate($('#lvl').value);
-  sol=s;giv=p.slice();cur=p.slice();nt=Array(81).fill(0);
+  sol=s;giv=p.slice();cur=p.slice();
   hist=[];sel=-1;miss=0;hints=0;over=false;secs=0;
   $('#win').hidden=true;
   clearInterval(tm);tm=setInterval(()=>{if(!over&&!document.hidden){secs++;top_()}},1000);
@@ -138,24 +126,18 @@ function top_(){
 }
 function place(n){
   if(over||sel<0||giv[sel])return;
-  if(note){
-    if(cur[sel])return;
-    snap();nt[sel]^=1<<n;
-  }else{
-    if(cur[sel]===n)return;
-    snap();cur[sel]=n;nt[sel]=0;
-    if(n!==sol[sel])miss++;
-    else peers(sel).forEach(j=>nt[j]&=~(1<<n));
-  }
+  if(cur[sel]===n)return;
+  snap();cur[sel]=n;
+  if(n!==sol[sel])miss++;
   render();check();
 }
 function erase(){
-  if(over||sel<0||giv[sel]||(!cur[sel]&&!nt[sel]))return;
-  snap();cur[sel]=0;nt[sel]=0;render();
+  if(over||sel<0||giv[sel]||!cur[sel])return;
+  snap();cur[sel]=0;render();
 }
 function undo(){
   if(over||!hist.length)return;
-  [cur,nt,miss]=hist.pop();render();
+  [cur,miss]=hist.pop();render();
 }
 function hint(){
   if(over)return;
@@ -165,8 +147,7 @@ function hint(){
     const w=[];for(let i=0;i<81;i++)if(cur[i]!==sol[i])w.push(i);
     if(!w.length)return;t=w[Math.random()*w.length|0];
   }
-  snap();cur[t]=sol[t];nt[t]=0;hints++;sel=t;
-  peers(t).forEach(j=>nt[j]&=~(1<<sol[t]));
+  snap();cur[t]=sol[t];hints++;sel=t;
   render();check();
 }
 function check(){
@@ -192,13 +173,7 @@ function render(){
       if(sv&&cur[i]===sv&&i!==sel)k+=' same';
     }
     if(cur[i]&&cur[i]!==sol[i])k+=' bad';
-    let inner='';
-    if(cur[i])inner=cur[i];
-    else if(nt[i]){
-      inner='<div class="nt">';
-      for(let v=1;v<=9;v++)inner+='<span>'+(nt[i]&(1<<v)?v:'')+'</span>';
-      inner+='</div>';
-    }
+    const inner=cur[i]||'';
     h+='<div class="'+k+'" data-i="'+i+'" role="gridcell" tabindex="'+(i===sel||(sel<0&&i===0)?0:-1)+'" aria-label="Row '+(r+1)+', column '+(c+1)+(cur[i]?', '+cur[i]:', empty')+'">'+inner+'</div>';
   }
   $('#board').innerHTML=h;
@@ -208,8 +183,6 @@ function render(){
     ph+='<button data-n="'+v+'"'+(used>=9?' disabled':'')+'>'+v+'<small>'+(9-used)+'</small></button>';
   }
   $('#pad').innerHTML=ph;
-  $('#notes').textContent='Notes: '+(note?'on':'off');
-  $('#notes').setAttribute('aria-pressed',note);
   top_();
 }
 
@@ -224,7 +197,6 @@ $('#pad').addEventListener('click',e=>{
 $('#undo').onclick=undo;
 $('#erase').onclick=erase;
 $('#hint').onclick=hint;
-$('#notes').onclick=()=>{note=!note;render()};
 $('#new').onclick=newGame;
 $('#again').onclick=newGame;
 $('#lvl').onchange=newGame;
@@ -233,7 +205,6 @@ document.addEventListener('keydown',e=>{
   const k=e.key;
   if(/^[1-9]$/.test(k)){place(+k);e.preventDefault()}
   else if(k==='Backspace'||k==='Delete'||k==='0'){erase();e.preventDefault()}
-  else if(k==='n'||k==='N'){note=!note;render()}
   else if(k==='u'||k==='U'){undo()}
   else if(k==='h'||k==='H'){hint()}
   else if(k.startsWith('Arrow')){
