@@ -32,10 +32,13 @@ button:disabled{opacity:.3;cursor:default}
 .same{background:var(--same)}
 .sel{background:var(--sel)}
 .bad{color:var(--bad);background:var(--badbg)}
-.tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 8px}
+.tools{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0 8px}
 .pad{display:grid;grid-template-columns:repeat(9,1fr);gap:5px}
 .pad button{padding:8px 0;font-size:1.3rem;font-weight:600;display:flex;flex-direction:column;align-items:center;line-height:1.1}
-.pad small{font-size:.115rem;font-weight:500;color:var(--mute)}
+.pad small{font-size:.85rem;font-weight:500;color:var(--mute)}
+.pad.hide small{visibility:hidden}
+.tools button[aria-pressed=true]{background:var(--on);color:var(--onfg);border-color:var(--on)}
+@media(max-width:400px){.tools{grid-template-columns:repeat(2,1fr)}}
 #win{margin-bottom:10px;padding:12px 14px;border-radius:8px;background:var(--on);color:var(--onfg);display:flex;justify-content:space-between;align-items:center;gap:10px}
 #win button{background:var(--onfg);color:var(--on);border-color:var(--onfg);font-weight:600;white-space:nowrap}
 .help{margin-top:14px;color:var(--mute);font-size:.82rem;line-height:1.5}
@@ -61,6 +64,7 @@ button:disabled{opacity:.3;cursor:default}
     <button id="undo">Undo</button>
     <button id="erase">Erase</button>
     <button id="hint">Hint</button>
+    <button id="counts" aria-pressed="true">Occurrence</button>
   </div>
   <div class="pad" id="pad"></div>
   <p class="help">Tap a cell, then a number. On a keyboard: 1–9 to fill, arrow keys to move, Backspace to erase, U to undo, H for a hint.</p>
@@ -108,7 +112,7 @@ function generate(level){
 }
 
 /* ---- game state ---- */
-let sol,giv,cur,sel=-1,hist=[],secs=0,tm,miss=0,hints=0,over=false;
+let showCounts=true,sol,giv,cur,sel=-1,hist=[],secs=0,tm,miss=0,hints=0,over=false;
 const fmt=s=>String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
 const snap=()=>{hist.push([cur.slice(),miss]);if(hist.length>200)hist.shift()};
 
@@ -183,6 +187,8 @@ function render(){
     ph+='<button data-n="'+v+'"'+(used>=9?' disabled':'')+'>'+v+'<small>'+(9-used)+'</small></button>';
   }
   $('#pad').innerHTML=ph;
+  $('#pad').classList.toggle('hide',!showCounts);
+  $('#counts').setAttribute('aria-pressed',showCounts);
   top_();
 }
 
@@ -197,6 +203,7 @@ $('#pad').addEventListener('click',e=>{
 $('#undo').onclick=undo;
 $('#erase').onclick=erase;
 $('#hint').onclick=hint;
+$('#counts').onclick=()=>{showCounts=!showCounts;render()};
 $('#new').onclick=newGame;
 $('#again').onclick=newGame;
 $('#lvl').onchange=newGame;
