@@ -15,7 +15,7 @@ header{display:flex;justify-content:space-between;align-items:center;margin-bott
 h1{margin:0;font-size:1.7rem;font-weight:800;letter-spacing:-.03em}
 .row{display:flex;gap:8px;align-items:center}
 select,button{font:inherit;color:var(--ink);background:var(--btn);border:1.5px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer}
-@media (hover:hover){button:hover:not(:disabled){border-color:var(--box)}}
+button:hover:not(:disabled){border-color:var(--box)}
 button:focus-visible,select:focus-visible,.c:focus-visible{outline:3px solid var(--user);outline-offset:1px}
 button:disabled{opacity:.3;cursor:default}
 .primary{background:var(--on);color:var(--onfg);border-color:var(--on);font-weight:600}
@@ -43,12 +43,20 @@ button:disabled{opacity:.3;cursor:default}
 #win{margin-bottom:10px;padding:12px 14px;border-radius:8px;background:var(--on);color:var(--onfg);display:flex;justify-content:space-between;align-items:center;gap:10px}
 #win button{background:var(--onfg);color:var(--on);border-color:var(--onfg);font-weight:600;white-space:nowrap}
 .help{margin-top:14px;color:var(--mute);font-size:.82rem;line-height:1.5}
+#info{position:relative;z-index:21;padding:8px 14px;font-weight:600}
+#rules{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:72px 16px 16px;background:rgba(0,0,0,.6)}
+.rules-card{width:100%;max-width:420px;max-height:calc(100vh - 100px);overflow:auto;background:var(--panel);color:var(--ink);border-radius:12px;padding:18px 20px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.rules-card h2{margin:0 0 10px;font-size:1.2rem}
+.rules-card ul{margin:0;padding-left:1.2em;line-height:1.5}
+.rules-card li+li{margin-top:6px}
+@media(max-width:400px){h1{font-size:1.35rem}.row button,.row select{padding:8px 9px}}
 </style>
 </head>
 <body>
 <main>
   <header>
     <h1>Sudoku</h1>
+    <button id="info" aria-haspopup="dialog" aria-expanded="false">Info</button>
     <div class="row">
       <select id="lvl" aria-label="Difficulty">
         <option value="easy">Easy</option>
@@ -101,6 +109,17 @@ button:disabled{opacity:.3;cursor:default}
       }
     </style>
   </footer>
+  <div id="rules" role="dialog" aria-modal="true" aria-labelledby="rulesTitle" hidden>
+    <div class="rules-card">
+      <h2 id="rulesTitle">How to play</h2>
+      <ul>
+        <li>Fill the grid so every row, column and 3×3 box has the numbers 1 to 9, once each.</li>
+        <li>The bold numbers are given and can't be changed.</li>
+        <li>Tap a cell, then tap a number. Wrong numbers turn red.</li>
+        <li>Stuck? Use Hint. Made a slip? Use Undo or Erase.</li>
+      </ul>
+    </div>
+  </div>
 </main>
 <script>
 document.getElementById('year').textContent = new Date().getFullYear();
@@ -266,8 +285,23 @@ document.addEventListener('keydown',e=>{
   }
 });
 
-document.addEventListener('touchstart',()=>{},{passive:true});
-  
+/* ---- rules popup ---- */
+function toggleRules(open){
+  const box=$('#rules');
+  const show=open===undefined?box.hidden:open;
+  box.hidden=!show;
+  $('#info').textContent=show?'Close':'Info';
+  $('#info').setAttribute('aria-expanded',show);
+}
+$('#info').onclick=()=>toggleRules();
+$('#rules').addEventListener('click',e=>{if(e.target.id==='rules')toggleRules(false)});
+// while the popup is open: Esc closes it and keys don't reach the game behind it
+document.addEventListener('keydown',e=>{
+  if($('#rules').hidden)return;
+  e.stopImmediatePropagation();
+  if(e.key==='Escape')toggleRules(false);
+},true);
+
 /* ---- save and resume ---- */
 const KEY='sudoku-save-v1';
 
