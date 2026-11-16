@@ -71,11 +71,30 @@ button:disabled{opacity:.3;cursor:default}
   <p class="help">Tap a cell, then a number. On a keyboard: 1–9 to fill, arrow keys to move, Backspace to erase, U to undo, H for a hint.</p>
   <footer>
     <p id="footerText" class="footer">
-      &copy; 2026 Gichuki. All rights reserved.
+      &copy; <span id="year">2026</span> Gichuki. All rights reserved.
     </p>
+    <style>
+      footer{
+        width:100%;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        text-align:center;
+      }
+      .footer{
+        margin:20px auto 4px;
+        text-align:center;
+        font-family:inherit;
+        font-size:.82rem;
+        line-height:1.5;
+        color:var(--mute);
+      }
+    </style>
   </footer>
 </main>
 <script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
 const $=s=>document.querySelector(s);
 const pop=m=>{let n=0;while(m){m&=m-1;n++}return n};
 const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
