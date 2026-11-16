@@ -10,6 +10,7 @@
 3. Installation
 - No installation required! Just visit the live website URL: [Nature-photos](https://gich-lab.github.io/Nature-Photos/)
 - For background images display visit this site: [Nature-photos-loop](https://gich-lab.github.io/Nature-Photos/Display)
+- Sudoku online game:  [Sudoku-Game](https://gich-lab.github.io/Nature-Photos/Sudoku)
 
 4. Usage
 - Navigate through the homepage
