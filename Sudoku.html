@@ -112,7 +112,7 @@ function generate(level){
 }
 
 /* ---- game state ---- */
-let showCounts=true,sol,giv,cur,sel=-1,hist=[],secs=0,tm,miss=0,hints=0,over=false;
+let showCounts=false,sol,giv,cur,sel=-1,hist=[],secs=0,tm,miss=0,hints=0,over=false;
 const fmt=s=>String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
 const snap=()=>{hist.push([cur.slice(),miss]);if(hist.length>200)hist.shift()};
 
