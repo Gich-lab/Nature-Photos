@@ -43,7 +43,7 @@ button:disabled{opacity:.3;cursor:default}
 #win{margin-bottom:10px;padding:12px 14px;border-radius:8px;background:var(--on);color:var(--onfg);display:flex;justify-content:space-between;align-items:center;gap:10px}
 #win button{background:var(--onfg);color:var(--on);border-color:var(--onfg);font-weight:600;white-space:nowrap}
 .help{margin-top:14px;color:var(--mute);font-size:.82rem;line-height:1.5}
-#info{position:relative;z-index:21;padding:8px 14px;font-weight:600}
+#rulesBtn{position:relative;z-index:21;padding:8px 14px;font-weight:600}
 #rules{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:72px 16px 16px;background:rgba(0,0,0,.6)}
 .rules-card{width:100%;max-width:420px;max-height:calc(100vh - 100px);overflow:auto;background:var(--panel);color:var(--ink);border-radius:12px;padding:18px 20px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
 .rules-card h2{margin:0 0 10px;font-size:1.2rem}
@@ -56,7 +56,7 @@ button:disabled{opacity:.3;cursor:default}
 <main>
   <header>
     <h1>Sudoku</h1>
-    <button id="info" aria-haspopup="dialog" aria-expanded="false">Info</button>
+    <button id="rulesBtn" aria-haspopup="dialog" aria-expanded="false">Info</button>
     <div class="row">
       <select id="lvl" aria-label="Difficulty">
         <option value="easy">Easy</option>
@@ -290,10 +290,10 @@ function toggleRules(open){
   const box=$('#rules');
   const show=open===undefined?box.hidden:open;
   box.hidden=!show;
-  $('#info').textContent=show?'Close':'Info';
-  $('#info').setAttribute('aria-expanded',show);
+  $('#rulesBtn').textContent=show?'Close':'Info';
+  $('#rulesBtn').setAttribute('aria-expanded',show);
 }
-$('#info').onclick=()=>toggleRules();
+$('#rulesBtn').onclick=()=>toggleRules();
 $('#rules').addEventListener('click',e=>{if(e.target.id==='rules')toggleRules(false)});
 // while the popup is open: Esc closes it and keys don't reach the game behind it
 document.addEventListener('keydown',e=>{
