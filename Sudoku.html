@@ -15,7 +15,7 @@ header{display:flex;justify-content:space-between;align-items:center;margin-bott
 h1{margin:0;font-size:1.7rem;font-weight:800;letter-spacing:-.03em}
 .row{display:flex;gap:8px;align-items:center}
 select,button{font:inherit;color:var(--ink);background:var(--btn);border:1.5px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer}
-button:hover:not(:disabled){border-color:var(--box)}
+@media (hover:hover){button:hover:not(:disabled){border-color:var(--box)}}
 button:focus-visible,select:focus-visible,.c:focus-visible{outline:3px solid var(--user);outline-offset:1px}
 button:disabled{opacity:.3;cursor:default}
 .primary{background:var(--on);color:var(--onfg);border-color:var(--on);font-weight:600}
@@ -225,6 +225,7 @@ function render(){
   $('#pad').classList.toggle('hide',!showCounts);
   $('#counts').setAttribute('aria-pressed',showCounts);
   top_();
+  save();
 }
 
 /* ---- events ---- */
@@ -264,7 +265,44 @@ document.addEventListener('keydown',e=>{
     const el=document.querySelector('.c[data-i="'+sel+'"]');if(el)el.focus();
   }
 });
-newGame();
+
+document.addEventListener('touchstart',()=>{},{passive:true});
+  
+/* ---- save and resume ---- */
+const KEY='sudoku-save-v1';
+
+function save(){
+  try{
+    if(over){localStorage.removeItem(KEY);return}
+    localStorage.setItem(KEY,JSON.stringify({
+      sol,giv,cur,hist,secs,miss,hints,sel,showCounts,lvl:$('#lvl').value
+    }));
+  }catch(e){}
+}
+
+function load(){
+  try{
+    const d=JSON.parse(localStorage.getItem(KEY));
+    if(!d||d.sol.length!==81||d.giv.length!==81||d.cur.length!==81)return false;
+    if(d.cur.every((v,i)=>v===d.sol[i]))return false;   // finished game: don't resume
+    ({sol,giv,cur,hist,secs,miss,hints,sel,showCounts}=d);
+    over=false;
+    $('#lvl').value=d.lvl;
+    return true;
+  }catch(e){return false}
+}
+
+// also save the timer when the player leaves the page
+addEventListener('pagehide',save);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)save()});
+
+if(load()){
+  clearInterval(tm);
+  tm=setInterval(()=>{if(!over&&!document.hidden){secs++;top_()}},1000);
+  render();
+}else{
+  newGame();
+}
 </script>
 </body>
 </html>
