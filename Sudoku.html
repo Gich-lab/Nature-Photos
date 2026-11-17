@@ -123,7 +123,7 @@ button:disabled{opacity:.3;cursor:default}
   <p class="help">Tap a cell, then a number. On a keyboard: 1–9 to fill, arrow keys to move, Backspace to erase, U to undo, H for a hint.</p>
   <footer>
     <p id="footerText" class="footer">
-      &copy; <span id="year">2026</span> Gichuki. All rights reserved.
+      &copy; <span id="year">2026</span> Ken Gichuki. All rights reserved.
     </p>
     <style>
       main .help{
@@ -226,10 +226,15 @@ function place(n){
   if(n!==sol[sel])miss++;
   render();check();
 }
+  
 function erase(){
-  if(over||sel<0||giv[sel]||!cur[sel])return;
-  snap();cur[sel]=0;render();
+  if(over)return;
+  if(cur.every((v,i)=>v===giv[i]))return; // nothing entered, nothing to clear
+  snap();
+  cur=giv.slice(); // back to the given numbers only
+  render();
 }
+
 function undo(){
   if(over||!hist.length)return;
   [cur,miss]=hist.pop();render();
