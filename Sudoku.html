@@ -68,8 +68,8 @@ button:disabled{opacity:.3;cursor:default}
 /* Info/Close button stays above the blurred overlay */
 #rulesBtn{position:relative;z-index:21}
 
-/* Rules popup: card sits near the top, background is lightly blurred */
-#rules{
+/* Popups (rules + scores): card sits near the top, background is lightly blurred */
+#rules,#scores{
   position:fixed;inset:0;z-index:20;
   display:flex;align-items:flex-start;justify-content:center;
   padding:150px 16px 16px;               /* lower this number to raise the card further */
@@ -78,13 +78,22 @@ button:disabled{opacity:.3;cursor:default}
   -webkit-backdrop-filter:blur(6px);
 }
 .rules-card{
-  width:100%;max-width:420px;max-height:calc(100vh - 140px);overflow:auto;
+  width:100%;max-width:420px;max-height:calc(100vh - 170px);overflow:auto;
   background:var(--panel);color:var(--ink);border-radius:12px;padding:18px 20px;
   box-shadow:0 10px 30px rgba(0,0,0,.35);
 }
 .rules-card h2{margin:0 0 10px;font-size:1.2rem}
 .rules-card ul{margin:0;padding-left:1.2em;line-height:1.5}
 .rules-card li+li{margin-top:6px}
+
+/* score history */
+.score-row{padding:10px 0;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.score-row b{font-size:1.05rem}
+.score-row small{display:block;color:var(--mute);margin-top:2px}
+.score-actions{display:flex;gap:8px;margin-top:14px}
+.score-actions button{flex:1;height:44px;font-weight:600}
+.scores-open{width:100%;height:44px;margin-top:12px;font-weight:600}
+
 @media(max-width:400px){h1{font-size:1.35rem}}
 </style>
 </head>
@@ -121,6 +130,7 @@ button:disabled{opacity:.3;cursor:default}
   </style>
   <div class="pad" id="pad"></div>
   <p class="help">Tap a cell, then a number. On a keyboard: 1–9 to fill, arrow keys to move, Backspace to erase, U to undo, H for a hint.</p>
+  <button id="scoresBtn" class="scores-open" aria-haspopup="dialog">Past scores</button>
   <footer>
     <p id="footerText" class="footer">
       &copy; <span id="year">2026</span> Ken Gichuki. All rights reserved.
@@ -145,6 +155,16 @@ button:disabled{opacity:.3;cursor:default}
       }
     </style>
   </footer>
+  <div id="scores" role="dialog" aria-modal="true" aria-labelledby="scoresTitle" hidden>
+    <div class="rules-card">
+      <h2 id="scoresTitle">Finished games</h2>
+      <div id="scoreList"></div>
+      <div class="score-actions">
+        <button id="scoresClear">Clear scores</button>
+        <button id="scoresClose">Close</button>
+      </div>
+    </div>
+  </div>
   <div id="rules" role="dialog" aria-modal="true" aria-labelledby="rulesTitle" hidden>
     <div class="rules-card">
       <h2 id="rulesTitle">How to play</h2>
@@ -227,7 +247,7 @@ function place(n){
   if(n!==sol[sel])miss++;
   render();check();
 }
-  
+
 function erase(){
   if(over)return;
   if(cur.every((v,i)=>v===giv[i]))return; // nothing entered, nothing to clear
@@ -254,6 +274,7 @@ function hint(){
 function check(){
   if(cur.every((v,i)=>v===sol[i])){
     over=true;clearInterval(tm);
+    saveScore();   // record this finished game (device + Google Sheet)
     $('#wintxt').textContent='Solved in '+fmt(secs)+' with '+miss+(miss===1?' mistake':' mistakes')+' and '+hints+(hints===1?' hint.':' hints.');
     $('#win').hidden=false;
   }
@@ -328,8 +349,7 @@ document.addEventListener('keydown',e=>{
   }
 });
 
-/* press feedback for Info and the dropdown: same attribute as Occurrence, reverts on release */
-/*document.querySelectorAll('#rulesBtn, #lvl').forEach(el=>*/
+/* press feedback: same attribute as Occurrence, reverts on release */
 document.querySelectorAll('#rulesBtn, #lvl, #new, #undo, #erase, #hint').forEach(el=>{
   const on=()=>el.setAttribute('aria-pressed','true');
   const off=()=>el.setAttribute('aria-pressed','false');
@@ -341,17 +361,73 @@ document.querySelectorAll('#rulesBtn, #lvl, #new, #undo, #erase, #hint').forEach
 function toggleRules(open){
   const box=$('#rules');
   const show=open===undefined?box.hidden:open;
+  if(show)showScores(false);   // never show both popups at once
   box.hidden=!show;
   $('#rulesBtn').textContent=show?'Close':'Info';
   $('#rulesBtn').setAttribute('aria-expanded',show);
 }
 $('#rulesBtn').onclick=()=>toggleRules();
 $('#rules').addEventListener('click',e=>{if(e.target.id==='rules')toggleRules(false)});
-// while the popup is open: Esc closes it and keys don't reach the game behind it
+
+/* ---- score history (kept on this device) + Google Sheet ---- */
+const SKEY='sudoku-scores-v1';
+const SHEET_URL='https://script.google.com/macros/s/AKfycbw5de0Er6QRgCsN2q30NeMwhEGOuzAEwAyYShUrYFD9SSzg3VLerJ5-EOLr8IsPugjEzA/exec';
+const SHEET_KEY='chezeshaubongo';   // equal SECRET in your Apps Script
+
+const getScores=()=>{try{return JSON.parse(localStorage.getItem(SKEY))||[]}catch(e){return[]}};
+const fmtDate=ts=>{
+  const d=new Date(ts);
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+' • '+
+         d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+};
+const deviceId=(()=>{
+  try{
+    let id=localStorage.getItem('sudoku-device');
+    if(!id){id=Math.random().toString(36).slice(2,8);localStorage.setItem('sudoku-device',id)}
+    return id;
+  }catch(e){return'unknown'}
+})();
+function sendToSheet(r){
+  if(!SHEET_URL)return;
+  fetch(SHEET_URL,{
+    method:'POST',mode:'no-cors',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify({key:SHEET_KEY,device:deviceId,level:r.lvl,time:fmt(r.t),
+      seconds:r.t,mistakes:r.m,hints:r.h,when:fmtDate(r.at)})
+  }).catch(()=>{});
+}
+function saveScore(){
+  const rec={t:secs,m:miss,h:hints,lvl:$('#lvl').value,at:Date.now()};
+  try{
+    const list=getScores();
+    list.unshift(rec);
+    localStorage.setItem(SKEY,JSON.stringify(list.slice(0,100)));   // keep the latest 100
+  }catch(e){}
+  sendToSheet(rec);
+}
+function showScores(open){
+  $('#scores').hidden=!open;
+  if(!open)return;
+  const names={easy:'Easy',medium:'Medium',hard:'Hard'};
+  const list=getScores();
+  $('#scoreList').innerHTML=list.length
+    ? list.map(s=>'<div class="score-row"><b>'+fmt(+s.t)+'</b> · '+(names[s.lvl]||'')+
+        '<small>Mistakes: '+(+s.m)+' · Hints: '+(+s.h)+'</small>'+
+        '<small>'+fmtDate(+s.at)+'</small></div>').join('')
+    : '<p>No finished games yet.</p>';
+}
+$('#scoresBtn').onclick=()=>{toggleRules(false);showScores(true)};
+$('#scoresClose').onclick=()=>showScores(false);
+$('#scores').addEventListener('click',e=>{if(e.target.id==='scores')showScores(false)});
+$('#scoresClear').onclick=()=>{
+  if(confirm('Delete all saved scores on this device?')){localStorage.removeItem(SKEY);showScores(true)}
+};
+
+// while a popup is open: Esc closes it and keys don't reach the game behind it
 document.addEventListener('keydown',e=>{
-  if($('#rules').hidden)return;
+  if($('#rules').hidden&&$('#scores').hidden)return;
   e.stopImmediatePropagation();
-  if(e.key==='Escape')toggleRules(false);
+  if(e.key==='Escape'){toggleRules(false);showScores(false)}
 },true);
 
 /* ---- save and resume ---- */
