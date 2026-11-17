@@ -44,6 +44,12 @@ button:disabled{opacity:.3;cursor:default}
 .c.b{border-bottom:2px solid var(--box)}
 .c:nth-child(9n){border-right:0}
 .c:nth-child(n+73){border-bottom:0}
+/* thin cyan line inside each 3×3 box, along all four of its sides */
+.c{box-shadow:var(--sl,0 0 #0000),var(--sr,0 0 #0000),var(--st,0 0 #0000),var(--sb,0 0 #0000)}
+.c.el{--sl:inset 1px 0 0 var(--line)}
+.c.er{--sr:inset -1px 0 0 var(--line)}
+.c.et{--st:inset 0 1px 0 var(--line)}
+.c.eb{--sb:inset 0 -1px 0 var(--line)}
 .given{font-weight:700}
 .user{color:var(--user)}
 .peer{background:var(--peer)}
@@ -288,6 +294,10 @@ function render(){
     const r=i/9|0,c=i%9;let k='c';
     if(c===2||c===5)k+=' r';
     if(r===2||r===5)k+=' b';
+    if(c%3===0)k+=' el';
+    if(c%3===2)k+=' er';
+    if(r%3===0)k+=' et';
+    if(r%3===2)k+=' eb';
     if(giv[i])k+=' given';else if(cur[i])k+=' user';
     if(sel>=0){
       if(i===sel)k+=' sel';
