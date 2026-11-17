@@ -11,18 +11,30 @@
 [hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh;display:flex;justify-content:center;padding:16px}
 main{width:100%;max-width:480px}
+
+/* header: title on its own line, three equal controls below */
 header{display:flex;flex-direction:column;align-items:stretch;gap:10px;margin-bottom:12px}
 h1{margin:0;font-size:1.7rem;font-weight:800;letter-spacing:-.03em;text-align:center}
 .controls{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .controls > *{width:100%;height:44px;padding:0 8px;font-size:1rem;font-weight:600;text-align:center;text-align-last:center}
+
 select,button{font:inherit;color:var(--ink);background:var(--btn);border:1.5px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer}
-.controls > *{font-size:1rem;font-weight:600;padding:0 8px}
-button:hover:not(:disabled){border-color:var(--box)}
+/* hover only on devices that really hover (avoids sticky hover on touch screens) */
+@media (hover:hover){button:hover:not(:disabled){border-color:var(--box)}}
 button:focus-visible,select:focus-visible,.c:focus-visible{outline:3px solid var(--user);outline-offset:1px}
 button:disabled{opacity:.3;cursor:default}
-.controls button:active,
-.controls select:active{background:var(--on);color:var(--onfg);border-color:var(--on)}
 .primary{background:var(--on);color:var(--onfg);border-color:var(--on);font-weight:600}
+
+/* dropdown: custom arrow so its background can change on mobile */
+.controls select{
+  -webkit-appearance:none;appearance:none;
+  padding:0 26px 0 8px;
+  background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);
+  background-position:calc(100% - 15px) 50%,calc(100% - 10px) 50%;
+  background-size:5px 5px,5px 5px;
+  background-repeat:no-repeat;
+}
+
 .stats{display:flex;justify-content:space-between;color:var(--mute);font-size:.9rem;margin-bottom:8px;font-variant-numeric:tabular-nums}
 #board{display:grid;grid-template-columns:repeat(9,1fr);aspect-ratio:1;background:var(--panel);border:3px solid var(--box);border-radius:6px;overflow:hidden;user-select:none;touch-action:manipulation}
 #board{--panel:#000;--ink:#fff;--line:#cfcfcf;--box:#fff;--sel:#7a7a7a;--peer:#3d3d3d;--same:#5c5c5c;--user:#7fb0ff;--bad:#ff8a8a;--badbg:#5a1f1f;color:#fff}
@@ -42,7 +54,11 @@ button:disabled{opacity:.3;cursor:default}
 .pad button{padding:8px 0;font-size:1.3rem;font-weight:600;display:flex;flex-direction:column;align-items:center;line-height:1.1}
 .pad small{font-size:.85rem;font-weight:500;color:var(--mute)}
 .pad.hide small{visibility:hidden}
+
+/* pressed look: Occurrence (toggle) and Info / dropdown (only while held) */
 .tools button[aria-pressed=true]{background:var(--on);color:var(--onfg);border-color:var(--on)}
+.controls [aria-pressed=true]{background-color:var(--on);color:var(--onfg);border-color:var(--on)}
+
 @media(max-width:400px){.tools{grid-template-columns:repeat(2,1fr)}}
 #win{margin-bottom:10px;padding:12px 14px;border-radius:8px;background:var(--on);color:var(--onfg);display:flex;justify-content:space-between;align-items:center;gap:10px}
 #win button{background:var(--onfg);color:var(--on);border-color:var(--onfg);font-weight:600;white-space:nowrap}
@@ -51,14 +67,14 @@ button:disabled{opacity:.3;cursor:default}
 /* Info/Close button stays above the blurred overlay */
 #rulesBtn{position:relative;z-index:21}
 
-/* Rules popup: card sits near the top, background is blurred */
+/* Rules popup: card sits near the top, background is lightly blurred */
 #rules{
   position:fixed;inset:0;z-index:20;
   display:flex;align-items:flex-start;justify-content:center;
   padding:120px 16px 16px;               /* lower this number to raise the card further */
   background:rgba(0,0,0,.45);
-  backdrop-filter:blur(12px);            /* increase for more blur */
-  -webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(6px);             /* change both blur values together */
+  -webkit-backdrop-filter:blur(6px);
 }
 .rules-card{
   width:100%;max-width:420px;max-height:calc(100vh - 140px);overflow:auto;
@@ -136,6 +152,7 @@ button:disabled{opacity:.3;cursor:default}
         <li>The bold numbers are given and can't be changed.</li>
         <li>Tap a cell, then tap a number. Wrong numbers turn red.</li>
         <li>Stuck? Use Hint. Made a slip? Use Undo or Erase.</li>
+        <li>Karibu kwenye huu mchezo na ujue hakuna kubahatisha!</li>
       </ul>
     </div>
   </div>
@@ -302,6 +319,14 @@ document.addEventListener('keydown',e=>{
     render();
     const el=document.querySelector('.c[data-i="'+sel+'"]');if(el)el.focus();
   }
+});
+
+/* press feedback for Info and the dropdown: same attribute as Occurrence, reverts on release */
+document.querySelectorAll('#rulesBtn, #lvl').forEach(el=>{
+  const on=()=>el.setAttribute('aria-pressed','true');
+  const off=()=>el.setAttribute('aria-pressed','false');
+  el.addEventListener('pointerdown',on);
+  ['pointerup','pointercancel','pointerleave','change','blur'].forEach(t=>el.addEventListener(t,off));
 });
 
 /* ---- rules popup ---- */
