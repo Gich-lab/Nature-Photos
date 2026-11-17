@@ -99,7 +99,7 @@ button:disabled{opacity:.3;cursor:default}
         <option value="medium" selected>Medium</option>
         <option value="hard">Hard</option>
       </select>
-      <button id="new" class="primary">New game</button>
+      <button id="new">New game</button>
     </div>
   </header>
   <div id="win" hidden><span id="wintxt"></span><button id="again">Play again</button></div>
@@ -324,7 +324,7 @@ document.addEventListener('keydown',e=>{
 
 /* press feedback for Info and the dropdown: same attribute as Occurrence, reverts on release */
 /*document.querySelectorAll('#rulesBtn, #lvl').forEach(el=>*/
-document.querySelectorAll('#rulesBtn, #lvl, #undo, #erase, #hint').forEach(el=>{
+document.querySelectorAll('#rulesBtn, #lvl, #new, #undo, #erase, #hint').forEach(el=>{
   const on=()=>el.setAttribute('aria-pressed','true');
   const off=()=>el.setAttribute('aria-pressed','false');
   el.addEventListener('pointerdown',on);
