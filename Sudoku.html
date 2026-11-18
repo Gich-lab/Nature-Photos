@@ -191,7 +191,12 @@ button:active:not(:disabled),
 }
 
 /* disabled buttons lie flat */
-button:disabled{box-shadow:none;transform:none;background-image:none}
+button:disabled{
+  opacity:.6;  /* was .3: higher = more legible */
+  box-shadow:none;
+  transform:none;
+  background-image:none;
+}
 </style>
 </head>
 <body>
