@@ -116,18 +116,31 @@ body::before{
 }
 
 /* keep content clear of the notch/clock and the bottom bar (0 on desktop) */
+/* keep content clear of the notch and the bottom bar (0 on desktop) */
 body{
   padding-top:max(16px,env(safe-area-inset-top));
   padding-bottom:max(16px,env(safe-area-inset-bottom));
 }
 
-/* readable text over wallpapers: only applies once an image has loaded */
-body.wall h1,
-body.wall .stats,
-body.wall .help,
-body.wall main footer #footerText{
-  color:#fff;
-  text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 8px rgba(0,0,0,.6);
+/* wallpaper and white text: landscape / desktop only */
+@media (orientation:landscape){
+  body::before{
+    content:"";position:fixed;inset:0;
+    min-height:100lvh;
+    z-index:-1;
+    background-color:var(--bg);
+    background-image:var(--wall,none);
+    background-size:cover;
+    background-position:var(--wallpos,center);
+    background-repeat:no-repeat;
+  }
+  body.wall h1,
+  body.wall .stats,
+  body.wall .help,
+  body.wall main footer #footerText{
+    color:#fff;
+    text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 8px rgba(0,0,0,.6);
+  }
 }
 </style>
 </head>
@@ -219,30 +232,49 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
 const $=s=>document.querySelector(s);
 
-const WALLS=Array.from({length:10},(_,i)=>'sudoku_wallpapers/img'+(i+1)+'.jpg');
-const WALLPOS={1:'30% 50%',4:'70% 40%'};   // image number: 'x y'; any image not listed uses center
+const WALLS=Array.from({length:10},(_,i)=>'sudoku_wallpapers/img'+(i+1));
+const WALL_EXT=['jpg','jpeg','png','webp','JPG','JPEG','PNG'];
+const WALLPOS={1:'30% 50%',4:'70% 40%'};
+const landscape=()=>matchMedia('(orientation:landscape)').matches;
 let wallIdx=-1;
-function setWallpaper(i){
+function setWallpaper(i,bad){
+  bad=bad||[];
   if(!WALLS.length)return;
   let n=i;
-  if(n===undefined||n<0||n>=WALLS.length){
-    do{n=Math.random()*WALLS.length|0}while(n===wallIdx&&WALLS.length>1);
+  if(n===undefined||n<0||n>=WALLS.length||bad.includes(n)){
+    const pool=WALLS.map((_,k)=>k).filter(k=>!bad.includes(k)&&(k!==wallIdx||WALLS.length===1));
+    if(!pool.length){
+      document.documentElement.style.setProperty('--wall','none');
+      document.body.classList.remove('wall');
+      return;
+    }
+    n=pool[Math.random()*pool.length|0];
   }
   wallIdx=n;
+  if(!landscape()){                          // portrait: no image, original look
+    document.documentElement.style.setProperty('--wall','none');
+    document.body.classList.remove('wall');
+    return;
+  }
+  let e=0;
   const img=new Image();
   img.onload=()=>{
-    if(wallIdx!==n)return;   // ignore a slow image if a newer one was picked
+    if(wallIdx!==n)return;
     const st=document.documentElement.style;
-    st.setProperty('--wall','url("'+WALLS[n]+'")');
+    st.setProperty('--wall','url("'+img.src+'")');
     st.setProperty('--wallpos',WALLPOS[n+1]||'center');
     document.body.classList.add('wall');
   };
   img.onerror=()=>{
     if(wallIdx!==n)return;
-    document.documentElement.style.setProperty('--wall','none');
-    document.body.classList.remove('wall');
+    e++;
+    if(e<WALL_EXT.length){img.src=WALLS[n]+'.'+WALL_EXT[e]}
+    else{
+      console.warn('Wallpaper not found: '+WALLS[n]);
+      setWallpaper(undefined,bad.concat(n));
+    }
   };
-  img.src=WALLS[n];
+  img.src=WALLS[n]+'.'+WALL_EXT[0];
 }
   
 const pop=m=>{let n=0;while(m){m&=m-1;n++}return n};
@@ -541,7 +573,9 @@ function load(){
 // also save the timer when the player leaves the page
 addEventListener('pagehide',save);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)save()});
-
+// rotating the device switches between wallpaper and plain green
+matchMedia('(orientation:landscape)').addEventListener('change',()=>setWallpaper(wallIdx));
+  
 if(load()){
   clearInterval(tm);
   tm=setInterval(()=>{if(!over&&!document.hidden){secs++;top_()}},1000);
