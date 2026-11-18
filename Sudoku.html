@@ -576,7 +576,18 @@ $('#hint').onclick=hint;
 $('#counts').onclick=()=>{showCounts=!showCounts;render()};
 $('#new').onclick=newGame;
 $('#again').onclick=newGame;
-$('#lvl').onchange=newGame;
+// $('#lvl').onchange=newGame;
+
+let lastLvl;
+$('#lvl').onchange=()=>{
+  const started=!over&&cur.some((v,i)=>v!==giv[i]); // any number entered yet?
+  if(started&&!confirm('Start a new game? Your current progress will be lost.')){
+    $('#lvl').value=lastLvl; // cancelled: put the old level back
+    return;
+  }
+  newGame();
+};
+  
 document.addEventListener('keydown',e=>{
   if(e.target.tagName==='SELECT'||e.ctrlKey||e.metaKey||e.altKey)return;
   const k=e.key;
