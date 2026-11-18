@@ -182,7 +182,26 @@ button,
   background-repeat:no-repeat;
 }
 
-/* pressed: your original dark look, pushed down (also Occurrence when on) */
+/* ---- button text: small grey edge, like the button's own thickness ---- */
+button,
+.controls select{
+  text-shadow:0 1px 0 var(--edge); /* crisp, no blur */
+}
+.pad small{text-shadow:0 1px 0 var(--edge)}
+
+/* ---- optical centring: the 3px edge under each button makes text look low ---- */
+.controls > *{padding-bottom:3px}
+.tools button{
+  height:44px;  /* same height as the top row */
+  padding:0 8px 3px;
+  font-size:1rem;
+  font-weight:600;
+  display:flex;align-items:center;justify-content:center;
+}
+.pad button{min-height:48px;padding-top:6px;padding-bottom:9px;justify-content:center}
+.pad.hide small{display:none} /* hidden counts no longer push the number up */
+
+/* ---- pressed: original dark look, pushed down (also Occurrence when on) ---- */
 button:active:not(:disabled),
 .tools button:active,
 .tools button[aria-pressed=true],
@@ -195,44 +214,12 @@ button:active:not(:disabled),
   box-shadow:
     inset 0 2px 4px rgba(0,0,0,.4),
     0 1px 0 var(--edge);
+  text-shadow:0 1px 0 rgba(0,0,0,.55); /* light text on dark fill: edge flips to dark */
 }
 .controls select[aria-pressed=true]{
   background-image:
     linear-gradient(45deg,transparent 50%,currentColor 50%),
     linear-gradient(135deg,currentColor 50%,transparent 50%);
-}
-
-/* disabled buttons lie flat */
-button:disabled{
-  opacity:.6;  /* was .3: higher = more legible */
-  box-shadow:none;
-  transform:none;
-  background-image:none;
-}
-
-/* button text gets a small grey edge, like the button's own thickness */
-button,
-.controls select{
-  text-shadow:
-    0 1px 0 var(--edge),            /* solid edge under the letters */
-    0 2px 2px rgba(0,0,0,.18);      /* soft shadow under that */
-}
-.pad small{
-  text-shadow:0 1px 0 var(--edge);
-}
-
-/* optical centring: the 3px edge under the button makes text look low, so lift it slightly */
-.controls > *,
-.tools button{padding-bottom:3px}
-.pad button{min-height:48px;padding-top:6px;padding-bottom:9px;justify-content:center}
-.pad.hide small{display:none}       /* hidden counts no longer push the number up */
-
-/* pressed: light text on the dark fill, so the edge flips to a dark line */
-button:active:not(:disabled),
-.tools button:active,
-.tools button[aria-pressed=true],
-.controls [aria-pressed=true]{
-  text-shadow:0 1px 0 rgba(0,0,0,.55);
 }
 
 /* dark theme: pressed fill is light, so the text is dark there */
@@ -245,8 +232,14 @@ button:active:not(:disabled),
   }
 }
 
-/* disabled buttons: no effect, so they stay legible */
-button:disabled{text-shadow:none}
+/* ---- disabled: flat, no text effect, still legible ---- */
+button:disabled{
+  opacity:.6;  /* was .3: higher = more legible */
+  box-shadow:none;
+  transform:none;
+  background-image:none;
+  text-shadow:none;
+}
 </style>
 </head>
 <body>
