@@ -254,16 +254,6 @@ function place(n){
   if(n!==sol[sel])miss++;
   render();check();
 }
-
-/*
-function erase(){
-  if(over)return;
-  if(cur.every((v,i)=>v===giv[i]))return; // nothing entered, nothing to clear
-  snap();
-  cur=giv.slice(); // back to the given numbers only
-  render();
-}
-*/
   
 function erase(){
   if(over)return;
