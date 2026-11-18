@@ -106,6 +106,15 @@ body::before{
   content:"";position:fixed;inset:0;z-index:-1;
   background:var(--bg) var(--wall,none) center/cover no-repeat;
 }
+
+/* readable text over wallpapers: only applies once an image has loaded */
+body.wall h1,
+body.wall .stats,
+body.wall .help,
+body.wall main footer #footerText{
+  color:#fff;
+  text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 8px rgba(0,0,0,.6);
+}  
 </style>
 </head>
 <body>
@@ -205,8 +214,18 @@ function setWallpaper(i){
     do{n=Math.random()*WALLS.length|0}while(n===wallIdx&&WALLS.length>1);
   }
   wallIdx=n;
-  document.documentElement.style.setProperty('--wall','url("'+WALLS[n]+'")');
+  const img=new Image();
+  img.onload=()=>{
+    document.documentElement.style.setProperty('--wall','url("'+WALLS[n]+'")');
+    document.body.classList.add('wall');      // white text switches on with the photo
+  };
+  img.onerror=()=>{
+    document.documentElement.style.setProperty('--wall','none');
+    document.body.classList.remove('wall');   // missing file: back to green + dark text
+  };
+  img.src=WALLS[n];
 }
+  
 const pop=m=>{let n=0;while(m){m&=m-1;n++}return n};
 const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 
