@@ -88,7 +88,7 @@ button:disabled{opacity:.3;cursor:default}
 #rulesBtn{position:relative;z-index:21}
 
 /* Popups (rules + scores): card sits near the top, background is lightly blurred */
-#rules,#scores{
+#rules,#scores,#confirm {
   position:fixed;inset:0;z-index:20;
   display:flex;align-items:flex-start;justify-content:center;
   padding:150px 16px 16px;               /* lower this number to raise the card further */
@@ -280,6 +280,10 @@ button:disabled{
   color:var(--onfg);
   border-color:var(--on);
 }
+
+#confirm{z-index:22} /* above the Info/Close button */
+#confirm .rules-card{max-width:340px}
+#confirm p{margin:0 0 4px;line-height:1.5}  
   
 </style>
 </head>
@@ -365,6 +369,16 @@ button:disabled{
       </ul>
     </div>
   </div>
+  <div id="confirm" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" hidden>
+  <div class="rules-card">
+    <h2 id="confirmTitle">Start a new game?</h2>
+    <p id="confirmMsg">Your current progress will be lost.</p>
+    <div class="score-actions">
+      <button id="confirmNo">Cancel</button>
+      <button id="confirmYes">New game</button>
+    </div>
+  </div>
+</div>
 </main>
 <script>
 document.getElementById('year').textContent = new Date().getFullYear();
@@ -578,15 +592,39 @@ $('#new').onclick=newGame;
 $('#again').onclick=newGame;
 // $('#lvl').onchange=newGame;
 
+/* ---- in-page confirm popup (replaces the browser's confirm box) ---- */
+let confirmDone=null;
+function askConfirm(title,msg,yesText,cb){
+  $('#confirmTitle').textContent=title;
+  $('#confirmMsg').textContent=msg;
+  $('#confirmYes').textContent=yesText;
+  confirmDone=cb;
+  $('#confirm').hidden=false;
+  $('#confirmNo').focus();
+}
+function closeConfirm(ok){
+  $('#confirm').hidden=true;
+  const f=confirmDone;confirmDone=null;
+  if(f)f(ok);
+}
+$('#confirmYes').onclick=()=>closeConfirm(true);
+$('#confirmNo').onclick=()=>closeConfirm(false);
+$('#confirm').addEventListener('click',e=>{if(e.target.id==='confirm')closeConfirm(false)});
+
 let lastLvl;
 $('#lvl').onchange=()=>{
-  const started=!over&&cur.some((v,i)=>v!==giv[i]); // any number entered yet?
-  if(started&&!confirm('Start a new game? Your current progress will be lost.')){
-    $('#lvl').value=lastLvl; // cancelled: put the old level back
-    return;
-  }
-  newGame();
+  const started=!over&&cur.some((v,i)=>v!==giv[i]);
+  if(!started){newGame();return}
+  askConfirm('Change level?','Your current progress will be lost.','New game',ok=>{
+    if(ok)newGame();else $('#lvl').value=lastLvl;     // cancelled: restore the old level
+  });
 };
+
+$('#new').onclick=()=>{
+  const started=!over&&cur.some((v,i)=>v!==giv[i]);
+  if(!started){newGame();return}
+  askConfirm('Start a new game?','Your current progress will be lost.','New game',ok=>{if(ok)newGame()});
+};  
   
 document.addEventListener('keydown',e=>{
   if(e.target.tagName==='SELECT'||e.ctrlKey||e.metaKey||e.altKey)return;
