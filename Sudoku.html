@@ -503,6 +503,13 @@ function erase(){
   render();
 }
 
+function eraseCell(){
+  if(over||sel<0||giv[sel]||!cur[sel])return;   // nothing selected, a given, or already empty
+  snap();
+  cur[sel]=0;
+  render();
+}
+  
 function undo(){
   if(over||!hist.length)return;
   [cur,miss]=hist.pop();render();
@@ -616,7 +623,7 @@ document.addEventListener('keydown',e=>{
   if(e.target.tagName==='SELECT'||e.ctrlKey||e.metaKey||e.altKey)return;
   const k=e.key;
   if(/^[1-9]$/.test(k)){place(+k);e.preventDefault()}
-  else if(k==='Backspace'||k==='Delete'||k==='0'){erase();e.preventDefault()}
+  else if(k==='Backspace'||k==='Delete'){eraseCell();e.preventDefault()}
   else if(k==='u'||k==='U'){undo()}
   else if(k==='h'||k==='H'){hint()}
   else if(k.startsWith('Arrow')){
