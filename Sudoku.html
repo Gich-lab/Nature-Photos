@@ -218,7 +218,8 @@ function count(g,lim){
   for(const v of vals(m)){g[b]=v;t+=count(g,lim-t);if(t>=lim)break}
   g[b]=0;return t;
 }
-const CLUES={easy:40,medium:32,hard:26};
+/*const CLUES={easy:40,medium:32,hard:26};*/
+const HINT_MAX={easy:5,medium:3,hard:2};   // adjust to preference
 function generate(level){
   const s=Array(81).fill(0);fill(s);
   const p=s.slice();let left=81;
@@ -273,7 +274,7 @@ function undo(){
   [cur,miss]=hist.pop();render();
 }
 function hint(){
-  if(over)return;
+  if(over||hints>=HINT_MAX[$('#lvl').value])return;
   let t=-1;
   if(sel>=0&&!giv[sel]&&cur[sel]!==sol[sel])t=sel;
   else{
@@ -323,6 +324,9 @@ function render(){
   $('#pad').innerHTML=ph;
   $('#pad').classList.toggle('hide',!showCounts);
   $('#counts').setAttribute('aria-pressed',showCounts);
+  const left=HINT_MAX[$('#lvl').value]-hints;
+  $('#hint').textContent='Hint ('+Math.max(left,0)+')';
+  $('#hint').disabled=left<=0;
   top_();
   save();
 }
