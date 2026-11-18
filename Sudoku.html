@@ -240,6 +240,47 @@ button:disabled{
   background-image:none;
   text-shadow:none;
 }
+
+/* Occurence button transition effects */
+/* Occurrence: dark fill wipes in from the centre when toggled on */
+#counts{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;                 /* keeps the circle behind the text, above the button face */
+  transition:transform .06s,box-shadow .06s,color .3s .1s,border-color .3s;
+}
+
+/* the circle (grows from 0 to cover the whole button, even when it is wide) */
+#counts::before{
+  content:"";
+  position:absolute;left:50%;top:50%;
+  width:140%;aspect-ratio:1;
+  border-radius:50%;
+  background:var(--on);
+  transform:translate(-50%,-50%) scale(0);
+  transition:transform 400ms cubic-bezier(.8,0,.2,1);   /* same easing as btn-121 */
+  z-index:-1;
+  pointer-events:none;
+}
+#counts[aria-pressed=true]::before{
+  transform:translate(-50%,-50%) scale(1);
+}
+
+/* the face stays light; the circle supplies the dark. Text colour follows the state. */
+#counts,
+#counts:active:not(:disabled){
+  background-color:var(--btn);
+  background-image:var(--shade);
+  color:var(--ink);
+}
+#counts[aria-pressed=true],
+#counts[aria-pressed=true]:active:not(:disabled){
+  background-color:var(--btn);
+  background-image:var(--shade);
+  color:var(--onfg);
+  border-color:var(--on);
+}
+  
 </style>
 </head>
 <body>
