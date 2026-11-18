@@ -218,7 +218,7 @@ function count(g,lim){
   for(const v of vals(m)){g[b]=v;t+=count(g,lim-t);if(t>=lim)break}
   g[b]=0;return t;
 }
-const CLUES={easy:40,medium:32,hard:26};
+const CLUES={easy:40,medium:32,hard:26}; //sets how many numbers are pre-filled at the start of a puzzle, for each difficulty level.
 const HINT_MAX={easy:5,medium:3,hard:2};   // adjust to preference
 function generate(level){
   const s=Array(81).fill(0);fill(s);
