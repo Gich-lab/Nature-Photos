@@ -142,6 +142,36 @@ body{
     text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 8px rgba(0,0,0,.6);
   }
 }
+
+/* 3D buttons: raised edge, pushed down while pressed */
+:root{--edge:#a9b5c6}
+@media(prefers-color-scheme:dark){:root{--edge:#060a14}}
+
+button,
+.controls select{
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.7),     /* light top rim */
+    0 3px 0 var(--edge),                    /* solid bottom edge = thickness */
+    0 5px 8px rgba(0,0,0,.2);               /* soft shadow underneath */
+  transition:transform .06s,box-shadow .06s;
+}
+
+/* pressed: Info, dropdown, New game, Undo, Erase, Hint, number pad, and the Occurrence toggle when on */
+button:active:not(:disabled),
+button[aria-pressed=true],
+.controls select[aria-pressed=true]{
+  transform:translateY(2px);
+  box-shadow:
+    inset 0 1px 3px rgba(0,0,0,.25),
+    0 1px 0 var(--edge),
+    0 2px 3px rgba(0,0,0,.2);
+}
+
+/* disabled buttons (used-up numbers, Hint at 0) lie flat */
+button:disabled{
+  box-shadow:none;
+  transform:none;
+}
 </style>
 </head>
 <body>
