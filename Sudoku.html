@@ -101,6 +101,11 @@ button:disabled{opacity:.3;cursor:default}
 .scores-open{width:100%;height:44px;margin-top:12px;font-weight:600}
 
 @media(max-width:400px){h1{font-size:1.35rem}}
+/* background wallpapers*/
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;
+  background:var(--bg) var(--wall,none) center/cover no-repeat;
+}
 </style>
 </head>
 <body>
@@ -190,6 +195,18 @@ button:disabled{opacity:.3;cursor:default}
 document.getElementById('year').textContent = new Date().getFullYear();
 
 const $=s=>document.querySelector(s);
+
+const WALLS=Array.from({length:12},(_,i)=>'sudoku_wallpapers/img'+(i+1)+'.jpg');
+let wallIdx=-1;
+function setWallpaper(i){
+  if(!WALLS.length)return;
+  let n=i;
+  if(n===undefined||n<0||n>=WALLS.length){
+    do{n=Math.random()*WALLS.length|0}while(n===wallIdx&&WALLS.length>1);
+  }
+  wallIdx=n;
+  document.documentElement.style.setProperty('--wall','url("'+WALLS[n]+'")');
+}
 const pop=m=>{let n=0;while(m){m&=m-1;n++}return n};
 const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 
@@ -459,7 +476,7 @@ function save(){
   try{
     if(over){localStorage.removeItem(KEY);return}
     localStorage.setItem(KEY,JSON.stringify({
-      sol,giv,cur,hist,secs,miss,hints,sel,showCounts,lvl:$('#lvl').value
+      sol,giv,cur,hist,secs,miss,hints,sel,showCounts,wallIdx,lvl:$('#lvl').value
     }));
   }catch(e){}
 }
@@ -471,6 +488,7 @@ function load(){
     if(d.cur.every((v,i)=>v===d.sol[i]))return false;   // finished game: don't resume
     ({sol,giv,cur,hist,secs,miss,hints,sel,showCounts}=d);
     over=false;
+    setWallpaper(d.wallIdx);
     $('#lvl').value=d.lvl;
     return true;
   }catch(e){return false}
@@ -485,6 +503,7 @@ if(load()){
   tm=setInterval(()=>{if(!over&&!document.hidden){secs++;top_()}},1000);
   render();
 }else{
+  setWallpaper();
   newGame();
 }
 </script>
