@@ -21,7 +21,6 @@ h1{margin:0;font-size:1.7rem;font-weight:800;letter-spacing:-.03em;text-align:ce
 
 select,button{font:inherit;color:var(--ink);background:var(--btn);border:1.5px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer}
 /* hover only on devices that really hover (avoids sticky hover on touch screens) */
-/* @media (hover:hover){button:hover:not(:disabled){border-color:var(--box)}} */
 @media (hover:hover){
   button:hover:not(:disabled):not(:active),
   .controls select:hover:not([aria-pressed=true]){
@@ -87,8 +86,8 @@ button:disabled{opacity:.3;cursor:default}
 /* Info/Close button stays above the blurred overlay */
 #rulesBtn{position:relative;z-index:21}
 
-/* Popups (rules + scores): card sits near the top, background is lightly blurred */
-#rules,#scores,#confirm {
+/* Popups (rules + scores + confirm): card sits near the top, background is lightly blurred */
+#rules,#scores,#confirm{
   position:fixed;inset:0;z-index:20;
   display:flex;align-items:flex-start;justify-content:center;
   padding:150px 16px 16px;               /* lower this number to raise the card further */
@@ -127,25 +126,14 @@ body::before{
   background-repeat:no-repeat;
 }
 
-/* keep content clear of the notch/clock and the bottom bar (0 on desktop) */
 /* keep content clear of the notch and the bottom bar (0 on desktop) */
 body{
   padding-top:max(16px,env(safe-area-inset-top));
   padding-bottom:max(16px,env(safe-area-inset-bottom));
 }
 
-/* wallpaper and white text: landscape / desktop only */
+/* white text over the wallpaper: landscape / desktop only */
 @media (orientation:landscape){
-  body::before{
-    content:"";position:fixed;inset:0;
-    min-height:100lvh;
-    z-index:-1;
-    background-color:var(--bg);
-    background-image:var(--wall,none);
-    background-size:cover;
-    background-position:var(--wallpos,center);
-    background-repeat:no-repeat;
-  }
   body.wall h1,
   body.wall .stats,
   body.wall .help,
@@ -241,7 +229,6 @@ button:disabled{
   text-shadow:none;
 }
 
-/* Occurence button transition effects */
 /* Occurrence: dark fill wipes in from the centre when toggled on */
 #counts{
   position:relative;
@@ -281,10 +268,10 @@ button:disabled{
   border-color:var(--on);
 }
 
+/* confirm popup */
 #confirm{z-index:22} /* above the Info/Close button */
 #confirm .rules-card{max-width:340px}
-#confirm p{margin:0 0 4px;line-height:1.5}  
-  
+#confirm p{margin:0 0 4px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -362,7 +349,7 @@ button:disabled{
         <li>Sudoku is a logic puzzle: every cell has exactly one solution and you can find it by deduction alone. No guessing or math is needed.</li>
         <li>Fill the grid so every row, column and 3×3 box has the numbers 1 to 9, once each.</li>
         <li>The bold numbers are given and can't be changed.</li>
-        <li>Tap a cell, then tap a number. Wrong numbers turn red.</li>        
+        <li>Tap a cell, then tap a number. Wrong numbers turn red.</li>
         <li>The grey area around a selected cell is where the number cannot be repeated.</li>
         <li>Stuck? Use Hint. Made a slip? Use Undo or Erase.</li>
         <li>Karibu kwenye huu mchezo! 😀</li>
@@ -370,24 +357,25 @@ button:disabled{
     </div>
   </div>
   <div id="confirm" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" hidden>
-  <div class="rules-card">
-    <h2 id="confirmTitle">Start a new game?</h2>
-    <p id="confirmMsg">Your current progress will be lost.</p>
-    <div class="score-actions">
-      <button id="confirmNo">Cancel</button>
-      <button id="confirmYes">New game</button>
+    <div class="rules-card">
+      <h2 id="confirmTitle">Start a new game?</h2>
+      <p id="confirmMsg">Your current progress will be lost.</p>
+      <div class="score-actions">
+        <button id="confirmNo">Cancel</button>
+        <button id="confirmYes">New game</button>
+      </div>
     </div>
   </div>
-</div>
 </main>
 <script>
 document.getElementById('year').textContent = new Date().getFullYear();
 
 const $=s=>document.querySelector(s);
 
+/* ---- wallpapers (landscape / desktop only) ---- */
 const WALLS=Array.from({length:10},(_,i)=>'sudoku_wallpapers/img'+(i+1));
 const WALL_EXT=['jpg','jpeg','png','webp','JPG','JPEG','PNG'];
-const WALLPOS={1:'30% 50%',4:'70% 40%'};
+const WALLPOS={1:'30% 50%',4:'70% 40%'};   // image number: 'x y'; any image not listed uses center
 const landscape=()=>matchMedia('(orientation:landscape)').matches;
 let wallIdx=-1;
 function setWallpaper(i,bad){
@@ -429,7 +417,7 @@ function setWallpaper(i,bad){
   };
   img.src=WALLS[n]+'.'+WALL_EXT[0];
 }
-  
+
 const pop=m=>{let n=0;while(m){m&=m-1;n++}return n};
 const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 
@@ -458,11 +446,11 @@ function count(g,lim){
   for(const v of vals(m)){g[b]=v;t+=count(g,lim-t);if(t>=lim)break}
   g[b]=0;return t;
 }
-const CLUES={easy:40,medium:32,hard:26}; //sets how many numbers are pre-filled at the start of a puzzle, for each difficulty level.
-const HINT_MAX={easy:5,medium:3,hard:2};   // adjust to preference
-// This is the game logic 
-// It builds a finished Sudoku, then erases numbers one at a time until the puzzle is as hard as the chosen level asks for
-function generate(level){ 
+const CLUES={easy:40,medium:32,hard:26};   // how many numbers are pre-filled at the start, per level
+const HINT_MAX={easy:5,medium:3,hard:2};   // hints allowed per game, per level
+// The game logic: build a finished Sudoku, then erase numbers one at a time
+// (keeping exactly one solution) until the level's clue target is reached.
+function generate(level){
   const s=Array(81).fill(0);fill(s);
   const p=s.slice();let left=81;
   for(const i of shuf([...Array(81).keys()])){
@@ -475,6 +463,7 @@ function generate(level){
 
 /* ---- game state ---- */
 let showCounts=false,sol,giv,cur,sel=-1,hist=[],secs=0,tm,miss=0,hints=0,over=false;
+let lastLvl;   // level of the game being played, used to undo a cancelled level change
 const fmt=s=>String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
 const snap=()=>{hist.push([cur.slice(),miss]);if(hist.length>200)hist.shift()};
 
@@ -487,12 +476,12 @@ function newGame(){
   clearInterval(tm);tm=setInterval(()=>{if(!over&&!document.hidden){secs++;top_()}},1000);
   render();
 }
-  
+
 function top_(){
   $('#time').textContent=fmt(secs);
   $('#info').textContent='Mistakes: '+miss+'   Hints: '+hints;
 }
-  
+
 function place(n){
   if(over||sel<0||giv[sel])return;
   if(cur[sel]===n)return;
@@ -500,7 +489,7 @@ function place(n){
   if(n!==sol[sel])miss++;
   render();check();
 }
-  
+
 function erase(){
   if(over)return;
   if(cur.every((v,i)=>v===giv[i])){
@@ -510,10 +499,10 @@ function erase(){
   }
   snap();
   cur=giv.slice(); // back to the given numbers only
-  sel=-1; // same reset New game does: removes the grey highlight
+  sel=-1;  // same reset New game does: removes the grey highlight
   render();
 }
-  
+
 function undo(){
   if(over||!hist.length)return;
   [cur,miss]=hist.pop();render();
@@ -572,25 +561,10 @@ function render(){
   const left=HINT_MAX[$('#lvl').value]-hints;
   $('#hint').textContent='Hint ('+Math.max(left,0)+')';
   $('#hint').disabled=left<=0;
+  lastLvl=$('#lvl').value;
   top_();
   save();
 }
-
-/* ---- events ---- */
-$('#board').addEventListener('click',e=>{
-  const c=e.target.closest('.c');if(!c)return;
-  sel=+c.dataset.i;render();
-});
-$('#pad').addEventListener('click',e=>{
-  const b=e.target.closest('button');if(b)place(+b.dataset.n);
-});
-$('#undo').onclick=undo;
-$('#erase').onclick=erase;
-$('#hint').onclick=hint;
-$('#counts').onclick=()=>{showCounts=!showCounts;render()};
-$('#new').onclick=newGame;
-$('#again').onclick=newGame;
-// $('#lvl').onchange=newGame;
 
 /* ---- in-page confirm popup (replaces the browser's confirm box) ---- */
 let confirmDone=null;
@@ -611,21 +585,33 @@ $('#confirmYes').onclick=()=>closeConfirm(true);
 $('#confirmNo').onclick=()=>closeConfirm(false);
 $('#confirm').addEventListener('click',e=>{if(e.target.id==='confirm')closeConfirm(false)});
 
-let lastLvl;
+/* ---- events ---- */
+const started=()=>!over&&cur.some((v,i)=>v!==giv[i]);   // has the player entered anything yet?
+
+$('#board').addEventListener('click',e=>{
+  const c=e.target.closest('.c');if(!c)return;
+  sel=+c.dataset.i;render();
+});
+$('#pad').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(b)place(+b.dataset.n);
+});
+$('#undo').onclick=undo;
+$('#erase').onclick=erase;
+$('#hint').onclick=hint;
+$('#counts').onclick=()=>{showCounts=!showCounts;render()};
+$('#again').onclick=newGame;
+
+$('#new').onclick=()=>{
+  if(!started()){newGame();return}
+  askConfirm('Start a new game?','Your current progress will be lost.','New game',ok=>{if(ok)newGame()});
+};
 $('#lvl').onchange=()=>{
-  const started=!over&&cur.some((v,i)=>v!==giv[i]);
-  if(!started){newGame();return}
+  if(!started()){newGame();return}
   askConfirm('Change level?','Your current progress will be lost.','New game',ok=>{
     if(ok)newGame();else $('#lvl').value=lastLvl;     // cancelled: restore the old level
   });
 };
 
-$('#new').onclick=()=>{
-  const started=!over&&cur.some((v,i)=>v!==giv[i]);
-  if(!started){newGame();return}
-  askConfirm('Start a new game?','Your current progress will be lost.','New game',ok=>{if(ok)newGame()});
-};  
-  
 document.addEventListener('keydown',e=>{
   if(e.target.tagName==='SELECT'||e.ctrlKey||e.metaKey||e.altKey)return;
   const k=e.key;
@@ -672,7 +658,7 @@ $('#rules').addEventListener('click',e=>{if(e.target.id==='rules')toggleRules(fa
 /* ---- score history (kept on this device) + Google Sheet ---- */
 const SKEY='sudoku-scores-v1';
 const SHEET_URL='https://script.google.com/macros/s/AKfycbw5de0Er6QRgCsN2q30NeMwhEGOuzAEwAyYShUrYFD9SSzg3VLerJ5-EOLr8IsPugjEzA/exec';
-const SHEET_KEY='chezeshaubongo';   // equal SECRET in your Apps Script
+const SHEET_KEY='chezeshaubongo';  
 
 const getScores=()=>{try{return JSON.parse(localStorage.getItem(SKEY))||[]}catch(e){return[]}};
 const fmtDate=ts=>{
@@ -687,7 +673,7 @@ const deviceId=(()=>{
     return id;
   }catch(e){return'unknown'}
 })();
-  
+
 function sendToSheet(r){
   if(!SHEET_URL)return;
   fetch(SHEET_URL,{
@@ -697,7 +683,7 @@ function sendToSheet(r){
       seconds:r.t,mistakes:r.m,hints:r.h,when:fmtDate(r.at)})
   }).catch(()=>{});
 }
-  
+
 function saveScore(){
   const rec={t:secs,m:miss,h:hints,lvl:$('#lvl').value,at:Date.now()};
   try{
@@ -707,7 +693,7 @@ function saveScore(){
   }catch(e){}
   sendToSheet(rec);
 }
-  
+
 function showScores(open){
   $('#scores').hidden=!open;
   if(!open)return;
@@ -723,14 +709,19 @@ $('#scoresBtn').onclick=()=>{toggleRules(false);showScores(true)};
 $('#scoresClose').onclick=()=>showScores(false);
 $('#scores').addEventListener('click',e=>{if(e.target.id==='scores')showScores(false)});
 $('#scoresClear').onclick=()=>{
-  if(confirm('Delete all saved scores on this device?')){localStorage.removeItem(SKEY);showScores(true)}
+  askConfirm('Clear scores?','All saved scores on this device will be deleted.','Clear',ok=>{
+    if(ok){localStorage.removeItem(SKEY);showScores(true)}
+  });
 };
 
 // while a popup is open: Esc closes it and keys don't reach the game behind it
 document.addEventListener('keydown',e=>{
-  if($('#rules').hidden&&$('#scores').hidden)return;
+  if($('#rules').hidden&&$('#scores').hidden&&$('#confirm').hidden)return;
   e.stopImmediatePropagation();
-  if(e.key==='Escape'){toggleRules(false);showScores(false)}
+  if(e.key==='Escape'){
+    if(!$('#confirm').hidden)closeConfirm(false);
+    else{toggleRules(false);showScores(false)}
+  }
 },true);
 
 /* ---- save and resume ---- */
@@ -763,14 +754,13 @@ addEventListener('pagehide',save);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)save()});
 // rotating the device switches between wallpaper and plain green
 matchMedia('(orientation:landscape)').addEventListener('change',()=>setWallpaper(wallIdx));
-  
+
 if(load()){
   clearInterval(tm);
   tm=setInterval(()=>{if(!over&&!document.hidden){secs++;top_()}},1000);
   render();
 }else{
-  setWallpaper();
-  newGame();
+  newGame();   // newGame() already picks the wallpaper
 }
 </script>
 </body>
