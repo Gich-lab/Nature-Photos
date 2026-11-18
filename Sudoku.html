@@ -23,13 +23,15 @@ select,button{font:inherit;color:var(--ink);background:var(--btn);border:1.5px s
 /* hover only on devices that really hover (avoids sticky hover on touch screens) */
 /* @media (hover:hover){button:hover:not(:disabled){border-color:var(--box)}} */
 @media (hover:hover){
-  button:hover:not(:disabled){
-    border-color:var(--line);
+  button:hover:not(:disabled):not(:active),
+  .controls select:hover:not([aria-pressed=true]){
+    border-color:#2563d6;
     box-shadow:
+      0 0 0 3px rgba(37,99,214,.55),          /* blue ring, drawn on top */
+      0 0 14px 4px rgba(37,99,214,.45),       /* soft outer glow */
       inset 0 1px 0 rgba(255,255,255,.8),
       inset 0 -2px 3px rgba(0,0,0,.12),
-      0 3px 0 var(--edge),
-      0 0 0 3px rgba(37,99,214,.25);
+      0 3px 0 var(--edge);
   }
 }
 button:focus-visible,select:focus-visible,.c:focus-visible{outline:3px solid var(--user);outline-offset:1px}
