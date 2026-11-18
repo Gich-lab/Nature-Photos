@@ -256,6 +256,7 @@ const fmt=s=>String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
 const snap=()=>{hist.push([cur.slice(),miss]);if(hist.length>200)hist.shift()};
 
 function newGame(){
+  setWallpaper();
   const[s,p]=generate($('#lvl').value);
   sol=s;giv=p.slice();cur=p.slice();
   hist=[];sel=-1;miss=0;hints=0;over=false;secs=0;
@@ -263,10 +264,12 @@ function newGame(){
   clearInterval(tm);tm=setInterval(()=>{if(!over&&!document.hidden){secs++;top_()}},1000);
   render();
 }
+  
 function top_(){
   $('#time').textContent=fmt(secs);
   $('#info').textContent='Mistakes: '+miss+'   Hints: '+hints;
 }
+  
 function place(n){
   if(over||sel<0||giv[sel])return;
   if(cur[sel]===n)return;
@@ -426,6 +429,7 @@ const deviceId=(()=>{
     return id;
   }catch(e){return'unknown'}
 })();
+  
 function sendToSheet(r){
   if(!SHEET_URL)return;
   fetch(SHEET_URL,{
@@ -435,6 +439,7 @@ function sendToSheet(r){
       seconds:r.t,mistakes:r.m,hints:r.h,when:fmtDate(r.at)})
   }).catch(()=>{});
 }
+  
 function saveScore(){
   const rec={t:secs,m:miss,h:hints,lvl:$('#lvl').value,at:Date.now()};
   try{
@@ -444,6 +449,7 @@ function saveScore(){
   }catch(e){}
   sendToSheet(rec);
 }
+  
 function showScores(open){
   $('#scores').hidden=!open;
   if(!open)return;
