@@ -219,7 +219,7 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
 const $=s=>document.querySelector(s);
 
-const WALLS=Array.from({length:12},(_,i)=>'sudoku_wallpapers/img'+(i+1)+'.jpg');
+const WALLS=Array.from({length:10},(_,i)=>'sudoku_wallpapers/img'+(i+1)+'.jpg');
 const WALLPOS={1:'30% 50%',4:'70% 40%'};   // image number: 'x y'; any image not listed uses center
 let wallIdx=-1;
 function setWallpaper(i){
