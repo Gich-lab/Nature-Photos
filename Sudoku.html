@@ -255,6 +255,7 @@ function place(n){
   render();check();
 }
 
+/*
 function erase(){
   if(over)return;
   if(cur.every((v,i)=>v===giv[i]))return; // nothing entered, nothing to clear
@@ -262,7 +263,21 @@ function erase(){
   cur=giv.slice(); // back to the given numbers only
   render();
 }
-
+*/
+  
+function erase(){
+  if(over)return;
+  if(cur.every((v,i)=>v===giv[i])){
+    // nothing entered, but still clear the highlight
+    if(sel>=0){sel=-1;render()}
+    return;
+  }
+  snap();
+  cur=giv.slice(); // back to the given numbers only
+  sel=-1; // same reset New game does: removes the grey highlight
+  render();
+}
+  
 function undo(){
   if(over||!hist.length)return;
   [cur,miss]=hist.pop();render();
