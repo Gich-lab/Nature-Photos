@@ -23,14 +23,13 @@ select,button{font:inherit;color:var(--ink);background:var(--btn);border:1.5px s
 /* hover only on devices that really hover (avoids sticky hover on touch screens) */
 /* @media (hover:hover){button:hover:not(:disabled){border-color:var(--box)}} */
 @media (hover:hover){
-  button:hover:not(:disabled):not(:active){
+  button:hover:not(:disabled){
     border-color:var(--line);
-    transform:translateY(-1px);
     box-shadow:
       inset 0 1px 0 rgba(255,255,255,.8),
       inset 0 -2px 3px rgba(0,0,0,.12),
-      0 4px 0 var(--edge),
-      0 7px 9px rgba(0,0,0,.22);
+      0 3px 0 var(--edge),
+      0 0 0 3px rgba(37,99,214,.25);
   }
 }
 button:focus-visible,select:focus-visible,.c:focus-visible{outline:3px solid var(--user);outline-offset:1px}
