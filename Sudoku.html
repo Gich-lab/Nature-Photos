@@ -48,6 +48,75 @@ button:disabled{opacity:.3;cursor:default}
 }
 
 .stats{display:flex;justify-content:space-between;color:var(--mute);font-size:.9rem;margin-bottom:8px;font-variant-numeric:tabular-nums}
+
+/* ======================================================
+   Animated runner around the Sudoku board
+   ====================================================== */
+
+.sudoku-frame{
+    position:relative;
+    width:100%;
+    padding:3px;
+    border-radius:8px;
+    overflow:hidden;
+
+    box-shadow:
+        0 0 12px rgba(34,211,238,.35),
+        0 0 24px rgba(34,211,238,.20);
+}
+
+/* moving light around the outer edge */
+.sudoku-frame::before{
+    content:"";
+    position:absolute;
+
+    left:-150%;
+    top:-150%;
+
+    width:400%;
+    height:400%;
+
+    background:
+        conic-gradient(
+            from 0deg,
+            transparent 0deg,
+            transparent 320deg,
+            #22d3ee 332deg,
+            #ffffff 346deg,
+            #22d3ee 360deg
+        );
+
+    animation:borderRunner 2.5s linear infinite;
+    z-index:0;
+}
+
+/* covers the center, leaving only the border visible */
+.sudoku-frame::after{
+    content:"";
+    position:absolute;
+    inset:3px;
+
+    background:#000;
+
+    border-radius:5px;
+    z-index:1;
+}
+
+/* board stays above the animation */
+#board{
+    position:relative;
+    z-index:2;
+}
+
+@keyframes borderRunner{
+    from{
+        transform:rotate(0deg);
+    }
+    to{
+        transform:rotate(360deg);
+    }
+}
+  
 #board{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));grid-template-rows:repeat(9,minmax(0,1fr));aspect-ratio:1;background:var(--panel);border:3px solid var(--box);border-radius:6px;overflow:hidden;user-select:none;touch-action:manipulation}
 #board{--panel:#000;--ink:#fff;--line:#22d3ee;--box:#fff;--sel:#7a7a7a;--peer:#3d3d3d;--same:#5c5c5c;--user:#7fb0ff;--bad:#ff8a8a;--badbg:#5a1f1f;color:#fff}
 #board{width:100%}
@@ -331,7 +400,11 @@ button:disabled{
     </div>
   </header>
   <div class="stats"><span id="time">00:00</span><span id="info"></span></div>
-  <div id="board" role="grid" aria-label="Sudoku board"></div>
+  
+  <div class="sudoku-frame">
+    <div id="board" role="grid" aria-label="Sudoku board"></div>    
+  </div>
+  
   <div class="tools">
     <button id="undo">Undo</button>
     <button id="erase">Erase</button>
