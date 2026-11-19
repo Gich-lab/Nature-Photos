@@ -622,11 +622,12 @@ $('#lvl').onchange=()=>{
 };
 
 document.addEventListener('keydown',e=>{
-  console.log('KEY',e.key,e.target.tagName,e.target.className); //to remove after checks
+  console.log('KEY',JSON.stringify(e.key),e.code,e.keyCode);//to remove after checks
   if(e.target.tagName==='SELECT'||e.ctrlKey||e.metaKey||e.altKey)return;
   const k=e.key;
   if(/^[1-9]$/.test(k)){place(+k);e.preventDefault()}
-  else if(k==='Backspace'||k==='Delete'){eraseCell();e.preventDefault()}
+  //else if(k==='Backspace'||k==='Delete'){eraseCell();e.preventDefault()}
+  else if(k==='Backspace'||k==='Delete'||e.code==='Backspace'||e.code==='Delete'||e.keyCode===8||e.keyCode===46){eraseCell();e.preventDefault()}
   else if(k==='u'||k==='U'){undo()}
   else if(k==='h'||k==='H'){hint()}
   else if(k.startsWith('Arrow')){
