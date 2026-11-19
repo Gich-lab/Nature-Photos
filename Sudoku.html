@@ -296,6 +296,23 @@ button:disabled{
   text-shadow:none;
 }
 .pad button.flash small{color:#ccc;text-shadow:none}  
+
+/* Past scores button doubles as a progress bar */
+#scoresBtn{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;                 /* keeps the fill behind the label */
+}
+#scoresBtn::before{
+  content:"";
+  position:absolute;left:0;top:0;bottom:0;
+  width:var(--p,0%);
+  background:linear-gradient(90deg,#34d399,#22d3ee);   /* green to cyan, matches the board lines */
+  box-shadow:inset 0 -6px 10px rgba(0,0,0,.12);        /* slight depth */
+  transition:width .8s cubic-bezier(.22,1,.36,1);      /* smooth glide to the new value */
+  z-index:-1;
+  pointer-events:none;
+}
 </style>
 </head>
 <body>
@@ -569,6 +586,16 @@ function check(){
   }
 }
 
+/* progress = correct numbers placed, out of the cells the player has to fill */
+function updateProgress(){
+  let total=0,ok=0;
+  for(let i=0;i<81;i++)if(!giv[i]){total++;if(cur[i]===sol[i])ok++}
+  const pct=total?Math.round(ok/total*100):0;
+  const b=$('#scoresBtn');
+  b.style.setProperty('--p',pct+'%');
+  b.title='Progress: '+pct+'%';
+}
+  
 /* ---- rendering ---- */
 function render(){
   const sv=sel>=0?cur[sel]:0,sr=sel/9|0,sc=sel%9;
@@ -606,6 +633,7 @@ function render(){
   lastLvl=$('#lvl').value;
   updateLvlBtn();
   top_();
+  updateProgress();
   save();
 }
 
