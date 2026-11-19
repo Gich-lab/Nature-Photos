@@ -640,7 +640,7 @@ $('#pad').addEventListener('click',e=>{
   const b=e.target.closest('button');if(b)place(+b.dataset.n);
 });
 */
-const FLASH_MS=700;   // how long a tapped number stays black (milliseconds)
+const FLASH_MS=500;   // how long a tapped number stays black (milliseconds)
 $('#pad').addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
   const n=+b.dataset.n;
