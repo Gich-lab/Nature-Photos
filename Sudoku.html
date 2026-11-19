@@ -187,7 +187,7 @@ button,
   display:flex;align-items:center;justify-content:center;
 }
 .pad button{min-height:48px;padding-top:6px;padding-bottom:9px;justify-content:center}
-.pad button{transition:background-color .9s,color .9s,box-shadow .9s}
+.pad button{transition:background-color .5s,color .5s,box-shadow .5s}   /* fade back to grey */
 .pad.hide small{display:none} /* hidden counts no longer push the number up */
 
 /* ---- pressed: original dark look, pushed down (also Occurrence when on) ---- */
@@ -286,6 +286,16 @@ button:disabled{
   color:var(--onfg);border-color:var(--on);
   text-shadow:0 1px 0 rgba(0,0,0,.55);
 }
+
+/* number pad: black at once on tap (no fade in), then the .5s fade above runs when the class is removed */
+.pad button.flash:not(:disabled){
+  transition:none;
+  background-color:#000;background-image:none;
+  color:#fff;border-color:#000;
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.4);
+  text-shadow:none;
+}
+.pad button.flash small{color:#ccc;text-shadow:none}  
 </style>
 </head>
 <body>
@@ -625,9 +635,20 @@ $('#board').addEventListener('click',e=>{
   const c=e.target.closest('.c');if(!c)return;
   sel=+c.dataset.i;render();
 });
+/*  
 $('#pad').addEventListener('click',e=>{
   const b=e.target.closest('button');if(b)place(+b.dataset.n);
 });
+*/
+const FLASH_MS=1500;   // how long a tapped number stays black (milliseconds)
+$('#pad').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  const n=+b.dataset.n;
+  place(n);
+  // the pad is redrawn on every tap, so mark the new button
+  const nb=document.querySelector('#pad button[data-n="'+n+'"]');
+  if(nb&&!nb.disabled){nb.classList.add('flash');setTimeout(()=>nb.classList.remove('flash'),FLASH_MS)}
+});  
 $('#undo').onclick=undo;
 $('#erase').onclick=erase;
 $('#hint').onclick=hint;
