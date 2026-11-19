@@ -187,6 +187,7 @@ button,
   display:flex;align-items:center;justify-content:center;
 }
 .pad button{min-height:48px;padding-top:6px;padding-bottom:9px;justify-content:center}
+.pad button{transition:background-color .5s,color .5s,box-shadow .5s}
 .pad.hide small{display:none} /* hidden counts no longer push the number up */
 
 /* ---- pressed: original dark look, pushed down (also Occurrence when on) ---- */
@@ -653,7 +654,7 @@ function showLevels(open){
   clearTimeout(levelsTimer);
   if(!open){
     if(box.hidden)return;
-    box.classList.add('fade');                       // fade out, then hide
+    box.classList.add('fade'); // fade out, then hide
     levelsTimer=setTimeout(()=>{box.hidden=true},250);
     return;
   }
@@ -674,7 +675,7 @@ $('#levels').addEventListener('click',e=>{
   showLevels(false);
   if(b.dataset.lvl===$('#lvl').value)return;   // same level: nothing to do
   $('#lvl').value=b.dataset.lvl;
-  $('#lvl').onchange();                        // starts a game, or asks first if one is in progress
+  $('#lvl').onchange();  // starts a game, or asks first if one is in progress
 });
 
 document.addEventListener('keydown',e=>{
@@ -723,7 +724,7 @@ $('#rules').addEventListener('click',e=>{if(e.target.id==='rules')toggleRules(fa
 /* ---- score history (kept on this device) + Google Sheet ---- */
 const SKEY='sudoku-scores-v1';
 const SHEET_URL='https://script.google.com/macros/s/AKfycbw5de0Er6QRgCsN2q30NeMwhEGOuzAEwAyYShUrYFD9SSzg3VLerJ5-EOLr8IsPugjEzA/exec';
-const SHEET_KEY='chezeshaubongo';   // equal SECRET in your Apps Script
+const SHEET_KEY='chezeshaubongo';   
 
 const getScores=()=>{try{return JSON.parse(localStorage.getItem(SKEY))||[]}catch(e){return[]}};
 const fmtDate=ts=>{
