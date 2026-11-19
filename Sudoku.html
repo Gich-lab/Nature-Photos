@@ -306,7 +306,7 @@ button:disabled{
     }
   </style>
   <div class="pad" id="pad"></div>
-  <p class="help">Tap a cell, then a number. On a keyboard: 1–9 to fill, arrow keys to move, Backspace to erase, U to undo, H for a hint.</p>
+  <p class="help">Tap a cell, then a number. On a keyboard: 1–9 to fill, arrow keys to move, Backspace to clear a cell, U to undo, H for a hint.</p>
   <button id="scoresBtn" class="scores-open" aria-haspopup="dialog">Past scores</button>
   <footer>
     <p id="footerText" class="footer">
@@ -504,7 +504,6 @@ function erase(){
 }
 
 function eraseCell(){
-  console.log('eraseCell called',sel,cur[sel],giv[sel]); // to remove after checks
   if(over||sel<0||giv[sel]||!cur[sel])return;   // nothing selected, a given, or already empty
   snap();
   cur[sel]=0;
@@ -537,7 +536,6 @@ function check(){
 
 /* ---- rendering ---- */
 function render(){
-  console.trace('render, cell value is',cur&&cur[sel]);
   const sv=sel>=0?cur[sel]:0,sr=sel/9|0,sc=sel%9;
   let h='';
   for(let i=0;i<81;i++){
@@ -622,12 +620,10 @@ $('#lvl').onchange=()=>{
 };
 
 document.addEventListener('keydown',e=>{
-  console.log('KEY',JSON.stringify(e.key),e.code,e.keyCode);//to remove after checks
   if(e.target.tagName==='SELECT'||e.ctrlKey||e.metaKey||e.altKey)return;
   const k=e.key;
   if(/^[1-9]$/.test(k)){place(+k);e.preventDefault()}
-  //else if(k==='Backspace'||k==='Delete'){eraseCell();e.preventDefault()}
-  else if(k==='Backspace'||k==='Delete'||e.code==='Backspace'||e.code==='Delete'||e.keyCode===8||e.keyCode===46){eraseCell();e.preventDefault()}
+  else if(k==='Backspace'||k==='Delete'){eraseCell();e.preventDefault()}
   else if(k==='u'||k==='U'){undo()}
   else if(k==='h'||k==='H'){hint()}
   else if(k.startsWith('Arrow')){
