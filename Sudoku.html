@@ -586,7 +586,7 @@ function check(){
   }
 }
 
-/* progress = correct numbers placed, out of the cells the player has to fill */
+/* progress = correct numbers placed, out of the cells the player has to fill 
 function updateProgress(){
   let total=0,ok=0;
   for(let i=0;i<81;i++)if(!giv[i]){total++;if(cur[i]===sol[i])ok++}
@@ -595,6 +595,41 @@ function updateProgress(){
   b.style.setProperty('--p',pct+'%');
   b.title='Progress: '+pct+'%';
 }
+*/
+
+/* progress = correct numbers placed, out of the cells the player has to fill */
+
+function updateProgress() {
+    let total = 0, ok = 0;
+
+    for (let i = 0; i < 81; i++) {
+        if (!giv[i]) {
+            total++;
+            if (cur[i] === sol[i]) ok++;
+        }
+    }
+
+    const pct = total ? Math.round((ok / total) * 100) : 0;
+
+    const b = $('#scoresBtn');
+    b.style.setProperty('--p', pct + '%');
+
+    // Percentage-based progress messages
+    let msg;
+    if (pct < 10) msg = 'Let’s begin..';
+    else if (pct < 20) msg = 'Good start..';
+    else if (pct < 30) msg = 'Making progress..';
+    else if (pct < 40) msg = 'Thinking ahead..';
+    else if (pct < 50) msg = 'Halfway there..';
+    else if (pct < 60) msg = 'Momentum building..';
+    else if (pct < 70) msg = 'Looking sharp..';
+    else if (pct < 80) msg = 'Almost there..';
+    else if (pct < 90) msg = 'Final moves..';
+    else if (pct < 100) msg = 'Solution in sight..';
+    else msg = 'Puzzle Complete!';
+
+    b.textContent = `${msg} (${pct}%)`;
+}  
   
 /* ---- rendering ---- */
 function render(){
