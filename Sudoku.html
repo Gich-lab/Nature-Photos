@@ -274,9 +274,12 @@ button:disabled{
 #confirm p{margin:0 0 4px;line-height:1.5}
 
 /* difficulty picker */
-#levels .rules-card{max-width:340px}
-.lvl-list{display:flex;flex-direction:column;gap:10px;margin-top:6px}
-.lvl-list button{height:48px;font-size:1.05rem;font-weight:600}
+#levels{transition:opacity .25s ease}
+#levels.fade{opacity:0;pointer-events:none}      /* fades away after a choice */
+#levels .rules-card{max-width:220px;padding:14px 16px}
+#levels h2{font-size:1.05rem;margin-bottom:8px;text-align:center}
+.lvl-list{display:flex;flex-direction:column;gap:8px}
+.lvl-list button{height:40px;font-size:1rem;font-weight:600}
 .lvl-list button.on{
   background-color:var(--on);background-image:none;
   color:var(--onfg);border-color:var(--on);
@@ -385,7 +388,6 @@ button:disabled{
         <button data-lvl="medium">Medium</button>
         <button data-lvl="hard">Hard</button>
       </div>
-      <div class="score-actions"><button id="levelsCancel">Cancel</button></div>
     </div>
   </div>
 </main>
@@ -645,9 +647,18 @@ $('#lvl').onchange=()=>{
 /* ---- difficulty picker popup ---- */
 const LVL_NAMES={easy:'Easy',medium:'Medium',hard:'Hard'};
 const updateLvlBtn=()=>{$('#lvlBtn').textContent=LVL_NAMES[$('#lvl').value]+' ▾'};
+let levelsTimer;
 function showLevels(open){
-  $('#levels').hidden=!open;
-  if(!open)return;
+  const box=$('#levels');
+  clearTimeout(levelsTimer);
+  if(!open){
+    if(box.hidden)return;
+    box.classList.add('fade');                       // fade out, then hide
+    levelsTimer=setTimeout(()=>{box.hidden=true},250);
+    return;
+  }
+  box.classList.remove('fade');
+  box.hidden=false;
   const now=$('#lvl').value;
   document.querySelectorAll('#levels [data-lvl]').forEach(b=>{
     const on=b.dataset.lvl===now;
@@ -658,7 +669,7 @@ function showLevels(open){
 }
 $('#lvlBtn').onclick=()=>{toggleRules(false);showScores(false);showLevels(true)};
 $('#levels').addEventListener('click',e=>{
-  if(e.target.id==='levels'||e.target.closest('#levelsCancel')){showLevels(false);return}
+  if(e.target.id==='levels'){showLevels(false);return}
   const b=e.target.closest('[data-lvl]');if(!b)return;
   showLevels(false);
   if(b.dataset.lvl===$('#lvl').value)return;   // same level: nothing to do
