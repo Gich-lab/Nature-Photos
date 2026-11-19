@@ -504,6 +504,7 @@ function erase(){
 }
 
 function eraseCell(){
+  console.log('eraseCell called',sel,cur[sel],giv[sel]); // to remove after checks
   if(over||sel<0||giv[sel]||!cur[sel])return;   // nothing selected, a given, or already empty
   snap();
   cur[sel]=0;
@@ -621,6 +622,7 @@ $('#lvl').onchange=()=>{
 };
 
 document.addEventListener('keydown',e=>{
+  console.log('KEY',e.key,e.target.tagName,e.target.className); //to remove after checks
   if(e.target.tagName==='SELECT'||e.ctrlKey||e.metaKey||e.altKey)return;
   const k=e.key;
   if(/^[1-9]$/.test(k)){place(+k);e.preventDefault()}
