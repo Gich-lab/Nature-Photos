@@ -9,8 +9,6 @@
 :root{--bg:#bfe3c9;--panel:#fff;--ink:#17243a;--mute:#6b7a90;--line:#b8c3d1;--box:#17243a;--sel:#bcd4fb;--peer:#e6eef9;--same:#d0e0fa;--user:#2563d6;--bad:#d23b3b;--badbg:#fbe0e0;--btn:#fff;--on:#17243a;--onfg:#fff}
 @media(prefers-color-scheme:dark){:root{--bg:#10291c;--panel:#18223a;--ink:#e6ecf6;--mute:#8a99b3;--line:#33425f;--box:#8fa3c7;--sel:#2c4a85;--peer:#1f2c48;--same:#28407a;--user:#7fb0ff;--bad:#ff8a8a;--badbg:#4a2230;--btn:#18223a;--on:#e6ecf6;--onfg:#0f1624}}
 *{box-sizing:border-box}
-:root{--face:#d8dce1;--face-hi:#3d9be0}                         /* button face, and its brighter hover/press colour */
-@media(prefers-color-scheme:dark){:root{--face:#2b3856;--face-hi:#3d9be0}}
 [hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh;display:flex;justify-content:center;padding:16px}
 main{width:100%;max-width:480px}
@@ -19,10 +17,24 @@ main{width:100%;max-width:480px}
 header{display:flex;flex-direction:column;align-items:stretch;gap:10px;margin-bottom:12px}
 h1{margin:0;font-size:1.7rem;font-weight:800;letter-spacing:-.03em;text-align:center}
 .controls{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.controls > *{width:100%;height:44px;padding:0 8px;font-size:clamp(.8rem,3.6vw,1rem);text-align:center;text-align-last:center}
+.controls > *{width:100%;height:44px;padding:0 8px;font-size:1rem;font-weight:600;text-align:center;text-align-last:center}
 
 select,button{font:inherit;color:var(--ink);background:var(--btn);border:1.5px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer}
+/* hover only on devices that really hover (avoids sticky hover on touch screens) */
+@media (hover:hover){
+  button:hover:not(:disabled):not(:active),
+  .controls select:hover:not([aria-pressed=true]){
+    border-color:#2563d6;
+    box-shadow:
+      0 0 0 3px rgba(37,99,214,.55),          /* blue ring, drawn on top */
+      0 0 14px 4px rgba(37,99,214,.45),       /* soft outer glow */
+      inset 0 1px 0 rgba(255,255,255,.8),
+      inset 0 -2px 3px rgba(0,0,0,.12),
+      0 3px 0 var(--edge);
+  }
+}
 button:focus-visible,select:focus-visible,.c:focus-visible{outline:3px solid var(--user);outline-offset:1px}
+button:disabled{opacity:.3;cursor:default}
 .primary{background:var(--on);color:var(--onfg);border-color:var(--on);font-weight:600}
 
 /* dropdown: custom arrow so its background can change on mobile */
@@ -58,13 +70,17 @@ button:focus-visible,select:focus-visible,.c:focus-visible{outline:3px solid var
 .bad{color:var(--bad);background:var(--badbg)}
 .tools{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0 8px}
 .pad{display:grid;grid-template-columns:repeat(9,1fr);gap:5px}
-.pad button{padding:6px 0;min-height:48px;font-size:1.3rem;display:flex;justify-content:center;flex-direction:column;align-items:center;line-height:1.1}
-.pad small{font-size:.85rem;font-weight:500;color:inherit;opacity:.85}
+.pad button{padding:8px 0;font-size:1.3rem;font-weight:600;display:flex;flex-direction:column;align-items:center;line-height:1.1}
+.pad small{font-size:.85rem;font-weight:500;color:var(--mute)}
 .pad.hide small{visibility:hidden}
+
+/* pressed look: Occurrence (toggle) and Info / dropdown (only while held) */
+.tools button[aria-pressed=true]{background:var(--on);color:var(--onfg);border-color:var(--on)}
+.controls [aria-pressed=true]{background-color:var(--on);color:var(--onfg);border-color:var(--on)}
 
 @media(max-width:400px){.tools{grid-template-columns:repeat(2,1fr)}}
 #win{margin-bottom:10px;padding:12px 14px;border-radius:8px;background:var(--on);color:var(--onfg);display:flex;justify-content:space-between;align-items:center;gap:10px}
-#win button{background:var(--onfg);color:var(--on);white-space:nowrap}
+#win button{background:var(--onfg);color:var(--on);border-color:var(--onfg);font-weight:600;white-space:nowrap}
 .help{margin-top:14px;color:var(--mute);font-size:.82rem;line-height:1.5}
 
 /* Info/Close button stays above the blurred overlay */
@@ -93,8 +109,8 @@ button:focus-visible,select:focus-visible,.c:focus-visible{outline:3px solid var
 .score-row b{font-size:1.05rem}
 .score-row small{display:block;color:var(--mute);margin-top:2px}
 .score-actions{display:flex;gap:8px;margin-top:14px}
-.score-actions button{flex:1;height:44px}
-.scores-open{width:100%;height:44px;margin-top:12px}
+.score-actions button{flex:1;height:44px;font-weight:600}
+.scores-open{width:100%;height:44px;margin-top:12px;font-weight:600}
 
 @media(max-width:400px){h1{font-size:1.35rem}}
 
@@ -127,62 +143,101 @@ body{
   }
 }
 
-/* ---- all buttons: btn-139 style (sizes unchanged) ---- */
-button{
-  border:none;border-radius:30px;
-  font-family:Arial,Helvetica,sans-serif;font-weight:bold;
-  text-transform:uppercase;letter-spacing:.02em;
-  background:var(--face);color:#fff;
-  text-shadow:0 1px 1px rgba(0,0,0,.35);
-  -webkit-tap-highlight-color:transparent;
-  box-shadow:
-    rgba(0,0,0,.17) 0 -23px 25px 0 inset,
-    rgba(0,0,0,.15) 0 -36px 30px 0 inset,
-    rgba(0,0,0,.1) 0 -79px 40px 0 inset,
-    rgba(0,0,0,.06) 0 2px 1px,
-    rgba(0,0,0,.09) 0 4px 2px,
-    rgba(0,0,0,.09) 0 8px 4px;
-  transition:box-shadow .2s,color .2s,background-color .2s;
-}
-/* brighter face + black text: mouse hover, finger press (touch) and the short flash after a number-pad tap */
-@media (hover:hover){
-  button:hover:not(:disabled):not(:active){
-    background:var(--face-hi);color:#000;text-shadow:none;
-    box-shadow:
-      rgba(0,0,0,.08) 0 -23px 25px 0 inset,
-      rgba(0,0,0,.06) 0 -36px 30px 0 inset,
-      rgba(0,0,0,.06) 0 2px 1px,
-      rgba(0,0,0,.09) 0 4px 2px,
-      rgba(0,0,0,.09) 0 8px 4px;
-  }
-}
-button:active:not(:disabled),
-button.flash:not(:disabled){
-  background:var(--face-hi);color:#000;text-shadow:none;
-  box-shadow:
-    rgba(0,0,0,.08) 0 -23px 25px 0 inset,
-    rgba(50,50,93,.25) 0 30px 60px -12px inset,
-    rgba(0,0,0,.3) 0 18px 36px -18px inset,
-    1px 2px 5px 0 #818080;
-}
-button:disabled{opacity:.65;color:#7e7e7e;background:#dcdcdc;box-shadow:none;cursor:default}
-@media(prefers-color-scheme:dark){button:disabled{background:#2a3550}}
+/* 3D through grey shading only: same shape, same colours */
+:root{--hi:.6;--lo:.10;--edge:#aab3c0}
+@media(prefers-color-scheme:dark){:root{--hi:.12;--lo:.35;--edge:#05080f}}
 
-/* text sizes that keep uppercase labels inside their buttons */
+button,
+.controls select{
+  --shade:linear-gradient(to bottom,rgba(255,255,255,var(--hi)) 0,rgba(255,255,255,0) 45%,rgba(0,0,0,var(--lo)) 100%);
+  background-image:var(--shade);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.8),      /* light top rim */
+    inset 0 -2px 3px rgba(0,0,0,.12),        /* grey shading along the bottom */
+    0 3px 0 var(--edge),                     /* grey edge = thickness */
+    0 5px 7px rgba(0,0,0,.2);                /* soft shadow underneath */
+  transition:transform .06s,box-shadow .06s;
+}
+
+/* dropdown keeps its arrow */
+.controls select{
+  background-image:
+    linear-gradient(45deg,transparent 50%,currentColor 50%),
+    linear-gradient(135deg,currentColor 50%,transparent 50%),
+    var(--shade);
+  background-position:calc(100% - 15px) 50%,calc(100% - 10px) 50%,0 0;
+  background-size:5px 5px,5px 5px,100% 100%;
+  background-repeat:no-repeat;
+}
+
+/* ---- button text: small grey edge, like the button's own thickness ---- */
+button,
+.controls select{
+  text-shadow:0 1px 0 var(--edge); /* crisp, no blur */
+}
+.pad small{text-shadow:0 1px 0 var(--edge)}
+
+/* ---- optical centring: the 3px edge under each button makes text look low ---- */
+.controls > *{padding-bottom:3px}
 .tools button{
-  height:44px;padding:0 4px;
-  font-size:clamp(.7rem,2.6vw,.85rem);
+  height:44px;  /* same height as the top row */
+  padding:0 8px 3px;
+  font-size:1rem;
+  font-weight:600;
   display:flex;align-items:center;justify-content:center;
 }
+.pad button{min-height:48px;padding-top:6px;padding-bottom:9px;justify-content:center}
 .pad.hide small{display:none} /* hidden counts no longer push the number up */
+
+/* ---- pressed: original dark look, pushed down (also Occurrence when on) ---- */
+button:active:not(:disabled),
+.tools button:active,
+.tools button[aria-pressed=true],
+.controls [aria-pressed=true]{
+  background-color:var(--on);
+  background-image:none;
+  color:var(--onfg);
+  border-color:var(--on);
+  transform:translateY(2px);
+  box-shadow:
+    inset 0 2px 4px rgba(0,0,0,.4),
+    0 1px 0 var(--edge);
+  text-shadow:0 1px 0 rgba(0,0,0,.55); /* light text on dark fill: edge flips to dark */
+}
+.controls select[aria-pressed=true]{
+  background-image:
+    linear-gradient(45deg,transparent 50%,currentColor 50%),
+    linear-gradient(135deg,currentColor 50%,transparent 50%);
+}
+
+/* dark theme: pressed fill is light, so the text is dark there */
+@media(prefers-color-scheme:dark){
+  button:active:not(:disabled),
+  .tools button:active,
+  .tools button[aria-pressed=true],
+  .controls [aria-pressed=true]{
+    text-shadow:0 1px 0 rgba(255,255,255,.4);
+  }
+}
+
+/* ---- disabled: flat, no text effect, still legible ---- */
+button:disabled{
+  opacity:.6;  /* was .3: higher = more legible */
+  box-shadow:none;
+  transform:none;
+  background-image:none;
+  text-shadow:none;
+}
 
 /* Occurrence: dark fill wipes in from the centre when toggled on */
 #counts{
   position:relative;
   overflow:hidden;
   isolation:isolate;                 /* keeps the circle behind the text, above the button face */
-  transition:box-shadow .2s,color .3s .1s;
+  transition:transform .06s,box-shadow .06s,color .3s .1s,border-color .3s;
 }
+
+/* the circle (grows from 0 to cover the whole button, even when it is wide) */
 #counts::before{
   content:"";
   position:absolute;left:50%;top:50%;
@@ -190,15 +245,28 @@ button:disabled{opacity:.65;color:#7e7e7e;background:#dcdcdc;box-shadow:none;cur
   border-radius:50%;
   background:var(--on);
   transform:translate(-50%,-50%) scale(0);
-  transition:transform 400ms cubic-bezier(.8,0,.2,1);
+  transition:transform 400ms cubic-bezier(.8,0,.2,1);   /* same easing as btn-121 */
   z-index:-1;
   pointer-events:none;
 }
-#counts[aria-pressed=true]::before{transform:translate(-50%,-50%) scale(1)}
+#counts[aria-pressed=true]::before{
+  transform:translate(-50%,-50%) scale(1);
+}
+
+/* the face stays light; the circle supplies the dark. Text colour follows the state. */
+#counts,
+#counts:active:not(:disabled){
+  background-color:var(--btn);
+  background-image:var(--shade);
+  color:var(--ink);
+}
 #counts[aria-pressed=true],
-#counts[aria-pressed=true]:hover:not(:disabled):not(:active),
-#counts[aria-pressed=true]:active:not(:disabled),
-#counts[aria-pressed=true].flash{color:var(--onfg)}
+#counts[aria-pressed=true]:active:not(:disabled){
+  background-color:var(--btn);
+  background-image:var(--shade);
+  color:var(--onfg);
+  border-color:var(--on);
+}
 
 /* confirm popup */
 #confirm{z-index:22} /* above the Info/Close button */
@@ -211,12 +279,12 @@ button:disabled{opacity:.65;color:#7e7e7e;background:#dcdcdc;box-shadow:none;cur
 #levels .rules-card{max-width:220px;padding:14px 16px}
 #levels h2{font-size:1.05rem;margin-bottom:8px;text-align:center}
 .lvl-list{display:flex;flex-direction:column;gap:8px}
-
-/* picker buttons: size and the current-level fill (style comes from the global button rules) */
-#levels .lvl-list button{height:40px;font-size:1rem}
-#levels .lvl-list button.on,
-#levels .lvl-list button.on:hover:not(:active),
-#levels .lvl-list button.on:active{background:var(--on);color:var(--onfg)}
+.lvl-list button{height:40px;font-size:1rem;font-weight:600}
+.lvl-list button.on{
+  background-color:var(--on);background-image:none;
+  color:var(--onfg);border-color:var(--on);
+  text-shadow:0 1px 0 rgba(0,0,0,.55);
+}
 </style>
 </head>
 <body>
@@ -243,6 +311,14 @@ button:disabled{opacity:.65;color:#7e7e7e;background:#dcdcdc;box-shadow:none;cur
     <button id="hint">Hint</button>
     <button id="counts" aria-pressed="true">Occurrence</button>
   </div>
+  <style>
+    /* dark only while the button is being pressed */
+    .tools button:active{
+      background:var(--on);
+      color:var(--onfg);
+      border-color:var(--on);
+    }
+  </style>
   <div class="pad" id="pad"></div>
   <p class="help">Tap a cell, then a number. On a keyboard: 1–9 to fill, arrow keys to move, Backspace to clear a cell, U to undo, H for a hint.</p>
   <button id="scoresBtn" class="scores-open" aria-haspopup="dialog">Past scores</button>
@@ -549,14 +625,8 @@ $('#board').addEventListener('click',e=>{
   sel=+c.dataset.i;render();
 });
 $('#pad').addEventListener('click',e=>{
-  const b=e.target.closest('button');if(!b)return;
-  const n=+b.dataset.n;
-  place(n);
-  // the pad is redrawn on every tap, so re-apply a short hover-style flash to the new button
-  const nb=document.querySelector('#pad button[data-n="'+n+'"]');
-  if(nb&&!nb.disabled){nb.classList.add('flash');setTimeout(()=>nb.classList.remove('flash'),220)}
+  const b=e.target.closest('button');if(b)place(+b.dataset.n);
 });
-document.addEventListener('touchstart',()=>{},{passive:true});   // lets :active work on iOS Safari
 $('#undo').onclick=undo;
 $('#erase').onclick=erase;
 $('#hint').onclick=hint;
