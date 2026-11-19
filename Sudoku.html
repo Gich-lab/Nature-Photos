@@ -87,7 +87,7 @@ button:disabled{opacity:.3;cursor:default}
 #rulesBtn{position:relative;z-index:21}
 
 /* Popups (rules + scores + confirm): card sits near the top, background is lightly blurred */
-#rules,#scores,#confirm{
+#rules,#scores,#confirm,#levels{
   position:fixed;inset:0;z-index:20;
   display:flex;align-items:flex-start;justify-content:center;
   padding:150px 16px 16px;               /* lower this number to raise the card further */
@@ -272,6 +272,16 @@ button:disabled{
 #confirm{z-index:22} /* above the Info/Close button */
 #confirm .rules-card{max-width:340px}
 #confirm p{margin:0 0 4px;line-height:1.5}
+
+/* difficulty picker */
+#levels .rules-card{max-width:340px}
+.lvl-list{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.lvl-list button{height:48px;font-size:1.05rem;font-weight:600}
+.lvl-list button.on{
+  background-color:var(--on);background-image:none;
+  color:var(--onfg);border-color:var(--on);
+  text-shadow:0 1px 0 rgba(0,0,0,.55);
+}
 </style>
 </head>
 <body>
@@ -280,11 +290,12 @@ button:disabled{
     <h1>Sudoku</h1>
     <div class="controls">
       <button id="rulesBtn" aria-haspopup="dialog" aria-expanded="false">Info</button>
-      <select id="lvl" aria-label="Difficulty">
+      <select id="lvl" aria-label="Difficulty" hidden>
         <option value="easy">Easy</option>
         <option value="medium" selected>Medium</option>
         <option value="hard">Hard</option>
       </select>
+      <button id="lvlBtn" type="button" aria-haspopup="dialog">Medium ▾</button>
       <button id="new">New game</button>
     </div>
   </header>
@@ -364,6 +375,17 @@ button:disabled{
         <button id="confirmNo">Cancel</button>
         <button id="confirmYes">New game</button>
       </div>
+    </div>
+  </div>
+  <div id="levels" role="dialog" aria-modal="true" aria-labelledby="levelsTitle" hidden>
+    <div class="rules-card">
+      <h2 id="levelsTitle">Choose difficulty</h2>
+      <div class="lvl-list">
+        <button data-lvl="easy">Easy</button>
+        <button data-lvl="medium">Medium</button>
+        <button data-lvl="hard">Hard</button>
+      </div>
+      <div class="score-actions"><button id="levelsCancel">Cancel</button></div>
     </div>
   </div>
 </main>
@@ -499,7 +521,7 @@ function erase(){
   }
   snap();
   cur=giv.slice(); // back to the given numbers only
-  sel=-1;  // same reset New game does: removes the grey highlight
+  sel=-1;          // same reset New game does: removes the grey highlight
   render();
 }
 
@@ -509,7 +531,7 @@ function eraseCell(){
   cur[sel]=0;
   render();
 }
-  
+
 function undo(){
   if(over||!hist.length)return;
   [cur,miss]=hist.pop();render();
@@ -569,6 +591,7 @@ function render(){
   $('#hint').textContent='Hint ('+Math.max(left,0)+')';
   $('#hint').disabled=left<=0;
   lastLvl=$('#lvl').value;
+  updateLvlBtn();
   top_();
   save();
 }
@@ -614,10 +637,34 @@ $('#new').onclick=()=>{
 };
 $('#lvl').onchange=()=>{
   if(!started()){newGame();return}
-  askConfirm('Change level?','Your current progress will be lost.','New game',ok=>{
-    if(ok)newGame();else $('#lvl').value=lastLvl;     // cancelled: restore the old level
+  askConfirm('Change difficulty?','Your current progress will be lost.','New game',ok=>{
+    if(ok)newGame();else{$('#lvl').value=lastLvl;updateLvlBtn()}   // cancelled: keep the old level
   });
 };
+
+/* ---- difficulty picker popup ---- */
+const LVL_NAMES={easy:'Easy',medium:'Medium',hard:'Hard'};
+const updateLvlBtn=()=>{$('#lvlBtn').textContent=LVL_NAMES[$('#lvl').value]+' ▾'};
+function showLevels(open){
+  $('#levels').hidden=!open;
+  if(!open)return;
+  const now=$('#lvl').value;
+  document.querySelectorAll('#levels [data-lvl]').forEach(b=>{
+    const on=b.dataset.lvl===now;
+    b.classList.toggle('on',on);
+    b.textContent=LVL_NAMES[b.dataset.lvl]+(on?'  ✓':'');
+  });
+  const c=document.querySelector('#levels .on');if(c)c.focus();
+}
+$('#lvlBtn').onclick=()=>{toggleRules(false);showScores(false);showLevels(true)};
+$('#levels').addEventListener('click',e=>{
+  if(e.target.id==='levels'||e.target.closest('#levelsCancel')){showLevels(false);return}
+  const b=e.target.closest('[data-lvl]');if(!b)return;
+  showLevels(false);
+  if(b.dataset.lvl===$('#lvl').value)return;   // same level: nothing to do
+  $('#lvl').value=b.dataset.lvl;
+  $('#lvl').onchange();                        // starts a game, or asks first if one is in progress
+});
 
 document.addEventListener('keydown',e=>{
   if(e.target.tagName==='SELECT'||e.ctrlKey||e.metaKey||e.altKey)return;
@@ -643,7 +690,7 @@ document.addEventListener('keydown',e=>{
 });
 
 /* press feedback: same attribute as Occurrence, reverts on release */
-document.querySelectorAll('#rulesBtn, #lvl, #new, #undo, #erase, #hint').forEach(el=>{
+document.querySelectorAll('#rulesBtn, #lvlBtn, #new, #undo, #erase, #hint').forEach(el=>{
   const on=()=>el.setAttribute('aria-pressed','true');
   const off=()=>el.setAttribute('aria-pressed','false');
   el.addEventListener('pointerdown',on);
@@ -654,7 +701,7 @@ document.querySelectorAll('#rulesBtn, #lvl, #new, #undo, #erase, #hint').forEach
 function toggleRules(open){
   const box=$('#rules');
   const show=open===undefined?box.hidden:open;
-  if(show)showScores(false);   // never show both popups at once
+  if(show){showScores(false);showLevels(false)}   // never show two popups at once
   box.hidden=!show;
   $('#rulesBtn').textContent=show?'Close':'Info';
   $('#rulesBtn').setAttribute('aria-expanded',show);
@@ -665,7 +712,7 @@ $('#rules').addEventListener('click',e=>{if(e.target.id==='rules')toggleRules(fa
 /* ---- score history (kept on this device) + Google Sheet ---- */
 const SKEY='sudoku-scores-v1';
 const SHEET_URL='https://script.google.com/macros/s/AKfycbw5de0Er6QRgCsN2q30NeMwhEGOuzAEwAyYShUrYFD9SSzg3VLerJ5-EOLr8IsPugjEzA/exec';
-const SHEET_KEY='chezeshaubongo';  
+const SHEET_KEY='chezeshaubongo';   // equal SECRET in your Apps Script
 
 const getScores=()=>{try{return JSON.parse(localStorage.getItem(SKEY))||[]}catch(e){return[]}};
 const fmtDate=ts=>{
@@ -723,11 +770,11 @@ $('#scoresClear').onclick=()=>{
 
 // while a popup is open: Esc closes it and keys don't reach the game behind it
 document.addEventListener('keydown',e=>{
-  if($('#rules').hidden&&$('#scores').hidden&&$('#confirm').hidden)return;
+  if($('#rules').hidden&&$('#scores').hidden&&$('#confirm').hidden&&$('#levels').hidden)return;
   e.stopImmediatePropagation();
   if(e.key==='Escape'){
     if(!$('#confirm').hidden)closeConfirm(false);
-    else{toggleRules(false);showScores(false)}
+    else{toggleRules(false);showScores(false);showLevels(false)}
   }
 },true);
 
