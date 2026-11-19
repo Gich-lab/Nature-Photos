@@ -79,15 +79,13 @@ button:disabled{opacity:.3;cursor:default}
 .controls [aria-pressed=true]{background-color:var(--on);color:var(--onfg);border-color:var(--on)}
 
 @media(max-width:400px){.tools{grid-template-columns:repeat(2,1fr)}}
-#win{margin-bottom:10px;padding:12px 14px;border-radius:8px;background:var(--on);color:var(--onfg);display:flex;justify-content:space-between;align-items:center;gap:10px}
-#win button{background:var(--onfg);color:var(--on);border-color:var(--onfg);font-weight:600;white-space:nowrap}
 .help{margin-top:14px;color:var(--mute);font-size:.82rem;line-height:1.5}
 
 /* Info/Close button stays above the blurred overlay */
 #rulesBtn{position:relative;z-index:21}
 
-/* Popups (rules + scores + confirm): card sits near the top, background is lightly blurred */
-#rules,#scores,#confirm,#levels{
+/* Popups (rules + scores + confirm + levels + finished): card sits near the top, background is lightly blurred */
+#rules,#scores,#confirm,#levels,#win{
   position:fixed;inset:0;z-index:20;
   display:flex;align-items:flex-start;justify-content:center;
   padding:150px 16px 16px;               /* lower this number to raise the card further */
@@ -269,10 +267,12 @@ button:disabled{
   border-color:var(--on);
 }
 
-/* confirm popup */
-#confirm{z-index:22} /* above the Info/Close button */
+/* confirm + finished popups sit above the Info/Close button */
+#confirm,#win{z-index:22}
 #confirm .rules-card{max-width:340px}
 #confirm p{margin:0 0 4px;line-height:1.5}
+#win .rules-card{max-width:340px;text-align:center}
+#win p{margin:0 0 4px;line-height:1.5}
 
 /* difficulty picker */
 #levels{transition:opacity .25s ease}
@@ -295,7 +295,7 @@ button:disabled{
   box-shadow:inset 0 2px 4px rgba(0,0,0,.4);
   text-shadow:none;
 }
-.pad button.flash small{color:#ccc;text-shadow:none}  
+.pad button.flash small{color:#ccc;text-shadow:none}
 
 /* Past scores button doubles as a progress bar */
 #scoresBtn{
@@ -330,7 +330,6 @@ button:disabled{
       <button id="new">New game</button>
     </div>
   </header>
-  <div id="win" hidden><span id="wintxt"></span><button id="again">Play again</button></div>
   <div class="stats"><span id="time">00:00</span><span id="info"></span></div>
   <div id="board" role="grid" aria-label="Sudoku board"></div>
   <div class="tools">
@@ -415,6 +414,15 @@ button:disabled{
         <button data-lvl="easy">Easy</button>
         <button data-lvl="medium">Medium</button>
         <button data-lvl="hard">Hard</button>
+      </div>
+    </div>
+  </div>
+  <div id="win" role="dialog" aria-modal="true" aria-labelledby="winTitle" hidden>
+    <div class="rules-card">
+      <h2 id="winTitle">Puzzle complete! 🎉</h2>
+      <p id="wintxt"></p>
+      <div class="score-actions">
+        <button id="again">Play again</button>
       </div>
     </div>
   </div>
@@ -564,7 +572,8 @@ function eraseCell(){
 
 function undo(){
   if(over||!hist.length)return;
-  [cur,miss]=hist.pop();render();
+  cur=hist.pop()[0];   // restore the board only: mistakes and hints keep their counts
+  render();
 }
 function hint(){
   if(over||hints>=HINT_MAX[$('#lvl').value])return;
@@ -582,55 +591,43 @@ function check(){
     over=true;clearInterval(tm);
     saveScore();   // record this finished game (device + Google Sheet)
     $('#wintxt').textContent='Solved in '+fmt(secs)+' with '+miss+(miss===1?' mistake':' mistakes')+' and '+hints+(hints===1?' hint.':' hints.');
-    $('#win').hidden=false;
+    $('#win').hidden=false;     // finished popup: Play again starts a new game, otherwise the board stays finished
+    $('#again').focus();
   }
 }
 
-/* progress = correct numbers placed, out of the cells the player has to fill 
+/* ---- progress text on the Past scores button ---- */
+/* shows "Past scores" until the player enters a number, then a progress message and a left-to-right fill */
 function updateProgress(){
-  let total=0,ok=0;
-  for(let i=0;i<81;i++)if(!giv[i]){total++;if(cur[i]===sol[i])ok++}
-  const pct=total?Math.round(ok/total*100):0;
   const b=$('#scoresBtn');
+  const entered=cur.some((v,i)=>v!==giv[i]);   // has the player put anything on the board?
+  if(!entered){
+    b.style.setProperty('--p','0%');
+    b.textContent='Past scores';
+    return;
+  }
+  let total=0,ok=0;
+  for(let i=0;i<81;i++){
+    if(!giv[i]){total++;if(cur[i]===sol[i])ok++}
+  }
+  const pct=total?Math.round(ok/total*100):0;
   b.style.setProperty('--p',pct+'%');
-  b.title='Progress: '+pct+'%';
+
+  let msg;
+  if(pct<10)msg='Let’s begin..';
+  else if(pct<20)msg='Good start..';
+  else if(pct<30)msg='Making progress..';
+  else if(pct<40)msg='Thinking ahead..';
+  else if(pct<50)msg='Halfway there..';
+  else if(pct<60)msg='Momentum building..';
+  else if(pct<70)msg='Looking sharp..';
+  else if(pct<80)msg='Almost there..';
+  else if(pct<90)msg='Final moves..';
+  else if(pct<100)msg='Solution in sight..';
+  else msg='Puzzle Complete!';
+  b.textContent=msg+' '+pct+'%';
 }
-*/
 
-/* progress = correct numbers placed, out of the cells the player has to fill */
-
-function updateProgress() {
-    let total = 0, ok = 0;
-
-    for (let i = 0; i < 81; i++) {
-        if (!giv[i]) {
-            total++;
-            if (cur[i] === sol[i]) ok++;
-        }
-    }
-
-    const pct = total ? Math.round((ok / total) * 100) : 0;
-
-    const b = $('#scoresBtn');
-    b.style.setProperty('--p', pct + '%');
-
-    // Percentage-based progress messages
-    let msg;
-    if (pct < 10) msg = 'Let’s begin..';
-    else if (pct < 20) msg = 'Good start..';
-    else if (pct < 30) msg = 'Making progress..';
-    else if (pct < 40) msg = 'Thinking ahead..';
-    else if (pct < 50) msg = 'Halfway there..';
-    else if (pct < 60) msg = 'Momentum building..';
-    else if (pct < 70) msg = 'Looking sharp..';
-    else if (pct < 80) msg = 'Almost there..';
-    else if (pct < 90) msg = 'Final moves..';
-    else if (pct < 100) msg = 'Solution in sight..';
-    else msg = 'Puzzle Complete!';
-
-    b.textContent = `${msg} ${pct}%`;
-}  
-  
 /* ---- rendering ---- */
 function render(){
   const sv=sel>=0?cur[sel]:0,sr=sel/9|0,sc=sel%9;
@@ -698,11 +695,6 @@ $('#board').addEventListener('click',e=>{
   const c=e.target.closest('.c');if(!c)return;
   sel=+c.dataset.i;render();
 });
-/*  
-$('#pad').addEventListener('click',e=>{
-  const b=e.target.closest('button');if(b)place(+b.dataset.n);
-});
-*/
 const FLASH_MS=350;   // how long a tapped number stays black (milliseconds)
 $('#pad').addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
@@ -711,12 +703,13 @@ $('#pad').addEventListener('click',e=>{
   // the pad is redrawn on every tap, so mark the new button
   const nb=document.querySelector('#pad button[data-n="'+n+'"]');
   if(nb&&!nb.disabled){nb.classList.add('flash');setTimeout(()=>nb.classList.remove('flash'),FLASH_MS)}
-});  
+});
 $('#undo').onclick=undo;
 $('#erase').onclick=erase;
 $('#hint').onclick=hint;
 $('#counts').onclick=()=>{showCounts=!showCounts;render()};
-$('#again').onclick=newGame;
+$('#again').onclick=newGame;                                   // Play again: start a new game
+$('#win').addEventListener('click',e=>{if(e.target.id==='win')$('#win').hidden=true});   // tap outside: close, the game stays finished
 
 $('#new').onclick=()=>{
   if(!started()){newGame();return}
@@ -808,7 +801,7 @@ $('#rules').addEventListener('click',e=>{if(e.target.id==='rules')toggleRules(fa
 /* ---- score history (kept on this device) + Google Sheet ---- */
 const SKEY='sudoku-scores-v1';
 const SHEET_URL='https://script.google.com/macros/s/AKfycbw5de0Er6QRgCsN2q30NeMwhEGOuzAEwAyYShUrYFD9SSzg3VLerJ5-EOLr8IsPugjEzA/exec';
-const SHEET_KEY='chezeshaubongo';   
+const SHEET_KEY='chezeshaubongo';
 
 const getScores=()=>{try{return JSON.parse(localStorage.getItem(SKEY))||[]}catch(e){return[]}};
 const fmtDate=ts=>{
@@ -866,10 +859,11 @@ $('#scoresClear').onclick=()=>{
 
 // while a popup is open: Esc closes it and keys don't reach the game behind it
 document.addEventListener('keydown',e=>{
-  if($('#rules').hidden&&$('#scores').hidden&&$('#confirm').hidden&&$('#levels').hidden)return;
+  if($('#rules').hidden&&$('#scores').hidden&&$('#confirm').hidden&&$('#levels').hidden&&$('#win').hidden)return;
   e.stopImmediatePropagation();
   if(e.key==='Escape'){
     if(!$('#confirm').hidden)closeConfirm(false);
+    else if(!$('#win').hidden)$('#win').hidden=true;      // the game stays finished
     else{toggleRules(false);showScores(false);showLevels(false)}
   }
 },true);
