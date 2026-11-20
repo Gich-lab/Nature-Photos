@@ -151,7 +151,7 @@ button:disabled{opacity:.3;cursor:default}
 .help{margin-top:14px;color:var(--mute);font-size:.82rem;line-height:1.5}
 
 /* Info/Close button stays above the blurred overlay */
-#rulesBtn{position:relative;z-index:21}
+/* #rulesBtn{position:relative;z-index:21} */
 
 /* Popups (rules + scores + confirm + levels + finished): card sits near the top, background is lightly blurred */
 #rules,#scores,#confirm,#levels,#win{
@@ -865,7 +865,7 @@ function toggleRules(open){
   const show=open===undefined?box.hidden:open;
   if(show){showScores(false);showLevels(false)}   // never show two popups at once
   box.hidden=!show;
-  $('#rulesBtn').textContent=show?'Close':'Info';
+  // $('#rulesBtn').textContent=show?'Close':'Info';
   $('#rulesBtn').setAttribute('aria-expanded',show);
 }
 $('#rulesBtn').onclick=()=>toggleRules();
