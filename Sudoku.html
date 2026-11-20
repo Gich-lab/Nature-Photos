@@ -554,6 +554,7 @@ let wallIdx=-1;
 const WALL_URL={};   // remembers the working file for each wallpaper number
 let wallNext=-1;     // wallpaper already downloading for the next New game
 
+const WALL_IMG={};
 function loadWall(n,done){   // done(url) when found, done(null) if no extension works
   if(WALL_URL[n]){done(WALL_URL[n]);return}
   let e=0;
