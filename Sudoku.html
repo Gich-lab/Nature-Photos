@@ -1029,6 +1029,16 @@ if(load()){
 }else{
   newGame();   // newGame() already picks the wallpaper
 }
+/* old browsers without aspect-ratio: make the board square with JS */
+function sizeBoard(){
+  const b=$('#board');
+  if(window.CSS&&CSS.supports&&CSS.supports('aspect-ratio','1')){b.style.height='';return}
+  b.style.height=b.getBoundingClientRect().width+'px';
+}
+addEventListener('resize',sizeBoard);
+addEventListener('orientationchange',sizeBoard);
+addEventListener('load',sizeBoard);
+sizeBoard();
 </script>
 </body>
 </html>
