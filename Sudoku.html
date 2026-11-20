@@ -554,26 +554,7 @@ let wallIdx=-1;
 const WALL_URL={};   // remembers the working file for each wallpaper number
 let wallNext=-1;     // wallpaper already downloading for the next New game
 
-const WALL_IMG={};
-function loadWall(n,done){   // done(url) when found, done(null) if no extension works
-  if(WALL_URL[n]){done(WALL_URL[n]);return}
-  let e=0;
-  const img=new Image();
-  WALL_IMG[n]=img;
-  img.onload=()=>{
-    const ok=()=>{WALL_URL[n]=img.src;done(img.src)};
-    if(img.decode)img.decode().then(ok,ok);   // unpack it now, not at swap time
-    else ok();
-  };
-  img.onerror=()=>{
-    e++;
-    if(e<WALL_EXT.length)img.src=WALLS[n]+'.'+WALL_EXT[e];
-    else done(null);
-  };
-  img.src=WALLS[n]+'.'+WALL_EXT[0];
-}  
-  
-/* 
+ 
 function loadWall(n,done){   // done(url) when found, done(null) if no extension works
   if(WALL_URL[n]){done(WALL_URL[n]);return}
   let e=0;
@@ -586,7 +567,6 @@ function loadWall(n,done){   // done(url) when found, done(null) if no extension
   };
   img.src=WALLS[n]+'.'+WALL_EXT[0];
 }
-*/
   
 function preloadNext(){      // quietly download another wallpaper for next time
   const pool=WALLS.map((_,k)=>k).filter(k=>k!==wallIdx);
@@ -670,7 +650,7 @@ let lastLvl;   // level of the game being played, used to undo a cancelled level
 const fmt=s=>String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
 const snap=()=>{hist.push([cur.slice(),miss]);if(hist.length>200)hist.shift()};
 
-/* 
+
 function newGame(){
   setWallpaper();
   const[s,p]=generate($('#lvl').value);
@@ -680,23 +660,6 @@ function newGame(){
   clearTimeout(winTimer);$('#win').hidden=true;
   clearInterval(tm);tm=setInterval(()=>{if(!over&&!document.hidden){secs++;top_()}},1000);
   render();
-}
-*/
-
-let genToken=0;
-function newGame(){
-  setWallpaper();    // wallpaper first, so it can paint
-  clearTimeout(winTimer);winToken++;$('#win').hidden=true;
-  clearInterval(tm);
-  const tok=++genToken;
-  setTimeout(()=>{   // build the puzzle a moment later
-    if(tok!==genToken)return;  // a newer New game replaced this one
-    const[s,p]=generate($('#lvl').value);
-    sol=s;giv=p.slice();cur=p.slice();
-    hist=[];sel=-1;miss=0;hints=0;over=false;secs=0;
-    tm=setInterval(()=>{if(!over&&!document.hidden){secs++;top_()}},1000);
-    render();
-  },40);
 }
   
 function top_(){
