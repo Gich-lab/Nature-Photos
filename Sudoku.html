@@ -382,6 +382,19 @@ button:disabled{
   z-index:-1;
   pointer-events:none;
 }
+
+/* finished puzzle popup: same card as Info, pops in, fades out */
+#win{transition:opacity .25s ease}
+#win.fade{opacity:0;pointer-events:none}
+#win:not([hidden]) .rules-card{animation:winPop .45s cubic-bezier(.3,1.4,.5,1) both}
+@keyframes winPop{
+  from{opacity:0;transform:scale(.6)}
+  to  {opacity:1;transform:scale(1)}
+}
+#win .pug{
+  display:block;width:min(200px,60%);height:auto;aspect-ratio:260/354;
+  margin:0 auto 12px;border-radius:10px;background:#000;
+}  
 </style>
 </head>
 <body>
@@ -492,6 +505,7 @@ button:disabled{
   </div>
   <div id="win" role="dialog" aria-modal="true" aria-labelledby="winTitle" hidden>
     <div class="rules-card">
+      <img id="pug" class="pug" alt="">
       <h2 id="winTitle">Puzzle complete! 🎉</h2>
       <p id="wintxt"></p>
       <div class="score-actions">
@@ -605,7 +619,8 @@ function newGame(){
   const[s,p]=generate($('#lvl').value);
   sol=s;giv=p.slice();cur=p.slice();
   hist=[];sel=-1;miss=0;hints=0;over=false;secs=0;
-  $('#win').hidden=true;
+  // $('#win').hidden=true;
+  clearTimeout(winTimer);$('#win').hidden=true;
   clearInterval(tm);tm=setInterval(()=>{if(!over&&!document.hidden){secs++;top_()}},1000);
   render();
 }
@@ -664,8 +679,9 @@ function check(){
     over=true;clearInterval(tm);
     saveScore();   // record this finished game (device + Google Sheet)
     $('#wintxt').textContent='Solved in '+fmt(secs)+' with '+miss+(miss===1?' mistake':' mistakes')+' and '+hints+(hints===1?' hint.':' hints.');
-    $('#win').hidden=false;     // finished popup: Play again starts a new game, otherwise the board stays finished
-    $('#again').focus();
+    showWin(true);
+    //$('#win').hidden=false;     // finished popup: Play again starts a new game, otherwise the board stays finished
+    //$('#again').focus();
   }
 }
 
@@ -782,7 +798,8 @@ $('#erase').onclick=erase;
 $('#hint').onclick=hint;
 $('#counts').onclick=()=>{showCounts=!showCounts;render()};
 $('#again').onclick=newGame;                                   // Play again: start a new game
-$('#win').addEventListener('click',e=>{if(e.target.id==='win')$('#win').hidden=true});   // tap outside: close, the game stays finished
+//$('#win').addEventListener('click',e=>{if(e.target.id==='win')$('#win').hidden=true});   // tap outside: close, the game stays finished
+$('#win').addEventListener('click',e=>{if(e.target.id==='win')showWin(false)});   // tap outside: close, the game stays finished
 
 $('#new').onclick=()=>{
   if(!started()){newGame();return}
@@ -936,11 +953,39 @@ document.addEventListener('keydown',e=>{
   e.stopImmediatePropagation();
   if(e.key==='Escape'){
     if(!$('#confirm').hidden)closeConfirm(false);
-    else if(!$('#win').hidden)$('#win').hidden=true;      // the game stays finished
+    // else if(!$('#win').hidden)$('#win').hidden=true;      // the game stays finished
+    else if(!$('#win').hidden)showWin(false);
     else{toggleRules(false);showScores(false);showLevels(false)}
   }
 },true);
 
+/* ---- finished popup: the pug plays once for 6 seconds, then the popup fades away ---- */
+const WIN_MS=6000; // duration of playback
+let winTimer,winToken=0;
+function showWin(open){
+  const box=$('#win');
+  clearTimeout(winTimer);
+  const tok=++winToken;                        // lets a stale load callback be ignored
+  if(!open){
+    if(box.hidden)return;
+    box.classList.add('fade');
+    winTimer=setTimeout(()=>{box.hidden=true;$('#pug').removeAttribute('src')},250);
+    return;
+  }
+  box.classList.remove('fade');
+  const img=$('#pug');
+  const reveal=()=>{
+    if(tok!==winToken||!box.hidden)return;
+    box.hidden=false;                          // popup appears only once the pug is ready, so it starts from frame 1
+    $('#again').focus();
+    winTimer=setTimeout(()=>showWin(false),WIN_MS);
+  };
+  img.onload=reveal;img.onerror=reveal;
+  img.src='dancing_pug.webp?'+Date.now();      // fresh URL so it always restarts
+  setTimeout(reveal,1500);                     // fallback if the image is slow
+}
+
+  
 /* ---- save and resume ---- */
 const KEY='sudoku-save-v1';
 
