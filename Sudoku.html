@@ -642,6 +642,7 @@ let lastLvl;   // level of the game being played, used to undo a cancelled level
 const fmt=s=>String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
 const snap=()=>{hist.push([cur.slice(),miss]);if(hist.length>200)hist.shift()};
 
+ /* 
 function newGame(){
   setWallpaper();
   const[s,p]=generate($('#lvl').value);
@@ -652,7 +653,21 @@ function newGame(){
   clearInterval(tm);tm=setInterval(()=>{if(!over&&!document.hidden){secs++;top_()}},1000);
   render();
 }
+*/
 
+function newGame(){
+  setWallpaper();
+  clearTimeout(winTimer);$('#win').hidden=true;
+  clearInterval(tm);
+  setTimeout(()=>{                       // let the new wallpaper paint before the puzzle is built
+    const[s,p]=generate($('#lvl').value);
+    sol=s;giv=p.slice();cur=p.slice();
+    hist=[];sel=-1;miss=0;hints=0;over=false;secs=0;
+    tm=setInterval(()=>{if(!over&&!document.hidden){secs++;top_()}},1000);
+    render();
+  },40);
+}  
+  
 function top_(){
   $('#time').textContent=fmt(secs);
   $('#info').textContent='Mistakes: '+miss+'   Hints: '+hints;
@@ -1052,7 +1067,7 @@ if(load()){
 }else{
   newGame();   // newGame() already picks the wallpaper
 }
-/* old browsers without aspect-ratio: make the board square with JS 
+/* old browsers without aspect-ratio: make the board square with JS */
 function sizeBoard(){
   const b=$('#board');
   if(window.CSS&&CSS.supports&&CSS.supports('aspect-ratio','1')){b.style.height='';return}
@@ -1061,7 +1076,7 @@ function sizeBoard(){
 addEventListener('resize',sizeBoard);
 addEventListener('orientationchange',sizeBoard);
 addEventListener('load',sizeBoard);
-sizeBoard(); */
+sizeBoard(); 
 </script>
 </body>
 </html>
