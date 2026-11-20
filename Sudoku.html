@@ -395,6 +395,11 @@ button:disabled{
   display:block;width:min(200px,60%);height:auto;aspect-ratio:260/354;
   margin:0 auto 12px;border-radius:10px;background:#000;
 }  
+
+/* pause the spinning border while any popup is open */
+body:has(:is(#rules,#scores,#confirm,#levels,#win):not([hidden])) .sudoku-frame::before{
+  animation-play-state:paused;
+}
 </style>
 </head>
 <body>
