@@ -400,6 +400,27 @@ button:disabled{
 body:has(:is(#rules,#scores,#confirm,#levels,#win):not([hidden])) .sudoku-frame::before{
   animation-play-state:paused;
 }
+
+
+  /* ---- fit btn-172 into the tools row and switch off the shared button look for Reset only ---- */
+#erase.btn-172,
+#erase.btn-172:hover,
+#erase.btn-172:active,
+#erase.btn-172[aria-pressed=true]{
+  position:relative;               /* the two text layers are positioned inside the button */
+  width:100%;height:44px;padding:0;/* fills its grid cell, same height as the other buttons */
+  font-size:14px;font-weight:bold;color:#fff;
+  background:none;background-image:none;
+  border:none;box-shadow:none;text-shadow:none;transform:none;
+}
+
+/* touch screens: flip while the button is pressed, since :hover sticks after a tap */
+@media (hover:none){
+  #erase.btn-172:hover .front-text{transform:rotateX(0deg) translateZ(2px)}
+  #erase.btn-172:hover .back-text{transform:rotateX(180deg) translateZ(2px)}
+}
+#erase.btn-172:active .front-text{transform:rotateX(-180deg) translateZ(2px)}
+#erase.btn-172:active .back-text{transform:rotateX(0deg) translateZ(2px)}
 </style>
 </head>
 <body>
@@ -526,7 +547,7 @@ const $=s=>document.querySelector(s);
 
 /* ---- wallpapers (landscape / desktop only) ---- */
 const WALLS=Array.from({length:10},(_,i)=>'sudoku_wallpapers/img'+(i+1));
-const WALL_EXT=['jpg','jpeg','png','webp','JPG','JPEG','PNG'];
+const WALL_EXT=['jpg'];
 const WALLPOS={1:'30% 50%',4:'70% 40%'};   // image number: 'x y'; any image not listed uses center
 const landscape=()=>matchMedia('(orientation:landscape)').matches;
 let wallIdx=-1;
