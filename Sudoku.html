@@ -553,46 +553,55 @@ const WALL_EXT=['jpg'];
 const WALLPOS={1:'30% 50%',4:'70% 40%'};   // image number: 'x y'; any image not listed uses center
 const landscape=()=>matchMedia('(orientation:landscape)').matches;
 let wallIdx=-1;
-function setWallpaper(i,bad){
-  bad=bad||[];
-  if(!WALLS.length)return;
-  let n=i;
-  if(n===undefined||n<0||n>=WALLS.length||bad.includes(n)){
-    const pool=WALLS.map((_,k)=>k).filter(k=>!bad.includes(k)&&(k!==wallIdx||WALLS.length===1));
-    if(!pool.length){
-      document.documentElement.style.setProperty('--wall','none');
-      document.body.classList.remove('wall');
-      return;
-    }
-    n=pool[Math.random()*pool.length|0];
-  }
-  wallIdx=n;
-  if(!landscape()){                          // portrait: no image, original look
-    document.documentElement.style.setProperty('--wall','none');
-    document.body.classList.remove('wall');
-    return;
-  }
+const WALL_URL={};   // remembers the working file for each wallpaper number
+let wallNext=-1;     // wallpaper already downloading for the next New game
+
+function loadWall(n,done){   // done(url) when found, done(null) if no extension works
+  if(WALL_URL[n]){done(WALL_URL[n]);return}
   let e=0;
   const img=new Image();
-  img.onload=()=>{
-    if(wallIdx!==n)return;
-    const st=document.documentElement.style;
-    st.setProperty('--wall','url("'+img.src+'")');
-    st.setProperty('--wallpos',WALLPOS[n+1]||'center');
-    document.body.classList.add('wall');
-  };
+  img.onload=()=>{WALL_URL[n]=img.src;done(img.src)};
   img.onerror=()=>{
-    if(wallIdx!==n)return;
     e++;
-    if(e<WALL_EXT.length){img.src=WALLS[n]+'.'+WALL_EXT[e]}
-    else{
-      console.warn('Wallpaper not found: '+WALLS[n]);
-      setWallpaper(undefined,bad.concat(n));
-    }
+    if(e<WALL_EXT.length)img.src=WALLS[n]+'.'+WALL_EXT[e];
+    else done(null);
   };
   img.src=WALLS[n]+'.'+WALL_EXT[0];
 }
 
+function preloadNext(){      // quietly download another wallpaper for next time
+  const pool=WALLS.map((_,k)=>k).filter(k=>k!==wallIdx);
+  if(!pool.length)return;
+  wallNext=pool[Math.random()*pool.length|0];
+  loadWall(wallNext,()=>{});
+}
+
+function setWallpaper(i,bad){
+  bad=bad||[];
+  if(!WALLS.length)return;
+  const st=document.documentElement.style;
+  let n=i;
+  if(n===undefined||n<0||n>=WALLS.length||bad.includes(n)){
+    const pool=WALLS.map((_,k)=>k).filter(k=>!bad.includes(k)&&(k!==wallIdx||WALLS.length===1));
+    if(!pool.length){st.setProperty('--wall','none');document.body.classList.remove('wall');return}
+    n=(wallNext>=0&&pool.includes(wallNext))?wallNext:pool[Math.random()*pool.length|0];
+    wallNext=-1;                             // used up, a new one is chosen after this one shows
+  }
+  wallIdx=n;
+  if(!landscape()){                          // portrait: no image, original look
+    st.setProperty('--wall','none');
+    document.body.classList.remove('wall');
+    return;
+  }
+  loadWall(n,url=>{
+    if(wallIdx!==n)return;                   // a newer choice replaced this one
+    if(!url){console.warn('Wallpaper not found: '+WALLS[n]);setWallpaper(undefined,bad.concat(n));return}
+    st.setProperty('--wall','url("'+url+'")');
+    st.setProperty('--wallpos',WALLPOS[n+1]||'center');
+    document.body.classList.add('wall');
+    preloadNext();                           // start downloading the next one in the background
+  });
+}
 const pop=m=>{let n=0;while(m){m&=m-1;n++}return n};
 const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 
@@ -642,7 +651,7 @@ let lastLvl;   // level of the game being played, used to undo a cancelled level
 const fmt=s=>String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
 const snap=()=>{hist.push([cur.slice(),miss]);if(hist.length>200)hist.shift()};
 
- /* 
+  
 function newGame(){
   setWallpaper();
   const[s,p]=generate($('#lvl').value);
@@ -653,21 +662,7 @@ function newGame(){
   clearInterval(tm);tm=setInterval(()=>{if(!over&&!document.hidden){secs++;top_()}},1000);
   render();
 }
-*/
 
-function newGame(){
-  setWallpaper();
-  clearTimeout(winTimer);$('#win').hidden=true;
-  clearInterval(tm);
-  setTimeout(()=>{                       // let the new wallpaper paint before the puzzle is built
-    const[s,p]=generate($('#lvl').value);
-    sol=s;giv=p.slice();cur=p.slice();
-    hist=[];sel=-1;miss=0;hints=0;over=false;secs=0;
-    tm=setInterval(()=>{if(!over&&!document.hidden){secs++;top_()}},1000);
-    render();
-  },40);
-}  
-  
 function top_(){
   $('#time').textContent=fmt(secs);
   $('#info').textContent='Mistakes: '+miss+'   Hints: '+hints;
