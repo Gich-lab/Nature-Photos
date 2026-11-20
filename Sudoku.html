@@ -960,7 +960,7 @@ document.addEventListener('keydown',e=>{
 },true);
 
 /* ---- finished popup: the pug plays once for 6 seconds, then the popup fades away ---- */
-const WIN_MS=6000; // duration of playback
+// const WIN_MS=6000; // duration of playback
 let winTimer,winToken=0;
 function showWin(open){
   const box=$('#win');
@@ -976,13 +976,13 @@ function showWin(open){
   const img=$('#pug');
   const reveal=()=>{
     if(tok!==winToken||!box.hidden)return;
-    box.hidden=false;                          // popup appears only once the pug is ready, so it starts from frame 1
+    box.hidden=false;  // popup appears only once the pug is ready, so it starts from frame 1
     $('#again').focus();
-    winTimer=setTimeout(()=>showWin(false),WIN_MS);
+    // winTimer=setTimeout(()=>showWin(false),WIN_MS);
   };
   img.onload=reveal;img.onerror=reveal;
-  img.src='dancing_pug.webp?'+Date.now();      // fresh URL so it always restarts
-  setTimeout(reveal,1500);                     // fallback if the image is slow
+  img.src='dancing_pug.webp?'+Date.now();  // fresh URL so it always restarts
+  setTimeout(reveal,1500);      // fallback if the image is slow
 }
 
   
