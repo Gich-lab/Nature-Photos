@@ -722,7 +722,7 @@ function flipHint(){ // animate the hint button in an appealing way
   void b.offsetWidth;             // restarts the animation on rapid clicks
   b.classList.add('hint-flip');
 }
-$('#hintBtn').addEventListener('animationend', e => e.currentTarget.classList.remove('hint-flip'));
+$('#hint').addEventListener('animationend', e => e.currentTarget.classList.remove('hint-flip'));
   
 function hint(){
   if(over||hints>=HINT_MAX[$('#lvl').value])return;
