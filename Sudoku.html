@@ -421,6 +421,17 @@ body:has(:is(#rules,#scores,#confirm,#levels,#win):not([hidden])) .sudoku-frame:
 #erase.btn-172:active .front-text{transform:rotateX(-180deg) translateZ(2px)}
 #erase.btn-172:active .back-text{transform:rotateX(0deg) translateZ(2px)}
 
+  /*flip the hint button animatedly*/
+@keyframes hint-flip {
+  from { transform: perspective(600px) rotateX(0deg); }
+  to   { transform: perspective(600px) rotateX(360deg); }
+}
+.hint-flip { animation: hint-flip .5s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hint-flip { animation: none; }
+}
+  
 </style>
 </head>
 <body>
@@ -612,23 +623,27 @@ function cands(g,i){
   for(let a=0;a<3;a++)for(let b=0;b<3;b++)m&=~(1<<g[(br+a)*9+bc+b]);
   return m;
 }
+  
 function pick(g){
   let best=-1,bm=0,bn=10;
   for(let i=0;i<81;i++)if(!g[i]){const m=cands(g,i),n=pop(m);if(n<bn){bn=n;best=i;bm=m;if(n<2)break}}
   return[best,bm,bn];
 }
+  
 const vals=m=>{const a=[];for(let v=1;v<=9;v++)if(m&(1<<v))a.push(v);return a};
 function fill(g){
   const[b,m,n]=pick(g);if(b<0)return true;if(!n)return false;
   for(const v of shuf(vals(m))){g[b]=v;if(fill(g))return true}
   g[b]=0;return false;
 }
+  
 function count(g,lim){
   const[b,m,n]=pick(g);if(b<0)return 1;if(!n)return 0;
   let t=0;
   for(const v of vals(m)){g[b]=v;t+=count(g,lim-t);if(t>=lim)break}
   g[b]=0;return t;
 }
+  
 const CLUES={easy:40,medium:32,hard:26};   // how many numbers are pre-filled at the start, per level
 const HINT_MAX={easy:5,medium:3,hard:2};   // hints allowed per game, per level
 // The game logic: build a finished Sudoku, then erase numbers one at a time
@@ -700,6 +715,15 @@ function undo(){
   cur=hist.pop()[0];   // restore the board only: mistakes and hints keep their counts
   render();
 }
+
+function flipHint(){ // animate the hint button in an appealing way
+  const b = $('#hint');        // use your Hint button's real id
+  b.classList.remove('hint-flip');
+  void b.offsetWidth;             // restarts the animation on rapid clicks
+  b.classList.add('hint-flip');
+}
+$('#hintBtn').addEventListener('animationend', e => e.currentTarget.classList.remove('hint-flip'));
+  
 function hint(){
   if(over||hints>=HINT_MAX[$('#lvl').value])return;
   let t=-1;
@@ -709,6 +733,7 @@ function hint(){
     if(!w.length)return;t=w[Math.random()*w.length|0];
   }
   snap();cur[t]=sol[t];hints++;sel=t;
+  flipHint(); // flip the button on click
   render();check();
 }
 function check(){
