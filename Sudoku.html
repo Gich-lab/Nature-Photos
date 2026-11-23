@@ -423,10 +423,11 @@ body:has(:is(#rules,#scores,#confirm,#levels,#win):not([hidden])) .sudoku-frame:
 
   /*flip the hint button animatedly*/
 @keyframes hint-flip {
-  from { transform: perspective(600px) rotateX(0deg); }
-  to   { transform: perspective(600px) rotateX(360deg); }
+  0%   { transform: perspective(600px) rotateX(0deg);  animation-timing-function: ease-in; }
+  50%  { transform: perspective(600px) rotateX(90deg); animation-timing-function: ease-out; }
+  100% { transform: perspective(600px) rotateX(0deg); }
 }
-.hint-flip { animation: hint-flip .5s ease; }
+.hint-flip { animation: hint-flip .5s; }
 
 @media (prefers-reduced-motion: reduce) {
   .hint-flip { animation: none; }
@@ -716,16 +717,22 @@ function undo(){
   render();
 }
 
-function flipHint(){ // animate the hint button in an appealing way
-  const b = $('#hint');        // use your Hint button's real id
+function flipHint(oldText){
+  const b = $('#hint');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;  // no animation, keep the new label
+  b.textContent = oldText;  // keep showing the old count at first
   b.classList.remove('hint-flip');
-  void b.offsetWidth;             // restarts the animation on rapid clicks
+  void b.offsetWidth;
   b.classList.add('hint-flip');
+  setTimeout(() => {   // button is edge-on: swap in the new count
+    b.textContent = 'Hint (' + Math.max(HINT_MAX[$('#lvl').value] - hints, 0) + ')';
+  }, 250);
 }
 $('#hint').addEventListener('animationend', e => e.currentTarget.classList.remove('hint-flip'));
   
 function hint(){
   if(over||hints>=HINT_MAX[$('#lvl').value])return;
+  const oldText=$('#hint').textContent;
   let t=-1;
   if(sel>=0&&!giv[sel]&&cur[sel]!==sol[sel])t=sel;
   else{
@@ -733,9 +740,10 @@ function hint(){
     if(!w.length)return;t=w[Math.random()*w.length|0];
   }
   snap();cur[t]=sol[t];hints++;sel=t;
-  flipHint(); // flip the button on click
   render();check();
+  flipHint(oldText);
 }
+  
 function check(){
   if(cur.every((v,i)=>v===sol[i])){
     over=true;clearInterval(tm);
