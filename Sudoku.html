@@ -94,7 +94,8 @@ button:disabled{opacity:.3;cursor:default}
 .sudoku-frame::after{
     content:"";
     position:absolute;
-    inset:3px;
+    top:3px;right:3px;bottom:3px;left:3px;
+    /*inset:3px;*/ /*old browsers compatibility*/
 
     background:#000;
 
@@ -155,7 +156,7 @@ button:disabled{opacity:.3;cursor:default}
 
 /* Popups (rules + scores + confirm + levels + finished): card sits near the top, background is lightly blurred */
 #rules,#scores,#confirm,#levels,#win{
-  position:fixed;inset:0;z-index:20;
+  position:fixed;top:0;right:0;bottom:0;left:0;z-index:20; /*replaced inset:0; for compatibility with older browsers*/
   display:flex;align-items:flex-start;justify-content:center;
   padding:150px 16px 16px;               /* lower this number to raise the card further */
   background:rgba(0,0,0,.45);
@@ -183,8 +184,8 @@ button:disabled{opacity:.3;cursor:default}
 
 /* wallpaper layer: pinned to all four screen edges, including the safe areas */
 body::before{
-  content:"";position:fixed;inset:0;
-  min-height:100lvh;                   /* stays full height when the toolbar collapses */
+  content:"";position:fixed;top:0;right:0;bottom:0;left:0; /*inset:0;*/
+  min-height:100lvh;  /* stays full height when the toolbar collapses */
   z-index:-1;
   background-color:var(--bg);
   background-image:var(--wall,none);
