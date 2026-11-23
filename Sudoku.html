@@ -26,8 +26,8 @@ select,button{font:inherit;color:var(--ink);background:var(--btn);border:1.5px s
   .controls select:hover:not([aria-pressed=true]){
     border-color:#2563d6;
     box-shadow:
-      0 0 0 3px rgba(37,99,214,.55),          /* blue ring, drawn on top */
-      0 0 14px 4px rgba(37,99,214,.45),       /* soft outer glow */
+      0 0 0 3px rgba(37,99,214,.55), /* blue ring, drawn on top */
+      0 0 14px 4px rgba(37,99,214,.45), /* soft outer glow */
       inset 0 1px 0 rgba(255,255,255,.8),
       inset 0 -2px 3px rgba(0,0,0,.12),
       0 3px 0 var(--edge);
@@ -59,7 +59,6 @@ button:disabled{opacity:.3;cursor:default}
     padding:3px;
     border-radius:8px;
     overflow:hidden;
-
     box-shadow:
         0 0 12px rgba(34,211,238,.35),
         0 0 24px rgba(34,211,238,.20);
@@ -96,18 +95,13 @@ button:disabled{opacity:.3;cursor:default}
     position:absolute;
     top:3px;right:3px;bottom:3px;left:3px;
     /*inset:3px;*/ /*old browsers compatibility*/
-
     background:#000;
-
     border-radius:5px;
     z-index:1;
 }
 
 /* board stays above the animation */
-#board{
-    position:relative;
-    z-index:2;
-}
+#board{position:relative;z-index:2;}
 
 @keyframes borderRunner{
     from{
@@ -158,9 +152,9 @@ button:disabled{opacity:.3;cursor:default}
 #rules,#scores,#confirm,#levels,#win{
   position:fixed;top:0;right:0;bottom:0;left:0;z-index:20; /*replaced inset:0; for compatibility with older browsers*/
   display:flex;align-items:flex-start;justify-content:center;
-  padding:150px 16px 16px;               /* lower this number to raise the card further */
+  padding:150px 16px 16px;  /* lower this number to raise the card further */
   background:rgba(0,0,0,.45);
-  backdrop-filter:blur(6px);             /* change both blur values together */
+  backdrop-filter:blur(6px);  /* change both blur values together */
   -webkit-backdrop-filter:blur(6px);
 }
 .rules-card{
@@ -220,10 +214,10 @@ button,
   --shade:linear-gradient(to bottom,rgba(255,255,255,var(--hi)) 0,rgba(255,255,255,0) 45%,rgba(0,0,0,var(--lo)) 100%);
   background-image:var(--shade);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.8),      /* light top rim */
-    inset 0 -2px 3px rgba(0,0,0,.12),        /* grey shading along the bottom */
-    0 3px 0 var(--edge),                     /* grey edge = thickness */
-    0 5px 7px rgba(0,0,0,.2);                /* soft shadow underneath */
+    inset 0 1px 0 rgba(255,255,255,.8), /* light top rim */
+    inset 0 -2px 3px rgba(0,0,0,.12), /* grey shading along the bottom */
+    0 3px 0 var(--edge),  /* grey edge = thickness */
+    0 5px 7px rgba(0,0,0,.2);  /* soft shadow underneath */
   transition:transform .06s,box-shadow .06s;
 }
 
@@ -302,7 +296,7 @@ button:disabled{
 #counts{
   position:relative;
   overflow:hidden;
-  isolation:isolate;                 /* keeps the circle behind the text, above the button face */
+  isolation:isolate; /* keeps the circle behind the text, above the button face */
   transition:transform .06s,box-shadow .06s,color .3s .1s,border-color .3s;
 }
 
@@ -371,15 +365,15 @@ button:disabled{
 #scoresBtn{
   position:relative;
   overflow:hidden;
-  isolation:isolate;                 /* keeps the fill behind the label */
+  isolation:isolate; /* keeps the fill behind the label */
 }
 #scoresBtn::before{
   content:"";
   position:absolute;left:0;top:0;bottom:0;
   width:var(--p,0%);
-  background:linear-gradient(90deg,#34d399,#22d3ee);   /* green to cyan, matches the board lines */
-  box-shadow:inset 0 -6px 10px rgba(0,0,0,.12);        /* slight depth */
-  transition:width .8s cubic-bezier(.22,1,.36,1);      /* smooth glide to the new value */
+  background:linear-gradient(90deg,#34d399,#22d3ee);  /* green to cyan, matches the board lines */
+  box-shadow:inset 0 -6px 10px rgba(0,0,0,.12); /* slight depth */
+  transition:width .8s cubic-bezier(.22,1,.36,1); /* smooth glide to the new value */
   z-index:-1;
   pointer-events:none;
 }
@@ -407,8 +401,8 @@ body:has(:is(#rules,#scores,#confirm,#levels,#win):not([hidden])) .sudoku-frame:
 #erase.btn-172:hover,
 #erase.btn-172:active,
 #erase.btn-172[aria-pressed=true]{
-  position:relative;               /* the two text layers are positioned inside the button */
-  width:100%;height:44px;padding:0;/* fills its grid cell, same height as the other buttons */
+  position:relative; /* the two text layers are positioned inside the button */
+  width:100%;height:44px;padding:0; /* fills its grid cell, same height as the other buttons */
   font-size:14px;font-weight:bold;color:#fff;
   background:none;background-image:none;
   border:none;box-shadow:none;text-shadow:none;transform:none;
@@ -561,14 +555,14 @@ const $=s=>document.querySelector(s);
 /* ---- wallpapers (landscape / desktop only) ---- */
 const WALLS=Array.from({length:10},(_,i)=>'sudoku_wallpapers/img'+(i+1));
 const WALL_EXT=['jpg'];
-const WALLPOS={1:'30% 50%',4:'70% 40%'};   // image number: 'x y'; any image not listed uses center
+const WALLPOS={1:'30% 50%',4:'70% 40%'};  // image number: 'x y'; any image not listed uses center
 const landscape=()=>matchMedia('(orientation:landscape)').matches;
 let wallIdx=-1;
-const WALL_URL={};   // remembers the working file for each wallpaper number
-let wallNext=-1;     // wallpaper already downloading for the next New game
+const WALL_URL={}; // remembers the working file for each wallpaper number
+let wallNext=-1;  // wallpaper already downloading for the next New game
 
  
-function loadWall(n,done){   // done(url) when found, done(null) if no extension works
+function loadWall(n,done){  // done(url) when found, done(null) if no extension works
   if(WALL_URL[n]){done(WALL_URL[n]);return}
   let e=0;
   const img=new Image();
@@ -581,7 +575,7 @@ function loadWall(n,done){   // done(url) when found, done(null) if no extension
   img.src=WALLS[n]+'.'+WALL_EXT[0];
 }
   
-function preloadNext(){      // quietly download another wallpaper for next time
+function preloadNext(){  // quietly download another wallpaper for next time
   const pool=WALLS.map((_,k)=>k).filter(k=>k!==wallIdx);
   if(!pool.length)return;
   wallNext=pool[Math.random()*pool.length|0];
@@ -597,21 +591,21 @@ function setWallpaper(i,bad){
     const pool=WALLS.map((_,k)=>k).filter(k=>!bad.includes(k)&&(k!==wallIdx||WALLS.length===1));
     if(!pool.length){st.setProperty('--wall','none');document.body.classList.remove('wall');return}
     n=(wallNext>=0&&pool.includes(wallNext))?wallNext:pool[Math.random()*pool.length|0];
-    wallNext=-1;                             // used up, a new one is chosen after this one shows
+    wallNext=-1; // used up, a new one is chosen after this one shows
   }
   wallIdx=n;
-  if(!landscape()){                          // portrait: no image, original look
+  if(!landscape()){  // portrait: no image, original look
     st.setProperty('--wall','none');
     document.body.classList.remove('wall');
     return;
   }
   loadWall(n,url=>{
-    if(wallIdx!==n)return;                   // a newer choice replaced this one
+    if(wallIdx!==n)return;  // a newer choice replaced this one
     if(!url){console.warn('Wallpaper not found: '+WALLS[n]);setWallpaper(undefined,bad.concat(n));return}
     st.setProperty('--wall','url("'+url+'")');
     st.setProperty('--wallpos',WALLPOS[n+1]||'center');
     document.body.classList.add('wall');
-    preloadNext();                           // start downloading the next one in the background
+    preloadNext(); // start downloading the next one in the background
   });
 }
 const pop=m=>{let n=0;while(m){m&=m-1;n++}return n};
@@ -646,8 +640,8 @@ function count(g,lim){
   g[b]=0;return t;
 }
   
-const CLUES={easy:40,medium:32,hard:26};   // how many numbers are pre-filled at the start, per level
-const HINT_MAX={easy:5,medium:3,hard:2};   // hints allowed per game, per level
+const CLUES={easy:40,medium:32,hard:26};  // how many numbers are pre-filled at the start, per level
+const HINT_MAX={easy:5,medium:3,hard:2};  // hints allowed per game, per level
 // The game logic: build a finished Sudoku, then erase numbers one at a time
 // (keeping exactly one solution) until the level's clue target is reached.
 function generate(level){
@@ -663,10 +657,9 @@ function generate(level){
 
 /* ---- game state ---- */
 let showCounts=false,sol,giv,cur,sel=-1,hist=[],secs=0,tm,miss=0,hints=0,over=false;
-let lastLvl;   // level of the game being played, used to undo a cancelled level change
+let lastLvl;  // level of the game being played, used to undo a cancelled level change
 const fmt=s=>String(s/60|0).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
 const snap=()=>{hist.push([cur.slice(),miss]);if(hist.length>200)hist.shift()};
-
 
 function newGame(){
   setWallpaper();
@@ -701,12 +694,12 @@ function erase(){
   }
   snap();
   cur=giv.slice(); // back to the given numbers only
-  sel=-1;          // same reset New game does: removes the grey highlight
+  sel=-1; // same reset New game does: removes the grey highlight
   render();
 }
 
 function eraseCell(){
-  if(over||sel<0||giv[sel]||!cur[sel])return;   // nothing selected, a given, or already empty
+  if(over||sel<0||giv[sel]||!cur[sel])return;  // nothing selected, a given, or already empty
   snap();
   cur[sel]=0;
   render();
@@ -714,7 +707,7 @@ function eraseCell(){
 
 function undo(){
   if(over||!hist.length)return;
-  cur=hist.pop()[0];   // restore the board only: mistakes and hints keep their counts
+  cur=hist.pop()[0];  // restore the board only: mistakes and hints keep their counts
   render();
 }
 
@@ -748,10 +741,10 @@ function hint(){
 function check(){
   if(cur.every((v,i)=>v===sol[i])){
     over=true;clearInterval(tm);
-    saveScore();   // record this finished game (device + Google Sheet)
+    saveScore(); // record this finished game (device + Google Sheet)
     $('#wintxt').textContent='Solved in '+fmt(secs)+' with '+miss+(miss===1?' mistake':' mistakes')+' and '+hints+(hints===1?' hint.':' hints.');
     showWin(true);
-    //$('#win').hidden=false;     // finished popup: Play again starts a new game, otherwise the board stays finished
+    //$('#win').hidden=false; // finished popup: Play again starts a new game, otherwise the board stays finished
     //$('#again').focus();
   }
 }
@@ -868,9 +861,8 @@ $('#undo').onclick=undo;
 $('#erase').onclick=erase;
 $('#hint').onclick=hint;
 $('#counts').onclick=()=>{showCounts=!showCounts;render()};
-$('#again').onclick=newGame;                                   // Play again: start a new game
-//$('#win').addEventListener('click',e=>{if(e.target.id==='win')$('#win').hidden=true});   // tap outside: close, the game stays finished
-$('#win').addEventListener('click',e=>{if(e.target.id==='win')showWin(false)});   // tap outside: close, the game stays finished
+$('#again').onclick=newGame; // Play again: start a new game
+$('#win').addEventListener('click',e=>{if(e.target.id==='win')showWin(false)}); // tap outside: close, the game stays finished
 
 $('#new').onclick=()=>{
   if(!started()){newGame();return}
@@ -911,7 +903,7 @@ $('#levels').addEventListener('click',e=>{
   if(e.target.id==='levels'){showLevels(false);return}
   const b=e.target.closest('[data-lvl]');if(!b)return;
   showLevels(false);
-  if(b.dataset.lvl===$('#lvl').value)return;   // same level: nothing to do
+  if(b.dataset.lvl===$('#lvl').value)return; // same level: nothing to do
   $('#lvl').value=b.dataset.lvl;
   $('#lvl').onchange();  // starts a game, or asks first if one is in progress
 });
@@ -951,7 +943,7 @@ document.querySelectorAll('#rulesBtn, #lvlBtn, #new, #undo, #erase, #hint').forE
 function toggleRules(open){
   const box=$('#rules');
   const show=open===undefined?box.hidden:open;
-  if(show){showScores(false);showLevels(false)}   // never show two popups at once
+  if(show){showScores(false);showLevels(false)}  // never show two popups at once
   box.hidden=!show;
   // $('#rulesBtn').textContent=show?'Close':'Info';
   $('#rulesBtn').setAttribute('aria-expanded',show);
@@ -1024,19 +1016,18 @@ document.addEventListener('keydown',e=>{
   e.stopImmediatePropagation();
   if(e.key==='Escape'){
     if(!$('#confirm').hidden)closeConfirm(false);
-    // else if(!$('#win').hidden)$('#win').hidden=true;      // the game stays finished
+    // else if(!$('#win').hidden)$('#win').hidden=true; // the game stays finished
     else if(!$('#win').hidden)showWin(false);
     else{toggleRules(false);showScores(false);showLevels(false)}
   }
 },true);
 
-/* ---- finished popup: the pug plays once for 6 seconds, then the popup fades away ---- */
-// const WIN_MS=6000; // duration of playback
+/* ---- finished popup: the pug plays on loop ---- */
 let winTimer,winToken=0;
 function showWin(open){
   const box=$('#win');
   clearTimeout(winTimer);
-  const tok=++winToken;                        // lets a stale load callback be ignored
+  const tok=++winToken; // lets a stale load callback be ignored
   if(!open){
     if(box.hidden)return;
     box.classList.add('fade');
@@ -1052,10 +1043,9 @@ function showWin(open){
     // winTimer=setTimeout(()=>showWin(false),WIN_MS);
   };
   img.onload=reveal;img.onerror=reveal;
-  img.src='dancing_pug.webp?'+Date.now();  // fresh URL so it always restarts
-  setTimeout(reveal,1500);      // fallback if the image is slow
+  img.src='dancing_pug.webp?'+Date.now(); // fresh URL so it always restarts
+  setTimeout(reveal,1500); // fallback if the image is slow
 }
-
   
 /* ---- save and resume ---- */
 const KEY='sudoku-save-v1';
@@ -1093,7 +1083,7 @@ if(load()){
   tm=setInterval(()=>{if(!over&&!document.hidden){secs++;top_()}},1000);
   render();
 }else{
-  newGame();   // newGame() already picks the wallpaper
+  newGame();  // newGame() already picks the wallpaper
 }
 /* old browsers without aspect-ratio: make the board square with JS */
 function sizeBoard(){
