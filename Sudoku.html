@@ -741,7 +741,8 @@ function hint(){
 function check(){
   if(cur.every((v,i)=>v===sol[i])){
     over=true;clearInterval(tm);
-    saveScore(); // record this finished game (device + Google Sheet)
+    // saveScore(); // record this finished game (device + Google Sheet)
+    try{saveScore()}catch(e){console.error(e)}   // a save problem must never stop the pug
     $('#wintxt').textContent='Solved in '+fmt(secs)+' with '+miss+(miss===1?' mistake':' mistakes')+' and '+hints+(hints===1?' hint.':' hints.');
     showWin(true);
     //$('#win').hidden=false; // finished popup: Play again starts a new game, otherwise the board stays finished
