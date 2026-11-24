@@ -1,7 +1,11 @@
 /* Sudoku service worker: stores the page, pug and wallpapers on the first visit.
-   Put this file in the SAME folder as the game's HTML file.
-   Change VERSION whenever you add or rename files, so phones refresh the stored copy. */
-const VERSION = 'sudoku-v2.4';
+   Change VERSION whenever you add or rename files, or replace the pug or a wallpaper,
+   so phones refresh the stored copy. */
+const VERSION = 'sudoku-v2.5';
+
+// true  = when the game is opened online, quietly fetch a newer copy of the page for next time
+// false = never touch the network once files are stored (page updates then arrive only when VERSION changes)
+const REFRESH_PAGE = true;
 
 const CORE = ['./', 'sudoku.ico', 'dancing_pug.webp'];
 const WALLPAPERS = Array.from({ length: 10 }, (_, i) => 'sudoku_wallpapers/img' + (i + 1) + '.jpg');
@@ -46,22 +50,25 @@ self.addEventListener('fetch', event => {
     const key = keyFor(req.url);
     const stored = await cache.match(key);
 
-    // fetch a fresh copy in the background; use it next time
-    const refresh = fetch(req).then(res => {
+    if (stored) {
+      // only the page itself may refresh in the background; the pug and wallpapers never touch the network
+      if (REFRESH_PAGE && req.mode === 'navigate') {
+        fetch(req).then(res => { if (res && res.ok) cache.put(key, res.clone()); }).catch(() => {});
+      }
+      return stored;   // instant, no network
+    }
+
+    try {
+      const res = await fetch(req);
       if (res && res.ok) cache.put(key, res.clone());
       return res;
-    }).catch(() => null);
-
-    if (stored) return stored;   // instant, works offline
-
-    const fresh = await refresh;
-    if (fresh) return fresh;
-
-    // offline and not stored: for a page visit, fall back to the game itself
-    if (req.mode === 'navigate') {
-      const page = await cache.match(keyFor('./'));
-      if (page) return page;
+    } catch (e) {
+      // offline and not stored: for a page visit, fall back to the game itself
+      if (req.mode === 'navigate') {
+        const page = await cache.match(keyFor('./'));
+        if (page) return page;
+      }
+      return new Response('', { status: 504, statusText: 'Offline' });
     }
-    return new Response('', { status: 504, statusText: 'Offline' });
   })());
 });
