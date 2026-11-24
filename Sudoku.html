@@ -970,25 +970,49 @@ const deviceId=(()=>{
   }catch(e){return'unknown'}
 })();
 
-function sendToSheet(r){
-  if(!SHEET_URL)return;
-  fetch(SHEET_URL,{
-    method:'POST',mode:'no-cors',
-    headers:{'Content-Type':'text/plain;charset=utf-8'},
-    body:JSON.stringify({key:SHEET_KEY,device:deviceId,level:r.lvl,time:fmt(r.t),
-      seconds:r.t,mistakes:r.m,hints:r.h,when:fmtDate(r.at)})
-  }).catch(()=>{});
+/* ---- Google Sheet queue: results wait here until they are really sent ---- */
+const QKEY='sudoku-sheet-queue-v1';
+const getQueue=()=>{try{return JSON.parse(localStorage.getItem(QKEY))||[]}catch(e){return[]}};
+const setQueue=q=>{try{localStorage.setItem(QKEY,JSON.stringify(q))}catch(e){}};
+
+let flushing=false;
+async function flushQueue(){
+  if(!SHEET_URL||flushing||navigator.onLine===false)return;
+  flushing=true;
+  try{
+    while(true){
+      const q=getQueue();
+      if(!q.length)break;
+      const r=q[0];
+      try{
+        await fetch(SHEET_URL,{
+          method:'POST',mode:'no-cors',
+          headers:{'Content-Type':'text/plain;charset=utf-8'},
+          body:JSON.stringify({key:SHEET_KEY,id:r.id,device:deviceId,level:r.lvl,time:fmt(r.t),
+            seconds:r.t,mistakes:r.m,hints:r.h,when:fmtDate(r.at)})
+        });
+      }catch(e){break}   // still offline: keep it queued and try again later
+      setQueue(getQueue().filter(x=>x.id!==r.id));   // sent: remove only this one
+    }
+  }finally{flushing=false}
 }
 
 function saveScore(){
-  const rec={t:secs,m:miss,h:hints,lvl:$('#lvl').value,at:Date.now()};
+  const rec={id:Date.now().toString(36)+'-'+deviceId+'-'+Math.random().toString(36).slice(2,6),
+             t:secs,m:miss,h:hints,lvl:$('#lvl').value,at:Date.now()};
   try{
     const list=getScores();
     list.unshift(rec);
     localStorage.setItem(SKEY,JSON.stringify(list.slice(0,100)));   // keep the latest 100
   }catch(e){}
-  sendToSheet(rec);
+  setQueue(getQueue().concat(rec));
+  if(navigator.onLine)flushQueue();
 }
+
+// retry when the connection returns and when the page opens or comes back into view
+addEventListener('online',flushQueue);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)flushQueue()});
+flushQueue();
 
 function showScores(open){
   $('#scores').hidden=!open;
