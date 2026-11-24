@@ -1,7 +1,7 @@
 /* Sudoku service worker: stores the page, pug and wallpapers on the first visit.
    Put this file in the SAME folder as the game's HTML file.
    Change VERSION whenever you add or rename files, so phones refresh the stored copy. */
-const VERSION = 'sudoku-v2';
+const VERSION = 'sudoku-v2.1';
 
 const CORE = ['./', 'sudoku.ico', 'dancing_pug.webp'];
 const WALLPAPERS = Array.from({ length: 10 }, (_, i) => 'sudoku_wallpapers/img' + (i + 1) + '.jpg');
