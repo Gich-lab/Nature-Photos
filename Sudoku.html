@@ -1091,6 +1091,14 @@ function sizeBoard(){
   if(window.CSS&&CSS.supports&&CSS.supports('aspect-ratio','1')){b.style.height='';return}
   b.style.height=b.getBoundingClientRect().width+'px';
 }
+
+/* offline support: stores the page, pug and wallpapers on the first visit */
+if('serviceWorker' in navigator){
+  addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}  
+  
 addEventListener('resize',sizeBoard);
 addEventListener('orientationchange',sizeBoard);
 addEventListener('load',sizeBoard);
