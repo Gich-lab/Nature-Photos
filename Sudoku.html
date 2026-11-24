@@ -862,7 +862,7 @@ $('#undo').onclick=undo;
 $('#erase').onclick=erase;
 $('#hint').onclick=hint;
 $('#counts').onclick=()=>{showCounts=!showCounts;render()};
-$('#again').onclick=newGame; // Play again: start a new game
+$('#again').onclick=()=>{newGame();flushQueue()}; // Play again: start a new game, then send game results to g-sheet
 $('#win').addEventListener('click',e=>{if(e.target.id==='win')showWin(false)}); // tap outside: close, the game stays finished
 
 $('#new').onclick=()=>{
@@ -978,7 +978,7 @@ const setQueue=q=>{try{localStorage.setItem(QKEY,JSON.stringify(q))}catch(e){}};
 
 let flushing=false;
 async function flushQueue(){
-  if(!SHEET_URL||flushing||navigator.onLine===false)return;
+  if(!SHEET_URL||flushing||navigator.onLine===false||!$('#win').hidden)return;
   flushing=true;
   try{
     while(true){
@@ -1006,8 +1006,7 @@ function saveScore(){
     list.unshift(rec);
     localStorage.setItem(SKEY,JSON.stringify(list.slice(0,100)));   // keep the latest 100
   }catch(e){}
-  setQueue(getQueue().concat(rec));
-  if(navigator.onLine)flushQueue();
+  setQueue(getQueue().concat(rec));   // stored now; sent when the pug popup is closed
 }
 
 // retry when the connection returns and when the page opens or comes back into view
@@ -1056,7 +1055,7 @@ function showWin(open){
   if(!open){
     if(box.hidden)return;
     box.classList.add('fade');
-    winTimer=setTimeout(()=>{box.hidden=true;$('#pug').removeAttribute('src')},250);
+    winTimer=setTimeout(()=>{box.hidden=true;$('#pug').removeAttribute('src');flushQueue()},250);
     return;
   }
   box.classList.remove('fade');
