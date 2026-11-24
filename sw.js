@@ -1,6 +1,6 @@
-/* Sudoku service worker: stores the page, pug and wallpapers on the first visit.
-   Change VERSION whenever you add or rename files, or replace the pug or a wallpaper,
-   so phones refresh the stored copy. */
+/* Sudoku service worker: this file is run by the browser in the background, separately from the game's page.
+   It stores the page, pug and wallpapers on the first visit.
+   Change VERSION whenever you add or rename files, or replace the pug or a wallpaper, so phones refresh the stored copy. */
 const VERSION = 'sudoku-v2.5';
 
 // true  = when the game is opened online, quietly fetch a newer copy of the page for next time
