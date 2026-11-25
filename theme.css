@@ -6,22 +6,31 @@
 @property --ang{syntax:'<angle>';inherits:false;initial-value:0deg}
 
 /* ---------- default theme (changing wallpapers) ---------- */
-body{
+/*body{
   --accent:#22d3ee;--onacc:#04222a;--ringhi:#fff;
   --bline:rgba(255,255,255,.7);--btn:rgba(255,255,255,.62);
   --b-glass:rgba(8,16,28,.5);--b-line:rgba(255,255,255,.2);--b-box:rgba(255,255,255,.75);
   --b-ink:#fff;--b-sel:rgba(34,211,238,.45);--b-peer:rgba(255,255,255,.12);
   --b-same:rgba(34,211,238,.25);--b-user:#7fe9ff;--b-bad:#ff8a8a;--b-badbg:rgba(255,70,70,.3);
 }
-@media(prefers-color-scheme:dark){body{--btn:rgba(24,34,58,.6);--bline:rgba(255,255,255,.2)}}
+@media(prefers-color-scheme:dark){body{--btn:rgba(24,34,58,.6);--bline:rgba(255,255,255,.2)}}*/
 
-/* ---------- Ocean ---------- */
+/* ---------- default theme (changing wallpapers) ---------- */
+body{
+  --accent:#22d3ee;--onacc:#04222a;--ringhi:#fff;
+  --b-glass:rgba(8,16,28,.5);--b-line:rgba(255,255,255,.2);--b-box:rgba(255,255,255,.75);
+  --b-ink:#fff;--b-sel:rgba(34,211,238,.45);--b-peer:rgba(255,255,255,.12);
+  --b-same:rgba(34,211,238,.25);--b-user:#7fe9ff;--b-bad:#ff8a8a;--b-badbg:rgba(255,70,70,.3);
+}
+
+/* ---------- Ocean (Steel Blue #4682b4) ---------- */
 body[data-theme=ocean]{
-  --bg:#0a3b57;--ink:#f2fbff;--mute:#bfe0ea;--panel:#0f3f58;--line:rgba(255,255,255,.2);
-  --on:#e8fbff;--onfg:#07324a;--btn:rgba(255,255,255,.14);--bline:rgba(255,255,255,.3);--edge:transparent;
-  --accent:#38e0d0;--onacc:#04222a;
-  --b-glass:rgba(5,32,54,.5);--b-user:#7ff5e8;--b-sel:rgba(56,224,208,.4);--b-same:rgba(56,224,208,.22);
-  --wallbg:linear-gradient(160deg,#0a2a43 0%,#0d5c7a 50%,#13a3b5 100%);
+  --bg:#4682b4;--ink:#f4f9fd;--mute:#c7dcee;--panel:#2f5f87;--line:rgba(255,255,255,.2);
+  --on:#f4f9fd;--onfg:#1d3f5c;--btn:rgba(255,255,255,.16);--bline:rgba(255,255,255,.32);--edge:transparent;
+  --accent:#9fd0f5;--onacc:#10283d;
+  --b-glass:rgba(16,40,64,.55);--b-line:rgba(190,225,250,.4);--b-box:#fff;--b-user:#b5ddfb;
+  --b-sel:rgba(159,208,245,.42);--b-same:rgba(159,208,245,.24);
+  --wallbg:radial-gradient(circle at 50% 0,#6aa3cf 0,transparent 60%),linear-gradient(180deg,#2c5578,#4682b4 55%,#3a6f9c);
 }
 
 /* ---------- Night ---------- */
@@ -40,15 +49,15 @@ body[data-theme=night]{
     linear-gradient(180deg,#050816,#131a40);
 }
 
-/* ---------- Minimal light ---------- */
+/* ---------- Light (Azure Mist #f0ffff) ---------- */
 body[data-theme=light]{
-  --bg:#eef1f6;--ink:#1b2535;--mute:#5d6b82;--panel:#fff;--line:rgba(20,30,50,.12);
-  --on:#1b2535;--onfg:#fff;--btn:rgba(255,255,255,.8);--bline:rgba(20,30,50,.12);--edge:transparent;
-  --accent:#2563eb;--onacc:#fff;--ringhi:#93c5fd;
-  --b-glass:rgba(255,255,255,.65);--b-line:rgba(20,30,50,.14);--b-box:rgba(20,30,50,.6);--b-ink:#1b2535;
-  --b-user:#2563eb;--b-sel:rgba(37,99,235,.3);--b-peer:rgba(37,99,235,.08);--b-same:rgba(37,99,235,.18);
+  --bg:#f0ffff;--ink:#12303a;--mute:#5a7a85;--panel:#fff;--line:rgba(18,48,58,.14);
+  --on:#12303a;--onfg:#fff;--btn:rgba(255,255,255,.92);--bline:rgba(18,48,58,.14);--edge:transparent;
+  --accent:#0ea5b7;--onacc:#fff;--ringhi:#a5f3fc;
+  --b-glass:rgba(255,255,255,.65);--b-line:rgba(18,48,58,.14);--b-box:rgba(18,48,58,.6);--b-ink:#12303a;
+  --b-user:#0e7490;--b-sel:rgba(14,165,183,.3);--b-peer:rgba(14,165,183,.08);--b-same:rgba(14,165,183,.18);
   --b-bad:#d23b3b;--b-badbg:rgba(210,59,59,.15);
-  --wallbg:linear-gradient(160deg,#f7f9fc,#e3e9f3);
+  --wallbg:linear-gradient(160deg,#ffffff,#f0ffff 55%,#d9f4f4);
 }
 @media (orientation:landscape){
   body[data-theme=light].wall h1,
@@ -57,15 +66,15 @@ body[data-theme=light]{
   body[data-theme=light].wall main footer #footerText{color:var(--ink);text-shadow:none}
 }
 
-/* ---------- Cyan ---------- */
+/* ---------- Green (Lincoln Green #195905) ---------- */
 body[data-theme=cyan]{
-  --bg:#04202a;--ink:#e6fbff;--mute:#9fd3de;--panel:#0a2f3b;--line:rgba(255,255,255,.18);
-  --on:#e6fbff;--onfg:#04303c;--btn:rgba(34,211,238,.12);--bline:rgba(34,211,238,.4);--edge:transparent;
-  --accent:#22d3ee;--onacc:#022b34;
-  --b-glass:rgba(2,24,32,.6);--b-line:rgba(34,211,238,.45);--b-box:#fff;--b-user:#7fe9ff;
-  --wallbg:radial-gradient(circle at 50% 0,#0b4a5c 0,transparent 60%),linear-gradient(180deg,#031a22,#052e3b);
+  --bg:#195905;--ink:#f0faea;--mute:#b5d9a6;--panel:#1f6a0a;--line:rgba(255,255,255,.18);
+  --on:#f0faea;--onfg:#0c3002;--btn:rgba(150,230,110,.14);--bline:rgba(150,230,110,.4);--edge:transparent;
+  --accent:#7bd957;--onacc:#0c2a02;
+  --b-glass:rgba(6,26,2,.6);--b-line:rgba(150,230,110,.45);--b-box:#fff;--b-user:#a6f08a;
+  --b-sel:rgba(123,217,87,.4);--b-same:rgba(123,217,87,.22);
+  --wallbg:radial-gradient(circle at 50% 0,#2f8a12 0,transparent 60%),linear-gradient(180deg,#0c3002,#195905);
 }
-
 /* every theme except the wallpapers one replaces the photo with its own background */
 body[data-theme]:not([data-theme=wallpapers])::before{
   background-image:var(--wallbg);background-color:var(--bg);
@@ -239,6 +248,12 @@ button:active:not(:disabled),
 #new[aria-pressed=true],#new:active:not(:disabled){
   box-shadow:inset 0 2px 8px rgba(0,0,0,.35),0 2px 6px rgba(0,0,0,.2);
 } 
+
+/* Default theme only: solid black cells */
+body[data-theme=wallpapers] #board{
+  background:#000;
+  -webkit-backdrop-filter:none;backdrop-filter:none;
+}
 
 /* New game: same glass style as the other buttons, in light blue 
 #new{
