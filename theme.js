@@ -4,7 +4,7 @@
     { id: 'wallpapers', name: 'Wallpapers',    sw: 'linear-gradient(135deg,#34d399,#38bdf8,#f59e0b)' },
     { id: 'ocean',      name: 'Ocean',         sw: 'linear-gradient(135deg,#0a2a43,#13a3b5)' },
     { id: 'night',      name: 'Night',         sw: 'linear-gradient(135deg,#050816,#7c6df2)' },
-    { id: 'light',      name: 'Minimal light', sw: 'linear-gradient(135deg,#ffffff,#d5dbe6)' },
+    { id: 'light',      name: 'Light',         sw: 'linear-gradient(135deg,#ffffff,#d5dbe6)' },
     { id: 'cyan',       name: 'Cyan',          sw: 'linear-gradient(135deg,#031b24,#22d3ee)' }
   ];
   const KEY = 'sudoku-theme-v1';
