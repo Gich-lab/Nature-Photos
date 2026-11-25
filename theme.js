@@ -7,14 +7,12 @@
     { id: 'light',      name: 'Light',       sw: 'linear-gradient(135deg,#ffffff,#a5e8ee)' },
     { id: 'cyan',       name: 'Green',       sw: 'linear-gradient(135deg,#0c3002,#195905)' },
   ];
-  const KEY = 'sudoku-theme-v1';
-  let current = 'wallpapers';
-  try { const s = localStorage.getItem(KEY); if (THEMES.some(t => t.id === s)) current = s; } catch (e) {}
+
+  let current = 'wallpapers';   // always start on Wallpapers
 
   function apply(id) {
     current = id;
     document.body.dataset.theme = id;
-    try { localStorage.setItem(KEY, id); } catch (e) {}
   }
   apply(current);
 
