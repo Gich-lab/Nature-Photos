@@ -131,9 +131,8 @@ button:active:not(:disabled),
 
 /* clearer tool labels (icons are drawn by CSS, so the page's own text updates keep working) */
 .tools button{gap:6px}
-#undo::before{content:"↶"}
-#erase::before{content:"↺"}
-#hint::before{content:"💡";font-size:.95em}
+#undo::before{content:"↺"}
+#hint::before{font-size:.95em}
 
 /* number pad */
 .pad small{text-shadow:none}
