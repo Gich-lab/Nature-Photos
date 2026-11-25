@@ -1,21 +1,48 @@
 /* =====================================================================
-   theme.css: frosted-glass board, flat glass buttons, 5 themes.
-   Load AFTER the page's inline <style> so it overrides it.
+   theme.css: ONE file for everything.
+   - Theme button, popup, keyboard hint: apply in every theme.
+   - Glass look: every rule starts with body:not([data-theme=wallpapers]),
+     so Default (data-theme="wallpapers") keeps the page's original look.
    ===================================================================== */
 
 @property --ang{syntax:'<angle>';inherits:false;initial-value:0deg}
 
-/* ---------- default theme (changing wallpapers) ---------- */
-/*body{
-  --accent:#22d3ee;--onacc:#04222a;--ringhi:#fff;
-  --bline:rgba(255,255,255,.7);--btn:rgba(255,255,255,.62);
-  --b-glass:rgba(8,16,28,.5);--b-line:rgba(255,255,255,.2);--b-box:rgba(255,255,255,.75);
-  --b-ink:#fff;--b-sel:rgba(34,211,238,.45);--b-peer:rgba(255,255,255,.12);
-  --b-same:rgba(34,211,238,.25);--b-user:#7fe9ff;--b-bad:#ff8a8a;--b-badbg:rgba(255,70,70,.3);
-}
-@media(prefers-color-scheme:dark){body{--btn:rgba(24,34,58,.6);--bline:rgba(255,255,255,.2)}}*/
+/* =====================================================================
+   A. ALWAYS ON: theme button, popup, keyboard hint
+   ===================================================================== */
+header{position:relative}
+#themeBtn{position:absolute;right:0;top:0;width:40px;height:40px;padding:0 0 2px;font-size:1.15rem;line-height:1}
+/* touch devices only: lift it so it clears the New game button */
+@media (hover:none) and (pointer:coarse){#themeBtn{top:-10px}}
 
-/* ---------- default theme (changing wallpapers) ---------- */
+#themes{
+  position:fixed;top:0;right:0;bottom:0;left:0;z-index:20;
+  display:flex;align-items:flex-start;justify-content:center;padding:150px 16px 16px;
+  background:rgba(0,0,0,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  transition:opacity .25s ease;
+}
+#themes.fade{opacity:0;pointer-events:none}
+#themes .rules-card{max-width:260px;padding:14px 16px}
+#themes h2{font-size:1.05rem;margin-bottom:8px;text-align:center}
+#themes .lvl-list button{display:flex;align-items:center;gap:10px;height:44px;padding:0 12px 2px;justify-content:flex-start}
+#themes .lvl-list button.on::after{content:"✓";margin-left:auto}
+.sw{width:20px;height:20px;border-radius:50%;border:1px solid rgba(255,255,255,.5);flex:none}
+
+/* keyboard hint: only on devices with a mouse / physical keyboard, always centered */
+.help .tap{display:block;text-align:center}
+.help .kbd{display:none;margin-top:6px;text-align:center}
+@media (hover:hover) and (pointer:fine){.help .kbd{display:block;text-align:center}}
+.help kbd{
+  font:inherit;font-size:.78rem;font-weight:600;padding:1px 6px;border-radius:6px;
+  border:1px solid var(--line);border-bottom-width:2px;background:var(--btn);color:var(--ink);
+}
+
+/* Default theme: solid black cells */
+body[data-theme=wallpapers] #board{background:#000;-webkit-backdrop-filter:none;backdrop-filter:none}
+
+/* =====================================================================
+   B. THEME COLORS (only used by the four glass themes)
+   ===================================================================== */
 body{
   --accent:#22d3ee;--onacc:#04222a;--ringhi:#fff;
   --b-glass:rgba(8,16,28,.5);--b-line:rgba(255,255,255,.2);--b-box:rgba(255,255,255,.75);
@@ -75,25 +102,25 @@ body[data-theme=cyan]{
   --b-sel:rgba(123,217,87,.4);--b-same:rgba(123,217,87,.22);
   --wallbg:radial-gradient(circle at 50% 0,#2f8a12 0,transparent 60%),linear-gradient(180deg,#0c3002,#195905);
 }
-/* every theme except the wallpapers one replaces the photo with its own background */
-body[data-theme]:not([data-theme=wallpapers])::before{
-  background-image:var(--wallbg);background-color:var(--bg);
-}
 
 /* =====================================================================
-   1. FROSTED-GLASS BOARD
+   C. GLASS LOOK (not Default)
    ===================================================================== */
-#board{
+
+/* the theme's own background replaces the wallpaper photo */
+body:not([data-theme=wallpapers])::before{background-image:var(--wallbg);background-color:var(--bg)}
+
+/* frosted-glass board */
+body:not([data-theme=wallpapers]) #board{
   background:var(--b-glass);
   -webkit-backdrop-filter:blur(14px) saturate(1.25);backdrop-filter:blur(14px) saturate(1.25);
   border:0;border-radius:14px;color:var(--b-ink);
   --ink:var(--b-ink);--line:var(--b-line);--box:var(--b-box);--sel:var(--b-sel);--peer:var(--b-peer);
   --same:var(--b-same);--user:var(--b-user);--bad:var(--b-bad);--badbg:var(--b-badbg);
 }
-.sudoku-frame{overflow:visible;padding:3px;border-radius:17px;box-shadow:0 14px 40px rgba(0,0,0,.35)}
-.sudoku-frame::after{display:none}
-/* the light now runs around a thin ring only (masked), so the glass stays see-through */
-.sudoku-frame::before{
+body:not([data-theme=wallpapers]) .sudoku-frame{overflow:visible;padding:3px;border-radius:17px;box-shadow:0 14px 40px rgba(0,0,0,.35)}
+body:not([data-theme=wallpapers]) .sudoku-frame::after{display:none}
+body:not([data-theme=wallpapers]) .sudoku-frame::before{
   left:0;top:0;width:100%;height:100%;box-sizing:border-box;padding:3px;border-radius:17px;
   background:conic-gradient(from var(--ang),transparent 0deg,transparent 300deg,var(--accent) 330deg,var(--ringhi) 348deg,var(--accent) 360deg);
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
@@ -104,123 +131,28 @@ body[data-theme]:not([data-theme=wallpapers])::before{
   z-index:3;pointer-events:none;
 }
 @keyframes ringSpin{to{--ang:360deg}}
-@media(prefers-reduced-motion:reduce){.sudoku-frame::before{animation:none}}
+@media(prefers-reduced-motion:reduce){body:not([data-theme=wallpapers]) .sudoku-frame::before{animation:none}}
 
-/* =====================================================================
-   3. MODERN GLASS BUTTONS
-   ===================================================================== */
-button,.controls select{
-  --shade:none;
-  background-color:var(--btn);background-image:none;color:var(--ink);
+/* soft glass buttons */
+body:not([data-theme=wallpapers]) button,
+body:not([data-theme=wallpapers]) .controls select{
+  --shade:linear-gradient(to bottom,rgba(255,255,255,.30) 0%,rgba(255,255,255,.06) 50%,rgba(0,0,0,.10) 100%);
+  background-color:var(--btn);background-image:var(--shade);color:var(--ink);
   border:1px solid var(--bline);border-radius:12px;
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
-  box-shadow:0 2px 8px rgba(0,0,0,.14);text-shadow:none;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.6),
+    inset 0 -3px 8px rgba(0,0,0,.12),
+    0 2px 4px rgba(0,0,0,.18),
+    0 8px 20px rgba(0,0,0,.30);
+  text-shadow:none;
   transition:transform .12s,box-shadow .12s,background-color .2s,border-color .2s,color .2s;
 }
+body:not([data-theme=wallpapers]) button:disabled{box-shadow:none;background-image:none}
 @media (hover:hover){
-  button:hover:not(:disabled):not(:active),
-  .controls select:hover:not([aria-pressed=true]){
-    border-color:var(--accent);transform:translateY(-1px);
-    box-shadow:0 6px 16px rgba(0,0,0,.22),0 0 0 1px var(--accent);
-  }
-}
-button:active:not(:disabled),
-.tools button:active,
-.tools button[aria-pressed=true],
-.controls [aria-pressed=true]{
-  transform:translateY(1px);
-  box-shadow:inset 0 2px 6px rgba(0,0,0,.35);
-  text-shadow:none;
-}
-
-/* primary action 
-#new{background-color:var(--accent);color:var(--onacc);border-color:transparent;font-weight:700;
-     box-shadow:0 4px 14px rgba(0,0,0,.22)}
-#new[aria-pressed=true],#new:active:not(:disabled){background-color:var(--accent);color:var(--onacc);filter:brightness(.9)} */
-
-/* clearer tool labels (icons are drawn by CSS, so the page's own text updates keep working) */
-.tools button{gap:6px}
-#undo::before{content:"↺"}
-#hint::before{font-size:.95em}
-
-/* number pad */
-.pad small{text-shadow:none}
-.pad button.flash:not(:disabled){background-color:var(--accent);color:var(--onacc);border-color:var(--accent);box-shadow:none}
-.pad button.flash small{color:var(--onacc)}
-
-.rules-card{border-radius:16px}
-
-/* =====================================================================
-   Theme button + popup
-   ===================================================================== */
-header{position:relative}
-#themeBtn{position:absolute;right:0;top:0;width:40px;height:40px;padding:0 0 2px;font-size:1.15rem;line-height:1}
-
-/* touch devices only: lift it so it clears the New game button */
-@media (hover:none) and (pointer:coarse){#themeBtn{top:-10px}}
-
-#themes{
-  position:fixed;top:0;right:0;bottom:0;left:0;z-index:20;
-  display:flex;align-items:flex-start;justify-content:center;padding:150px 16px 16px;
-  background:rgba(0,0,0,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
-  transition:opacity .25s ease;
-}
-#themes.fade{opacity:0;pointer-events:none}
-#themes .rules-card{max-width:260px;padding:14px 16px}
-#themes h2{font-size:1.05rem;margin-bottom:8px;text-align:center}
-#themes .lvl-list button{display:flex;align-items:center;gap:10px;height:44px;padding:0 12px 2px;justify-content:flex-start}
-#themes .lvl-list button.on::after{content:"✓";margin-left:auto}
-.sw{width:20px;height:20px;border-radius:50%;border:1px solid rgba(255,255,255,.5);flex:none}
-
-/* =====================================================================
-   Keyboard hint: only on devices with a mouse / physical keyboard
-   ===================================================================== */
-.help .kbd{display:none;margin-top:6px}
-@media (hover:hover) and (pointer:fine){.help .kbd{display:block}}
-.help kbd{
-  font:inherit;font-size:.78rem;font-weight:600;padding:1px 6px;border-radius:6px;
-  border:1px solid var(--bline);border-bottom-width:2px;background:var(--btn);color:var(--ink);
-}
-
-.help .tap{display:block;text-align:center}
-
-.help .kbd{display:none;margin-top:6px;text-align:center}
-@media (hover:hover) and (pointer:fine){
-  .help .kbd{display:block;text-align:center}
-}
-
-/* default theme, phone held upright, light mode: soft cyan backdrop + glow *//*
-@media (prefers-color-scheme:light){
-  body[data-theme=wallpapers]:not(.wall)::before{
-    background-image:radial-gradient(circle at 50% 25%,#e4f6fa 0%,#bddbe2 65%,#a9cdd6 100%);
-  }
-  /*body[data-theme=wallpapers] button{
-    box-shadow:0 0 0 4px rgba(34,211,238,.12),0 6px 14px rgba(0,60,80,.18);
-  }*/
-@media (prefers-color-scheme:light){
-  body[data-theme=wallpapers] .sudoku-frame{
-    box-shadow:0 0 28px rgba(34,211,238,.4),0 14px 40px rgba(0,60,80,.3);
-  }
-}
-
-/* Soft glass buttons: gentle gloss + diffuse shadow, matching the board's depth */
-button,.controls select{
-  --shade:linear-gradient(to bottom,
-    rgba(255,255,255,.30) 0%,
-    rgba(255,255,255,.06) 50%,
-    rgba(0,0,0,.10) 100%);
-  background-image:var(--shade);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.6),      /* light top rim */
-    inset 0 -3px 8px rgba(0,0,0,.12),        /* soft shading inside, low on the face */
-    0 2px 4px rgba(0,0,0,.18),               /* tight contact shadow */
-    0 8px 20px rgba(0,0,0,.30);              /* wide soft shadow, like the board */
-}
-@media (hover:hover){
-  button:hover:not(:disabled):not(:active),
-  .controls select:hover:not([aria-pressed=true]){
-    transform:translateY(-1px);
-    border-color:var(--accent);
+  body:not([data-theme=wallpapers]) button:hover:not(:disabled):not(:active),
+  body:not([data-theme=wallpapers]) .controls select:hover:not([aria-pressed=true]){
+    transform:translateY(-1px);border-color:var(--accent);
     box-shadow:
       inset 0 1px 0 rgba(255,255,255,.65),
       inset 0 -3px 8px rgba(0,0,0,.12),
@@ -228,43 +160,25 @@ button,.controls select{
       0 12px 26px rgba(0,0,0,.34);
   }
 }
-/* pressed: sinks slightly, shadow tightens */
-button:active:not(:disabled),
-.tools button:active,
-.tools button[aria-pressed=true],
-.controls [aria-pressed=true]{
+body:not([data-theme=wallpapers]) button:active:not(:disabled),
+body:not([data-theme=wallpapers]) .tools button:active,
+body:not([data-theme=wallpapers]) .tools button[aria-pressed=true],
+body:not([data-theme=wallpapers]) .controls [aria-pressed=true]{
   transform:translateY(1px);
   box-shadow:inset 0 2px 8px rgba(0,0,0,.4),0 2px 6px rgba(0,0,0,.2);
+  text-shadow:none;
 }
 
-/* New game: same softness in the accent color */
-#new{
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.55),
-    inset 0 -3px 8px rgba(0,0,0,.16),
-    0 2px 4px rgba(0,0,0,.2),
-    0 8px 20px rgba(0,0,0,.32);
-}
-#new[aria-pressed=true],#new:active:not(:disabled){
-  box-shadow:inset 0 2px 8px rgba(0,0,0,.35),0 2px 6px rgba(0,0,0,.2);
-} 
+/* tool icon */
+body:not([data-theme=wallpapers]) .tools button{gap:6px}
+body:not([data-theme=wallpapers]) #undo::before{content:"↺"}
 
-/* Default theme only: solid black cells */
-body[data-theme=wallpapers] #board{
-  background:#000;
-  -webkit-backdrop-filter:none;backdrop-filter:none;
+/* number pad */
+body:not([data-theme=wallpapers]) .pad button{transition:background-color .5s,color .5s,box-shadow .5s}
+body:not([data-theme=wallpapers]) .pad small{text-shadow:none}
+body:not([data-theme=wallpapers]) .pad button.flash:not(:disabled){
+  transition:none;background-color:var(--accent);color:var(--onacc);border-color:var(--accent);box-shadow:none;
 }
+body:not([data-theme=wallpapers]) .pad button.flash small{color:var(--onacc)}
 
-/* New game: same glass style as the other buttons, in light blue 
-#new{
-  background-color:#a8dcff;
-  color:#0b2a44;
-  border-color:rgba(255,255,255,.7);
-  font-weight:700;
-}
-#new[aria-pressed=true],
-#new:active:not(:disabled){
-  background-color:#86c6f0;
-  color:#0b2a44;
-}
-*/
+body:not([data-theme=wallpapers]) .rules-card{border-radius:16px}
