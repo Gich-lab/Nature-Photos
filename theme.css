@@ -170,3 +170,4 @@ header{position:relative}
   font:inherit;font-size:.78rem;font-weight:600;padding:1px 6px;border-radius:6px;
   border:1px solid var(--bline);border-bottom-width:2px;background:var(--btn);color:var(--ink);
 }
+.help .tap{display:block;text-align:center}
