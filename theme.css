@@ -180,7 +180,7 @@ header{position:relative}
   .help .kbd{display:block;text-align:center}
 }
 
-/* default theme, phone held upright, light mode: soft cyan backdrop + glow */
+/* default theme, phone held upright, light mode: soft cyan backdrop + glow *//*
 @media (prefers-color-scheme:light){
   body[data-theme=wallpapers]:not(.wall)::before{
     background-image:radial-gradient(circle at 50% 25%,#e4f6fa 0%,#bddbe2 65%,#a9cdd6 100%);
@@ -188,6 +188,7 @@ header{position:relative}
   /*body[data-theme=wallpapers] button{
     box-shadow:0 0 0 4px rgba(34,211,238,.12),0 6px 14px rgba(0,60,80,.18);
   }*/
+@media (prefers-color-scheme:light){
   body[data-theme=wallpapers] .sudoku-frame{
     box-shadow:0 0 28px rgba(34,211,238,.4),0 14px 40px rgba(0,60,80,.3);
   }
