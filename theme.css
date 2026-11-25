@@ -185,10 +185,58 @@ header{position:relative}
   body[data-theme=wallpapers]:not(.wall)::before{
     background-image:radial-gradient(circle at 50% 25%,#e4f6fa 0%,#bddbe2 65%,#a9cdd6 100%);
   }
-  body[data-theme=wallpapers] button{
+  /*body[data-theme=wallpapers] button{
     box-shadow:0 0 0 4px rgba(34,211,238,.12),0 6px 14px rgba(0,60,80,.18);
-  }
+  }*/
   body[data-theme=wallpapers] .sudoku-frame{
     box-shadow:0 0 28px rgba(34,211,238,.4),0 14px 40px rgba(0,60,80,.3);
   }
+}
+
+/* 3D buttons: glossy curved face, light rim, dark underside, thick edge */
+button,.controls select{
+  --e3:rgba(0,0,0,.3);
+  --shade:linear-gradient(to bottom,
+    rgba(255,255,255,.55) 0%,
+    rgba(255,255,255,.14) 48%,
+    rgba(0,0,0,.05) 52%,
+    rgba(0,0,0,.22) 100%);
+  background-image:var(--shade);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.8),     /* bright top rim */
+    inset 1px 0 0 rgba(255,255,255,.25),    /* left highlight */
+    inset -1px 0 0 rgba(0,0,0,.08),         /* right shade */
+    inset 0 -4px 6px rgba(0,0,0,.18),       /* darker curve underneath */
+    0 4px 0 var(--e3),                      /* button thickness */
+    0 10px 16px rgba(0,0,0,.25);            /* shadow on the surface below */
+}
+@media (hover:hover){
+  button:hover:not(:disabled):not(:active),
+  .controls select:hover:not([aria-pressed=true]){
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.85),
+      inset 0 -4px 6px rgba(0,0,0,.18),
+      0 4px 0 var(--accent),
+      0 12px 20px rgba(0,0,0,.28);
+  }
+}
+/* pressed: the face sinks and the thickness disappears */
+button:active:not(:disabled),
+.tools button:active,
+.tools button[aria-pressed=true],
+.controls [aria-pressed=true]{
+  transform:translateY(3px);
+  box-shadow:inset 0 3px 8px rgba(0,0,0,.45),0 1px 0 var(--e3);
+}
+
+/* New game: same depth, in the accent color */
+#new{
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.6),
+    inset 0 -4px 6px rgba(0,0,0,.22),
+    0 4px 0 rgba(0,0,0,.35),
+    0 10px 16px rgba(0,0,0,.28);
+}
+#new[aria-pressed=true],#new:active:not(:disabled){
+  box-shadow:inset 0 3px 8px rgba(0,0,0,.4),0 1px 0 rgba(0,0,0,.35);
 }
