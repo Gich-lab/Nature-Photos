@@ -1,11 +1,11 @@
 /* theme.js: theme picker, keyboard-only hint, clearer label. Load after the page's main script. */
 (function () {
   const THEMES = [
-    { id: 'wallpapers', name: 'Wallpapers',    sw: 'linear-gradient(135deg,#34d399,#38bdf8,#f59e0b)' },
-    { id: 'ocean',      name: 'Ocean',         sw: 'linear-gradient(135deg,#0a2a43,#13a3b5)' },
-    { id: 'night',      name: 'Night',         sw: 'linear-gradient(135deg,#050816,#7c6df2)' },
-    { id: 'light',      name: 'Light',         sw: 'linear-gradient(135deg,#ffffff,#d5dbe6)' },
-    { id: 'cyan',       name: 'Cyan',          sw: 'linear-gradient(135deg,#031b24,#22d3ee)' }
+    { id: 'wallpapers', name: 'Wallpapers',  sw: 'linear-gradient(135deg,#34d399,#38bdf8,#f59e0b)'},
+    { id: 'ocean',      name: 'Ocean',       sw: 'linear-gradient(135deg,#2c5578,#4682b4)'},
+    { id: 'night',      name: 'Night',       sw: 'linear-gradient(135deg,#050816,#7c6df2)'},
+    { id: 'light',      name: 'Light',       sw: 'linear-gradient(135deg,#ffffff,#f0ffff)' },
+    { id: 'cyan',       name: 'Green',       sw: 'linear-gradient(135deg,#0c3002,#195905)' },
   ];
   const KEY = 'sudoku-theme-v1';
   let current = 'wallpapers';
@@ -24,8 +24,8 @@
     const isDefault = (id === 'wallpapers');
     const look = document.getElementById('theme-look');
     if (look) look.media = isDefault ? 'not all' : 'all';   // Default = original look
-    const counts = document.getElementById('counts');
-    if (counts) counts.textContent = isDefault ? 'Occurrence' : 'Remaining';
+    //const counts = document.getElementById('counts');
+    //if (counts) counts.textContent = isDefault ? 'Occurrence' : 'Remaining';
     try { localStorage.setItem(KEY, id); } catch (e) {}
   }
 
