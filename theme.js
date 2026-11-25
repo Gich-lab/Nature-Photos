@@ -22,9 +22,8 @@
   const help = document.querySelector('.help');
   if (help) {
     help.innerHTML =
-      'Tap a cell, then a number.' +
-      '<span class="kbd">On a keyboard: <kbd>1</kbd>–<kbd>9</kbd> to fill, <kbd>arrow keys</kbd> to move, ' +
-      '<kbd>Backspace</kbd> to clear a cell, <kbd>U</kbd> to undo, <kbd>H</kbd> for a hint.</span>';
+      '<span class="tap">Tap a cell, then a number.</span>' +
+      '<span class="kbd">On a keyboard: 1-9 to fill, arrow keys to move, Backspace to clear a cell, U to undo, H for a hint.</span>';
   }
 
   /* clearer label for the remaining-count toggle */
