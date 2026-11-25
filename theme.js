@@ -11,14 +11,14 @@
   let current = 'wallpapers';
   try { const s = localStorage.getItem(KEY); if (THEMES.some(t => t.id === s)) current = s; } catch (e) {}
 
-  /*function apply(id) {
+  function apply(id) {
     current = id;
     document.body.dataset.theme = id;
     try { localStorage.setItem(KEY, id); } catch (e) {}
   }
-  apply(current);*/
+  apply(current);
 
-  function apply(id) {
+  /*function apply(id) {
     current = id;
     document.body.dataset.theme = id;
     const isDefault = (id === 'wallpapers');
@@ -27,7 +27,7 @@
     //const counts = document.getElementById('counts');
     //if (counts) counts.textContent = isDefault ? 'Occurrence' : 'Remaining';
     try { localStorage.setItem(KEY, id); } catch (e) {}
-  }
+  }*/
 
   /* keyboard hint: keep "Tap a cell, then a number." and show the keyboard part only on keyboard devices */
   const help = document.querySelector('.help');
