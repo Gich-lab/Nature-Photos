@@ -1,0 +1,172 @@
+/* =====================================================================
+   theme.css: frosted-glass board, flat glass buttons, 5 themes.
+   Load AFTER the page's inline <style> so it overrides it.
+   ===================================================================== */
+
+@property --ang{syntax:'<angle>';inherits:false;initial-value:0deg}
+
+/* ---------- default theme (changing wallpapers) ---------- */
+body{
+  --accent:#22d3ee;--onacc:#04222a;--ringhi:#fff;
+  --bline:rgba(255,255,255,.7);--btn:rgba(255,255,255,.62);
+  --b-glass:rgba(8,16,28,.5);--b-line:rgba(255,255,255,.2);--b-box:rgba(255,255,255,.75);
+  --b-ink:#fff;--b-sel:rgba(34,211,238,.45);--b-peer:rgba(255,255,255,.12);
+  --b-same:rgba(34,211,238,.25);--b-user:#7fe9ff;--b-bad:#ff8a8a;--b-badbg:rgba(255,70,70,.3);
+}
+@media(prefers-color-scheme:dark){body{--btn:rgba(24,34,58,.6);--bline:rgba(255,255,255,.2)}}
+
+/* ---------- Ocean ---------- */
+body[data-theme=ocean]{
+  --bg:#0a3b57;--ink:#f2fbff;--mute:#bfe0ea;--panel:#0f3f58;--line:rgba(255,255,255,.2);
+  --on:#e8fbff;--onfg:#07324a;--btn:rgba(255,255,255,.14);--bline:rgba(255,255,255,.3);--edge:transparent;
+  --accent:#38e0d0;--onacc:#04222a;
+  --b-glass:rgba(5,32,54,.5);--b-user:#7ff5e8;--b-sel:rgba(56,224,208,.4);--b-same:rgba(56,224,208,.22);
+  --wallbg:linear-gradient(160deg,#0a2a43 0%,#0d5c7a 50%,#13a3b5 100%);
+}
+
+/* ---------- Night ---------- */
+body[data-theme=night]{
+  --bg:#070b1f;--ink:#e8ecff;--mute:#a3acd6;--panel:#141a38;--line:rgba(255,255,255,.15);
+  --on:#e8ecff;--onfg:#101533;--btn:rgba(255,255,255,.08);--bline:rgba(255,255,255,.18);--edge:transparent;
+  --accent:#a78bfa;--onacc:#120a33;
+  --b-glass:rgba(10,14,36,.62);--b-user:#c4b5fd;--b-sel:rgba(167,139,250,.45);--b-same:rgba(167,139,250,.25);
+  --wallbg:
+    radial-gradient(1.5px 1.5px at 12% 18%,#fff,transparent 60%),
+    radial-gradient(1px 1px at 78% 12%,#fff,transparent 60%),
+    radial-gradient(1.5px 1.5px at 40% 62%,#fff,transparent 60%),
+    radial-gradient(1px 1px at 88% 70%,#fff,transparent 60%),
+    radial-gradient(1px 1px at 22% 86%,#fff,transparent 60%),
+    radial-gradient(1.5px 1.5px at 62% 38%,#fff,transparent 60%),
+    linear-gradient(180deg,#050816,#131a40);
+}
+
+/* ---------- Minimal light ---------- */
+body[data-theme=light]{
+  --bg:#eef1f6;--ink:#1b2535;--mute:#5d6b82;--panel:#fff;--line:rgba(20,30,50,.12);
+  --on:#1b2535;--onfg:#fff;--btn:rgba(255,255,255,.8);--bline:rgba(20,30,50,.12);--edge:transparent;
+  --accent:#2563eb;--onacc:#fff;--ringhi:#93c5fd;
+  --b-glass:rgba(255,255,255,.65);--b-line:rgba(20,30,50,.14);--b-box:rgba(20,30,50,.6);--b-ink:#1b2535;
+  --b-user:#2563eb;--b-sel:rgba(37,99,235,.3);--b-peer:rgba(37,99,235,.08);--b-same:rgba(37,99,235,.18);
+  --b-bad:#d23b3b;--b-badbg:rgba(210,59,59,.15);
+  --wallbg:linear-gradient(160deg,#f7f9fc,#e3e9f3);
+}
+@media (orientation:landscape){
+  body[data-theme=light].wall h1,
+  body[data-theme=light].wall .stats,
+  body[data-theme=light].wall .help,
+  body[data-theme=light].wall main footer #footerText{color:var(--ink);text-shadow:none}
+}
+
+/* ---------- Cyan ---------- */
+body[data-theme=cyan]{
+  --bg:#04202a;--ink:#e6fbff;--mute:#9fd3de;--panel:#0a2f3b;--line:rgba(255,255,255,.18);
+  --on:#e6fbff;--onfg:#04303c;--btn:rgba(34,211,238,.12);--bline:rgba(34,211,238,.4);--edge:transparent;
+  --accent:#22d3ee;--onacc:#022b34;
+  --b-glass:rgba(2,24,32,.6);--b-line:rgba(34,211,238,.45);--b-box:#fff;--b-user:#7fe9ff;
+  --wallbg:radial-gradient(circle at 50% 0,#0b4a5c 0,transparent 60%),linear-gradient(180deg,#031a22,#052e3b);
+}
+
+/* every theme except the wallpapers one replaces the photo with its own background */
+body[data-theme]:not([data-theme=wallpapers])::before{
+  background-image:var(--wallbg);background-color:var(--bg);
+}
+
+/* =====================================================================
+   1. FROSTED-GLASS BOARD
+   ===================================================================== */
+#board{
+  background:var(--b-glass);
+  -webkit-backdrop-filter:blur(14px) saturate(1.25);backdrop-filter:blur(14px) saturate(1.25);
+  border:0;border-radius:14px;color:var(--b-ink);
+  --ink:var(--b-ink);--line:var(--b-line);--box:var(--b-box);--sel:var(--b-sel);--peer:var(--b-peer);
+  --same:var(--b-same);--user:var(--b-user);--bad:var(--b-bad);--badbg:var(--b-badbg);
+}
+.sudoku-frame{overflow:visible;padding:3px;border-radius:17px;box-shadow:0 14px 40px rgba(0,0,0,.35)}
+.sudoku-frame::after{display:none}
+/* the light now runs around a thin ring only (masked), so the glass stays see-through */
+.sudoku-frame::before{
+  left:0;top:0;width:100%;height:100%;box-sizing:border-box;padding:3px;border-radius:17px;
+  background:conic-gradient(from var(--ang),transparent 0deg,transparent 300deg,var(--accent) 330deg,var(--ringhi) 348deg,var(--accent) 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  mask-composite:exclude;
+  animation:ringSpin 8s linear infinite;
+  z-index:3;pointer-events:none;
+}
+@keyframes ringSpin{to{--ang:360deg}}
+@media(prefers-reduced-motion:reduce){.sudoku-frame::before{animation:none}}
+
+/* =====================================================================
+   3. MODERN GLASS BUTTONS
+   ===================================================================== */
+button,.controls select{
+  --shade:none;
+  background-color:var(--btn);background-image:none;color:var(--ink);
+  border:1px solid var(--bline);border-radius:12px;
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  box-shadow:0 2px 8px rgba(0,0,0,.14);text-shadow:none;
+  transition:transform .12s,box-shadow .12s,background-color .2s,border-color .2s,color .2s;
+}
+@media (hover:hover){
+  button:hover:not(:disabled):not(:active),
+  .controls select:hover:not([aria-pressed=true]){
+    border-color:var(--accent);transform:translateY(-1px);
+    box-shadow:0 6px 16px rgba(0,0,0,.22),0 0 0 1px var(--accent);
+  }
+}
+button:active:not(:disabled),
+.tools button:active,
+.tools button[aria-pressed=true],
+.controls [aria-pressed=true]{
+  transform:translateY(1px);
+  box-shadow:inset 0 2px 6px rgba(0,0,0,.35);
+  text-shadow:none;
+}
+
+/* primary action */
+#new{background-color:var(--accent);color:var(--onacc);border-color:transparent;font-weight:700;
+     box-shadow:0 4px 14px rgba(0,0,0,.22)}
+#new[aria-pressed=true],#new:active:not(:disabled){background-color:var(--accent);color:var(--onacc);filter:brightness(.9)}
+
+/* clearer tool labels (icons are drawn by CSS, so the page's own text updates keep working) */
+.tools button{gap:6px}
+#undo::before{content:"↶"}
+#erase::before{content:"↺"}
+#hint::before{content:"💡";font-size:.95em}
+
+/* number pad */
+.pad small{text-shadow:none}
+.pad button.flash:not(:disabled){background-color:var(--accent);color:var(--onacc);border-color:var(--accent);box-shadow:none}
+.pad button.flash small{color:var(--onacc)}
+
+.rules-card{border-radius:16px}
+
+/* =====================================================================
+   Theme button + popup
+   ===================================================================== */
+header{position:relative}
+#themeBtn{position:absolute;right:0;top:0;width:40px;height:40px;padding:0 0 2px;font-size:1.15rem;line-height:1}
+
+#themes{
+  position:fixed;top:0;right:0;bottom:0;left:0;z-index:20;
+  display:flex;align-items:flex-start;justify-content:center;padding:150px 16px 16px;
+  background:rgba(0,0,0,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  transition:opacity .25s ease;
+}
+#themes.fade{opacity:0;pointer-events:none}
+#themes .rules-card{max-width:260px;padding:14px 16px}
+#themes h2{font-size:1.05rem;margin-bottom:8px;text-align:center}
+#themes .lvl-list button{display:flex;align-items:center;gap:10px;height:44px;padding:0 12px 2px;justify-content:flex-start}
+#themes .lvl-list button.on::after{content:"✓";margin-left:auto}
+.sw{width:20px;height:20px;border-radius:50%;border:1px solid rgba(255,255,255,.5);flex:none}
+
+/* =====================================================================
+   Keyboard hint: only on devices with a mouse / physical keyboard
+   ===================================================================== */
+.help .kbd{display:none;margin-top:6px}
+@media (hover:hover) and (pointer:fine){.help .kbd{display:block}}
+.help kbd{
+  font:inherit;font-size:.78rem;font-weight:600;padding:1px 6px;border-radius:6px;
+  border:1px solid var(--bline);border-bottom-width:2px;background:var(--btn);color:var(--ink);
+}
