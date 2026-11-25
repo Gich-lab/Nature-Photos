@@ -124,10 +124,10 @@ button:active:not(:disabled),
   text-shadow:none;
 }
 
-/* primary action */
+/* primary action 
 #new{background-color:var(--accent);color:var(--onacc);border-color:transparent;font-weight:700;
      box-shadow:0 4px 14px rgba(0,0,0,.22)}
-#new[aria-pressed=true],#new:active:not(:disabled){background-color:var(--accent);color:var(--onacc);filter:brightness(.9)}
+#new[aria-pressed=true],#new:active:not(:disabled){background-color:var(--accent);color:var(--onacc);filter:brightness(.9)} */
 
 /* clearer tool labels (icons are drawn by CSS, so the page's own text updates keep working) */
 .tools button{gap:6px}
@@ -227,7 +227,7 @@ button:active:not(:disabled),
   box-shadow:inset 0 2px 8px rgba(0,0,0,.4),0 2px 6px rgba(0,0,0,.2);
 }
 
-/* New game: same softness in the accent color */
+/* New game: same softness in the accent color 
 #new{
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.55),
@@ -237,4 +237,17 @@ button:active:not(:disabled),
 }
 #new[aria-pressed=true],#new:active:not(:disabled){
   box-shadow:inset 0 2px 8px rgba(0,0,0,.35),0 2px 6px rgba(0,0,0,.2);
+} */
+
+/* New game: same glass style as the other buttons, in light blue */
+#new{
+  background-color:#a8dcff;
+  color:#0b2a44;
+  border-color:rgba(255,255,255,.7);
+  font-weight:700;
+}
+#new[aria-pressed=true],
+#new:active:not(:disabled){
+  background-color:#86c6f0;
+  color:#0b2a44;
 }
