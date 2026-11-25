@@ -555,25 +555,26 @@ const $=s=>document.querySelector(s);
 
 /* ---- wallpapers (landscape / desktop only) ---- */
 const WALLS=Array.from({length:10},(_,i)=>'sudoku_wallpapers/img'+(i+1));
+const walls=()=>landscape()?WALLS:WALLS_P;
 const WALL_EXT=['jpg'];
 const WALLPOS={1:'30% 50%',4:'70% 40%'};  // image number: 'x y'; any image not listed uses center
 const landscape=()=>matchMedia('(orientation:landscape)').matches;
 let wallIdx=-1;
 const WALL_URL={}; // remembers the working file for each wallpaper number
 let wallNext=-1;  // wallpaper already downloading for the next New game
-
  
 function loadWall(n,done){  // done(url) when found, done(null) if no extension works
-  if(WALL_URL[n]){done(WALL_URL[n]);return}
+  const set=walls(),key=(landscape()?'L':'P')+n;   // separate cache for each folder
+  if(WALL_URL[key]){done(WALL_URL[key]);return}
   let e=0;
   const img=new Image();
-  img.onload=()=>{WALL_URL[n]=img.src;done(img.src)};
+  img.onload=()=>{WALL_URL[key]=img.src;done(img.src)};
   img.onerror=()=>{
     e++;
-    if(e<WALL_EXT.length)img.src=WALLS[n]+'.'+WALL_EXT[e];
+    if(e<WALL_EXT.length)img.src=set[n]+'.'+WALL_EXT[e];
     else done(null);
   };
-  img.src=WALLS[n]+'.'+WALL_EXT[0];
+  img.src=set[n]+'.'+WALL_EXT[0];
 }
   
 function preloadNext(){  // quietly download another wallpaper for next time
@@ -592,23 +593,19 @@ function setWallpaper(i,bad){
     const pool=WALLS.map((_,k)=>k).filter(k=>!bad.includes(k)&&(k!==wallIdx||WALLS.length===1));
     if(!pool.length){st.setProperty('--wall','none');document.body.classList.remove('wall');return}
     n=(wallNext>=0&&pool.includes(wallNext))?wallNext:pool[Math.random()*pool.length|0];
-    wallNext=-1; // used up, a new one is chosen after this one shows
+    wallNext=-1;
   }
   wallIdx=n;
-  if(!landscape()){  // portrait: no image, original look
-    st.setProperty('--wall','none');
-    document.body.classList.remove('wall');
-    return;
-  }
   loadWall(n,url=>{
-    if(wallIdx!==n)return;  // a newer choice replaced this one
-    if(!url){console.warn('Wallpaper not found: '+WALLS[n]);setWallpaper(undefined,bad.concat(n));return}
+    if(wallIdx!==n)return;
+    if(!url){console.warn('Wallpaper not found: '+walls()[n]);setWallpaper(undefined,bad.concat(n));return}
     st.setProperty('--wall','url("'+url+'")');
-    st.setProperty('--wallpos',WALLPOS[n+1]||'center');
+    st.setProperty('--wallpos',landscape()?(WALLPOS[n+1]||'center'):'center');
     document.body.classList.add('wall');
-    preloadNext(); // start downloading the next one in the background
+    preloadNext();
   });
 }
+  
 const pop=m=>{let n=0;while(m){m&=m-1;n++}return n};
 const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 
