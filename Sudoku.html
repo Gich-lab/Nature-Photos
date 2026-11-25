@@ -555,6 +555,7 @@ const $=s=>document.querySelector(s);
 
 /* ---- wallpapers (landscape / desktop only) ---- */
 const WALLS=Array.from({length:10},(_,i)=>'sudoku_wallpapers/img'+(i+1));
+const WALLS_P=Array.from({length:10},(_,i)=>'Sudoku_images_portrait/img'+(i+1));
 const walls=()=>landscape()?WALLS:WALLS_P;
 const WALL_EXT=['jpg'];
 const WALLPOS={1:'30% 50%',4:'70% 40%'};  // image number: 'x y'; any image not listed uses center
