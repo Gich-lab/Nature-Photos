@@ -26,7 +26,8 @@ header{position:relative}
 #themes h2{font-size:1.05rem;margin-bottom:8px;text-align:center}
 #themes .lvl-list button{display:flex;align-items:center;gap:10px;height:44px;padding:0 12px 2px;justify-content:flex-start}
 #themes .lvl-list button.on::after{content:"✓";margin-left:auto}
-.sw{width:20px;height:20px;border-radius:50%;border:1px solid rgba(255,255,255,.5);flex:none}
+/*.sw{width:20px;height:20px;border-radius:50%;border:1px solid rgba(255,255,255,.5);flex:none}*/
+.sw{width:20px;height:20px;border-radius:50%;border:1px solid rgba(0,0,0,.35);box-shadow:0 0 0 1px rgba(255,255,255,.6);flex:none}
 
 /* keyboard hint: only on devices with a mouse / physical keyboard, always centered */
 .help .tap{display:block;text-align:center}
