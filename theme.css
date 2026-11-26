@@ -123,7 +123,12 @@ body:not([data-theme=wallpapers]) .sudoku-frame{overflow:visible;padding:3px;bor
 body:not([data-theme=wallpapers]) .sudoku-frame::after{display:none}
 body:not([data-theme=wallpapers]) .sudoku-frame::before{
   left:0;top:0;width:100%;height:100%;box-sizing:border-box;padding:3px;border-radius:17px;
-  background:conic-gradient(from var(--ang),transparent 0deg,transparent 300deg,var(--accent) 330deg,var(--ringhi) 348deg,var(--accent) 360deg);
+
+  background:conic-gradient(from var(--ang),
+  transparent 0deg,transparent 120deg,var(--accent) 150deg,var(--ringhi) 168deg,var(--accent) 180deg,
+  transparent 180deg,transparent 300deg,var(--accent) 330deg,var(--ringhi) 348deg,var(--accent) 360deg);
+   
+  /* background:conic-gradient(from var(--ang),transparent 0deg,transparent 300deg,var(--accent) 330deg,var(--ringhi) 348deg,var(--accent) 360deg); */
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
   -webkit-mask-composite:xor;
   mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
