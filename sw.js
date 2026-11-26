@@ -1,7 +1,7 @@
 /* Sudoku service worker: this file is run by the browser in the background, separately from the game's page.
    It stores the page, pug and wallpapers on the first visit.
    Change VERSION whenever you add or rename files, or replace the pug or a wallpaper, so phones refresh the stored copy. */
-const VERSION = 'sudoku-v4.0';
+const VERSION = 'sudoku-v4.1';
 
 // true  = when the game is opened online, quietly fetch a newer copy of the page for next time
 // false = never touch the network once files are stored (page updates then arrive only when VERSION changes)
@@ -9,9 +9,12 @@ const REFRESH_PAGE = true;
 
 // const CORE = ['./', 'sudoku.ico', 'dancing_pug.webp'];
 const CORE = ['./', 'sudoku.ico', 'dancing_pug.webp', 'theme.css', 'theme.js'];
-//const WALLPAPERS = Array.from({ length: 10 }, (_, i) => 'sudoku_wallpapers/img' + (i + 1) + '.jpg');
-const WALLPAPERS = Array.from({ length: 10 }, (_, i) => 'sudoku_wallpapers/img' + (i + 1) + '.jpg')
-  .concat(Array.from({ length: 10 }, (_, i) => 'Sudoku_images_portrait/img' + (i + 1) + '.jpg'));
+
+const LANDSCAPE_COUNT = 24;      
+const PORTRAIT_COUNT  = 10;
+
+const WALLPAPERS = Array.from({ length: LANDSCAPE_COUNT }, (_, i) => 'sudoku_wallpapers/img' + (i + 1) + '.jpg')
+  .concat(Array.from({ length: PORTRAIT_COUNT }, (_, i) => 'Sudoku_images_portrait/img' + (i + 1) + '.jpg'));
 
 // the address without any ?query, so dancing_pug.webp?12345 and dancing_pug.webp are one file
 const keyFor = url => {
