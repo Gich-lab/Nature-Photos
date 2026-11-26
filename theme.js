@@ -11,7 +11,7 @@
     { id: 'khaki',      name: 'Khaki',       sw: 'linear-gradient(135deg,#d3c4a5,#c3b091)' },
     { id: 'ebony',      name: 'Rose Ebony',  sw: 'linear-gradient(135deg,#4a3130,#674846)' },
   ];
-
+  
   let current = 'wallpapers';   // always start on Wallpapers
 
   function apply(id) {
@@ -48,9 +48,9 @@
   const btn = document.createElement('button');
   btn.id = 'themeBtn'; btn.type = 'button';
   btn.setAttribute('aria-label', 'Choose theme'); btn.setAttribute('aria-haspopup', 'dialog');
-  btn.textContent = '🎨';
+  btn.textContent = 'Theme';
   header.appendChild(btn);
-
+  
   /* theme popup */
   const box = document.createElement('div');
   box.id = 'themes'; box.hidden = true;
