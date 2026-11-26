@@ -183,3 +183,16 @@ body:not([data-theme=wallpapers]) .pad button.flash:not(:disabled){
 body:not([data-theme=wallpapers]) .pad button.flash small{color:var(--onacc)}
 
 body:not([data-theme=wallpapers]) .rules-card{border-radius:16px}
+
+/* Wallpapers mode, touch devices: black text outside the board */
+@media (hover:none) and (pointer:coarse){
+  body[data-theme=wallpapers] h1,
+  body[data-theme=wallpapers] .stats,
+  body[data-theme=wallpapers] .stats *,
+  body[data-theme=wallpapers] .help,
+  body[data-theme=wallpapers] .help *,
+  body[data-theme=wallpapers] main footer #footerText{
+    color:#000;
+    text-shadow:none;
+  }
+}
