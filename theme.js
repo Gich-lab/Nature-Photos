@@ -43,14 +43,14 @@
   const counts = document.getElementById('counts');
   if (counts) counts.textContent = 'Remaining'; */
 
-  /* theme button: thin bar at the very top */
+  /* theme button: thin bar between the timer and mistakes text */
   const header = document.querySelector('header');
   const btn = document.createElement('button');
   btn.id = 'themeBtn'; btn.type = 'button';
   btn.setAttribute('aria-label', 'Select color theme'); btn.setAttribute('aria-haspopup', 'dialog');
   btn.textContent = 'Select color';
-  /*header.insertBefore(btn, header.firstChild);*/
-  header.insertBefore(btn, header.querySelector('.controls'));
+  const stats = document.querySelector('.stats');
+  stats.insertBefore(btn, document.getElementById('info'));
   
   /* theme popup */
   const box = document.createElement('div');
