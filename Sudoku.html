@@ -702,7 +702,8 @@ function newGame(){
   
 function top_(){
   $('#time').textContent=fmt(secs);
-  $('#info').textContent='Mistakes: '+miss+'   Hints: '+hints;
+  // $('#info').textContent='Mistakes: '+miss+'   Hints: '+hints; Paused hints update
+  $('#info').textContent='Mistakes: '+miss;
 }
 
 function place(n){
