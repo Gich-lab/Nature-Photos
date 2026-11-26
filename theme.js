@@ -51,7 +51,7 @@
   btn.textContent = 'Theme';
 
   /* progress & theme buttons */
-  onst past = document.getElementById('scoresBtn');
+  const past = document.getElementById('scoresBtn');
   const row = document.createElement('div');
   row.className = 'bottom-row';
   past.parentNode.insertBefore(row, past);
