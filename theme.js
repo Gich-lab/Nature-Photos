@@ -20,17 +20,6 @@
   }
   apply(current);
 
-  /*function apply(id) {
-    current = id;
-    document.body.dataset.theme = id;
-    const isDefault = (id === 'wallpapers');
-    const look = document.getElementById('theme-look');
-    if (look) look.media = isDefault ? 'not all' : 'all';   // Default = original look
-    //const counts = document.getElementById('counts');
-    //if (counts) counts.textContent = isDefault ? 'Occurrence' : 'Remaining';
-    try { localStorage.setItem(KEY, id); } catch (e) {}
-  }*/
-
   /* keyboard hint: keep "Tap a cell, then a number." and show the keyboard part only on keyboard devices */
   const help = document.querySelector('.help');
   if (help) {
@@ -38,10 +27,6 @@
       '<span class="tap">Tap a cell, then a number.</span>' +
       '<span class="kbd">On a keyboard: 1-9 to fill, arrow keys to move, Backspace to clear a cell, U to undo, H for a hint.</span>';
   }
-
-  /* clearer label for the remaining-count toggle *//*
-  const counts = document.getElementById('counts');
-  if (counts) counts.textContent = 'Remaining'; */
 
   /* theme button: thin bar between the timer and mistakes text */
   const header = document.querySelector('header');
