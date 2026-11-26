@@ -10,13 +10,6 @@
 /* =====================================================================
    A. ALWAYS ON: theme button, popup, keyboard hint
    ===================================================================== */
-/*header{position:relative}*/
-/*.bottom-row{display:flex;gap:8px;margin-top:12px}
-.bottom-row .scores-open{flex:1;width:auto;min-width:0;margin-top:0;font-size:.88rem;font-weight:600;padding:0 8px 3px;white-space:nowrap}
-#themeBtn{flex:none;width:76px;position:static;height:44px;padding:0 8px 3px;font-size:.88rem;font-weight:600}*/
-
-/*#themeBtn{align-self:center;width:auto;height:24px;padding:0 16px 1px;font-size:.75rem;font-weight:600;border-radius:999px;margin-top:-4px}*/
-
 /*Theme color selection button */
 .stats{display:grid;grid-template-columns:1fr auto 1fr;align-items:center}
 .stats #info{text-align:right;white-space:nowrap}
@@ -136,14 +129,6 @@ body[data-theme=light]{
   --b-bad:#d23b3b;--b-badbg:rgba(210,59,59,.15);
   --wallbg:linear-gradient(160deg,#ffffff,#f0ffff 55%,#d9f4f4);
 }
-/*
-@media (orientation:landscape){
-  body[data-theme=light].wall h1,
-  body[data-theme=light].wall .stats,
-  body[data-theme=light].wall .help,
-  body[data-theme=light].wall main footer #footerText{color:var(--ink);text-shadow:none}
-}
-*/
 
 @media (orientation:landscape){
   body[data-theme=light].wall h1,
@@ -274,11 +259,3 @@ body:has(#themes:not([hidden])) .sudoku-frame::before{animation-play-state:pause
 @media (hover:hover) and (pointer:fine){
   #themeBtn{padding:3px 14px 5px}
 }
-/*
-#themeBtn{text-box:trim-both cap alphabetic}
-@supports not (text-box:trim-both cap alphabetic){
-  @media (hover:hover) and (pointer:fine){
-    #themeBtn{padding:3px 14px 5px}
-  }
-}
-*/
