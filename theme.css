@@ -51,7 +51,7 @@ body{
   --b-same:rgba(34,211,238,.25);--b-user:#7fe9ff;--b-bad:#ff8a8a;--b-badbg:rgba(255,70,70,.3);
 }
 
-/* ---------- Ocean (Steel Blue #4682b4) ---------- */
+/* ---------- Ocean (Steel Blue #4682b4) ---------- 
 body[data-theme=ocean]{
   --bg:#4682b4;--ink:#f4f9fd;--mute:#c7dcee;--panel:#2f5f87;--line:rgba(255,255,255,.2);
   --on:#f4f9fd;--onfg:#1d3f5c;--btn:rgba(255,255,255,.16);--bline:rgba(255,255,255,.32);--edge:transparent;
@@ -59,6 +59,48 @@ body[data-theme=ocean]{
   --b-glass:rgba(16,40,64,.55);--b-line:rgba(190,225,250,.4);--b-box:#fff;--b-user:#b5ddfb;
   --b-sel:rgba(159,208,245,.42);--b-same:rgba(159,208,245,.24);
   --wallbg:radial-gradient(circle at 50% 0,#6aa3cf 0,transparent 60%),linear-gradient(180deg,#2c5578,#4682b4 55%,#3a6f9c);
+}*/
+
+/* ----------(Ocean) Blue Sapphire (#126180) ---------- */
+body[data-theme=ocean]{
+  --bg:#126180;--ink:#f0f9fd;--mute:#b7dbe9;--panel:#0d4a63;--line:rgba(255,255,255,.2);
+  --on:#f0f9fd;--onfg:#0a3447;--btn:rgba(255,255,255,.14);--bline:rgba(200,235,250,.34);--edge:transparent;
+  --accent:#6fd3f2;--onacc:#06232f;
+  --b-glass:rgba(5,30,42,.58);--b-line:rgba(180,230,250,.4);--b-box:#fff;--b-user:#a5e4fa;
+  --b-sel:rgba(111,211,242,.42);--b-same:rgba(111,211,242,.24);
+  --wallbg:radial-gradient(circle at 50% 0,#2a86a8 0,transparent 60%),linear-gradient(180deg,#0b4259,#126180 55%,#0e5069);
+}
+
+/* ---------- Rose Ebony (#674846) ---------- */
+body[data-theme=ebony]{
+  --bg:#674846;--ink:#fbf1ef;--mute:#d9bfbb;--panel:#4f3432;--line:rgba(255,255,255,.18);
+  --on:#fbf1ef;--onfg:#3a2423;--btn:rgba(255,255,255,.12);--bline:rgba(255,225,220,.3);--edge:transparent;
+  --accent:#f0a8a0;--onacc:#3a1512;
+  --b-glass:rgba(40,22,21,.58);--b-line:rgba(255,215,210,.38);--b-box:#fff;--b-user:#ffc9c2;
+  --b-sel:rgba(240,168,160,.42);--b-same:rgba(240,168,160,.24);
+  --wallbg:radial-gradient(circle at 50% 0,#8a6360 0,transparent 60%),linear-gradient(180deg,#4a3130,#674846 55%,#583b39);
+}
+
+/* ---------- Khaki (#c3b091) ---------- */
+body[data-theme=khaki]{
+  --bg:#c3b091;--ink:#2e2516;--mute:#5f5239;--panel:#f3ecdd;--line:rgba(46,37,22,.18);
+  --on:#2e2516;--onfg:#fff;--btn:rgba(255,255,255,.7);--bline:rgba(46,37,22,.2);--edge:transparent;
+  --accent:#8a6d2f;--onacc:#fff;--ringhi:#fff;
+  --b-glass:rgba(255,255,255,.5);--b-line:rgba(46,37,22,.2);--b-box:rgba(46,37,22,.65);--b-ink:#2e2516;
+  --b-user:#6b4f12;--b-sel:rgba(138,109,47,.32);--b-peer:rgba(138,109,47,.1);--b-same:rgba(138,109,47,.2);
+  --b-bad:#b3261e;--b-badbg:rgba(179,38,30,.15);
+  --wallbg:radial-gradient(circle at 50% 0,#dccfb4 0,transparent 60%),linear-gradient(160deg,#d3c4a5,#c3b091 55%,#ac9a78);
+}
+
+/* ---------- Light Pink (#ffb6c1) ---------- */
+body[data-theme=pink]{
+  --bg:#ffb6c1;--ink:#4a1426;--mute:#8a4a5e;--panel:#fff0f3;--line:rgba(74,20,38,.16);
+  --on:#4a1426;--onfg:#fff;--btn:rgba(255,255,255,.78);--bline:rgba(74,20,38,.18);--edge:transparent;
+  --accent:#d6336c;--onacc:#fff;--ringhi:#fff;
+  --b-glass:rgba(255,255,255,.55);--b-line:rgba(74,20,38,.18);--b-box:rgba(74,20,38,.6);--b-ink:#4a1426;
+  --b-user:#b0124f;--b-sel:rgba(214,51,108,.3);--b-peer:rgba(214,51,108,.08);--b-same:rgba(214,51,108,.18);
+  --b-bad:#c62828;--b-badbg:rgba(198,40,40,.15);
+  --wallbg:radial-gradient(circle at 50% 0,#ffdce2 0,transparent 60%),linear-gradient(160deg,#ffd0d8,#ffb6c1 55%,#ff9fb0);
 }
 
 /* ---------- Night ---------- */
