@@ -49,7 +49,8 @@
   btn.id = 'themeBtn'; btn.type = 'button';
   btn.setAttribute('aria-label', 'Select color theme'); btn.setAttribute('aria-haspopup', 'dialog');
   btn.textContent = 'Select color';
-  header.insertBefore(btn, header.firstChild);
+  /*header.insertBefore(btn, header.firstChild);*/
+  header.insertBefore(btn, header.querySelector('.controls'));
   
   /* theme popup */
   const box = document.createElement('div');
