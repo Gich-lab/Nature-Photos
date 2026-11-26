@@ -44,12 +44,19 @@
   if (counts) counts.textContent = 'Remaining'; */
 
   /* theme button (top right of the header) */
-  const header = document.querySelector('header');
+  /*const header = document.querySelector('header');*/
   const btn = document.createElement('button');
   btn.id = 'themeBtn'; btn.type = 'button';
-  btn.setAttribute('aria-label', 'Choose theme'); btn.setAttribute('aria-haspopup', 'dialog');
+  btn.setAttribute('aria-label', 'Select color theme'); btn.setAttribute('aria-haspopup', 'dialog');
   btn.textContent = 'Theme';
-  header.appendChild(btn);
+
+  /* progress & theme buttons */
+  onst past = document.getElementById('scoresBtn');
+  const row = document.createElement('div');
+  row.className = 'bottom-row';
+  past.parentNode.insertBefore(row, past);
+  row.appendChild(past);
+  row.appendChild(btn);
   
   /* theme popup */
   const box = document.createElement('div');
