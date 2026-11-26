@@ -12,8 +12,10 @@
    ===================================================================== */
 /*header{position:relative}*/
 .bottom-row{display:flex;gap:8px;margin-top:12px}
-.bottom-row .scores-open{flex:2;width:auto;min-width:0;margin-top:0;font-size:.95rem;white-space:nowrap}
-#themeBtn{flex:1;position:static;width:auto;height:44px;padding:0 8px 3px;font-size:1rem;font-weight:600}
+/*.bottom-row .scores-open{flex:2;width:auto;min-width:0;margin-top:0;font-size:.95rem;white-space:nowrap}
+#themeBtn{flex:1;position:static;width:auto;height:44px;padding:0 8px 3px;font-size:1rem;font-weight:600}*/
+.bottom-row .scores-open{flex:1;width:auto;min-width:0;margin-top:0;font-size:.88rem;font-weight:600;padding:0 8px 3px;white-space:nowrap}
+#themeBtn{flex:none;width:76px;position:static;height:44px;padding:0 8px 3px;font-size:.88rem;font-weight:600}
 /*#themeBtn{position:absolute;right:0;top:0;width:40px;height:40px;padding:0 0 2px;font-size:1.15rem;line-height:1}*/ /*updated*/
 /*#themeBtn{position:absolute;right:0;top:0;width:auto;height:32px;padding:0 12px 1px;font-size:.8rem;font-weight:600;line-height:1;white-space:nowrap}*/
 /* touch devices only: lift it so it clears the New game button */
