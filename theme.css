@@ -269,3 +269,11 @@ body:not([data-theme=wallpapers]) .rules-card{border-radius:16px}
 }
 
 body:has(#themes:not([hidden])) .sudoku-frame::before{animation-play-state:paused}
+
+/* centers the Select color text inside the button */
+#themeBtn{text-box:trim-both cap alphabetic}
+@supports not (text-box:trim-both cap alphabetic){
+  @media (hover:hover) and (pointer:fine){
+    #themeBtn{padding:3px 14px 5px}
+  }
+}
