@@ -11,7 +11,8 @@
    A. ALWAYS ON: theme button, popup, keyboard hint
    ===================================================================== */
 header{position:relative}
-#themeBtn{position:absolute;right:0;top:0;width:40px;height:40px;padding:0 0 2px;font-size:1.15rem;line-height:1}
+/*#themeBtn{position:absolute;right:0;top:0;width:40px;height:40px;padding:0 0 2px;font-size:1.15rem;line-height:1}*/ /*updated*/
+#themeBtn{position:absolute;right:0;top:0;width:auto;height:32px;padding:0 12px 1px;font-size:.8rem;font-weight:600;line-height:1;white-space:nowrap}
 /* touch devices only: lift it so it clears the New game button */
 @media (hover:none) and (pointer:coarse){#themeBtn{top:-10px}}
 
