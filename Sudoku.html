@@ -65,7 +65,7 @@ button:disabled{opacity:.3;cursor:default}
 }
 
 /* moving light around the outer edge */
-.sudoku-frame::before{
+/*.sudoku-frame::before{
     content:"";
     position:absolute;
 
@@ -87,8 +87,37 @@ button:disabled{opacity:.3;cursor:default}
 
     animation:borderRunner 8s linear infinite;
     z-index:0;
-}
+}*/
 
+.sudoku-frame::before{
+    content:"";
+    position:absolute;
+
+    left:-150%;
+    top:-150%;
+
+    width:400%;
+    height:400%;
+
+    background:
+        conic-gradient(
+            from 0deg,
+            transparent 0deg,
+            transparent 140deg,
+            #22d3ee 152deg,
+            #ffffff 166deg,
+            #22d3ee 180deg,
+            transparent 180deg,
+            transparent 320deg,
+            #22d3ee 332deg,
+            #ffffff 346deg,
+            #22d3ee 360deg
+        );
+
+    animation:borderRunner 12s linear infinite;
+    z-index:0;
+}
+  
 /* covers the center, leaving only the border visible */
 .sudoku-frame::after{
     content:"";
