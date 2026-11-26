@@ -2,10 +2,14 @@
 (function () {
   const THEMES = [
     { id: 'wallpapers', name: 'Wallpapers',  sw: 'linear-gradient(135deg,#34d399,#38bdf8,#f59e0b)'},
-    { id: 'ocean',      name: 'Ocean',       sw: 'linear-gradient(135deg,#2c5578,#4682b4)'},
+    /*{ id: 'ocean',      name: 'Ocean',       sw: 'linear-gradient(135deg,#2c5578,#4682b4)'},*/
+    { id: 'ocean',      name: 'Ocean',       sw: 'linear-gradient(135deg,#0b4259,#126180)' },
     { id: 'night',      name: 'Night',       sw: 'linear-gradient(135deg,#050816,#7c6df2)'},
     { id: 'light',      name: 'Light',       sw: 'linear-gradient(135deg,#ffffff,#a5e8ee)' },
     { id: 'cyan',       name: 'Green',       sw: 'linear-gradient(135deg,#0c3002,#195905)' },
+    { id: 'pink',       name: 'Pink',        sw: 'linear-gradient(135deg,#ffd0d8,#ffb6c1)' },
+    { id: 'khaki',      name: 'Khaki',       sw: 'linear-gradient(135deg,#d3c4a5,#c3b091)' },
+    { id: 'ebony',      name: 'Rose Ebony',  sw: 'linear-gradient(135deg,#4a3130,#674846)' },
   ];
 
   let current = 'wallpapers';   // always start on Wallpapers
