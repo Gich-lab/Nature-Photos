@@ -21,8 +21,9 @@
 .stats{display:grid;grid-template-columns:1fr auto 1fr;align-items:center}
 .stats #info{text-align:right;white-space:nowrap}
 #themeBtn{
-  width:auto;height:auto;margin:0;padding:2px 12px;
-  font:inherit;color:inherit;text-shadow:inherit;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:auto;height:auto;margin:0;padding:4px 14px;
+  font:inherit;line-height:1;color:inherit;text-shadow:none;
   background:transparent;background-image:none;
   border:1px solid currentColor;border-radius:999px;
   box-shadow:none;transform:none;
