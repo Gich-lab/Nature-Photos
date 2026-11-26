@@ -51,12 +51,21 @@
   btn.textContent = 'Theme';
 
   /* progress & theme buttons */
+  /*
   const past = document.getElementById('scoresBtn');
   const row = document.createElement('div');
   row.className = 'bottom-row';
   past.parentNode.insertBefore(row, past);
   row.appendChild(past);
   row.appendChild(btn);
+  */
+
+  const header = document.querySelector('header');
+  const btn = document.createElement('button');
+  btn.id = 'themeBtn'; btn.type = 'button';
+  btn.setAttribute('aria-label', 'Select color theme'); btn.setAttribute('aria-haspopup', 'dialog');
+  btn.textContent = 'Select color';
+  header.insertBefore(btn, header.firstChild);
   
   /* theme popup */
   const box = document.createElement('div');
