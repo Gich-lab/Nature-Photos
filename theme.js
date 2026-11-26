@@ -43,23 +43,7 @@
   const counts = document.getElementById('counts');
   if (counts) counts.textContent = 'Remaining'; */
 
-  /* theme button (top right of the header) */
-  /*const header = document.querySelector('header');*/
-  const btn = document.createElement('button');
-  btn.id = 'themeBtn'; btn.type = 'button';
-  btn.setAttribute('aria-label', 'Select color theme'); btn.setAttribute('aria-haspopup', 'dialog');
-  btn.textContent = 'Theme';
-
-  /* progress & theme buttons */
-  /*
-  const past = document.getElementById('scoresBtn');
-  const row = document.createElement('div');
-  row.className = 'bottom-row';
-  past.parentNode.insertBefore(row, past);
-  row.appendChild(past);
-  row.appendChild(btn);
-  */
-
+  /* theme button: thin bar at the very top */
   const header = document.querySelector('header');
   const btn = document.createElement('button');
   btn.id = 'themeBtn'; btn.type = 'button';
