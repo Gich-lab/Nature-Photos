@@ -587,15 +587,6 @@ body:has(:is(#rules,#scores,#confirm,#levels,#win):not([hidden])) .sudoku-frame:
   </div>
 </main>
 <script>
-/* ---- block pinch / double-tap zoom on iOS Safari ---- */
-['gesturestart','gesturechange','gestureend'].forEach(t =>
-  document.addEventListener(t, e => e.preventDefault(), {passive:false}));
-
-/* older iOS: stop two-finger pinch */
-document.addEventListener('touchmove', e => {
-  if (e.touches.length > 1) e.preventDefault();
-}, {passive:false});
-  
 document.getElementById('year').textContent = new Date().getFullYear();
 
 const $=s=>document.querySelector(s);
