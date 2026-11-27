@@ -11,7 +11,7 @@ const REFRESH_PAGE = true;
 const CORE = ['./', 'sudoku.ico', 'dancing_pug.webp', 'theme.css', 'theme.js'];
 
 const LANDSCAPE_COUNT = 24;      
-const PORTRAIT_COUNT  = 10;
+const PORTRAIT_COUNT  = 20;
 
 const WALLPAPERS = Array.from({ length: LANDSCAPE_COUNT }, (_, i) => 'sudoku_wallpapers/img' + (i + 1) + '.jpg')
   .concat(Array.from({ length: PORTRAIT_COUNT }, (_, i) => 'Sudoku_images_portrait/img' + (i + 1) + '.jpg'));
