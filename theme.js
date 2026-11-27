@@ -8,8 +8,7 @@
     { id: 'cyan',       name: 'Green',       sw: 'linear-gradient(135deg,#0c3002,#195905)' },
     { id: 'pink',       name: 'Pink',        sw: 'linear-gradient(135deg,#ffd0d8,#ffb6c1)' },
     { id: 'khaki',      name: 'Khaki',       sw: 'linear-gradient(135deg,#d3c4a5,#c3b091)' },
-    /*{ id: 'ebony',      name: 'Rose Ebony',  sw: 'linear-gradient(135deg,#4a3130,#674846)' },*/
-    { id: 'cafenoir',   name: 'Brown',       sw: 'linear-gradient(135deg,#4b3621,#6a4c32)' },
+    { id: 'bluegreen',  name: 'Blue',        sw: 'linear-gradient(135deg,#0d98ba,#34b3d1)' },
     { id: 'peach',      name: 'Cream',       sw: 'linear-gradient(135deg,#fbceb1,#f3b48d)' }
   ];
   
