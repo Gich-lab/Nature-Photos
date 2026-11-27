@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sudoku</title>
 <link rel="icon" href="sudoku.ico" sizes="any">
 <style>
@@ -463,14 +463,8 @@ body:has(:is(#rules,#scores,#confirm,#levels,#win):not([hidden])) .sudoku-frame:
   .hint-flip { animation: none; }
 }
 
-/* stop double-tap zoom and sideways overflow on phones */
-html,body{
-  touch-action:manipulation;
-  overflow-x:hidden;
-  -webkit-text-size-adjust:100%;
-  text-size-adjust:100%;
-}
-button,select,.c,.pad,#board{touch-action:manipulation}
+/* no double-tap zoom */
+* { touch-action: manipulation; }
   
 </style>
 </head>
