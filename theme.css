@@ -130,6 +130,16 @@ body[data-theme=light]{
   --wallbg:linear-gradient(160deg,#ffffff,#f0ffff 55%,#d9f4f4);
 }
 
+body[data-theme=peach]{
+  --bg:#fbceb1;--ink:#3d2314;--mute:#7a5540;--panel:#fff8f3;--line:rgba(61,35,20,.14);
+  --on:#3d2314;--onfg:#fff;--btn:rgba(255,255,255,.92);--bline:rgba(61,35,20,.14);--edge:transparent;
+  --accent:#d9733a;--onacc:#fff;--ringhi:#fde3d0;
+  --b-glass:rgba(255,255,255,.65);--b-line:rgba(61,35,20,.14);--b-box:rgba(61,35,20,.6);--b-ink:#3d2314;
+  --b-user:#b4501f;--b-sel:rgba(217,115,58,.3);--b-peer:rgba(217,115,58,.08);--b-same:rgba(217,115,58,.18);
+  --b-bad:#d23b3b;--b-badbg:rgba(210,59,59,.15);
+  --wallbg:linear-gradient(160deg,#fff5ee,#fbceb1 55%,#f3b48d);
+}
+
 @media (orientation:landscape){
   body[data-theme=light].wall h1,
   body[data-theme=light].wall .stats,
@@ -143,6 +153,10 @@ body[data-theme=light]{
   body[data-theme=khaki].wall .stats,
   body[data-theme=khaki].wall .help,
   body[data-theme=khaki].wall main footer #footerText{color:var(--ink);text-shadow:none}
+  body[data-theme=peach].wall h1,
+  body[data-theme=peach].wall .stats,
+  body[data-theme=peach].wall .help,
+  body[data-theme=peach].wall main footer #footerText{color:var(--ink);text-shadow:none}
 }
 
 /* ---------- Green (Lincoln Green #195905) ---------- */
