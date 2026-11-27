@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Sudoku</title>
 <link rel="icon" href="sudoku.ico" sizes="any">
 <style>
@@ -164,7 +164,7 @@ button:disabled{opacity:.3;cursor:default}
 .bad{
   color:var(--bad);
   background-image:repeating-linear-gradient(135deg,
-    rgba(255,138,138,.35) 0,rgba(255,138,138,.35) 3px,
+    rgba(255,138,138,.35) 0,rgba(255,138,138,.5) 3px,
     transparent 3px,transparent 7px);
 }
 .tools{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0 8px}
@@ -462,6 +462,15 @@ body:has(:is(#rules,#scores,#confirm,#levels,#win):not([hidden])) .sudoku-frame:
 @media (prefers-reduced-motion: reduce) {
   .hint-flip { animation: none; }
 }
+
+/* stop double-tap zoom and sideways overflow on phones */
+html,body{
+  touch-action:manipulation;
+  overflow-x:hidden;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
+button,select,.c,.pad,#board{touch-action:manipulation}
   
 </style>
 </head>
@@ -584,6 +593,15 @@ body:has(:is(#rules,#scores,#confirm,#levels,#win):not([hidden])) .sudoku-frame:
   </div>
 </main>
 <script>
+/* ---- block pinch / double-tap zoom on iOS Safari ---- */
+['gesturestart','gesturechange','gestureend'].forEach(t =>
+  document.addEventListener(t, e => e.preventDefault(), {passive:false}));
+
+/* older iOS: stop two-finger pinch */
+document.addEventListener('touchmove', e => {
+  if (e.touches.length > 1) e.preventDefault();
+}, {passive:false});
+  
 document.getElementById('year').textContent = new Date().getFullYear();
 
 const $=s=>document.querySelector(s);
