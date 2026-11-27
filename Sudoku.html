@@ -768,7 +768,7 @@ function flipHint(oldText){
   void b.offsetWidth;
   b.classList.add('hint-flip');
   setTimeout(() => {   // button is edge-on: swap in the new count
-    b.textContent = 'Hint (' + Math.max(HINT_MAX[$('#lvl').value] - hints, 0) + ')';
+    b.textContent = 'Get hints (' + Math.max(HINT_MAX[$('#lvl').value] - hints, 0) + ')';
   }, 250);
 }
 $('#hint').addEventListener('animationend', e => e.currentTarget.classList.remove('hint-flip'));
@@ -863,7 +863,7 @@ function render(){
   $('#pad').classList.toggle('hide',!showCounts);
   $('#counts').setAttribute('aria-pressed',showCounts);
   const left=HINT_MAX[$('#lvl').value]-hints;
-  $('#hint').textContent='Hint ('+Math.max(left,0)+')';
+  $('#hint').textContent='Get hints ('+Math.max(left,0)+')';
   $('#hint').disabled=left<=0;
   lastLvl=$('#lvl').value;
   updateLvlBtn();
