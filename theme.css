@@ -71,25 +71,15 @@ body[data-theme=ocean]{
   --wallbg:radial-gradient(circle at 50% 0,#2a86a8 0,transparent 60%),linear-gradient(180deg,#0b4259,#126180 55%,#0e5069);
 }
 
-/* ---------- Rose Ebony (#674846) ---------- */
-/*body[data-theme=ebony]{
-  --bg:#674846;--ink:#fbf1ef;--mute:#d9bfbb;--panel:#4f3432;--line:rgba(255,255,255,.18);
-  --on:#fbf1ef;--onfg:#3a2423;--btn:rgba(255,255,255,.12);--bline:rgba(255,225,220,.3);--edge:transparent;
-  --accent:#f0a8a0;--onacc:#3a1512;
-  --b-glass:rgba(40,22,21,.58);--b-line:rgba(255,215,210,.38);--b-box:#fff;--b-user:#ffc9c2;
-  --b-sel:rgba(240,168,160,.42);--b-same:rgba(240,168,160,.24);
-  --wallbg:radial-gradient(circle at 50% 0,#8a6360 0,transparent 60%),linear-gradient(180deg,#4a3130,#674846 55%,#583b39);
-}*/
-
-/* ----------Brown---------- */
-body[data-theme=cafenoir]{
-  --bg:#4b3621;--ink:#f5e9dc;--mute:#c4a98f;--panel:#5a432d;--line:rgba(245,233,220,.18);
-  --on:#f5e9dc;--onfg:#2a1c10;--btn:rgba(255,255,255,.08);--bline:rgba(245,233,220,.18);--edge:#2a1c10;
-  --accent:#d9a066;--onacc:#2a1c10;--ringhi:#8a6a4a;
-  --b-glass:rgba(0,0,0,.35);--b-line:rgba(245,233,220,.2);--b-box:rgba(245,233,220,.7);--b-ink:#f5e9dc;
-  --b-user:#e8b887;--b-sel:rgba(217,160,102,.35);--b-peer:rgba(217,160,102,.1);--b-same:rgba(217,160,102,.22);
-  --b-bad:#ff8a8a;--b-badbg:rgba(255,138,138,.18);
-  --wallbg:linear-gradient(160deg,#6a4c32,#4b3621 55%,#2f2013);
+/* ----------Bluegreen---------- */
+body[data-theme=bluegreen]{
+  --bg:#0d98ba;--ink:#04222b;--mute:#0b4a5c;--panel:#e6f7fb;--line:rgba(4,34,43,.2);
+  --on:#04222b;--onfg:#fff;--btn:rgba(255,255,255,.88);--bline:rgba(4,34,43,.2);--edge:transparent;
+  --accent:#065a70;--onacc:#fff;--ringhi:#7fd6e8;
+  --b-glass:rgba(255,255,255,.6);--b-line:rgba(4,34,43,.2);--b-box:rgba(4,34,43,.65);--b-ink:#04222b;
+  --b-user:#065a70;--b-sel:rgba(6,90,112,.3);--b-peer:rgba(6,90,112,.1);--b-same:rgba(6,90,112,.2);
+  --b-bad:#c62d2d;--b-badbg:rgba(198,45,45,.15);
+  --wallbg:linear-gradient(160deg,#4fc3dc,#0d98ba 55%,#0a7a94);
 }
 
 /* ---------- Khaki (#c3b091) ---------- */
@@ -163,11 +153,15 @@ body[data-theme=peach]{
   body[data-theme=khaki].wall h1,
   body[data-theme=khaki].wall .stats,
   body[data-theme=khaki].wall .help,
-  body[data-theme=khaki].wall main footer #footerText{color:var(--ink);text-shadow:none}
+  body[data-theme=khaki].wall main footer #footerText,
   body[data-theme=peach].wall h1,
   body[data-theme=peach].wall .stats,
   body[data-theme=peach].wall .help,
-  body[data-theme=peach].wall main footer #footerText{color:var(--ink);text-shadow:none}
+  body[data-theme=peach].wall main footer #footerText,
+  body[data-theme=bluegreen].wall h1,
+  body[data-theme=bluegreen].wall .stats,
+  body[data-theme=bluegreen].wall .help,
+  body[data-theme=bluegreen].wall main footer #footerText{color:var(--ink);text-shadow:none}
 }
 
 /* ---------- Green (Lincoln Green #195905) ---------- */
