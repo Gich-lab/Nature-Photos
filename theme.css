@@ -72,13 +72,24 @@ body[data-theme=ocean]{
 }
 
 /* ---------- Rose Ebony (#674846) ---------- */
-body[data-theme=ebony]{
+/*body[data-theme=ebony]{
   --bg:#674846;--ink:#fbf1ef;--mute:#d9bfbb;--panel:#4f3432;--line:rgba(255,255,255,.18);
   --on:#fbf1ef;--onfg:#3a2423;--btn:rgba(255,255,255,.12);--bline:rgba(255,225,220,.3);--edge:transparent;
   --accent:#f0a8a0;--onacc:#3a1512;
   --b-glass:rgba(40,22,21,.58);--b-line:rgba(255,215,210,.38);--b-box:#fff;--b-user:#ffc9c2;
   --b-sel:rgba(240,168,160,.42);--b-same:rgba(240,168,160,.24);
   --wallbg:radial-gradient(circle at 50% 0,#8a6360 0,transparent 60%),linear-gradient(180deg,#4a3130,#674846 55%,#583b39);
+}*/
+
+/* ----------Brown---------- */
+body[data-theme=cafenoir]{
+  --bg:#4b3621;--ink:#f5e9dc;--mute:#c4a98f;--panel:#5a432d;--line:rgba(245,233,220,.18);
+  --on:#f5e9dc;--onfg:#2a1c10;--btn:rgba(255,255,255,.08);--bline:rgba(245,233,220,.18);--edge:#2a1c10;
+  --accent:#d9a066;--onacc:#2a1c10;--ringhi:#8a6a4a;
+  --b-glass:rgba(0,0,0,.35);--b-line:rgba(245,233,220,.2);--b-box:rgba(245,233,220,.7);--b-ink:#f5e9dc;
+  --b-user:#e8b887;--b-sel:rgba(217,160,102,.35);--b-peer:rgba(217,160,102,.1);--b-same:rgba(217,160,102,.22);
+  --b-bad:#ff8a8a;--b-badbg:rgba(255,138,138,.18);
+  --wallbg:linear-gradient(160deg,#6a4c32,#4b3621 55%,#2f2013);
 }
 
 /* ---------- Khaki (#c3b091) ---------- */
