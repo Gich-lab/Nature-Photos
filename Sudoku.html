@@ -587,6 +587,17 @@ body:has(:is(#rules,#scores,#confirm,#levels,#win):not([hidden])) .sudoku-frame:
   </div>
 </main>
 <script>
+/* stop double-tap zoom (iOS Safari), without losing fast taps */
+let lastTouch = 0;
+document.addEventListener('touchend', e => {
+  const now = Date.now();
+  if (now - lastTouch < 350) {
+    e.preventDefault();  // cancels the zoom
+    if (e.target.click) e.target.click(); // still registers the second tap
+  }
+  lastTouch = now;
+}, { passive: false });
+  
 document.getElementById('year').textContent = new Date().getFullYear();
 
 const $=s=>document.querySelector(s);
